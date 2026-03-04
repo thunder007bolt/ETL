@@ -1,0 +1,8 @@
+oracledb
+pandas
+numpy
+python-dotenv
+pyyaml
+pyarrow
+colorlog
+

@@ -1,0 +1,2025 @@
+2026-03-02 15:16:48 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PRET] step=E  date=20260302
+2026-03-02 15:17:02 [INFO    ] cnss_etl.run_dim — [E] DIM_BORDEREAU_PRET — 239490 lignes extraites → staging\raw\bordereau_pret_20260302.parquet
+2026-03-02 15:28:47 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PRET] step=T  date=20260302
+2026-03-02 15:28:50 [INFO    ] cnss_etl.run_dim — [T] DIM_BORDEREAU_PRET — 239490 lignes → staging\transformed\bordereau_pret_20260302.parquet
+2026-03-02 16:01:08 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PRET] step=L  date=20260302
+2026-03-02 16:01:10 [CRITICAL] cnss_etl.run_dim — Erreur : cannot import name 'BaseLoader' from 'shared.base.base_loader' (C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py)
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m86[0m, in [35mmain[0m
+    from domaines.prestation_recouvrement.dims.pipeline_dims import _GenericDimLoader
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m15[0m, in [35m<module>[0m
+    from shared.base.base_loader import BaseLoader
+[1;35mImportError[0m: [35mcannot import name 'BaseLoader' from 'shared.base.base_loader' (C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py)[0m
+2026-03-02 16:03:36 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PRET] step=L  date=20260302
+2026-03-02 16:04:01 [CRITICAL] cnss_etl.run_dim — Erreur : DPY-3013: unsupported Python type str for database type DB_TYPE_NUMBER
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m94[0m, in [35mmain[0m
+    count  = loader.merge(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m78[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, data)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m136[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m60[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/base/connection.pyx"[0m, line [35m170[0m, in [35moracledb.base_impl.BaseConnImpl._check_value[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\errors.py"[0m, line [35m199[0m, in [35m_raise_err[0m
+    raise error.exc_type(error) from cause
+[1;35moracledb.exceptions.NotSupportedError[0m: [35mDPY-3013: unsupported Python type str for database type DB_TYPE_NUMBER[0m
+2026-03-02 16:37:11 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PRET] step=L  date=20260302
+2026-03-02 16:37:45 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00942: Table ou vue inexistante
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m94[0m, in [35mmain[0m
+    count  = loader.merge(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m78[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m117[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, data)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 16:38:33 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 17:14:55 [INFO    ] cnss_etl.run_dim — [DIM_BRANCHE] step=E  date=20260302
+2026-03-02 17:15:05 [INFO    ] cnss_etl.run_dim — [E] DIM_BRANCHE — 3 lignes extraites → staging\raw\branche_20260302.parquet
+2026-03-02 17:15:23 [INFO    ] cnss_etl.run_dim — [DIM_BRANCHE] step=T  date=20260302
+2026-03-02 17:15:26 [INFO    ] cnss_etl.run_dim — [T] DIM_BRANCHE — 3 lignes → staging\transformed\branche_20260302.parquet
+2026-03-02 17:20:10 [INFO    ] cnss_etl.run_dim — [DIM_BRANCHE] step=L  date=20260302
+2026-03-02 17:20:14 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 17:20:14 [INFO    ] cnss_etl.run_dim — [L] DIM_BRANCHE — 3 lignes chargées
+2026-03-02 17:34:40 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 17:36:08 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 17:50:27 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 17:50:32 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE 5 lignes
+2026-03-02 17:50:32 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 5 lignes chargées
+2026-03-02 17:52:36 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 17:53:28 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE 1000 lignes
+2026-03-02 17:53:28 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 1000 lignes chargées
+2026-03-02 17:54:53 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:02:53 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE 10000 lignes
+2026-03-02 18:02:53 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 10000 lignes chargées
+2026-03-02 18:04:41 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:04:43 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 18:04:43 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 100 lignes
+2026-03-02 18:04:43 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 100 lignes chargées
+2026-03-02 18:05:05 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:05:06 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 100 lignes
+2026-03-02 18:05:06 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 100 lignes chargées
+2026-03-02 18:05:38 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:05:40 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 1000 lignes
+2026-03-02 18:05:40 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 1000 lignes chargées
+2026-03-02 18:05:57 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:06:00 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 10000 lignes
+2026-03-02 18:06:00 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 10000 lignes chargées
+2026-03-02 18:39:21 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:39:47 [CRITICAL] cnss_etl.run_dim — Erreur : DPI-1001: out of memory
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m84[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m222[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, data)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m167[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m88[0m, in [35moracledb.base_impl.BindVar._create_var_from_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m105[0m, in [35moracledb.thick_impl.ThickVarImpl._finalize_init[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-02 18:43:29 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:44:05 [CRITICAL] cnss_etl.run_dim — Erreur : DPI-1001: out of memory
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m84[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m236[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, data)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m167[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m88[0m, in [35moracledb.base_impl.BindVar._create_var_from_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m105[0m, in [35moracledb.thick_impl.ThickVarImpl._finalize_init[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-02 18:48:01 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:48:04 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 18:48:04 [CRITICAL] cnss_etl.run_dim — Erreur : '_GenericDimLoader' object has no attribute '_gtt_created'
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m84[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m187[0m, in [35m_merge_via_gtt[0m
+    gtt          = self._ensure_gtt(table)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m177[0m, in [35m_ensure_gtt[0m
+    [1;31mself._gtt_created[0m.add(gtt)
+    [1;31m^^^^^^^^^^^^^^^^^[0m
+[1;35mAttributeError[0m: [35m'_GenericDimLoader' object has no attribute '_gtt_created'[0m
+2026-03-02 18:48:25 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:48:26 [CRITICAL] cnss_etl.run_dim — Erreur : '_GenericDimLoader' object has no attribute '_gtt_created'
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m84[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m187[0m, in [35m_merge_via_gtt[0m
+    gtt          = self._ensure_gtt(table)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m177[0m, in [35m_ensure_gtt[0m
+    [1;31mself._gtt_created[0m.add(gtt)
+    [1;31m^^^^^^^^^^^^^^^^^[0m
+[1;35mAttributeError[0m: [35m'_GenericDimLoader' object has no attribute '_gtt_created'[0m
+2026-03-02 18:49:22 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=L  date=20260302
+2026-03-02 18:49:49 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 18:49:49 [INFO    ] cnss_etl.run_dim — [L] DIM_BORDEREAU_PREST — 239490 lignes chargées
+2026-03-02 19:09:23 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=L  date=20260302
+2026-03-02 19:09:27 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier staging transformed introuvable : staging\transformed\type_ajustement_20260302.parquet
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m89[0m, in [35mmain[0m
+    df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\staging.py"[0m, line [35m46[0m, in [35mread_transformed[0m
+    raise FileNotFoundError(f"Fichier staging transformed introuvable : {path}")
+[1;35mFileNotFoundError[0m: [35mFichier staging transformed introuvable : staging\transformed\type_ajustement_20260302.parquet[0m
+2026-03-02 19:09:45 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=E  date=20260302
+2026-03-02 19:09:46 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00942: Table ou vue inexistante
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m70[0m, in [35mmain[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 19:10:10 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=E  date=20260302
+2026-03-02 19:10:12 [INFO    ] cnss_etl.run_dim — [E] DIM_TYPE_AJUSTEMENT — 13 lignes extraites → staging\raw\type_ajustement_20260302.parquet
+2026-03-02 19:10:23 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=T  date=20260302
+2026-03-02 19:10:24 [INFO    ] cnss_etl.run_dim — [T] DIM_TYPE_AJUSTEMENT — 13 lignes → staging\transformed\type_ajustement_20260302.parquet
+2026-03-02 19:10:31 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=L  date=20260302
+2026-03-02 19:10:32 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_TYPE_AJUSTEMENT créée automatiquement.
+2026-03-02 19:10:32 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00904: "TAJ_USAGER_UPDATE" : identificateur non valide
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m93[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m212[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, data[start: start + self._MERGE_BATCH])[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00904: "TAJ_USAGER_UPDATE" : identificateur non valide[0m
+2026-03-02 19:13:28 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=L  date=20260302
+2026-03-02 19:13:28 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00904: "TAJ_USAGER_UPDATE" : identificateur non valide
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m93[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m212[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, data[start: start + self._MERGE_BATCH])[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00904: "TAJ_USAGER_UPDATE" : identificateur non valide[0m
+2026-03-02 19:13:36 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=E  date=20260302
+2026-03-02 19:13:37 [INFO    ] cnss_etl.run_dim — [E] DIM_TYPE_AJUSTEMENT — 13 lignes extraites → staging\raw\type_ajustement_20260302.parquet
+2026-03-02 19:13:46 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=T  date=20260302
+2026-03-02 19:13:46 [INFO    ] cnss_etl.run_dim — [T] DIM_TYPE_AJUSTEMENT — 13 lignes → staging\transformed\type_ajustement_20260302.parquet
+2026-03-02 19:13:52 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_AJUSTEMENT] step=L  date=20260302
+2026-03-02 19:13:53 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_TYPE_AJUSTEMENT"."ID_TYPE")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m93[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m216[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_TYPE_AJUSTEMENT"."ID_TYPE")[0m
+2026-03-02 19:48:17 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIES_BNTS] step=E  date=20260302
+2026-03-02 19:48:19 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00942: Table ou vue inexistante
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m70[0m, in [35mmain[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 19:49:33 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIES_BNTS] step=E  date=20260302
+2026-03-02 19:49:34 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier SQL introuvable : C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\sql\type_anomalies_bnts.sql
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m68[0m, in [35mmain[0m
+    sql    = load_sql(_SQL_DIR, cfg["sql_file"])
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\sql_loader.py"[0m, line [35m16[0m, in [35mload_sql[0m
+    raise FileNotFoundError(f"Fichier SQL introuvable : {sql_path}")
+[1;35mFileNotFoundError[0m: [35mFichier SQL introuvable : C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\sql\type_anomalies_bnts.sql[0m
+2026-03-02 19:51:43 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIES_BNTS] step=E  date=20260302
+2026-03-02 19:51:44 [INFO    ] cnss_etl.run_dim — [E] DIM_TYPE_ANOMALIES_BNTS — 12 lignes extraites → staging\raw\type_anomalie_bnts_20260302.parquet
+2026-03-02 19:52:02 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIES_BNTS] step=T  date=20260302
+2026-03-02 19:52:02 [INFO    ] cnss_etl.run_dim — [T] DIM_TYPE_ANOMALIES_BNTS — 12 lignes → staging\transformed\type_anomalie_bnts_20260302.parquet
+2026-03-02 19:52:11 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIES_BNTS] step=L  date=20260302
+2026-03-02 19:52:11 [CRITICAL] cnss_etl.run_dim — Erreur : Table DIM_TYPE_ANOMALIES_BNTS introuvable dans user_tab_columns — vérifiez le schéma DW.
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m95[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m93[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m186[0m, in [35m_merge_via_gtt[0m
+    gtt          = self._ensure_gtt(table)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m147[0m, in [35m_ensure_gtt[0m
+    raise RuntimeError(
+    ...<2 lines>...
+    )
+[1;35mRuntimeError[0m: [35mTable DIM_TYPE_ANOMALIES_BNTS introuvable dans user_tab_columns — vérifiez le schéma DW.[0m
+2026-03-02 19:52:40 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIE_BNTS] step=L  date=20260302
+2026-03-02 19:52:41 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_TYPE_ANOMALIE_BNTS créée automatiquement.
+2026-03-02 19:52:41 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE via GTT 12 lignes
+2026-03-02 19:52:42 [INFO    ] cnss_etl.run_dim — [L] DIM_TYPE_ANOMALIE_BNTS — 12 lignes chargées
+2026-03-02 20:40:29 [INFO    ] cnss_etl.run_dim — [DIM_TYPE_ANOMALIE_BNTS] step=ETL  date=20260302
+2026-03-02 20:40:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 20:40:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 20:40:32 [INFO    ] cnss_etl.run_dim — [ETL] DIM_TYPE_ANOMALIE_BNTS — 12 lignes chargées
+2026-03-02 20:41:07 [INFO    ] cnss_etl.run_dim — [DIM_BORDEREAU_PREST] step=ETL  date=20260302
+2026-03-02 20:41:18 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 20:41:46 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 20:41:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 20:41:46 [INFO    ] cnss_etl.run_dim — [ETL] DIM_BORDEREAU_PREST — 239490 lignes chargées
+2026-03-02 21:02:25 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:02:35 [ERROR   ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 21:02:35 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m57[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 21:02:35 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 21:03:08 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:03:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:03:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:03:11 [ERROR   ] cnss_etl.pipeline_dims — [DIM_TYPE_AJUSTEMENT] erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_TYPE_AJUSTEMENT"."ID_TYPE")
+2026-03-02 21:03:11 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m80[0m, in [35m_load_one[0m
+    count = loader.merge(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m96[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m114[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, batch)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_TYPE_AJUSTEMENT"."ID_TYPE")[0m
+2026-03-02 21:03:11 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_TYPE_AJUSTEMENT"."ID_TYPE")
+2026-03-02 21:08:01 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:08:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:08:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:08:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:08:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:08:10 [ERROR   ] cnss_etl.pipeline_dims — [DIM_TYPE_ATTESTATION] erreur : ORA-00904: "TAB_LIBELLE" : identificateur non valide
+2026-03-02 21:08:11 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m57[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00904: "TAB_LIBELLE" : identificateur non valide[0m
+2026-03-02 21:08:11 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00904: "TAB_LIBELLE" : identificateur non valide
+2026-03-02 21:08:50 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:08:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:08:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:08:53 [ERROR   ] cnss_etl.pipeline_dims — [DIM_TYPE_ATTESTATION] erreur : ORA-00904: "TAB_LIBELLE" : identificateur non valide
+2026-03-02 21:08:53 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m57[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00904: "TAB_LIBELLE" : identificateur non valide[0m
+2026-03-02 21:08:53 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00904: "TAB_LIBELLE" : identificateur non valide
+2026-03-02 21:09:19 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:09:22 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:09:22 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:09:22 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:09:22 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:09:22 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:09:22 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:09:22 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:09:22 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:09:23 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:09:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:09:24 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:09:24 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:09:24 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:09:24 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:09:24 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:09:24 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:09:25 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:09:25 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:09:25 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:09:25 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:09:25 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:09:25 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:09:26 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:09:26 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:09:26 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:09:26 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:09:52 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 21:10:26 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 21:10:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 21:10:28 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 21:10:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 21:12:43 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:12:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:12:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:12:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:12:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:12:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:12:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:12:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:12:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:12:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:12:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:12:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:12:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:12:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:12:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:12:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:12:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:12:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:12:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:12:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:12:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:12:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:12:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:12:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:12:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:12:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:13:08 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 21:13:36 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 21:13:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 21:13:37 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 21:13:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 21:13:40 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 21:13:43 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] erreur : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 21:13:43 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m78[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m102[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m216[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source[0m
+2026-03-02 21:13:44 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 21:20:22 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:20:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:20:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:20:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:20:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:20:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:20:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:20:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:20:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:20:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:20:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:20:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:20:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:20:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:20:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:20:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:20:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:20:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:20:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:20:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:20:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:20:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:20:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:20:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:20:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:20:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:20:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:20:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:20:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:20:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:20:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:20:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:20:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:20:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:20:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:20:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:20:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:20:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:20:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:20:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:20:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:20:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:20:53 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 21:21:08 [ERROR   ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] erreur : 
+2026-03-02 21:21:08 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m78[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m102[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m207[0m, in [35m_merge_via_gtt[0m
+    data   = _prepare(df)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m41[0m, in [35m_prepare[0m
+    return [tuple(_to_python(v) for v in row) for row in [31mdf.itertuples[0m[1;31m(index=False)[0m]
+                                                         [31m~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\datetimes.py"[0m, line [35m691[0m, in [35m__iter__[0m
+    converted = ints_to_pydatetime(
+        data[start_i:end_i],
+    ...<2 lines>...
+        reso=self._creso,
+    )
+  File [35m"pandas/_libs/tslibs/vectorized.pyx"[0m, line [35m174[0m, in [35mpandas._libs.tslibs.vectorized.ints_to_pydatetime[0m
+  File [35m"pandas/_libs/tslibs/timestamps.pyx"[0m, line [35m161[0m, in [35mpandas._libs.tslibs.timestamps.create_timestamp_from_ts[0m
+[1;35mMemoryError[0m
+2026-03-02 21:21:09 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : 
+2026-03-02 21:22:26 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:22:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:22:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:22:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:22:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:22:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:22:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:22:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:22:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:22:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:22:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:22:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:22:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:22:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:22:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:22:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:22:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:22:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:22:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:22:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:22:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:22:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:22:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:22:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:22:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:22:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:22:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:22:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:22:46 [ERROR   ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] erreur : Unable to allocate 54.8 MiB for an array with shape (239490, 30) and data type object
+2026-03-02 21:22:46 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m61[0m, in [35m_load_one[0m
+    df      = pd.DataFrame(rows, columns=columns)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\frame.py"[0m, line [35m837[0m, in [35m__init__[0m
+    arrays, columns, index = [31mnested_data_to_arrays[0m[1;31m([0m
+                             [31m~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31m# error: Argument 3 to "nested_data_to_arrays" has incompatible[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    ...<4 lines>...
+        [1;31mdtype,[0m
+        [1;31m^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m477[0m, in [35mnested_data_to_arrays[0m
+    arrays, columns = [31mto_arrays[0m[1;31m(data, columns, dtype=dtype)[0m
+                      [31m~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m802[0m, in [35mto_arrays[0m
+    arr = _list_to_arrays(data)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m820[0m, in [35m_list_to_arrays[0m
+    content = lib.to_object_array_tuples(data)
+  File [35m"pandas/_libs/lib.pyx"[0m, line [35m3173[0m, in [35mpandas._libs.lib.to_object_array_tuples[0m
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 54.8 MiB for an array with shape (239490, 30) and data type object[0m
+2026-03-02 21:22:47 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : Unable to allocate 54.8 MiB for an array with shape (239490, 30) and data type object
+2026-03-02 21:40:00 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:40:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:40:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:40:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:40:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:40:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:40:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:40:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:40:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:40:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:40:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:40:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:40:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:40:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:40:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:40:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:40:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:40:12 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:40:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:40:12 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:40:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:40:12 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:40:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:40:12 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:40:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:40:13 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:40:13 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:40:13 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:40:13 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:40:13 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:40:13 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:40:13 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:40:13 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:40:13 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:40:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:40:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:40:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:40:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:40:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:40:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:40:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:40:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:40:40 [ERROR   ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] erreur : Unable to allocate 78.1 KiB for an array with shape (10000,) and data type object
+2026-03-02 21:40:40 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m78[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m102[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m208[0m, in [35m_merge_via_gtt[0m
+    data   = _prepare(df)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m41[0m, in [35m_prepare[0m
+    return [tuple(_to_python(v) for v in row) for row in [31mdf.itertuples[0m[1;31m(index=False)[0m]
+                                                         [31m~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\datetimes.py"[0m, line [35m691[0m, in [35m__iter__[0m
+    converted = ints_to_pydatetime(
+        data[start_i:end_i],
+    ...<2 lines>...
+        reso=self._creso,
+    )
+  File [35m"pandas/_libs/tslibs/vectorized.pyx"[0m, line [35m139[0m, in [35mpandas._libs.tslibs.vectorized.ints_to_pydatetime[0m
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 78.1 KiB for an array with shape (10000,) and data type object[0m
+2026-03-02 21:40:41 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : Unable to allocate 78.1 KiB for an array with shape (10000,) and data type object
+2026-03-02 21:45:29 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:45:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:45:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:45:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:45:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:45:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:45:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:45:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:45:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:45:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:45:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:45:42 [ERROR   ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] erreur : Unable to allocate 7.31 MiB for an array with shape (4, 239490) and data type float64
+2026-03-02 21:45:42 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m61[0m, in [35m_load_one[0m
+    df      = pd.DataFrame(rows, columns=columns)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\frame.py"[0m, line [35m845[0m, in [35m__init__[0m
+    mgr = arrays_to_mgr(
+        arrays,
+    ...<2 lines>...
+        dtype=dtype,
+    )
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m150[0m, in [35marrays_to_mgr[0m
+    return create_block_manager_from_column_arrays(
+        arrays, axes, consolidate=consolidate, refs=refs
+    )
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2329[0m, in [35mcreate_block_manager_from_column_arrays[0m
+    blocks = _form_blocks(arrays, consolidate, refs)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2402[0m, in [35m_form_blocks[0m
+    values, placement = [31m_stack_arrays[0m[1;31m(tup_block, dtype)[0m
+                        [31m~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2442[0m, in [35m_stack_arrays[0m
+    stacked = np.empty(shape, dtype=dtype)
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 7.31 MiB for an array with shape (4, 239490) and data type float64[0m
+2026-03-02 21:45:43 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : Unable to allocate 7.31 MiB for an array with shape (4, 239490) and data type float64
+2026-03-02 21:49:46 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:49:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:49:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:49:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:49:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:49:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:49:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:49:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:49:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:49:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:49:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:49:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:49:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:49:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:49:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:49:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:49:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:49:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:49:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:49:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:49:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:49:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:49:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:49:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:49:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:49:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:49:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:49:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:49:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:49:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:49:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:49:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:49:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:49:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:49:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:49:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:49:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:49:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:49:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:49:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:49:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:49:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:50:40 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 21:50:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 21:50:41 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 21:50:41 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 21:50:47 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] erreur : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 21:50:47 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m218[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source[0m
+2026-03-02 21:50:47 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 21:53:28 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 21:53:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 21:53:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 21:53:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 21:53:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 21:53:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 21:53:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 21:53:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 21:53:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 21:53:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 21:53:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 21:53:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 21:53:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 21:53:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 21:53:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 21:53:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 21:53:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 21:53:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 21:53:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 21:53:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 21:53:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 21:53:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 21:53:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 21:53:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 21:53:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 21:53:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 21:53:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 21:53:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 21:53:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 21:53:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 21:53:34 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 21:53:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 21:53:46 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 21:54:20 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 21:54:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 21:54:20 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 21:54:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 21:54:25 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 21:54:25 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m218[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 21:54:25 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 22:01:11 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:01:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:01:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:01:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:01:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:01:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:01:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:01:14 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:01:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:01:15 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:01:15 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:01:15 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:01:15 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:01:15 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:01:15 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:01:15 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:01:15 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:01:15 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:01:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:01:16 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:01:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:01:16 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:01:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:01:16 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:01:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:01:16 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:01:17 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:01:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:01:18 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:01:19 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:01:19 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:01:31 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:02:05 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:02:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:02:05 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:02:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:02:10 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:02:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:02:11 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:02:11 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:02:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:02:18 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 22:02:39 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] erreur : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:02:39 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m218[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source[0m
+2026-03-02 22:02:40 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:08:55 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:08:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:08:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:08:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:08:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:08:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:08:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:08:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:08:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:08:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:08:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:08:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:08:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:08:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:08:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:09:00 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:09:00 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:09:00 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:09:00 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:09:00 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:09:00 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:09:00 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:09:00 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:09:01 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:09:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:09:01 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:09:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:09:01 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:09:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:09:01 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:09:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:09:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:09:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:09:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:09:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:09:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:09:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:09:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:09:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:09:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:09:03 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:09:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:09:18 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:09:54 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:09:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:09:56 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:09:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:09:58 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:10:03 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] erreur : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:10:03 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m218[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source[0m
+2026-03-02 22:10:04 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:21:25 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:21:36 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:21:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:21:36 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:21:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:21:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:21:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:21:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:21:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:21:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:21:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:21:37 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:21:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:21:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:21:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:21:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:21:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:21:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:21:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:21:38 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:21:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:21:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:21:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:21:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:21:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:21:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:21:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:21:39 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:21:39 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:21:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:21:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:21:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:21:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:21:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:21:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:21:40 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:21:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:21:41 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:21:41 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:21:41 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:21:41 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:21:41 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:21:55 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:22:31 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:22:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:22:32 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:22:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:22:36 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:22:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:22:36 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:22:37 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:22:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:23:06 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] erreur : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:23:06 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m218[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source[0m
+2026-03-02 22:23:07 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-30926: impossible d'obtenir un ensemble de lignes stables dans les tables source
+2026-03-02 22:31:47 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:31:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:31:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:31:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:31:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:31:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:31:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:31:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:31:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:31:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:31:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:31:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:31:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:31:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:31:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:31:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:31:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:31:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:31:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:31:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:31:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:31:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:31:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:31:51 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:31:51 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:31:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:31:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:31:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:31:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:31:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:31:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:31:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:31:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:31:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:31:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:31:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:31:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:31:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:31:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:31:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:31:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:31:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:32:04 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:32:40 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:32:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:32:40 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:32:40 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:32:42 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:32:46 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:32:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:32:46 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:32:46 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:32:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:33:10 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 22:33:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 22:33:10 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PENSION] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 22:33:10 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m58[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 22:33:10 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 22:36:05 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:36:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:36:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:36:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:36:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:36:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:36:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:36:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:36:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:36:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:36:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:36:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:36:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:36:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:36:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:36:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:36:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:36:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:36:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:36:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:36:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:36:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:36:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:36:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:36:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:36:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:36:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:36:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:36:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:36:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:36:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:36:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:36:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:36:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:36:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:36:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:36:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:36:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:36:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:36:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:36:12 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:36:12 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:36:22 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:36:55 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:36:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:36:55 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:36:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:36:57 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:37:01 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:37:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:37:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:37:01 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:37:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:37:07 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 22:37:25 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 22:37:25 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 22:37:25 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] erreur : ORA-00972: l'identificateur est trop long
+2026-03-02 22:37:25 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m188[0m, in [35m_merge_via_gtt[0m
+    gtt          = self._ensure_gtt(table)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m176[0m, in [35m_ensure_gtt[0m
+    [31mcursor.execute[0m[1;31m(ddl)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00972: l'identificateur est trop long[0m
+2026-03-02 22:37:25 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00972: l'identificateur est trop long
+2026-03-02 22:41:50 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:41:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:41:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:41:52 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:41:52 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:41:53 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:41:53 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:41:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:41:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:41:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:41:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:41:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:41:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:41:54 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:41:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:41:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:41:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:41:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:41:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:41:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:41:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:41:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:41:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:41:55 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:41:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:41:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:41:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:41:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:41:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:41:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:41:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:41:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:42:07 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:42:43 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:42:43 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:42:43 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:42:43 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:42:45 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:42:49 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:42:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:42:50 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:42:50 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:42:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:42:55 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 22:43:13 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 22:43:13 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 22:43:14 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 22:43:14 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 22:43:14 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] erreur : ORA-00972: l'identificateur est trop long
+2026-03-02 22:43:14 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m79[0m, in [35m_load_one[0m
+    count = loader.merge_via_gtt(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m103[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m188[0m, in [35m_merge_via_gtt[0m
+    gtt          = self._ensure_gtt(table)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m176[0m, in [35m_ensure_gtt[0m
+    [31mcursor.execute[0m[1;31m(ddl)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00972: l'identificateur est trop long[0m
+2026-03-02 22:43:14 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00972: l'identificateur est trop long
+2026-03-02 22:48:25 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:48:27 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:48:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:48:27 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:48:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:48:27 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:48:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:48:27 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:48:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:48:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:48:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:48:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:48:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:48:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:48:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:48:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:48:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:48:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:48:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:48:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:48:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:48:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:48:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:48:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:48:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:48:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:48:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:48:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:48:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:48:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:48:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:48:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:48:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:48:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:48:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:48:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:48:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:48:42 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:49:19 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:49:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:49:20 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:49:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:49:22 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:49:27 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:49:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:49:28 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:49:28 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:49:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:49:38 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 22:49:56 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 22:49:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 22:49:57 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 22:49:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 22:49:57 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-02 22:49:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-02 22:50:08 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-02 22:50:42 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-02 22:50:42 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-02 22:50:43 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-02 22:50:44 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-02 22:50:44 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-02 22:50:44 [ERROR   ] cnss_etl.pipeline_dims — [DIM_CONTROLLEUR] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 22:50:44 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m58[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 22:50:44 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 22:52:05 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 22:52:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 22:52:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 22:52:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 22:52:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 22:52:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 22:52:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 22:52:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 22:52:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 22:52:07 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 22:52:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 22:52:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 22:52:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 22:52:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 22:52:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 22:52:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 22:52:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 22:52:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 22:52:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 22:52:08 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 22:52:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 22:52:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 22:52:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 22:52:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 22:52:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 22:52:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 22:52:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 22:52:09 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 22:52:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 22:52:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 22:52:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 22:52:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 22:52:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 22:52:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 22:52:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 22:52:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 22:52:10 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 22:52:10 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 22:52:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 22:52:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 22:52:11 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 22:52:11 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 22:52:22 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 22:52:55 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 22:52:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 22:52:55 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 22:52:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 22:52:57 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 22:53:01 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 22:53:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 22:53:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 22:53:02 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 22:53:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 22:53:08 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 22:53:45 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 22:53:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 22:53:45 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 22:53:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 22:53:45 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-02 22:53:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-02 22:53:56 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-02 22:54:42 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-02 22:54:42 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-02 22:54:43 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-02 22:54:44 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-02 22:54:44 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-02 22:54:44 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CONTROLEUR créée automatiquement.
+2026-03-02 22:54:44 [INFO    ] cnss_etl.loader — [DIM_CONTROLEUR] MERGE via GTT 171 lignes
+2026-03-02 22:54:44 [INFO    ] cnss_etl.pipeline_dims — [DIM_CONTROLEUR] 171 lignes chargées
+2026-03-02 22:54:44 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DEPARTEMENT créée automatiquement.
+2026-03-02 22:54:45 [INFO    ] cnss_etl.loader — [DIM_DEPARTEMENT] MERGE via GTT 571 lignes
+2026-03-02 22:54:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_DEPARTEMENT] 571 lignes chargées
+2026-03-02 22:54:45 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DIRECTION_REGIONALE créée automatiquement.
+2026-03-02 22:54:45 [INFO    ] cnss_etl.loader — [DIM_DIRECTION_REGIONALE] MERGE via GTT 6 lignes
+2026-03-02 22:54:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_DIRECTION_REGIONALE] 6 lignes chargées
+2026-03-02 22:54:45 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_FORME_JURIDIQUE créée automatiquement.
+2026-03-02 22:54:45 [INFO    ] cnss_etl.loader — [DIM_FORME_JURIDIQUE] MERGE via GTT 30 lignes
+2026-03-02 22:54:45 [INFO    ] cnss_etl.pipeline_dims — [DIM_FORME_JURIDIQUE] 30 lignes chargées
+2026-03-02 22:54:46 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_INSTITUTION_FINANCIERE créée automatiquement.
+2026-03-02 22:54:46 [INFO    ] cnss_etl.loader — [DIM_INSTITUTION_FINANCIERE] MERGE via GTT 93 lignes
+2026-03-02 22:54:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_INSTITUTION_FINANCIERE] 93 lignes chargées
+2026-03-02 22:54:46 [INFO    ] cnss_etl.loader — [DIM_LIEU_PAIEMENT] MERGE 350 lignes
+2026-03-02 22:54:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_LIEU_PAIEMENT] 350 lignes chargées
+2026-03-02 22:54:46 [ERROR   ] cnss_etl.pipeline_dims — [DIM_PARAM_CAISSE_REP_DEC] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 22:54:46 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m58[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 22:54:47 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 23:01:26 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 23:01:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 23:01:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 23:01:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 23:01:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 23:01:28 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 23:01:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 23:01:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 23:01:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 23:01:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 23:01:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 23:01:29 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 23:01:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 23:01:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 23:01:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 23:01:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 23:01:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 23:01:30 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 23:01:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 23:01:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 23:01:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 23:01:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 23:01:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 23:01:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 23:01:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 23:01:31 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 23:01:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 23:01:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 23:01:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 23:01:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 23:01:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 23:01:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 23:01:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 23:01:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 23:01:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 23:01:32 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 23:01:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 23:01:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 23:01:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 23:01:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 23:01:33 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 23:01:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 23:01:44 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 23:02:17 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 23:02:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 23:02:17 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 23:02:17 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 23:02:19 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 23:02:23 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 23:02:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 23:02:23 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 23:02:23 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 23:02:23 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 23:02:30 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 23:02:48 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 23:02:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 23:02:48 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 23:02:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 23:02:48 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-02 23:02:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-02 23:02:59 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-02 23:03:33 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-02 23:03:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-02 23:03:34 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-02 23:03:35 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-02 23:03:35 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-02 23:03:35 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CONTROLEUR créée automatiquement.
+2026-03-02 23:03:35 [INFO    ] cnss_etl.loader — [DIM_CONTROLEUR] MERGE via GTT 171 lignes
+2026-03-02 23:03:35 [INFO    ] cnss_etl.pipeline_dims — [DIM_CONTROLEUR] 171 lignes chargées
+2026-03-02 23:03:35 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DEPARTEMENT créée automatiquement.
+2026-03-02 23:03:36 [INFO    ] cnss_etl.loader — [DIM_DEPARTEMENT] MERGE via GTT 571 lignes
+2026-03-02 23:03:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_DEPARTEMENT] 571 lignes chargées
+2026-03-02 23:03:36 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DIRECTION_REGIONALE créée automatiquement.
+2026-03-02 23:03:36 [INFO    ] cnss_etl.loader — [DIM_DIRECTION_REGIONALE] MERGE via GTT 6 lignes
+2026-03-02 23:03:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_DIRECTION_REGIONALE] 6 lignes chargées
+2026-03-02 23:03:36 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_FORME_JURIDIQUE créée automatiquement.
+2026-03-02 23:03:36 [INFO    ] cnss_etl.loader — [DIM_FORME_JURIDIQUE] MERGE via GTT 30 lignes
+2026-03-02 23:03:36 [INFO    ] cnss_etl.pipeline_dims — [DIM_FORME_JURIDIQUE] 30 lignes chargées
+2026-03-02 23:03:37 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_INSTITUTION_FINANCIERE créée automatiquement.
+2026-03-02 23:03:37 [INFO    ] cnss_etl.loader — [DIM_INSTITUTION_FINANCIERE] MERGE via GTT 93 lignes
+2026-03-02 23:03:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_INSTITUTION_FINANCIERE] 93 lignes chargées
+2026-03-02 23:03:37 [INFO    ] cnss_etl.loader — [DIM_LIEU_PAIEMENT] MERGE 350 lignes
+2026-03-02 23:03:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_LIEU_PAIEMENT] 350 lignes chargées
+2026-03-02 23:03:37 [INFO    ] cnss_etl.loader — [DIM_PARAM_CAISSE_REC_DEP] MERGE 28 lignes
+2026-03-02 23:03:37 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CAISSE_REC_DEP] 28 lignes chargées
+2026-03-02 23:03:38 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_PARAM_CPT_BANCAIRE créée automatiquement.
+2026-03-02 23:03:38 [INFO    ] cnss_etl.loader — [DIM_PARAM_CPT_BANCAIRE] MERGE via GTT 145 lignes
+2026-03-02 23:03:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CPT_BANCAIRE] 145 lignes chargées
+2026-03-02 23:03:38 [ERROR   ] cnss_etl.pipeline_dims — [DIM_PARAMETRE_COTISATION] erreur : ORA-00942: Table ou vue inexistante
+2026-03-02 23:03:38 [ERROR   ] cnss_etl.pipeline_dims — Erreur pipeline DIMS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m34[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m58[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00942: Table ou vue inexistante[0m
+2026-03-02 23:03:38 [CRITICAL] run_prestation_recouvrement_dim_pipeline — DimsPipeline échoué : ORA-00942: Table ou vue inexistante
+2026-03-02 23:04:44 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 23:04:46 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 23:04:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 23:04:46 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 23:04:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 23:04:46 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 23:04:46 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 23:04:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 23:04:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 23:04:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 23:04:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 23:04:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 23:04:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 23:04:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 23:04:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 23:04:47 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 23:04:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 23:04:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 23:04:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 23:04:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 23:04:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 23:04:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 23:04:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 23:04:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 23:04:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 23:04:48 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 23:04:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 23:04:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 23:04:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 23:04:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 23:04:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 23:04:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 23:04:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 23:04:49 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 23:04:49 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 23:04:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 23:04:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 23:04:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 23:04:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 23:04:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 23:04:50 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 23:04:50 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 23:05:00 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 23:05:37 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 23:05:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 23:05:38 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 23:05:38 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 23:05:39 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 23:05:43 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 23:05:43 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 23:05:44 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 23:05:44 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 23:05:44 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 23:05:50 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 23:06:15 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 23:06:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 23:06:16 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 23:06:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 23:06:16 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-02 23:06:16 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-02 23:06:27 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-02 23:07:27 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-02 23:07:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-02 23:07:28 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-02 23:07:28 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-02 23:07:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-02 23:07:29 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CONTROLEUR créée automatiquement.
+2026-03-02 23:07:29 [INFO    ] cnss_etl.loader — [DIM_CONTROLEUR] MERGE via GTT 171 lignes
+2026-03-02 23:07:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_CONTROLEUR] 171 lignes chargées
+2026-03-02 23:07:29 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DEPARTEMENT créée automatiquement.
+2026-03-02 23:07:29 [INFO    ] cnss_etl.loader — [DIM_DEPARTEMENT] MERGE via GTT 571 lignes
+2026-03-02 23:07:29 [INFO    ] cnss_etl.pipeline_dims — [DIM_DEPARTEMENT] 571 lignes chargées
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DIRECTION_REGIONALE créée automatiquement.
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [DIM_DIRECTION_REGIONALE] MERGE via GTT 6 lignes
+2026-03-02 23:07:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_DIRECTION_REGIONALE] 6 lignes chargées
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_FORME_JURIDIQUE créée automatiquement.
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [DIM_FORME_JURIDIQUE] MERGE via GTT 30 lignes
+2026-03-02 23:07:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_FORME_JURIDIQUE] 30 lignes chargées
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_INSTITUTION_FINANCIERE créée automatiquement.
+2026-03-02 23:07:30 [INFO    ] cnss_etl.loader — [DIM_INSTITUTION_FINANCIERE] MERGE via GTT 93 lignes
+2026-03-02 23:07:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_INSTITUTION_FINANCIERE] 93 lignes chargées
+2026-03-02 23:07:31 [INFO    ] cnss_etl.loader — [DIM_LIEU_PAIEMENT] MERGE 350 lignes
+2026-03-02 23:07:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_LIEU_PAIEMENT] 350 lignes chargées
+2026-03-02 23:07:31 [INFO    ] cnss_etl.loader — [DIM_PARAM_CAISSE_REC_DEP] MERGE 28 lignes
+2026-03-02 23:07:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CAISSE_REC_DEP] 28 lignes chargées
+2026-03-02 23:07:31 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_PARAM_CPT_BANCAIRE créée automatiquement.
+2026-03-02 23:07:31 [INFO    ] cnss_etl.loader — [DIM_PARAM_CPT_BANCAIRE] MERGE via GTT 145 lignes
+2026-03-02 23:07:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CPT_BANCAIRE] 145 lignes chargées
+2026-03-02 23:07:31 [INFO    ] cnss_etl.loader — [DIM_PARAMETRES_COTISATION] MERGE 1 lignes
+2026-03-02 23:07:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAMETRES_COTISATION] 1 lignes chargées
+2026-03-02 23:07:32 [INFO    ] cnss_etl.loader — [DIM_PAYS] MERGE 159 lignes
+2026-03-02 23:07:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_PAYS] 159 lignes chargées
+2026-03-02 23:07:32 [INFO    ] cnss_etl.loader — [DIM_PERIODE] MERGE 1572 lignes
+2026-03-02 23:07:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_PERIODE] 1572 lignes chargées
+2026-03-02 23:07:32 [INFO    ] cnss_etl.loader — [DIM_PROVINCE] MERGE 209 lignes
+2026-03-02 23:07:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_PROVINCE] 209 lignes chargées
+2026-03-02 23:07:33 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_REGIME_EMPLOYEUR créée automatiquement.
+2026-03-02 23:07:33 [INFO    ] cnss_etl.loader — [DIM_REGIME_EMPLOYEUR] MERGE via GTT 3 lignes
+2026-03-02 23:07:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_REGIME_EMPLOYEUR] 3 lignes chargées
+2026-03-02 23:07:33 [INFO    ] cnss_etl.loader — [DIM_SECTEUR_ACTIVITE] MERGE 11 lignes
+2026-03-02 23:07:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_SECTEUR_ACTIVITE] 11 lignes chargées
+2026-03-02 23:40:25 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 23:40:27 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 23:40:27 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 23:43:52 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-02 23:43:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-02 23:43:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-02 23:43:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-02 23:43:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-02 23:43:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-02 23:43:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-02 23:43:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-02 23:43:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-02 23:43:56 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-02 23:43:56 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-02 23:43:57 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-02 23:43:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-02 23:43:57 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-02 23:43:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-02 23:43:57 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-02 23:43:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-02 23:43:57 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-02 23:43:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-02 23:43:57 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-02 23:43:57 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-02 23:43:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-02 23:43:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-02 23:43:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-02 23:43:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-02 23:43:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-02 23:43:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-02 23:43:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-02 23:43:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-02 23:43:58 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-02 23:43:58 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-02 23:43:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-02 23:43:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-02 23:43:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-02 23:43:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-02 23:43:59 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-02 23:43:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-02 23:44:12 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-02 23:44:48 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-02 23:44:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-02 23:44:48 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-02 23:44:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-02 23:44:50 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-02 23:44:54 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-02 23:44:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-02 23:44:54 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-02 23:44:54 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-02 23:44:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-02 23:45:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-02 23:45:19 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-02 23:45:19 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-02 23:45:20 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-02 23:45:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-02 23:45:20 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-02 23:45:20 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-02 23:45:31 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-02 23:46:03 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-02 23:46:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-02 23:46:04 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-02 23:46:05 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-02 23:46:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-02 23:46:05 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CONTROLEUR créée automatiquement.
+2026-03-02 23:46:05 [INFO    ] cnss_etl.loader — [DIM_CONTROLEUR] MERGE via GTT 171 lignes
+2026-03-02 23:46:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_CONTROLEUR] 171 lignes chargées
+2026-03-02 23:46:05 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DEPARTEMENT créée automatiquement.
+2026-03-02 23:46:05 [INFO    ] cnss_etl.loader — [DIM_DEPARTEMENT] MERGE via GTT 571 lignes
+2026-03-02 23:46:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_DEPARTEMENT] 571 lignes chargées
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DIRECTION_REGIONALE créée automatiquement.
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [DIM_DIRECTION_REGIONALE] MERGE via GTT 6 lignes
+2026-03-02 23:46:06 [INFO    ] cnss_etl.pipeline_dims — [DIM_DIRECTION_REGIONALE] 6 lignes chargées
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_FORME_JURIDIQUE créée automatiquement.
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [DIM_FORME_JURIDIQUE] MERGE via GTT 30 lignes
+2026-03-02 23:46:06 [INFO    ] cnss_etl.pipeline_dims — [DIM_FORME_JURIDIQUE] 30 lignes chargées
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_INSTITUTION_FINANCIERE créée automatiquement.
+2026-03-02 23:46:06 [INFO    ] cnss_etl.loader — [DIM_INSTITUTION_FINANCIERE] MERGE via GTT 93 lignes
+2026-03-02 23:46:06 [INFO    ] cnss_etl.pipeline_dims — [DIM_INSTITUTION_FINANCIERE] 93 lignes chargées
+2026-03-02 23:46:07 [INFO    ] cnss_etl.loader — [DIM_LIEU_PAIEMENT] MERGE 350 lignes
+2026-03-02 23:46:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_LIEU_PAIEMENT] 350 lignes chargées
+2026-03-02 23:46:07 [INFO    ] cnss_etl.loader — [DIM_PARAM_CAISSE_REC_DEP] MERGE 28 lignes
+2026-03-02 23:46:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CAISSE_REC_DEP] 28 lignes chargées
+2026-03-02 23:46:07 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_PARAM_CPT_BANCAIRE créée automatiquement.
+2026-03-02 23:46:07 [INFO    ] cnss_etl.loader — [DIM_PARAM_CPT_BANCAIRE] MERGE via GTT 145 lignes
+2026-03-02 23:46:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CPT_BANCAIRE] 145 lignes chargées
+2026-03-02 23:46:07 [INFO    ] cnss_etl.loader — [DIM_PARAMETRES_COTISATION] MERGE 1 lignes
+2026-03-02 23:46:07 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAMETRES_COTISATION] 1 lignes chargées
+2026-03-02 23:46:08 [INFO    ] cnss_etl.loader — [DIM_PAYS] MERGE 159 lignes
+2026-03-02 23:46:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_PAYS] 159 lignes chargées
+2026-03-02 23:46:08 [INFO    ] cnss_etl.loader — [DIM_PERIODE] MERGE 1572 lignes
+2026-03-02 23:46:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_PERIODE] 1572 lignes chargées
+2026-03-02 23:46:08 [INFO    ] cnss_etl.loader — [DIM_PROVINCE] MERGE 209 lignes
+2026-03-02 23:46:08 [INFO    ] cnss_etl.pipeline_dims — [DIM_PROVINCE] 209 lignes chargées
+2026-03-02 23:46:08 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_REGIME_EMPLOYEUR créée automatiquement.
+2026-03-02 23:46:09 [INFO    ] cnss_etl.loader — [DIM_REGIME_EMPLOYEUR] MERGE via GTT 3 lignes
+2026-03-02 23:46:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_REGIME_EMPLOYEUR] 3 lignes chargées
+2026-03-02 23:46:09 [INFO    ] cnss_etl.loader — [DIM_SECTEUR_ACTIVITE] MERGE 11 lignes
+2026-03-02 23:46:09 [INFO    ] cnss_etl.pipeline_dims — [DIM_SECTEUR_ACTIVITE] 11 lignes chargées
+2026-03-02 23:46:17 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_SECTEUR_OPERATION créée automatiquement.
+2026-03-02 23:46:30 [INFO    ] cnss_etl.loader — [DIM_SECTEUR_OPERATION] MERGE via GTT 284476 lignes
+2026-03-02 23:46:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_SECTEUR_OPERATION] 284476 lignes chargées
+2026-03-02 23:46:32 [INFO    ] cnss_etl.loader — [DIM_SEMESTRE] MERGE 120 lignes
+2026-03-02 23:46:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_SEMESTRE] 120 lignes chargées
+2026-03-02 23:46:32 [INFO    ] cnss_etl.loader — [DIM_SERVICE_PROVINCIAL] MERGE 20 lignes
+2026-03-02 23:46:32 [INFO    ] cnss_etl.pipeline_dims — [DIM_SERVICE_PROVINCIAL] 20 lignes chargées
+2026-03-02 23:46:33 [INFO    ] cnss_etl.loader — [DIM_TRANCHE_EFFECTIF] MERGE 3501 lignes
+2026-03-02 23:46:33 [INFO    ] cnss_etl.pipeline_dims — [DIM_TRANCHE_EFFECTIF] 3501 lignes chargées
+2026-03-02 23:46:34 [INFO    ] cnss_etl.loader — [DIM_TRIMESTRE] MERGE 284 lignes
+2026-03-02 23:46:34 [INFO    ] cnss_etl.pipeline_dims — [DIM_TRIMESTRE] 284 lignes chargées
+2026-03-02 23:46:34 [INFO    ] cnss_etl.pipeline_dims — Pipeline DIMS terminé — 1095865 lignes chargées
+2026-03-02 23:46:34 [INFO    ] run_prestation_recouvrement_dim_pipeline — DimsPipeline terminé avec succès.
+2026-03-03 09:19:49 [INFO    ] run_prestation_recouvrement_dim_pipeline — Démarrage
+2026-03-03 09:20:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_ACCIDENT] MERGE 5 lignes
+2026-03-03 09:20:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ACCIDENT] 5 lignes chargées
+2026-03-03 09:20:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_ANOMALIE_BNTS] MERGE 12 lignes
+2026-03-03 09:20:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ANOMALIE_BNTS] 12 lignes chargées
+2026-03-03 09:20:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_BORDEREAU] MERGE 8 lignes
+2026-03-03 09:20:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_BORDEREAU] 8 lignes chargées
+2026-03-03 09:20:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_DEBOURS] MERGE 4 lignes
+2026-03-03 09:20:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DEBOURS] 4 lignes chargées
+2026-03-03 09:20:02 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOIGT] MERGE 10 lignes
+2026-03-03 09:20:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOIGT] 10 lignes chargées
+2026-03-03 09:20:03 [INFO    ] cnss_etl.loader — [DIM_TYPE_DOSSIER] MERGE 4 lignes
+2026-03-03 09:20:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_DOSSIER] 4 lignes chargées
+2026-03-03 09:20:03 [INFO    ] cnss_etl.loader — [DIM_TYPE_EFFET] MERGE 11 lignes
+2026-03-03 09:20:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_EFFET] 11 lignes chargées
+2026-03-03 09:20:03 [INFO    ] cnss_etl.loader — [DIM_TYPE_ETAPE] MERGE 13 lignes
+2026-03-03 09:20:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_ETAPE] 13 lignes chargées
+2026-03-03 09:20:03 [INFO    ] cnss_etl.loader — [DIM_TYPE_FREQUENCE_PAIEMENT] MERGE 4 lignes
+2026-03-03 09:20:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_FREQUENCE_PAIEMENT] 4 lignes chargées
+2026-03-03 09:20:04 [INFO    ] cnss_etl.loader — [DIM_TYPE_MODE_PAIEMENT] MERGE 7 lignes
+2026-03-03 09:20:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MODE_PAIEMENT] 7 lignes chargées
+2026-03-03 09:20:04 [INFO    ] cnss_etl.loader — [DIM_TYPE_MOTIF] MERGE 5 lignes
+2026-03-03 09:20:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_MOTIF] 5 lignes chargées
+2026-03-03 09:20:04 [INFO    ] cnss_etl.loader — [DIM_TYPE_OPER_CAISSE] MERGE 4 lignes
+2026-03-03 09:20:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_OPER_CAISSE] 4 lignes chargées
+2026-03-03 09:20:04 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE] MERGE 86 lignes
+2026-03-03 09:20:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE] 86 lignes chargées
+2026-03-03 09:20:04 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_IND_ASSURE] MERGE 33 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_IND_ASSURE] 33 lignes chargées
+2026-03-03 09:20:05 [INFO    ] cnss_etl.loader — [DIM_TYPE_PIECE_INIT_RECEPTION] MERGE 24 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PIECE_INIT_RECEPTION] 24 lignes chargées
+2026-03-03 09:20:05 [INFO    ] cnss_etl.loader — [DIM_TYPE_PJ_CORRESPONDANCE] MERGE 1 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PJ_CORRESPONDANCE] 1 lignes chargées
+2026-03-03 09:20:05 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_ESP] MERGE 28 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_ESP] 28 lignes chargées
+2026-03-03 09:20:05 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_NAT] MERGE 51 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_NAT] 51 lignes chargées
+2026-03-03 09:20:05 [INFO    ] cnss_etl.loader — [DIM_TYPE_PRESTATION_REGROUPE] MERGE 15 lignes
+2026-03-03 09:20:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRESTATION_REGROUPE] 15 lignes chargées
+2026-03-03 09:20:06 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_PRS_CORRESPONDANCE] aucune donnée
+2026-03-03 09:20:06 [INFO    ] cnss_etl.loader — [DIM_TYPE_TRAVAILLEUR] MERGE 8 lignes
+2026-03-03 09:20:06 [INFO    ] cnss_etl.pipeline_dims — [DIM_TYPE_TRAVAILLEUR] 8 lignes chargées
+2026-03-03 09:20:14 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_BORDEREAU_PREST créée automatiquement.
+2026-03-03 09:20:47 [INFO    ] cnss_etl.loader — [DIM_BORDEREAU_PREST] MERGE via GTT 239490 lignes
+2026-03-03 09:20:47 [INFO    ] cnss_etl.pipeline_dims — [DIM_BORDEREAU_PREST] 239490 lignes chargées
+2026-03-03 09:20:48 [INFO    ] cnss_etl.loader — [DIM_BRANCHE] MERGE 3 lignes
+2026-03-03 09:20:48 [INFO    ] cnss_etl.pipeline_dims — [DIM_BRANCHE] 3 lignes chargées
+2026-03-03 09:20:49 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSE_PAIEMENT créée automatiquement.
+2026-03-03 09:20:54 [INFO    ] cnss_etl.loader — [DIM_CAISSE_PAIEMENT] MERGE via GTT 49428 lignes
+2026-03-03 09:20:54 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSE_PAIEMENT] 49428 lignes chargées
+2026-03-03 09:20:55 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CAISSIER créée automatiquement.
+2026-03-03 09:20:55 [INFO    ] cnss_etl.loader — [DIM_CAISSIER] MERGE via GTT 159 lignes
+2026-03-03 09:20:55 [INFO    ] cnss_etl.pipeline_dims — [DIM_CAISSIER] 159 lignes chargées
+2026-03-03 09:20:59 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CATEGORIE_EMPLOYEUR créée automatiquement.
+2026-03-03 09:21:18 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_EMPLOYEUR] MERGE via GTT 264636 lignes
+2026-03-03 09:21:18 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-03 09:21:19 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_DOSSIER_PENSION] MERGE 5 lignes
+2026-03-03 09:21:19 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_DOSSIER_PENSION] 5 lignes chargées
+2026-03-03 09:21:19 [INFO    ] cnss_etl.loader — [DIM_CATEGORIE_PRESTATION_NAT] MERGE 24 lignes
+2026-03-03 09:21:19 [INFO    ] cnss_etl.pipeline_dims — [DIM_CATEGORIE_PRESTATION_NAT] 24 lignes chargées
+2026-03-03 09:21:27 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTE_BANCAIRE créée automatiquement.
+2026-03-03 09:21:59 [INFO    ] cnss_etl.loader — [DIM_COMPTE_BANCAIRE] MERGE via GTT 241981 lignes
+2026-03-03 09:21:59 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTE_BANCAIRE] 241981 lignes chargées
+2026-03-03 09:22:00 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_COMPTES créée automatiquement.
+2026-03-03 09:22:00 [INFO    ] cnss_etl.loader — [DIM_COMPTES] MERGE via GTT 8056 lignes
+2026-03-03 09:22:00 [INFO    ] cnss_etl.pipeline_dims — [DIM_COMPTES] 8056 lignes chargées
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_CONTROLEUR créée automatiquement.
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [DIM_CONTROLEUR] MERGE via GTT 171 lignes
+2026-03-03 09:22:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_CONTROLEUR] 171 lignes chargées
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DEPARTEMENT créée automatiquement.
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [DIM_DEPARTEMENT] MERGE via GTT 571 lignes
+2026-03-03 09:22:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_DEPARTEMENT] 571 lignes chargées
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DIRECTION_REGIONALE créée automatiquement.
+2026-03-03 09:22:01 [INFO    ] cnss_etl.loader — [DIM_DIRECTION_REGIONALE] MERGE via GTT 6 lignes
+2026-03-03 09:22:01 [INFO    ] cnss_etl.pipeline_dims — [DIM_DIRECTION_REGIONALE] 6 lignes chargées
+2026-03-03 09:22:02 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_FORME_JURIDIQUE créée automatiquement.
+2026-03-03 09:22:02 [INFO    ] cnss_etl.loader — [DIM_FORME_JURIDIQUE] MERGE via GTT 30 lignes
+2026-03-03 09:22:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_FORME_JURIDIQUE] 30 lignes chargées
+2026-03-03 09:22:02 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_INSTITUTION_FINANCIERE créée automatiquement.
+2026-03-03 09:22:02 [INFO    ] cnss_etl.loader — [DIM_INSTITUTION_FINANCIERE] MERGE via GTT 93 lignes
+2026-03-03 09:22:02 [INFO    ] cnss_etl.pipeline_dims — [DIM_INSTITUTION_FINANCIERE] 93 lignes chargées
+2026-03-03 09:22:03 [INFO    ] cnss_etl.loader — [DIM_LIEU_PAIEMENT] MERGE 350 lignes
+2026-03-03 09:22:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_LIEU_PAIEMENT] 350 lignes chargées
+2026-03-03 09:22:03 [INFO    ] cnss_etl.loader — [DIM_PARAM_CAISSE_REC_DEP] MERGE 28 lignes
+2026-03-03 09:22:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CAISSE_REC_DEP] 28 lignes chargées
+2026-03-03 09:22:03 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_PARAM_CPT_BANCAIRE créée automatiquement.
+2026-03-03 09:22:03 [INFO    ] cnss_etl.loader — [DIM_PARAM_CPT_BANCAIRE] MERGE via GTT 145 lignes
+2026-03-03 09:22:03 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAM_CPT_BANCAIRE] 145 lignes chargées
+2026-03-03 09:22:04 [INFO    ] cnss_etl.loader — [DIM_PARAMETRES_COTISATION] MERGE 1 lignes
+2026-03-03 09:22:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_PARAMETRES_COTISATION] 1 lignes chargées
+2026-03-03 09:22:04 [INFO    ] cnss_etl.loader — [DIM_PAYS] MERGE 159 lignes
+2026-03-03 09:22:04 [INFO    ] cnss_etl.pipeline_dims — [DIM_PAYS] 159 lignes chargées
+2026-03-03 09:22:05 [INFO    ] cnss_etl.loader — [DIM_PERIODE] MERGE 1572 lignes
+2026-03-03 09:22:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_PERIODE] 1572 lignes chargées
+2026-03-03 09:22:05 [INFO    ] cnss_etl.loader — [DIM_PROVINCE] MERGE 209 lignes
+2026-03-03 09:22:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_PROVINCE] 209 lignes chargées
+2026-03-03 09:22:05 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_REGIME_EMPLOYEUR créée automatiquement.
+2026-03-03 09:22:05 [INFO    ] cnss_etl.loader — [DIM_REGIME_EMPLOYEUR] MERGE via GTT 3 lignes
+2026-03-03 09:22:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_REGIME_EMPLOYEUR] 3 lignes chargées
+2026-03-03 09:22:05 [INFO    ] cnss_etl.loader — [DIM_SECTEUR_ACTIVITE] MERGE 11 lignes
+2026-03-03 09:22:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_SECTEUR_ACTIVITE] 11 lignes chargées
+2026-03-03 09:22:10 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_SECTEUR_OPERATION créée automatiquement.
+2026-03-03 09:22:28 [INFO    ] cnss_etl.loader — [DIM_SECTEUR_OPERATION] MERGE via GTT 284476 lignes
+2026-03-03 09:22:28 [INFO    ] cnss_etl.pipeline_dims — [DIM_SECTEUR_OPERATION] 284476 lignes chargées
+2026-03-03 09:22:30 [INFO    ] cnss_etl.loader — [DIM_SEMESTRE] MERGE 120 lignes
+2026-03-03 09:22:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_SEMESTRE] 120 lignes chargées
+2026-03-03 09:22:30 [INFO    ] cnss_etl.loader — [DIM_SERVICE_PROVINCIAL] MERGE 20 lignes
+2026-03-03 09:22:30 [INFO    ] cnss_etl.pipeline_dims — [DIM_SERVICE_PROVINCIAL] 20 lignes chargées
+2026-03-03 09:22:31 [INFO    ] cnss_etl.loader — [DIM_TRANCHE_EFFECTIF] MERGE 3501 lignes
+2026-03-03 09:22:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TRANCHE_EFFECTIF] 3501 lignes chargées
+2026-03-03 09:22:31 [INFO    ] cnss_etl.loader — [DIM_TRIMESTRE] MERGE 284 lignes
+2026-03-03 09:22:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TRIMESTRE] 284 lignes chargées
+2026-03-03 09:22:31 [INFO    ] cnss_etl.pipeline_dims — Pipeline DIMS terminé — 1095865 lignes chargées
+2026-03-03 09:22:32 [INFO    ] run_prestation_recouvrement_dim_pipeline — DimsPipeline terminé avec succès.

@@ -1,0 +1,16 @@
+SELECT
+    LP_NO,
+    DR_NO,
+    LP_DESC,
+    LP_DATE_INSERT,
+    LP_USAGER_INSERT,
+    LP_DATE_UPDATE,
+    LP_USAGER_UPDATE,
+    SP_NO,
+    DR_OU_SP,
+    LP_NO_SUP,
+    PA_NO,
+    PR_NO,
+    LP_CODE_GL,
+    LP_CODE_GRH
+FROM LIEU_PAIEMENT
