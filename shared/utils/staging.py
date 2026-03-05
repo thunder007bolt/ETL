@@ -26,6 +26,14 @@ def write_raw(staging_dir: str, name: str, run_date: str, df: pd.DataFrame) -> P
     return path
 
 
+def raw_path(staging_dir: str, name: str, run_date: str) -> Path:
+    """Retourne (et crée) le chemin du fichier raw — pour l'écriture en streaming."""
+    path = _raw_path(staging_dir, name, run_date)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+
 def read_raw(staging_dir: str, name: str, run_date: str) -> pd.DataFrame:
     path = _raw_path(staging_dir, name, run_date)
     if not path.exists():

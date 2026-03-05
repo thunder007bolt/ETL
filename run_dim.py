@@ -12,8 +12,13 @@ import sys
 import pandas as pd
 from datetime import datetime, date
 from pathlib import Path
+import pyarrow as pa
+import pyarrow.parquet as pq
 from shared.configs.log_setup import setup_logging
 
+pd.set_option('display.max_columns', None)  # Afficher toutes les colonnes
+pd.set_option('display.width', None)        # Largeur automatique
+pd.set_option('display.max_colwidth', None) # Ne pas tronquer le contenu
 
 
 _SQL_DIR = str(
@@ -23,6 +28,8 @@ _SQL_DIR = str(
 
 
 def main():
+    import gc
+    gc.collect()
     setup_logging()
     logger = logging.getLogger("cnss_etl.run_dim")
 
@@ -68,15 +75,58 @@ def main():
             sql    = load_sql(_SQL_DIR, cfg["sql_file"])
             cursor = src_conn.cursor()
             cursor.execute(sql)
-
-            cols = [col[0].upper() for col in cursor.description]
-            df   = pd.DataFrame(cursor.fetchall(), columns=cols)
-            path = staging.write_raw(settings.STAGING_DIR, args.dim, run_date, df)
-            logger.info(f"[E] {target} — {len(df)} lignes extraites → {path}")
+            cols  = [col[0].upper() for col in cursor.description]
+            path  = staging.raw_path(settings.STAGING_DIR, args.dim, run_date)
+            # Lecture en streaming fetchmany → écriture Parquet incrémentale.
+            # Évite le double pic mémoire de fetchall() + pd.DataFrame() global.
+            _FETCH = 50_000
+            writer       = None
+            writer_schema = None
+            total        = 0
+            try:
+                while True:
+                    rows = cursor.fetchmany(_FETCH)
+                    if not rows:
+                        break
+                    chunk = pd.DataFrame(rows, columns=cols)
+                    table = pa.Table.from_pandas(chunk, preserve_index=False)
+                    if writer is None:
+                        # Schéma de référence fixé sur le premier batch
+                        writer_schema = table.schema
+                        writer = pq.ParquetWriter(str(path), writer_schema)
+                    else:
+                        # Cast vers le schéma de référence : corrige les dérives de type
+                        # entre batches (ex: int64 → double quand des NULL apparaissent)
+                        table = table.cast(writer_schema)
+                    writer.write_table(table)
+                    total += len(chunk)
+            finally:
+                if writer:
+                    writer.close()
+            logger.info(f"[E] {target} — {total} lignes extraites → {path}")
 
         # ── T : transformation ───────────────────────
         elif args.step == "T":
             df   = staging.read_raw(settings.STAGING_DIR, args.dim, run_date)
+            print(df.columns.tolist())
+            print(df.shape)
+
+            print(df.head(10))
+            #return
+            # Renommage source → cible
+            col_map = cfg.get("col_map", {})
+            if col_map:
+                df = df.rename(columns={k.upper(): v.upper() for k, v in col_map.items()})
+
+            # Colonnes cible absentes de la source (métadonnées ETL, valeurs fixes…)
+            for col, val in cfg.get("extra_cols", {}).items():
+                df[col.upper()] = val() if callable(val) else val
+
+            # Transformation métier spécifique à la dimension
+            transform_fn = cfg.get("transform_fn")
+            if transform_fn is not None:
+                df = transform_fn(df)
+            
             path = staging.write_transformed(settings.STAGING_DIR, args.dim, run_date, df)
             logger.info(f"[T] {target} — {len(df)} lignes → {path}")
             
@@ -87,6 +137,10 @@ def main():
 
             dw_conn = get_dw_connection()
             df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
+            print(df.columns.tolist())
+            print(df.shape)
+            print(df.head(10))
+            #return
             if df.empty:
                 logger.info(f"[L] {target} — aucune donnée dans le staging")
             else:

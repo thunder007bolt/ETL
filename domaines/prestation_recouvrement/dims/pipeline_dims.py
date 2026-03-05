@@ -51,7 +51,7 @@ class DimsPipeline:
         
         try:
              
-            # Extraction
+            #### Extraction
             sql    = load_sql(_SQL_DIR, sql_file)
             cursor = src_conn.cursor()
 
@@ -65,14 +65,23 @@ class DimsPipeline:
                 logger.info(f"[{target}] aucune donnée")
                 return 0
 
+            #### Transformation
+            # Renommage source → cible
+            col_map = cfg.get("col_map", {})
+            if col_map:
+                df = df.rename(columns={k.upper(): v.upper() for k, v in col_map.items()})
 
-            # Transformation
+            # Colonnes cible absentes de la source (métadonnées ETL, valeurs fixes…)
+            for col, val in cfg.get("extra_cols", {}).items():
+                df[col.upper()] = val() if callable(val) else val
+
+            # Transformation métier spécifique à la dimension
             transform_fn = cfg.get("transform_fn")
             if transform_fn is not None:
                 df = transform_fn(df)
                 
                 
-            # Chargement
+            #### Chargement
             strategy = cfg.get("strategy", "merge")
 
             if strategy == "gtt":

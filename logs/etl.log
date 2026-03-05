@@ -2023,3 +2023,541 @@ Traceback (most recent call last):
 2026-03-03 09:22:31 [INFO    ] cnss_etl.pipeline_dims — [DIM_TRIMESTRE] 284 lignes chargées
 2026-03-03 09:22:31 [INFO    ] cnss_etl.pipeline_dims — Pipeline DIMS terminé — 1095865 lignes chargées
 2026-03-03 09:22:32 [INFO    ] run_prestation_recouvrement_dim_pipeline — DimsPipeline terminé avec succès.
+2026-03-04 23:01:11 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260304
+2026-03-04 23:02:50 [INFO    ] cnss_etl.run_dim — [E] DIM_ASSURE — 1543286 lignes extraites → staging\raw\assure_20260304.parquet
+2026-03-04 23:03:12 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260304
+2026-03-04 23:03:20 [INFO    ] cnss_etl.run_dim — [T] DIM_ASSURE — 1543286 lignes → staging\transformed\assure_20260304.parquet
+2026-03-04 23:12:48 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260304
+2026-03-04 23:12:49 [CRITICAL] cnss_etl.run_dim — Erreur : cannot access local variable 'df' where it is not associated with a value
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m87[0m, in [35mmain[0m
+    [1;31mdf[0m[col.upper()] = val() if callable(val) else val
+    [1;31m^^[0m
+[1;35mUnboundLocalError[0m: [35mcannot access local variable 'df' where it is not associated with a value[0m
+2026-03-04 23:15:25 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260304
+2026-03-04 23:15:59 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260304
+2026-03-04 23:16:05 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_ASSURE créée automatiquement.
+2026-03-04 23:17:14 [CRITICAL] cnss_etl.run_dim — Erreur : 
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m106[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m112[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m208[0m, in [35m_merge_via_gtt[0m
+    data   = _prepare(df)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m41[0m, in [35m_prepare[0m
+    return [[1;31mtuple[0m(_to_python(v) for v in row) for row in df.itertuples(index=False)]
+            [1;31m^^^^^[0m
+[1;35mMemoryError[0m
+2026-03-04 23:30:05 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260304
+2026-03-04 23:30:16 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01438: valeur incohérente avec la précision indiquée pour cette colonne
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m106[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m112[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m213[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, _prepare(chunk))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01438: valeur incohérente avec la précision indiquée pour cette colonne[0m
+2026-03-04 23:31:32 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260304
+2026-03-04 23:32:03 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260304
+2026-03-04 23:33:30 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260304
+2026-03-04 23:40:41 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260304
+2026-03-05 01:21:40 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 01:21:40 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier staging raw introuvable : staging\raw\assure_20260305.parquet
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m82[0m, in [35mmain[0m
+    df   = staging.read_raw(settings.STAGING_DIR, args.dim, run_date)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\staging.py"[0m, line [35m32[0m, in [35mread_raw[0m
+    raise FileNotFoundError(f"Fichier staging raw introuvable : {path}")
+[1;35mFileNotFoundError[0m: [35mFichier staging raw introuvable : staging\raw\assure_20260305.parquet[0m
+2026-03-05 01:21:58 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 01:23:02 [CRITICAL] cnss_etl.run_dim — Erreur : Unable to allocate 11.8 MiB for an array with shape (1543286,) and data type int64
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m76[0m, in [35mmain[0m
+    df   = pd.DataFrame(cursor.fetchall(), columns=cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\frame.py"[0m, line [35m837[0m, in [35m__init__[0m
+    arrays, columns, index = [31mnested_data_to_arrays[0m[1;31m([0m
+                             [31m~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31m# error: Argument 3 to "nested_data_to_arrays" has incompatible[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    ...<4 lines>...
+        [1;31mdtype,[0m
+        [1;31m^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m477[0m, in [35mnested_data_to_arrays[0m
+    arrays, columns = [31mto_arrays[0m[1;31m(data, columns, dtype=dtype)[0m
+                      [31m~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m812[0m, in [35mto_arrays[0m
+    content, columns = [31m_finalize_columns_and_data[0m[1;31m(arr, columns, dtype)[0m
+                       [31m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m917[0m, in [35m_finalize_columns_and_data[0m
+    contents = convert_object_array(contents, dtype=dtype)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m1053[0m, in [35mconvert_object_array[0m
+    arrays = [[31mconvert[0m[1;31m(arr)[0m for arr in content]
+              [31m~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m1004[0m, in [35mconvert[0m
+    arr = lib.maybe_convert_objects(
+        arr,
+        try_float=coerce_float,
+        convert_to_nullable_dtype=to_nullable,
+    )
+  File [35m"pandas/_libs/lib.pyx"[0m, line [35m2631[0m, in [35mpandas._libs.lib.maybe_convert_objects[0m
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 11.8 MiB for an array with shape (1543286,) and data type int64[0m
+2026-03-05 01:23:57 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 01:24:58 [CRITICAL] cnss_etl.run_dim — Erreur : Unable to allocate 1.47 MiB for an array with shape (1543286,) and data type bool
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m78[0m, in [35mmain[0m
+    df   = pd.DataFrame(cursor.fetchall(), columns=cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\frame.py"[0m, line [35m837[0m, in [35m__init__[0m
+    arrays, columns, index = [31mnested_data_to_arrays[0m[1;31m([0m
+                             [31m~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31m# error: Argument 3 to "nested_data_to_arrays" has incompatible[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    ...<4 lines>...
+        [1;31mdtype,[0m
+        [1;31m^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m477[0m, in [35mnested_data_to_arrays[0m
+    arrays, columns = [31mto_arrays[0m[1;31m(data, columns, dtype=dtype)[0m
+                      [31m~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m812[0m, in [35mto_arrays[0m
+    content, columns = [31m_finalize_columns_and_data[0m[1;31m(arr, columns, dtype)[0m
+                       [31m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m917[0m, in [35m_finalize_columns_and_data[0m
+    contents = convert_object_array(contents, dtype=dtype)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m1053[0m, in [35mconvert_object_array[0m
+    arrays = [[31mconvert[0m[1;31m(arr)[0m for arr in content]
+              [31m~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m1004[0m, in [35mconvert[0m
+    arr = lib.maybe_convert_objects(
+        arr,
+        try_float=coerce_float,
+        convert_to_nullable_dtype=to_nullable,
+    )
+  File [35m"pandas/_libs/lib.pyx"[0m, line [35m2634[0m, in [35mpandas._libs.lib.maybe_convert_objects[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\numpy\_core\numeric.py"[0m, line [35m385[0m, in [35mfull[0m
+    a = empty(shape, dtype, order, device=device)
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 1.47 MiB for an array with shape (1543286,) and data type bool[0m
+2026-03-05 01:33:08 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 01:34:16 [INFO    ] cnss_etl.run_dim — [E] DIM_ASSURE — 1543286 lignes extraites → staging\raw\assure_20260305.parquet
+2026-03-05 01:34:16 [CRITICAL] cnss_etl.run_dim — Erreur : cannot access local variable 'df' where it is not associated with a value
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m100[0m, in [35mmain[0m
+    logger.info(f"[E] {target} — {len([1;31mdf[0m)} lignes extraites → {path}")
+                                      [1;31m^^[0m
+[1;35mUnboundLocalError[0m: [35mcannot access local variable 'df' where it is not associated with a value[0m
+2026-03-05 01:36:35 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 01:39:22 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 01:39:25 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier staging transformed introuvable : staging\transformed\assure_20260305.parquet
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m129[0m, in [35mmain[0m
+    df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\staging.py"[0m, line [35m54[0m, in [35mread_transformed[0m
+    raise FileNotFoundError(f"Fichier staging transformed introuvable : {path}")
+[1;35mFileNotFoundError[0m: [35mFichier staging transformed introuvable : staging\transformed\assure_20260305.parquet[0m
+2026-03-05 01:40:01 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 01:40:07 [CRITICAL] cnss_etl.run_dim — Erreur : Unknown error: Wrapping Assuré principal failed
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m121[0m, in [35mmain[0m
+    df = transform_fn(df)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\transformers.py"[0m, line [35m64[0m, in [35mtransform_assure[0m
+    [31mdf.loc[0m[1;31m[df["ROLE_BENEFICIAIRE"].isna(), "LIBELLE_ROLE"][0m = "Assuré principal"
+    [31m~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\indexing.py"[0m, line [35m938[0m, in [35m__setitem__[0m
+    [31miloc._setitem_with_indexer[0m[1;31m(indexer, value, self.name)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\indexing.py"[0m, line [35m1953[0m, in [35m_setitem_with_indexer[0m
+    [31mself._setitem_with_indexer_split_path[0m[1;31m(indexer, value, name)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\indexing.py"[0m, line [35m2044[0m, in [35m_setitem_with_indexer_split_path[0m
+    [31mself._setitem_single_column[0m[1;31m(loc, value, pi)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\indexing.py"[0m, line [35m2181[0m, in [35m_setitem_single_column[0m
+    [31mself.obj._mgr.column_setitem[0m[1;31m(loc, plane_indexer, value)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m1521[0m, in [35mcolumn_setitem[0m
+    [31mself.iset[0m[1;31m(loc, new_mgr._block.values, inplace=True)[0m
+    [31m~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m1299[0m, in [35miset[0m
+    return [31mself._iset_single[0m[1;31m([0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mloc,[0m
+        [1;31m^^^^[0m
+    ...<4 lines>...
+        [1;31mrefs=refs,[0m
+        [1;31m^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m1482[0m, in [35m_iset_single[0m
+    [31mblk.set_inplace[0m[1;31m(slice(iloc, iloc + 1), value, copy=copy)[0m
+    [31m~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\blocks.py"[0m, line [35m1965[0m, in [35mset_inplace[0m
+    [31mself.values[0m[1;31m[:][0m = values
+    [31m~~~~~~~~~~~[0m[1;31m^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\arrow\array.py"[0m, line [35m2225[0m, in [35m__setitem__[0m
+    value = self._maybe_convert_setitem_value(value)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\string_arrow.py"[0m, line [35m289[0m, in [35m_maybe_convert_setitem_value[0m
+    value = np.array(value, dtype=object, copy=True)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\arrow\array.py"[0m, line [35m864[0m, in [35m__array__[0m
+    return [31mself.to_numpy[0m[1;31m(dtype=dtype, copy=copy)[0m
+           [31m~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\arrays\arrow\array.py"[0m, line [35m1730[0m, in [35mto_numpy[0m
+    result[~mask] = [31mdata[~mask]._pa_array.to_numpy[0m[1;31m()[0m
+                    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^[0m
+  File [35m"pyarrow/table.pxi"[0m, line [35m531[0m, in [35mpyarrow.lib.ChunkedArray.to_numpy[0m
+  File [35m"pyarrow/error.pxi"[0m, line [35m92[0m, in [35mpyarrow.lib.check_status[0m
+[1;35mpyarrow.lib.ArrowException[0m: [35mUnknown error: Wrapping Assuré principal failed[0m
+2026-03-05 07:29:04 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 07:31:50 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 07:31:54 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier staging transformed introuvable : staging\transformed\assure_20260305.parquet
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m129[0m, in [35mmain[0m
+    df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\staging.py"[0m, line [35m54[0m, in [35mread_transformed[0m
+    raise FileNotFoundError(f"Fichier staging transformed introuvable : {path}")
+[1;35mFileNotFoundError[0m: [35mFichier staging transformed introuvable : staging\transformed\assure_20260305.parquet[0m
+2026-03-05 07:34:07 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 07:34:15 [INFO    ] cnss_etl.run_dim — [T] DIM_ASSURE — 1543286 lignes → staging\transformed\assure_20260305.parquet
+2026-03-05 07:34:31 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 07:42:45 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 07:42:58 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01438: valeur incohérente avec la précision indiquée pour cette colonne
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m141[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m112[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m213[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.executemany[0m[1;31m(insert_sql, _prepare(chunk))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01438: valeur incohérente avec la précision indiquée pour cette colonne[0m
+2026-03-05 07:51:31 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 07:51:59 [CRITICAL] cnss_etl.run_dim — Erreur : Table schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m94[0m, in [35mmain[0m
+    [31mwriter.write_table[0m[1;31m(table)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pyarrow\parquet\core.py"[0m, line [35m1178[0m, in [35mwrite_table[0m
+    raise ValueError(msg)
+[1;35mValueError[0m: [35mTable schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333[0m
+2026-03-05 07:54:01 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 07:54:30 [CRITICAL] cnss_etl.run_dim — Erreur : Table schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m94[0m, in [35mmain[0m
+    [31mwriter.write_table[0m[1;31m(table)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pyarrow\parquet\core.py"[0m, line [35m1178[0m, in [35mwrite_table[0m
+    raise ValueError(msg)
+[1;35mValueError[0m: [35mTable schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333[0m
+2026-03-05 07:55:45 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 07:56:16 [CRITICAL] cnss_etl.run_dim — Erreur : Table schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m94[0m, in [35mmain[0m
+    [31mwriter.write_table[0m[1;31m(table)[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pyarrow\parquet\core.py"[0m, line [35m1178[0m, in [35mwrite_table[0m
+    raise ValueError(msg)
+[1;35mValueError[0m: [35mTable schema does not match schema used to create file: 
+table:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: double
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2337 vs. 
+file:
+IND_ID: int64
+TR_ID: large_string
+ID_ECNSS: null
+NOM: large_string
+PRENOM: large_string
+NOM_EPOUX: null
+DATE_NAISSANCE: timestamp[us]
+AGE: int64
+SEXE: int64
+SITUATION_MATRIMONIALE: large_string
+TYPE_ENFANT: large_string
+PA_NO: double
+EST_DECEDE: large_string
+DATE_DECES: timestamp[us]
+EST_ACTIF: large_string
+EST_VERIFIE: large_string
+ROLE_BENEFICIAIRE: large_string
+DATE_CHARGEMENT: timestamp[us]
+DATE_MAJ: timestamp[us]
+-- schema metadata --
+pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 2333[0m
+2026-03-05 07:59:13 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=E  date=20260305
+2026-03-05 08:00:40 [INFO    ] cnss_etl.run_dim — [E] DIM_ASSURE — 1543286 lignes extraites → staging\raw\assure_20260305.parquet
+2026-03-05 08:02:43 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=T  date=20260305
+2026-03-05 08:02:51 [INFO    ] cnss_etl.run_dim — [T] DIM_ASSURE — 1543286 lignes → staging\transformed\assure_20260305.parquet
+2026-03-05 08:03:12 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 08:07:00 [INFO    ] cnss_etl.loader — [DIM_ASSURE] MERGE via GTT 1543286 lignes
+2026-03-05 08:07:00 [INFO    ] cnss_etl.run_dim — [L] DIM_ASSURE — 1543286 lignes chargées
+2026-03-05 08:08:59 [INFO    ] cnss_etl.run_dim — [DIM_ASSURE] step=L  date=20260305
+2026-03-05 08:09:04 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_ASSURE créée automatiquement.
+2026-03-05 08:15:24 [INFO    ] cnss_etl.loader — [DIM_ASSURE] MERGE via GTT 1543286 lignes
+2026-03-05 08:15:24 [INFO    ] cnss_etl.run_dim — [L] DIM_ASSURE — 1543286 lignes chargées

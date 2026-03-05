@@ -3,7 +3,7 @@
 -- select * from SECTEUR_OPERATION
 -- where ROWNUM < 10
 
-select Count(*) from SECTEUR_OPERATION
+select Count(*) from 
 -- select Count(*) from CAISSE_PAIEMENT
 -- WITH req as (
     

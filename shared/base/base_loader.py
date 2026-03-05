@@ -205,14 +205,12 @@ class BaseLoader(ABC):
             WHEN NOT MATCHED THEN
                 INSERT ({cols_sql}) VALUES ({ins_vals})
         """      
-        data   = _prepare(df)
         cursor = self.conn.cursor()
-        total  = len(data)
+        total  = len(df)
 
         for start in range(0, total, self._MERGE_BATCH):
             chunk = df.iloc[start: start + self._MERGE_BATCH]
             cursor.executemany(insert_sql, _prepare(chunk))
-
         logger.debug(f"[{table}] GTT chargée ({total} lignes)")
 
         cursor.execute(merge_sql)

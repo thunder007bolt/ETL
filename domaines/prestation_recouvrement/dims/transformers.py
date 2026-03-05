@@ -16,6 +16,7 @@ def transform_assure(df: pd.DataFrame) -> pd.DataFrame:
         ROLE_BENEFICIAIRE, IND_ID présentes dans df.
     """
 
+
     # 1. Clé surrogate : IND_ID est unique NUMBER(10), pas besoin de séquence
     df["ID_ASSURE"] = df["IND_ID"]
 
@@ -60,7 +61,6 @@ def transform_assure(df: pd.DataFrame) -> pd.DataFrame:
         "A": "Ascendant",
         "R": "Recours",
     }
-    df["LIBELLE_ROLE"] = df["ROLE_BENEFICIAIRE"].map(_roles)
-    df.loc[df["ROLE_BENEFICIAIRE"].isna(), "LIBELLE_ROLE"] = "Assuré principal"
+    df["LIBELLE_ROLE"] = df["ROLE_BENEFICIAIRE"].map(_roles).fillna("Assuré principal")
 
     return df
