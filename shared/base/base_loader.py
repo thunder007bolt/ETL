@@ -58,15 +58,29 @@ class BaseLoader(ABC):
     # ------------------------------------------------------------------
     # INSERT bulk — tables de faits
     # ------------------------------------------------------------------
-    def _bulk_insert(self, table: str, df: pd.DataFrame) -> int:
-        """Insert en masse avec executemany (mode append)."""
+    def _bulk_insert(self, table: str, df: pd.DataFrame,
+                     seq_cols: dict | None = None) -> int:
+        """
+        Insert en masse avec executemany (mode append).
+
+        seq_cols : dict {col_cible: nom_sequence} — colonnes dont la valeur
+                   est fournie par SEQ.NEXTVAL (absent du DataFrame).
+                   Ex : {"ID_DOSSIER": "SEQ_DIM_DOSSIER"}
+        """
         if df.empty:
             return 0
-        cols         = list(df.columns)
-        placeholders = ", ".join(f":{i+1}" for i in range(len(cols)))
-        sql          = f"INSERT /*+ APPEND */ INTO {table} ({', '.join(cols)}) VALUES ({placeholders})"
-        cursor       = self.conn.cursor()
-        total        = len(df)
+        seq_cols     = seq_cols or {}
+        df_cols      = list(df.columns)
+
+        # Colonnes séquence en tête, puis colonnes DataFrame
+        ins_cols  = list(seq_cols.keys()) + df_cols
+        ins_vals  = [f"{s}.NEXTVAL" for s in seq_cols.values()] \
+                  + [f":{i+1}" for i in range(len(df_cols))]
+
+        sql    = (f"INSERT /*+ APPEND */ INTO {table}"
+                  f" ({', '.join(ins_cols)}) VALUES ({', '.join(ins_vals)})")
+        cursor = self.conn.cursor()
+        total  = len(df)
 
         for start in range(0, total, self._MERGE_BATCH):
             cursor.executemany(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))
@@ -80,13 +94,14 @@ class BaseLoader(ABC):
     # ------------------------------------------------------------------
 
 
-    def _merge(self, table: str, df: pd.DataFrame, key_cols: list) -> int:
+    def _merge(self, table: str, df: pd.DataFrame, key_cols: list, seq_cols: dict | None = None) -> int:
         """
         MERGE Oracle en masse via executemany, par lots de _MERGE_BATCH lignes.
         """
         if df.empty:
             return 0
 
+        seq_cols     = seq_cols or {}
         all_cols     = list(df.columns)
         non_key_cols = [c for c in all_cols if c not in key_cols]
 
@@ -95,8 +110,11 @@ class BaseLoader(ABC):
         )
         on_clause  = " AND ".join(f"t.{c} = s.{c}" for c in key_cols)
         set_clause = ", ".join(f"t.{c} = s.{c}" for c in non_key_cols)
-        ins_cols   = ", ".join(all_cols)
-        ins_vals   = ", ".join(f"s.{c}" for c in all_cols)
+
+        # seq_cols : ajoutés à l'INSERT uniquement (NEXTVAL), jamais à l'UPDATE
+        _ins_cols = list(seq_cols.keys()) + all_cols
+        _ins_vals = [f"{s}.NEXTVAL" for s in seq_cols.values()] \
+                  + [f"s.{c}" for c in all_cols]
 
         sql = f"""
             MERGE INTO {table} t
@@ -105,7 +123,7 @@ class BaseLoader(ABC):
             WHEN MATCHED THEN
                 UPDATE SET {set_clause}
             WHEN NOT MATCHED THEN
-                INSERT ({ins_cols}) VALUES ({ins_vals})
+                INSERT ({', '.join(_ins_cols)}) VALUES ({', '.join(_ins_vals)})
         """
 
         cursor = self.conn.cursor()
@@ -178,7 +196,7 @@ class BaseLoader(ABC):
 
         return gtt
 
-    def _merge_via_gtt(self, table: str, df: pd.DataFrame, key_cols: list) -> int:
+    def _merge_via_gtt(self, table: str, df: pd.DataFrame, key_cols: list, seq_cols: dict | None = None) -> int:
         """
     
         """
@@ -193,7 +211,10 @@ class BaseLoader(ABC):
         placeholders = ", ".join(f":{i+1}" for i in range(len(all_cols)))
         on_clause    = " AND ".join(f"t.{c} = s.{c}" for c in key_cols)
         set_clause   = ", ".join(f"t.{c} = s.{c}" for c in non_key_cols)
-        ins_vals     = ", ".join(f"s.{c}" for c in all_cols)
+        
+        _ins_cols = list(seq_cols.keys()) + all_cols
+        _ins_vals = [f"{s}.NEXTVAL" for s in seq_cols.values()] \
+                  + [f"s.{c}" for c in all_cols]
 
         insert_sql = f"INSERT INTO {gtt} ({cols_sql}) VALUES ({placeholders})"
         merge_sql  = f"""
@@ -203,7 +224,8 @@ class BaseLoader(ABC):
             WHEN MATCHED THEN
                 UPDATE SET {set_clause}
             WHEN NOT MATCHED THEN
-                INSERT ({cols_sql}) VALUES ({ins_vals})
+                INSERT ({', '.join(_ins_cols)}) VALUES ({', '.join(_ins_vals)})
+
         """      
         cursor = self.conn.cursor()
         total  = len(df)
@@ -222,7 +244,8 @@ class BaseLoader(ABC):
         logger.info(f"[{table}] MERGE via GTT {total} lignes")
         return total
 
-    def _full_reload(self, table: str, df: pd.DataFrame) -> int:
+    def _full_reload(self, table: str, df: pd.DataFrame,
+                     seq_cols: dict | None = None) -> int:
         """
         Vide la table cible puis insère toutes les lignes en une passe.
         """
@@ -234,4 +257,4 @@ class BaseLoader(ABC):
         self.conn.commit()
         logger.debug(f"[{table}] DELETE — table vidée")
 
-        return self._bulk_insert(table, df)
+        return self._bulk_insert(table, df, seq_cols=seq_cols)

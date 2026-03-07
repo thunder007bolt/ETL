@@ -64,3 +64,22 @@ def transform_assure(df: pd.DataFrame) -> pd.DataFrame:
     df["LIBELLE_ROLE"] = df["ROLE_BENEFICIAIRE"].map(_roles).fillna("Assuré principal")
 
     return df
+
+def transform_sinistre(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Transformations métier DIM_SINISTRE.
+    """
+    # 0. Rejeter les lignes sans clé naturelle
+    df = df[df["DOS_CODE"].notna()]
+    
+    # 1. Dédoublonnage sur toutes les colonnes sauf AGE (absent de DIM_SINISTRE)
+    subset = [c for c in df.columns if c != "AGE"]
+    df = df.drop_duplicates(subset=subset, keep="first")
+
+    # 2. Pour les DOS_CODE encore en doublon, conserver la notification la plus récente
+    df = (
+        df.sort_values("DOS_DATE_NOTIFICATION", ascending=False, na_position="last")
+          .drop_duplicates(subset=["DOS_CODE"], keep="first")
+    )
+
+    return df

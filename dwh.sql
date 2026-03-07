@@ -1,2 +1,14 @@
-select count(*) from DIM_ASSURE
+-- select count(*) from DIM_SINISTRE
 -- where rownum < 10
+-- SELECT a.table_name,
+--        a.constraint_name,
+--        a.r_constraint_name
+-- FROM user_constraints a
+-- WHERE a.constraint_type = 'R'
+-- AND a.r_constraint_name IN (
+--     SELECT constraint_name
+--     FROM user_constraints
+--     WHERE table_name = 'DIM_SINISTRE'
+-- );
+
+-- select count(*) from fait_at

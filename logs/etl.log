@@ -2561,3 +2561,361 @@ pandas: '{"index_columns": [], "column_indexes": [], "columns": [{"name":' + 233
 2026-03-05 08:09:04 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_ASSURE créée automatiquement.
 2026-03-05 08:15:24 [INFO    ] cnss_etl.loader — [DIM_ASSURE] MERGE via GTT 1543286 lignes
 2026-03-05 08:15:24 [INFO    ] cnss_etl.run_dim — [L] DIM_ASSURE — 1543286 lignes chargées
+2026-03-05 09:35:05 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=ETL  date=20260305
+2026-03-05 09:35:18 [ERROR   ] cnss_etl.pipeline_dims — [DIM_DOSSIER] erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+2026-03-05 09:35:18 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count    = DimsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m90[0m, in [35m_load_one[0m
+    count = loader.merge(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m106[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m116[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(chunk))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")[0m
+2026-03-05 11:03:48 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=ETL  date=20260305
+2026-03-05 11:03:56 [ERROR   ] cnss_etl.pipeline_dims — [DIM_DOSSIER] erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+2026-03-05 11:03:56 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count    = DimsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m90[0m, in [35m_load_one[0m
+    count = loader.merge(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m106[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m116[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(chunk))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")[0m
+2026-03-05 11:28:17 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=ETL  date=20260305
+2026-03-05 11:28:22 [ERROR   ] cnss_etl.pipeline_dims — [DIM_DOSSIER] erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+2026-03-05 11:28:22 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count    = DimsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m90[0m, in [35m_load_one[0m
+    count = loader.merge(target, df, key_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m106[0m, in [35mmerge[0m
+    return [31mself._merge[0m[1;31m(table, df, key_cols)[0m
+           [31m~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m116[0m, in [35m_merge[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(chunk))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_DOSSIER"."ID_DOSSIER")[0m
+2026-03-05 12:09:29 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=ETL  date=20260305
+2026-03-05 12:11:05 [INFO    ] cnss_etl.loader — [DIM_DOSSIER] MERGE 367947 lignes
+2026-03-05 12:11:05 [INFO    ] cnss_etl.pipeline_dims — [DIM_DOSSIER] 367947 lignes chargées
+2026-03-05 12:11:06 [INFO    ] cnss_etl.run_dim — [ETL] DIM_DOSSIER — 367947 lignes chargées
+2026-03-05 12:12:52 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=L  date=20260305
+2026-03-05 12:12:55 [CRITICAL] cnss_etl.run_dim — Erreur : Fichier staging transformed introuvable : staging\transformed\dossier_20260305.parquet
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m139[0m, in [35mmain[0m
+    df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\staging.py"[0m, line [35m54[0m, in [35mread_transformed[0m
+    raise FileNotFoundError(f"Fichier staging transformed introuvable : {path}")
+[1;35mFileNotFoundError[0m: [35mFichier staging transformed introuvable : staging\transformed\dossier_20260305.parquet[0m
+2026-03-05 12:13:06 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=E  date=20260305
+2026-03-05 12:13:13 [INFO    ] cnss_etl.run_dim — [E] DIM_DOSSIER — 367947 lignes extraites → staging\raw\dossier_20260305.parquet
+2026-03-05 12:13:32 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=T  date=20260305
+2026-03-05 12:13:35 [INFO    ] cnss_etl.run_dim — [T] DIM_DOSSIER — 367947 lignes → staging\transformed\dossier_20260305.parquet
+2026-03-05 12:14:02 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=L  date=20260305
+2026-03-05 12:14:05 [CRITICAL] cnss_etl.run_dim — Erreur : BaseLoader._merge_via_gtt() got an unexpected keyword argument 'seq_cols'. Did you mean 'key_cols'?
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m149[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[1;35mTypeError[0m: [35mBaseLoader._merge_via_gtt() got an unexpected keyword argument 'seq_cols'. Did you mean 'key_cols'?[0m
+2026-03-05 12:20:51 [INFO    ] cnss_etl.run_dim — [DIM_DOSSIER] step=L  date=20260305
+2026-03-05 12:20:57 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_DOSSIER créée automatiquement.
+2026-03-05 12:21:49 [INFO    ] cnss_etl.loader — [DIM_DOSSIER] MERGE via GTT 367947 lignes
+2026-03-05 12:21:49 [INFO    ] cnss_etl.run_dim — [L] DIM_DOSSIER — 367947 lignes chargées
+2026-03-05 12:23:07 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=E  date=20260305
+2026-03-05 12:23:12 [INFO    ] cnss_etl.run_dim — [E] DIM_SINISTRE — 25086 lignes extraites → staging\raw\sinistre_20260305.parquet
+2026-03-05 12:29:39 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=E  date=20260305
+2026-03-05 12:29:40 [INFO    ] cnss_etl.run_dim — [E] DIM_SINISTRE — 25086 lignes extraites → staging\raw\sinistre_20260305.parquet
+2026-03-05 12:29:53 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=T  date=20260305
+2026-03-05 12:29:54 [INFO    ] cnss_etl.run_dim — [T] DIM_SINISTRE — 25086 lignes → staging\transformed\sinistre_20260305.parquet
+2026-03-05 12:41:55 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 12:42:01 [INFO    ] cnss_etl.loader — [GTT] GTT_DIM_SINISTRE créée automatiquement.
+2026-03-05 12:42:02 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_SINISTRE")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_SINISTRE")[0m
+2026-03-05 12:53:51 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 12:54:14 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 12:54:21 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)[0m
+2026-03-05 13:05:25 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 13:05:32 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m161[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)[0m
+2026-03-05 13:06:58 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 13:07:13 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m162[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)[0m
+2026-03-05 13:07:52 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 13:08:02 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m162[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-00001: violation de contrainte unique (DWH.UK_DIM_SINISTRE_DOS)[0m
+2026-03-05 15:09:12 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=T  date=20260305
+2026-03-05 15:09:16 [INFO    ] cnss_etl.run_dim — [T] DIM_SINISTRE — 21348 lignes → staging\transformed\sinistre_20260305.parquet
+2026-03-05 15:09:41 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:09:51 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m162[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:17:33 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=T  date=20260305
+2026-03-05 15:17:34 [INFO    ] cnss_etl.run_dim — [T] DIM_SINISTRE — 21347 lignes → staging\transformed\sinistre_20260305.parquet
+2026-03-05 15:17:43 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:17:52 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m162[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:19:55 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:20:10 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m163[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:21:35 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:21:44 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m164[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:26:28 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:26:36 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m165[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:27:11 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:27:18 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m165[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:28:00 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:28:07 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m165[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:29:33 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=T  date=20260305
+2026-03-05 15:29:35 [INFO    ] cnss_etl.run_dim — [T] DIM_SINISTRE — 21347 lignes → staging\transformed\sinistre_20260305.parquet
+2026-03-05 15:29:44 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:29:52 [CRITICAL] cnss_etl.run_dim — Erreur : ORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_dim.py"[0m, line [35m165[0m, in [35mmain[0m
+    count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\dims\pipeline_dims.py"[0m, line [35m113[0m, in [35mmerge_via_gtt[0m
+    return [31mself._merge_via_gtt[0m[1;31m(table, df, key_cols, seq_cols=seq_cols)[0m
+           [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m238[0m, in [35m_merge_via_gtt[0m
+    [31mcursor.execute[0m[1;31m(merge_sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.IntegrityError[0m: [35mORA-01400: impossible d'insérer NULL dans ("DWH"."DIM_SINISTRE"."ID_DOSSIER")[0m
+2026-03-05 15:35:53 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
+2026-03-05 15:36:02 [INFO    ] cnss_etl.loader — [DIM_SINISTRE] MERGE via GTT 21344 lignes
+2026-03-05 15:36:02 [INFO    ] cnss_etl.run_dim — [L] DIM_SINISTRE — 21344 lignes chargées

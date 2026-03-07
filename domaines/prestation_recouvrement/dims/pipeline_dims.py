@@ -83,11 +83,12 @@ class DimsPipeline:
                 
             #### Chargement
             strategy = cfg.get("strategy", "merge")
+            seq_cols = cfg.get("seq_cols") or {}
 
             if strategy == "gtt":
-                count = loader.merge_via_gtt(target, df, key_cols)
+                count = loader.merge_via_gtt(target, df, key_cols, seq_cols=seq_cols)
             else:
-                count = loader.merge(target, df, key_cols)
+                count = loader.merge(target, df, key_cols, seq_cols=seq_cols)
 
 
             logger.info(f"[{target}] {count} lignes chargées")
@@ -102,11 +103,11 @@ class _GenericDimLoader(BaseLoader):
     def load(self, df) -> int:
         raise NotImplementedError
 
-    def merge(self, table: str, df: pd.DataFrame, key_cols: list) -> int:
-        return self._merge(table, df, key_cols)
+    def merge(self, table: str, df: pd.DataFrame, key_cols: list, seq_cols: dict | None = None) -> int:
+        return self._merge(table, df, key_cols, seq_cols=seq_cols)
 
-    def full_reload(self, table: str, df: pd.DataFrame) -> int:
-        return self._full_reload(table, df)
+    def full_reload(self, table: str, df: pd.DataFrame, seq_cols: dict | None = None) -> int:
+        return self._full_reload(table, df, seq_cols=seq_cols)
 
-    def merge_via_gtt(self, table: str, df: pd.DataFrame, key_cols: list) -> int:
-        return self._merge_via_gtt(table, df, key_cols)
+    def merge_via_gtt(self, table: str, df: pd.DataFrame, key_cols: list, seq_cols: dict | None = None) -> int:
+        return self._merge_via_gtt(table, df, key_cols, seq_cols=seq_cols)

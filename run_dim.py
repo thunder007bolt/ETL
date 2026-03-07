@@ -16,9 +16,9 @@ import pyarrow as pa
 import pyarrow.parquet as pq
 from shared.configs.log_setup import setup_logging
 
-pd.set_option('display.max_columns', None)  # Afficher toutes les colonnes
-pd.set_option('display.width', None)        # Largeur automatique
-pd.set_option('display.max_colwidth', None) # Ne pas tronquer le contenu
+# pd.set_option('display.max_columns', None)  # Afficher toutes les colonnes
+# pd.set_option('display.width', None)        # Largeur automatique
+# pd.set_option('display.max_colwidth', None) # Ne pas tronquer le contenu
 
 
 _SQL_DIR = str(
@@ -137,15 +137,24 @@ def main():
 
             dw_conn = get_dw_connection()
             df      = staging.read_transformed(settings.STAGING_DIR, args.dim, run_date)
-            print(df.columns.tolist())
-            print(df.shape)
-            print(df.head(10))
+             # Résolution des FK DWH (miroir de pipeline_dims._load_one)
+            for fk in cfg.get("fk_lookups", []):
+                cur = dw_conn.cursor()
+                cur.execute(
+                    f"SELECT {fk['join_col']}, {fk['fk_col']} FROM {fk['ref_table']}"
+                )
+                import pandas as _pd
+                fk_map = _pd.DataFrame(
+                    cur.fetchall(), columns=[fk["join_col"], fk["fk_col"]]
+                )
+                df = df.merge(fk_map, on=fk["join_col"], how="inner")
+            seq_cols = cfg.get("seq_cols") or {}
             #return
             if df.empty:
                 logger.info(f"[L] {target} — aucune donnée dans le staging")
             else:
                 loader = _GenericDimLoader(dw_conn)
-                count  = loader.merge_via_gtt(target, df, cfg["key_cols"])
+                count  = loader.merge_via_gtt(target, df, cfg["key_cols"], seq_cols=seq_cols)
                 logger.info(f"[L] {target} — {count} lignes chargées")
 
 

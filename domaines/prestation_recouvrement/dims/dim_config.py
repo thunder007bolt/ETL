@@ -8,21 +8,43 @@ Chaque entrée déclare :
 """
 from domaines.prestation_recouvrement.dims.transformers import (
     transform_assure,
+    transform_sinistre,
 )
 DIM_CONFIG = [
-
     {
         "sql_file":  "type_accident.sql",
         "target":    "DIM_TYPE_ACCIDENT",
         "key_cols":  ["TAT_CODE"],
     },
-    
     {
         "sql_file":     "assure.sql",
         "target":       "DIM_ASSURE",
         "key_cols":     ["IND_ID"],
         "extra_cols":   {"SOURCE_SYSTEME": "INDIVIDU"},
         "transform_fn": transform_assure,
+    },
+    {
+        "sql_file":  "dossier.sql",
+        "target":    "DIM_DOSSIER",
+        "key_cols":  ["DOS_CODE"],
+        "seq_cols":  {"ID_DOSSIER": "SEQ_DIM_DOSSIER"},
+        # "watermark": "d.DOS_DATE_UPDATE",
+    },
+    {
+        # ID_DOSSIER  : résolu depuis DWH.DIM_DOSSIER via fk_lookups
+        # Prérequis   : DIM_DOSSIER doit être chargé avant DIM_SINISTRE.
+        "sql_file":   "sinistre.sql",
+        "target":     "DIM_SINISTRE",
+        "key_cols":   ["DOS_CODE"],
+        "seq_cols":  {"ID_SINISTRE": "SEQ_DIM_SINISTRE"},
+        "fk_lookups": [
+            {
+                "join_col":  "DOS_CODE",
+                "fk_col":    "ID_DOSSIER",
+                "ref_table": "DIM_DOSSIER",
+            }
+        ],
+      "transform_fn": transform_sinistre,
     },
     ##### Demba doit rendre id_type auto increment
     # {
