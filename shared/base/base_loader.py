@@ -46,7 +46,7 @@ class BaseLoader(ABC):
     Chargement des données transformées dans le Data Warehouse Oracle.
 
     """
-    _MERGE_BATCH = 5_000   
+    _MERGE_BATCH = 15_000   
 
     def __init__(self, dw_conn):
         self.conn = dw_conn

@@ -55,7 +55,7 @@ class FactsPipeline:
             src_conn.close()
             dw_conn.close()
 
-    _FETCH = 50_000
+    _FETCH = 200_000
 
     def _load_one(self, src_conn, loader, cfg: dict) -> int:
         target = cfg["target"]
