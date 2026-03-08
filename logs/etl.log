@@ -2919,3 +2919,59 @@ Traceback (most recent call last):
 2026-03-05 15:35:53 [INFO    ] cnss_etl.run_dim — [DIM_SINISTRE] step=L  date=20260305
 2026-03-05 15:36:02 [INFO    ] cnss_etl.loader — [DIM_SINISTRE] MERGE via GTT 21344 lignes
 2026-03-05 15:36:02 [INFO    ] cnss_etl.run_dim — [L] DIM_SINISTRE — 21344 lignes chargées
+2026-03-08 00:47:55 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=E date=20260308
+2026-03-08 00:48:04 [CRITICAL] cnss_etl.run_fact — Erreur : Fichier SQL introuvable : C:\Users\DEV1\Documents\ETL\domains\prestation_recouvrement\facts\sql\contrainte.sql
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m62[0m, in [35mmain[0m
+    sql      = load_sql(_SQL_DIR, cfg["sql_file"])
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\utils\sql_loader.py"[0m, line [35m16[0m, in [35mload_sql[0m
+    raise FileNotFoundError(f"Fichier SQL introuvable : {sql_path}")
+[1;35mFileNotFoundError[0m: [35mFichier SQL introuvable : C:\Users\DEV1\Documents\ETL\domains\prestation_recouvrement\facts\sql\contrainte.sql[0m
+2026-03-08 00:48:24 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=E date=20260308
+2026-03-08 00:48:26 [INFO    ] cnss_etl.run_fact — [E] FAIT_CONTRAINTE — 1144 lignes extraites → staging\raw\contrainte_20260308.parquet
+2026-03-08 00:52:45 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=T date=20260308
+2026-03-08 00:52:50 [INFO    ] cnss_etl.run_fact — [T] FAIT_CONTRAINTE — 1144 lignes → staging\transformed\contrainte_20260308.parquet
+2026-03-08 00:53:06 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 00:53:08 [CRITICAL] cnss_etl.run_fact — Erreur : No module named 'shared.audit'
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m112[0m, in [35mmain[0m
+    from domaines.prestation_recouvrement.facts.pipeline_facts import _GenericFactLoader
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m12[0m, in [35m<module>[0m
+    from shared.audit.audit_logger import AuditLogger
+[1;35mModuleNotFoundError[0m: [35mNo module named 'shared.audit'[0m
+2026-03-08 00:55:02 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 00:55:07 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00904: "MOIS" : identificateur non valide
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m122[0m, in [35mmain[0m
+    count = loader.delete_insert_period(target, df)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35mdelete_insert_period[0m
+    return [31mself._delete_insert_period[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m274[0m, in [35m_delete_insert_period[0m
+    [31mcursor.execute[0m[1;31m(f"DELETE FROM {table} WHERE {where}", period_vals)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00904: "MOIS" : identificateur non valide[0m
+2026-03-08 00:59:55 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 00:59:59 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 00:59:59 [INFO    ] cnss_etl.run_fact — [L] FAIT_CONTRAINTE — 1144 lignes chargées
+2026-03-08 01:15:20 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=T date=20260308
+2026-03-08 01:15:23 [INFO    ] cnss_etl.run_fact — [T] FAIT_CONTRAINTE — 1144 lignes → staging\transformed\contrainte_20260308.parquet
+2026-03-08 01:16:22 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 01:16:27 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 01:16:27 [INFO    ] cnss_etl.run_fact — [L] FAIT_CONTRAINTE — 1144 lignes chargées
+2026-03-08 01:17:49 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 01:17:51 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 01:17:51 [INFO    ] cnss_etl.run_fact — [L] FAIT_CONTRAINTE — 1144 lignes chargées
+2026-03-08 01:20:07 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=L date=20260308
+2026-03-08 01:20:08 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 01:20:08 [INFO    ] cnss_etl.run_fact — [L] FAIT_CONTRAINTE — 1144 lignes chargées
+2026-03-08 01:22:54 [INFO    ] cnss_etl.run_fact — [FAIT_CONTRAINTE] step=ETL date=20260308
+2026-03-08 01:22:56 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 01:22:56 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 01:22:56 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_CONTRAINTE — 1144 lignes chargées

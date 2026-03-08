@@ -62,8 +62,8 @@ def setup_logging() -> None:
     Path(log_file).parent.mkdir(parents=True, exist_ok=True)
     file_handler = logging.handlers.RotatingFileHandler(
         filename=log_file,
-        maxBytes=10 * 1024 * 1024,  # 10 MB par fichier
-        backupCount=5,              # etl.log, etl.log.1, ..., etl.log.5
+        maxBytes=0.5 * 1024 * 1024,  # 0.5 MB par fichier
+        backupCount=20,              # etl.log, etl.log.1, ..., etl.log.5
         encoding="utf-8",
     )
     file_handler.setLevel(level)

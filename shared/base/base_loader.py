@@ -243,6 +243,39 @@ class BaseLoader(ABC):
 
         logger.info(f"[{table}] MERGE via GTT {total} lignes")
         return total
+    
+     # ------------------------------------------------------------------
+    # DELETE + INSERT — par période (ANNEE / MOIS)
+    # ------------------------------------------------------------------
+    def _delete_insert_period(self, table: str, df: pd.DataFrame,
+                               period_cols: list | None = None,
+                               seq_cols: dict | None = None) -> int:
+        """
+        Recharge les faits pour la période du run courant.
+
+        ANNEE et MOIS sont ajoutés au DataFrame avant l'appel (via extra_cols)
+        à partir de la date d'exécution — toutes les lignes du batch partagent
+        donc la même valeur. Un seul DELETE suffit.
+
+            DELETE FROM table WHERE ANNEE = :1 AND MOIS = :2
+            INSERT /*+ APPEND */ toutes les lignes
+
+        Cela permet de rejouer un mois sans toucher aux autres périodes.
+        """
+        if df.empty:
+            return 0
+
+        period_cols = period_cols or ["ANNEE", "MOIS"]
+        # Toutes les lignes ont la même période (calculée à l'exécution)
+        period_vals = [_to_python(df[c].iloc[0]) for c in period_cols]
+        where       = " AND ".join(f"{c} = :{i+1}" for i, c in enumerate(period_cols))
+
+        cursor = self.conn.cursor()
+        cursor.execute(f"DELETE FROM {table} WHERE {where}", period_vals)
+        self.conn.commit()
+        logger.debug(f"[{table}] DELETE période {dict(zip(period_cols, period_vals))}")
+
+        return self._bulk_insert(table, df, seq_cols=seq_cols)
 
     def _full_reload(self, table: str, df: pd.DataFrame,
                      seq_cols: dict | None = None) -> int:

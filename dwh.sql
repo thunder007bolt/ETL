@@ -11,4 +11,6 @@
 --     WHERE table_name = 'DIM_SINISTRE'
 -- );
 
--- select count(*) from fait_at
+-- select count(*) from FAIT_CONTRAINTE
+-- select * from FAIT_CONTRAINTE
+-- WHERE rownum < 10
