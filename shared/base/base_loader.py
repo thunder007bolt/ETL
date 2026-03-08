@@ -244,6 +244,18 @@ class BaseLoader(ABC):
         logger.info(f"[{table}] MERGE via GTT {total} lignes")
         return total
     
+      # ------------------------------------------------------------------
+    # DELETE période — utilisé avant un INSERT en streaming
+    # ------------------------------------------------------------------
+    def _delete_period(self, table: str, annee: int, mois: int) -> None:
+        cursor = self.conn.cursor()
+        # table columns have been renamed to L_ANNEE/L_MOIS in the DWH
+        cursor.execute(
+            f"DELETE FROM {table} WHERE L_ANNEE = :1 AND L_MOIS = :2", [annee, mois]
+        )
+        self.conn.commit()
+        logger.debug(f"[{table}] DELETE L_ANNEE={annee} L_MOIS={mois}")
+
      # ------------------------------------------------------------------
     # DELETE + INSERT — par période (ANNEE / MOIS)
     # ------------------------------------------------------------------
@@ -253,11 +265,11 @@ class BaseLoader(ABC):
         """
         Recharge les faits pour la période du run courant.
 
-        ANNEE et MOIS sont ajoutés au DataFrame avant l'appel (via extra_cols)
+        L_ANNEE et L_MOIS sont ajoutés au DataFrame avant l'appel (via extra_cols)
         à partir de la date d'exécution — toutes les lignes du batch partagent
         donc la même valeur. Un seul DELETE suffit.
 
-            DELETE FROM table WHERE ANNEE = :1 AND MOIS = :2
+            DELETE FROM table WHERE L_ANNEE = :1 AND L_MOIS = :2
             INSERT /*+ APPEND */ toutes les lignes
 
         Cela permet de rejouer un mois sans toucher aux autres périodes.
@@ -265,7 +277,7 @@ class BaseLoader(ABC):
         if df.empty:
             return 0
 
-        period_cols = period_cols or ["ANNEE", "MOIS"]
+        period_cols = period_cols or ["L_ANNEE", "L_MOIS"]
         # Toutes les lignes ont la même période (calculée à l'exécution)
         period_vals = [_to_python(df[c].iloc[0]) for c in period_cols]
         where       = " AND ".join(f"{c} = :{i+1}" for i, c in enumerate(period_cols))

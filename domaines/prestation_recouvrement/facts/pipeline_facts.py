@@ -55,34 +55,45 @@ class FactsPipeline:
             src_conn.close()
             dw_conn.close()
 
+    _FETCH = 50_000
+
     def _load_one(self, src_conn, loader, cfg: dict) -> int:
         target = cfg["target"]
-
+        import gc
+        gc.collect()
+        
         try:
             sql    = load_sql(_SQL_DIR, cfg["sql_file"])
             cursor = src_conn.cursor()
             cursor.execute(sql)
 
-            description = cursor.description
-            columns     = [col[0].upper() for col in description]
-            df          = pd.DataFrame(cursor.fetchall(), columns=columns)
-            df          = _cast_oracle_types(df, description)
-
-            now = datetime.now()
-            df["ANNEE"] = now.year
-            df["MOIS"]  = now.month
-
+            description  = cursor.description
+            columns      = [col[0].upper() for col in description]
             transform_fn = cfg.get("transform_fn")
-            if transform_fn is not None:
-                df = transform_fn(df)
 
-            if df.empty:
-                logger.info(f"[{target}] aucune donnée")
-                return 0
+            now     = datetime.now()
+            # period values injected into every batch row
+            l_annee = now.year
+            l_mois  = now.month
 
-            count = loader.delete_insert_period(target, df)
-            logger.info(f"[{target}] {count} lignes chargées")
-            return count
+            # delete rows matching the new period columns
+            loader.delete_period(target, l_annee, l_mois)
+
+            total = 0
+            while True:
+                rows = cursor.fetchmany(self._FETCH)
+                if not rows:
+                    break
+                df = pd.DataFrame(rows, columns=columns)
+                df = _cast_oracle_types(df, description)
+                df["L_ANNEE"] = l_annee
+                df["L_MOIS"]  = l_mois
+                if transform_fn is not None:
+                    df = transform_fn(df)
+                total += loader.insert_chunk(target, df)
+
+            logger.info(f"[{target}] {total} lignes chargées")
+            return total
 
         except Exception as e:
             logger.error(f"[{target}] erreur : {e}")
@@ -93,5 +104,8 @@ class _GenericFactLoader(BaseLoader):
     def load(self, df) -> int:
         raise NotImplementedError
 
-    def delete_insert_period(self, table: str, df: pd.DataFrame) -> int:
-        return self._delete_insert_period(table, df)
+    def delete_period(self, table: str, annee: int, mois: int) -> None:
+        self._delete_period(table, annee, mois)
+
+    def insert_chunk(self, table: str, df: pd.DataFrame) -> int:
+        return self._bulk_insert(table, df)

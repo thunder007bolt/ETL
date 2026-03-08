@@ -5,8 +5,8 @@ Chaque entrée déclare :
     sql_file : fichier SQL dans domains/.../facts/sql/
     target   : table cible dans le DWH
 
-Chargement : DELETE WHERE ANNEE = :1 AND MOIS = :2 + INSERT /*+ APPEND */
-ANNEE et MOIS sont injectés automatiquement par le pipeline à partir de la date du run.
+Chargement : DELETE WHERE L_ANNEE = :1 AND L_MOIS = :2 + INSERT /*+ APPEND */
+L_ANNEE et L_MOIS sont injectés automatiquement par le pipeline à partir de la date du run.
 
 Champ optionnel :
     col_map      : dict {col_source: col_cible} — renommage de colonnes
@@ -17,8 +17,8 @@ FACT_CONFIG = [
 
     # ----------------------------------------------------------------
     # Stratégie "period" (défaut) :
-    #   1. ANNEE et MOIS injectés automatiquement par le pipeline
-    #   2. DELETE FROM table WHERE ANNEE = :1 AND MOIS = :2
+    #   1. L_ANNEE et L_MOIS injectés automatiquement par le pipeline
+    #   2. DELETE FROM table WHERE L_ANNEE = :1 AND L_MOIS = :2
     #   3. INSERT /*+ APPEND */ toutes les lignes du batch
     # ----------------------------------------------------------------
 
@@ -35,8 +35,8 @@ FACT_CONFIG = [
         "target":     "FAIT_CONTROLE",
     },
     {
-        "sql_file":   "declaration_nomminative.sql",
-        "target":     "FAIT_DECLARATION_NOMMINATIVE",
+        "sql_file":   "declaration_nominative.sql",
+        "target":     "FAIT_DECLARATION_NOMINATIVE",
     },
     {
         "sql_file":   "depot.sql",
@@ -60,7 +60,7 @@ FACT_CONFIG = [
     },
     {
         "sql_file":   "mise_en_demeure.sql",
-        "target":     "FAIT_MISE_EN_DEUMEURE",
+        "target":     "FAIT_MISE_EN_DEMEURE",
     },
     {
         "sql_file":   "notification_prest.sql",

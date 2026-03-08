@@ -96,8 +96,9 @@ def main():
                 df = df.rename(columns={k.upper(): v.upper() for k, v in col_map.items()})
 
             now = datetime.now()
-            df["ANNEE"] = now.year
-            df["MOIS"]  = now.month
+            # new naming convention for period columns
+            df["L_ANNEE"] = now.year
+            df["L_MOIS"]  = now.month
 
             print(df.info())
             transform_fn = cfg.get("transform_fn")
@@ -117,13 +118,12 @@ def main():
             if df.empty:
                 logger.info(f"[L] {target} — aucune donnée dans le staging")
             else:
-                loader  = _GenericFactLoader(dw_conn)
-                strategy = cfg.get("strategy", "period")
-                print(df.info())
-                if strategy == "period":
-                    count = loader.delete_insert_period(target, df)
-                else:
-                    count = loader.full_reload(target, df)
+                loader = _GenericFactLoader(dw_conn)
+                # use renamed columns when determining period
+                l_annee  = int(df["L_ANNEE"].iloc[0])
+                l_mois   = int(df["L_MOIS"].iloc[0])
+                loader.delete_period(target, l_annee, l_mois)
+                count = loader.insert_chunk(target, df)
                 logger.info(f"[L] {target} — {count} lignes chargées")
 
         # ── ETL complet en mémoire (sans --step) ────────────────────────────
