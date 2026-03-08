@@ -36,6 +36,6 @@ def get_dw_connection():
     _init_thick_mode()
     cfg = settings.DW_DB
     dsn = f"{cfg['host']}:{cfg['port']}/{cfg['service']}"
-    conn = oracledb.connect(user=cfg["user"], password=cfg["password"], dsn=dsn)
+    conn = oracledb.connect(user=cfg["user"], password=cfg["password"], dsn=dsn, expire_time=1)
     logger.debug(f"Connexion DW établie : {cfg['user']}@{dsn}")
     return conn

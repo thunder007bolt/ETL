@@ -4589,3 +4589,945 @@ Traceback (most recent call last):
 2026-03-08 08:21:34 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
 2026-03-08 08:21:34 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
 2026-03-08 08:21:34 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 08:54:00 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 08:54:05 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
+2026-03-08 08:54:05 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
+2026-03-08 08:54:05 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 08:54:18 [INFO    ] run_prestation_recouvrement_facts_pipeline — Démarrage
+2026-03-08 08:54:28 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:54:30 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:54:33 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:54:35 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:54:37 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:54:37 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 14636 lignes insérées
+2026-03-08 08:54:37 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-08 08:54:38 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 08:54:38 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 08:55:01 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_CONTROLE] erreur : DPI-1001: out of memory
+2026-03-08 08:55:01 [ERROR   ] cnss_etl.pipeline_facts — Erreur pipeline FACTS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m47[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m94[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m114[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m136[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m68[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m238[0m, in [35moracledb.thick_impl.ThickVarImpl._resize[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-08 08:55:04 [CRITICAL] run_prestation_recouvrement_facts_pipeline — FactsPipeline échoué : DPI-1001: out of memory
+2026-03-08 08:57:24 [INFO    ] run_prestation_recouvrement_facts_pipeline — Démarrage
+2026-03-08 08:57:38 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:57:41 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:57:43 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:57:45 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:57:47 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 08:57:48 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 14636 lignes insérées
+2026-03-08 08:57:48 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-08 08:57:49 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 08:57:49 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 08:58:05 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 50000 lignes insérées
+2026-03-08 08:58:23 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 50000 lignes insérées
+2026-03-08 08:58:28 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 21167 lignes insérées
+2026-03-08 08:58:28 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTROLE] 121167 lignes chargées
+2026-03-08 09:08:10 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_DECLARATION_NOMINATIVE] erreur : DPY-1001: not connected to database
+DPI-1010: not connected  closed by ORA-12571
+ORA-12571: TNS:packet writer failure
+2026-03-08 09:08:10 [ERROR   ] cnss_etl.pipeline_facts — Erreur pipeline FACTS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m47[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m94[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m924[0m, in [35mexecutemany[0m
+    [31mself._impl.executemany[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mself,[0m
+        [1;31m^^^^^[0m
+    ...<3 lines>...
+        [1;31mmanager.message_offset,[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m364[0m, in [35moracledb.thick_impl.ThickCursorImpl.executemany[0m
+[1;35moracledb.exceptions.InterfaceError[0m: [35mDPY-1001: not connected to database
+DPI-1010: not connected  closed by ORA-12571
+ORA-12571: TNS:packet writer failure[0m
+2026-03-08 09:08:10 [CRITICAL] run_prestation_recouvrement_facts_pipeline — FactsPipeline échoué : DPY-4011: the database or network closed the connection
+DPI-1080: connection was closed by ORA-03113
+ORA-03113: end-of-file on communication channel
+ID de processus : 0
+ID de session : 122,  Numéro de série : 8037
+2026-03-08 09:14:09 [INFO    ] run_prestation_recouvrement_facts_pipeline — Démarrage
+2026-03-08 09:14:20 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:14:22 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:14:24 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:14:26 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:14:28 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:14:29 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 14636 lignes insérées
+2026-03-08 09:14:29 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-08 09:14:29 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 09:14:29 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 09:14:51 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 50000 lignes insérées
+2026-03-08 09:15:04 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 50000 lignes insérées
+2026-03-08 09:15:10 [INFO    ] cnss_etl.loader — [FAIT_CONTROLE] 21167 lignes insérées
+2026-03-08 09:15:10 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTROLE] 121167 lignes chargées
+2026-03-08 09:15:16 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:21 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:26 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:30 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:35 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:40 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:45 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:50 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:15:55 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:00 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:05 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:10 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:16 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:21 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:26 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:31 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:36 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:41 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:46 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:51 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:16:57 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:02 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:07 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:12 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:36 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:41 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:46 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:51 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:17:56 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:02 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:19 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:24 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:29 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:35 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:40 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:18:57 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:02 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:08 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:13 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:18 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:23 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:29 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:34 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:39 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:44 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 50000 lignes insérées
+2026-03-08 09:19:45 [INFO    ] cnss_etl.loader — [FAIT_DECLARATION_NOMINATIVE] 7760 lignes insérées
+2026-03-08 09:19:45 [INFO    ] cnss_etl.pipeline_facts — [FAIT_DECLARATION_NOMINATIVE] 2257760 lignes chargées
+2026-03-08 09:19:57 [INFO    ] cnss_etl.loader — [FAIT_DEPOT] 50000 lignes insérées
+2026-03-08 09:20:01 [INFO    ] cnss_etl.loader — [FAIT_DEPOT] 50000 lignes insérées
+2026-03-08 09:20:08 [INFO    ] cnss_etl.loader — [FAIT_DEPOT] 50000 lignes insérées
+2026-03-08 09:20:13 [INFO    ] cnss_etl.loader — [FAIT_DEPOT] 50000 lignes insérées
+2026-03-08 09:20:14 [INFO    ] cnss_etl.loader — [FAIT_DEPOT] 7993 lignes insérées
+2026-03-08 09:20:14 [INFO    ] cnss_etl.pipeline_facts — [FAIT_DEPOT] 207993 lignes chargées
+2026-03-08 09:21:11 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:14 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:17 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:26 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:29 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:32 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:35 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:38 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 50000 lignes insérées
+2026-03-08 09:21:39 [INFO    ] cnss_etl.loader — [FAIT_DOSSIER_IMMATRICULATION] 16123 lignes insérées
+2026-03-08 09:21:39 [INFO    ] cnss_etl.pipeline_facts — [FAIT_DOSSIER_IMMATRICULATION] 416123 lignes chargées
+2026-03-08 09:24:26 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:30 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:34 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:38 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:42 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:46 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:50 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:54 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:24:57 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:01 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:05 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:09 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:13 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:17 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:21 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:25 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:29 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:33 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:37 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:41 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:48 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:51 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 50000 lignes insérées
+2026-03-08 09:25:55 [INFO    ] cnss_etl.loader — [FAIT_EMPLOI] 46003 lignes insérées
+2026-03-08 09:25:55 [INFO    ] cnss_etl.pipeline_facts — [FAIT_EMPLOI] 1146003 lignes chargées
+2026-03-08 09:26:54 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:27:00 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:27:05 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:27:10 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:27:15 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 09:27:18 [INFO    ] cnss_etl.loader — [FAIT_EMPLOYEUR] 29239 lignes insérées
+2026-03-08 09:27:18 [INFO    ] cnss_etl.pipeline_facts — [FAIT_EMPLOYEUR] 279239 lignes chargées
+2026-03-08 09:30:29 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:33 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:36 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:40 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:43 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:47 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:50 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:54 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:30:57 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:01 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:04 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:07 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:11 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:14 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:18 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:21 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:24 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:28 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:31 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:35 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:38 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:42 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:45 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:49 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:56 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:31:59 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:32:03 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:32:07 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:32:10 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:32:13 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 50000 lignes insérées
+2026-03-08 09:32:16 [INFO    ] cnss_etl.loader — [FAIT_INDIVIDU] 43286 lignes insérées
+2026-03-08 09:32:16 [INFO    ] cnss_etl.pipeline_facts — [FAIT_INDIVIDU] 1543286 lignes chargées
+2026-03-08 09:32:19 [INFO    ] cnss_etl.loader — [FAIT_MISE_EN_DEMEURE] 14223 lignes insérées
+2026-03-08 09:32:19 [INFO    ] cnss_etl.pipeline_facts — [FAIT_MISE_EN_DEMEURE] 14223 lignes chargées
+2026-03-08 09:33:10 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:25 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:30 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:35 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:40 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:45 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 50000 lignes insérées
+2026-03-08 09:33:46 [INFO    ] cnss_etl.loader — [FAIT_NOTIFICATION_PREST] 4355 lignes insérées
+2026-03-08 09:33:46 [INFO    ] cnss_etl.pipeline_facts — [FAIT_NOTIFICATION_PREST] 304355 lignes chargées
+2026-03-08 09:33:46 [INFO    ] cnss_etl.loader — [FAIT_PARTENAIRE_ASSURANCE] 53 lignes insérées
+2026-03-08 09:33:46 [INFO    ] cnss_etl.pipeline_facts — [FAIT_PARTENAIRE_ASSURANCE] 53 lignes chargées
+2026-03-08 09:33:48 [INFO    ] cnss_etl.loader — [FAIT_PENALITE_RETARD] 2678 lignes insérées
+2026-03-08 09:33:48 [INFO    ] cnss_etl.pipeline_facts — [FAIT_PENALITE_RETARD] 2678 lignes chargées
+2026-03-08 09:36:36 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:36:43 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:36:49 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:36:56 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:02 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:08 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:15 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:22 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:28 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:35 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:41 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:48 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:37:54 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:01 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:08 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:15 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:21 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:28 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 50000 lignes insérées
+2026-03-08 09:38:34 [INFO    ] cnss_etl.loader — [FAIT_PRESTATION_ESP] 47953 lignes insérées
+2026-03-08 09:38:34 [INFO    ] cnss_etl.pipeline_facts — [FAIT_PRESTATION_ESP] 947953 lignes chargées
+2026-03-08 09:39:31 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 50000 lignes insérées
+2026-03-08 09:39:45 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 50000 lignes insérées
+2026-03-08 09:39:51 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 50000 lignes insérées
+2026-03-08 09:39:56 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 50000 lignes insérées
+2026-03-08 09:40:02 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 50000 lignes insérées
+2026-03-08 09:40:05 [INFO    ] cnss_etl.loader — [FAIT_RECEPTION_DOSSIER] 23005 lignes insérées
+2026-03-08 09:40:05 [INFO    ] cnss_etl.pipeline_facts — [FAIT_RECEPTION_DOSSIER] 273005 lignes chargées
+2026-03-08 11:49:06 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_COTISATION] step=ETL date=20260308
+2026-03-08 13:29:37 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_COTISATION] erreur : ORA-30036: impossible d'étendre le segment par 8 dans le tablespace d'annulation 'UNDOTBS1'
+2026-03-08 13:29:37 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-30036: impossible d'étendre le segment par 8 dans le tablespace d'annulation 'UNDOTBS1'
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m139[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m81[0m, in [35m_load_one[0m
+    [31mloader.delete_period[0m[1;31m(target, l_annee, l_mois)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m109[0m, in [35mdelete_period[0m
+    [31mself._delete_period[0m[1;31m(table, annee, mois)[0m
+    [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m253[0m, in [35m_delete_period[0m
+    [31mcursor.execute[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mf"DELETE FROM {table} WHERE L_ANNEE = :1 AND L_MOIS = :2", [annee, mois][0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-30036: impossible d'étendre le segment par 8 dans le tablespace d'annulation 'UNDOTBS1'[0m
+2026-03-08 16:24:33 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:24:37 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-01031: privilèges insuffisants
+2026-03-08 16:24:37 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-01031: privilèges insuffisants
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m300[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mf"DELETE FROM {ods_schema}.{table} WHERE CLICHE = :1",[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+        [1;31m[cliche],[0m
+        [1;31m^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-01031: privilèges insuffisants[0m
+2026-03-08 16:36:13 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:36:15 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-00947: nombre de valeurs insuffisant
+2026-03-08 16:36:15 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00947: nombre de valeurs insuffisant
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m313[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mf"INSERT /*+ APPEND */ INTO {ods_schema}.{table} SELECT * FROM {table}"[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00947: nombre de valeurs insuffisant[0m
+2026-03-08 16:40:02 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:40:05 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+2026-03-08 16:40:05 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m313[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m([0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mf"INSERT /*+ APPEND */ INTO {ods_schema}.{table} SELECT * FROM {table}"[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER[0m
+2026-03-08 16:45:51 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:45:52 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+2026-03-08 16:45:52 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m315[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m(req)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER[0m
+2026-03-08 16:50:47 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:50:48 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+2026-03-08 16:50:48 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m112[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m315[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m(req)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER[0m
+2026-03-08 16:52:20 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:52:21 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+2026-03-08 16:52:21 [CRITICAL] cnss_etl.run_fact — Erreur : ORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m83[0m, in [35m_load_one[0m
+    [31mloader.archive_and_truncate[0m[1;31m(target, ods,cliche)[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m113[0m, in [35marchive_and_truncate[0m
+    return [31mself._archive_to_ods_and_truncate[0m[1;31m(table, ods_schema, cliche)[0m
+           [31m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m315[0m, in [35m_archive_to_ods_and_truncate[0m
+    [31mcursor.execute[0m[1;31m(req)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m320[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mORA-00932: types de données incohérents ; attendu : DATE ; obtenu : NUMBER[0m
+2026-03-08 16:56:09 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:56:10 [INFO    ] cnss_etl.loader — [ODS] FAIT_TSINISTRE → ods.FAIT_TSINISTRE : 0 lignes archivées
+2026-03-08 16:56:10 [INFO    ] cnss_etl.loader — [DWH] FAIT_TSINISTRE TRUNCATE OK
+2026-03-08 16:56:16 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
+2026-03-08 16:56:16 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
+2026-03-08 16:56:16 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 16:58:13 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:58:14 [INFO    ] cnss_etl.loader — [ODS] FAIT_TSINISTRE → ods.FAIT_TSINISTRE : 25086 lignes archivées
+2026-03-08 16:58:15 [INFO    ] cnss_etl.loader — [DWH] FAIT_TSINISTRE TRUNCATE OK
+2026-03-08 16:58:18 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
+2026-03-08 16:58:18 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
+2026-03-08 16:58:18 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 16:58:26 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 16:58:28 [WARNING ] cnss_etl.loader — [ODS] ods.FAIT_TSINISTRE — 25086 lignes partielles (CLICHE=032026) nettoyées avant réarchivage
+2026-03-08 16:58:29 [INFO    ] cnss_etl.loader — [ODS] FAIT_TSINISTRE → ods.FAIT_TSINISTRE : 25086 lignes archivées
+2026-03-08 16:58:34 [INFO    ] cnss_etl.loader — [DWH] FAIT_TSINISTRE TRUNCATE OK
+2026-03-08 16:58:37 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
+2026-03-08 16:58:37 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
+2026-03-08 16:58:37 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 17:12:36 [INFO    ] cnss_etl.run_fact — [FAIT_TSINISTRE] step=ETL date=20260308
+2026-03-08 17:12:38 [WARNING ] cnss_etl.loader — [ODS] ods.FAIT_TSINISTRE — 25086 lignes partielles (CLICHE=032026) nettoyées avant réarchivage
+2026-03-08 17:12:39 [INFO    ] cnss_etl.loader — [ODS] FAIT_TSINISTRE → ods.FAIT_TSINISTRE : 25086 lignes archivées
+2026-03-08 17:12:39 [INFO    ] cnss_etl.loader — [DWH] FAIT_TSINISTRE TRUNCATE OK
+2026-03-08 17:12:44 [INFO    ] cnss_etl.loader — [FAIT_TSINISTRE] 25086 lignes insérées
+2026-03-08 17:12:44 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TSINISTRE] 25086 lignes chargées
+2026-03-08 17:12:44 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TSINISTRE — 25086 lignes chargées
+2026-03-08 17:21:59 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 17:22:02 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 0 lignes archivées
+2026-03-08 17:22:02 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 17:22:14 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:22:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:22:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:22:40 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:22:50 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:22:58 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:08 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:26 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:35 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:45 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:23:54 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:02 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:18 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:26 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:35 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:24:52 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:00 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:19 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:27 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:36 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:44 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:25:52 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:20 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:29 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:36 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:49 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:30:57 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:09 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:15 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:33 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:47 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 17:31:48 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 1896 lignes insérées
+2026-03-08 17:31:48 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] 1851896 lignes chargées
+2026-03-08 17:31:48 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TRANSACTION_REGLEMENT — 1851896 lignes chargées
+2026-03-08 17:47:56 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 17:48:00 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] erreur : DPI-1001: out of memory
+2026-03-08 17:48:00 [CRITICAL] cnss_etl.run_fact — Erreur : DPI-1001: out of memory
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m69[0m, in [35m_load_one[0m
+    [31mcursor.execute[0m[1;31m(sql)[0m
+    [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m844[0m, in [35mexecute[0m
+    [31mimpl.execute[0m[1;31m(self)[0m
+    [31m~~~~~~~~~~~~[0m[1;31m^^^^^^[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m325[0m, in [35moracledb.thick_impl.ThickCursorImpl.execute[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m210[0m, in [35moracledb.thick_impl.ThickCursorImpl._perform_define[0m
+  File [35m"src/oracledb/impl/thick/cursor.pyx"[0m, line [35m128[0m, in [35moracledb.thick_impl.ThickCursorImpl._define_var[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m234[0m, in [35moracledb.base_impl.BaseCursorImpl._create_fetch_var[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m105[0m, in [35moracledb.thick_impl.ThickVarImpl._finalize_init[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-08 17:48:39 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 17:49:03 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 1851896 lignes archivées
+2026-03-08 17:49:04 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 17:49:11 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] erreur : DPY-3002: Python value of type "datetime64" is not supported
+2026-03-08 17:49:11 [CRITICAL] cnss_etl.run_fact — Erreur : DPY-3002: Python value of type "datetime64" is not supported
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m109[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m167[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m76[0m, in [35moracledb.base_impl.BindVar._create_var_from_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m344[0m, in [35moracledb.base_impl.BaseVarImpl._set_metadata_from_value[0m
+  File [35m"src/oracledb/impl/base/metadata.pyx"[0m, line [35m450[0m, in [35moracledb.base_impl.OracleMetadata.from_value[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\errors.py"[0m, line [35m199[0m, in [35m_raise_err[0m
+    raise error.exc_type(error) from cause
+[1;35moracledb.exceptions.NotSupportedError[0m: [35mDPY-3002: Python value of type "datetime64" is not supported[0m
+2026-03-08 17:51:29 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 17:55:42 [WARNING ] cnss_etl.loader — [ODS] ods.FAIT_TRANSACTION_REGLEMENT — 1851896 lignes partielles (CLICHE=032026) nettoyées avant réarchivage
+2026-03-08 17:55:42 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 0 lignes archivées
+2026-03-08 17:55:43 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 17:55:47 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] erreur : DPY-3002: Python value of type "NAType" is not supported
+2026-03-08 17:55:47 [CRITICAL] cnss_etl.run_fact — Erreur : DPY-3002: Python value of type "NAType" is not supported
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m110[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m167[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m76[0m, in [35moracledb.base_impl.BindVar._create_var_from_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m344[0m, in [35moracledb.base_impl.BaseVarImpl._set_metadata_from_value[0m
+  File [35m"src/oracledb/impl/base/metadata.pyx"[0m, line [35m450[0m, in [35moracledb.base_impl.OracleMetadata.from_value[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\errors.py"[0m, line [35m199[0m, in [35m_raise_err[0m
+    raise error.exc_type(error) from cause
+[1;35moracledb.exceptions.NotSupportedError[0m: [35mDPY-3002: Python value of type "NAType" is not supported[0m
+2026-03-08 18:00:55 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 18:00:56 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 0 lignes archivées
+2026-03-08 18:00:56 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 18:01:04 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] erreur : DPY-3013: unsupported Python type float for database type DB_TYPE_VARCHAR
+2026-03-08 18:01:04 [CRITICAL] cnss_etl.run_fact — Erreur : DPY-3013: unsupported Python type float for database type DB_TYPE_VARCHAR
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m115[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m136[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m60[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/base/connection.pyx"[0m, line [35m170[0m, in [35moracledb.base_impl.BaseConnImpl._check_value[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\errors.py"[0m, line [35m199[0m, in [35m_raise_err[0m
+    raise error.exc_type(error) from cause
+[1;35moracledb.exceptions.NotSupportedError[0m: [35mDPY-3013: unsupported Python type float for database type DB_TYPE_VARCHAR[0m
+2026-03-08 18:02:38 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 18:02:39 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 0 lignes archivées
+2026-03-08 18:02:39 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 18:02:45 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] erreur : Unable to allocate 9.16 MiB for an array with shape (12, 100000) and data type object
+2026-03-08 18:02:45 [CRITICAL] cnss_etl.run_fact — Erreur : Unable to allocate 9.16 MiB for an array with shape (12, 100000) and data type object
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m92[0m, in [35m_load_one[0m
+    df = pd.DataFrame(rows, columns=columns)
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\frame.py"[0m, line [35m845[0m, in [35m__init__[0m
+    mgr = arrays_to_mgr(
+        arrays,
+    ...<2 lines>...
+        dtype=dtype,
+    )
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\construction.py"[0m, line [35m150[0m, in [35marrays_to_mgr[0m
+    return create_block_manager_from_column_arrays(
+        arrays, axes, consolidate=consolidate, refs=refs
+    )
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2334[0m, in [35mcreate_block_manager_from_column_arrays[0m
+    [31mmgr._consolidate_inplace[0m[1;31m()[0m
+    [31m~~~~~~~~~~~~~~~~~~~~~~~~[0m[1;31m^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m1956[0m, in [35m_consolidate_inplace[0m
+    self.blocks = [31m_consolidate[0m[1;31m(self.blocks)[0m
+                  [31m~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2459[0m, in [35m_consolidate[0m
+    merged_blocks, _ = [31m_merge_blocks[0m[1;31m([0m
+                       [31m~~~~~~~~~~~~~[0m[1;31m^[0m
+        [1;31mlist(group_blocks), dtype=dtype, can_consolidate=_can_consolidate[0m
+        [1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+    [1;31m)[0m
+    [1;31m^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\pandas\core\internals\managers.py"[0m, line [35m2491[0m, in [35m_merge_blocks[0m
+    new_values = [31mnew_values[0m[1;31m[argsort][0m
+                 [31m~~~~~~~~~~[0m[1;31m^^^^^^^^^[0m
+[1;35mnumpy._core._exceptions._ArrayMemoryError[0m: [35mUnable to allocate 9.16 MiB for an array with shape (12, 100000) and data type object[0m
+2026-03-08 19:04:03 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 19:04:07 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 0 lignes archivées
+2026-03-08 19:04:08 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 19:04:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:04:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:04:31 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:04:38 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:04:47 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:11 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:18 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:25 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:39 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:46 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:05:54 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:24 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:30 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:37 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:06:52 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:00 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:07 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:13 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:20 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:27 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:49 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:07:56 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:08:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:08:11 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:08:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:08:39 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:08:46 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:09:08 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:09:15 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:09:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:09:46 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:09:47 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 1896 lignes insérées
+2026-03-08 19:09:47 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] 1851896 lignes chargées
+2026-03-08 19:09:47 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TRANSACTION_REGLEMENT — 1851896 lignes chargées
+2026-03-08 19:12:48 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_REGLEMENT] step=ETL date=20260308
+2026-03-08 19:13:18 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_REGLEMENT → ods.FAIT_TRANSACTION_REGLEMENT : 1851896 lignes archivées
+2026-03-08 19:13:25 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_REGLEMENT TRUNCATE OK
+2026-03-08 19:13:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:13:38 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:13:45 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:13:52 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:13:59 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:06 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:13 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:22 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:37 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:44 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:14:53 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:01 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:07 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:14 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:37 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:44 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:15:51 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:16:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:16:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:16:24 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:16:46 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:16:53 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:17:00 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:17:25 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:17:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:17:39 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:17:45 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:20 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:36 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:18:50 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:19:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:19:11 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:19:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:19:29 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 50000 lignes insérées
+2026-03-08 19:19:30 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_REGLEMENT] 1896 lignes insérées
+2026-03-08 19:19:30 [INFO    ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_REGLEMENT] 1851896 lignes chargées
+2026-03-08 19:19:30 [INFO    ] cnss_etl.run_fact — [ETL] FAIT_TRANSACTION_REGLEMENT — 1851896 lignes chargées
+2026-03-08 19:22:43 [INFO    ] cnss_etl.run_fact — [FAIT_TRANSACTION_DECLARATION] step=ETL date=20260308
+2026-03-08 19:22:46 [INFO    ] cnss_etl.loader — [ODS] FAIT_TRANSACTION_DECLARATION → ods.FAIT_TRANSACTION_DECLARATION : 0 lignes archivées
+2026-03-08 19:22:46 [INFO    ] cnss_etl.loader — [DWH] FAIT_TRANSACTION_DECLARATION TRUNCATE OK
+2026-03-08 19:22:56 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:05 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:14 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:41 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:23:51 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:00 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:09 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:17 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:26 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:35 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:24:52 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:01 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:10 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:19 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:27 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:36 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:44 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:25:53 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:26:11 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:26:20 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:26:49 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:26:57 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:27:23 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:27:32 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:27:41 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:28:05 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:28:14 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:28:33 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:28:43 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:29:03 [INFO    ] cnss_etl.loader — [FAIT_TRANSACTION_DECLARATION] 50000 lignes insérées
+2026-03-08 19:29:14 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_TRANSACTION_DECLARATION] erreur : DPI-1001: out of memory
+2026-03-08 19:29:14 [CRITICAL] cnss_etl.run_fact — Erreur : DPI-1001: out of memory
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\run_fact.py"[0m, line [35m142[0m, in [35mmain[0m
+    count    = FactsPipeline()._load_one(src_conn, loader, cfg)
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m137[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m68[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m238[0m, in [35moracledb.thick_impl.ThickVarImpl._resize[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-08 19:38:50 [INFO    ] run_prestation_recouvrement_facts_pipeline — Démarrage
+2026-03-08 19:38:54 [INFO    ] cnss_etl.loader — [ODS] FAIT_CATEGORIE_EMPLOYEUR → ods.FAIT_CATEGORIE_EMPLOYEUR : 0 lignes archivées
+2026-03-08 19:38:54 [INFO    ] cnss_etl.loader — [DWH] FAIT_CATEGORIE_EMPLOYEUR TRUNCATE OK
+2026-03-08 19:38:58 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:39:01 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:39:03 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:39:05 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:39:08 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:39:09 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 14636 lignes insérées
+2026-03-08 19:39:09 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-08 19:39:09 [INFO    ] cnss_etl.loader — [ODS] FAIT_CONTRAINTE → ods.FAIT_CONTRAINTE : 0 lignes archivées
+2026-03-08 19:39:09 [INFO    ] cnss_etl.loader — [DWH] FAIT_CONTRAINTE TRUNCATE OK
+2026-03-08 19:39:10 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 19:39:10 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 19:39:10 [INFO    ] cnss_etl.loader — [ODS] FAIT_CONTROLE → ods.FAIT_CONTROLE : 0 lignes archivées
+2026-03-08 19:39:10 [INFO    ] cnss_etl.loader — [DWH] FAIT_CONTROLE TRUNCATE OK
+2026-03-08 19:39:21 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_CONTROLE] erreur : DPI-1001: out of memory
+2026-03-08 19:39:21 [ERROR   ] cnss_etl.pipeline_facts — Erreur pipeline FACTS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m47[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m137[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m68[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m238[0m, in [35moracledb.thick_impl.ThickVarImpl._resize[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-08 19:39:21 [CRITICAL] run_prestation_recouvrement_facts_pipeline — FactsPipeline échoué : DPI-1001: out of memory
+2026-03-08 19:55:45 [INFO    ] run_prestation_recouvrement_facts_pipeline — Démarrage
+2026-03-08 19:55:52 [INFO    ] cnss_etl.loader — [ODS] FAIT_CATEGORIE_EMPLOYEUR → ods.FAIT_CATEGORIE_EMPLOYEUR : 264636 lignes archivées
+2026-03-08 19:55:52 [INFO    ] cnss_etl.loader — [DWH] FAIT_CATEGORIE_EMPLOYEUR TRUNCATE OK
+2026-03-08 19:55:55 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:55:57 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:56:00 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:56:02 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:56:05 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 50000 lignes insérées
+2026-03-08 19:56:06 [INFO    ] cnss_etl.loader — [FAIT_CATEGORIE_EMPLOYEUR] 14636 lignes insérées
+2026-03-08 19:56:06 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CATEGORIE_EMPLOYEUR] 264636 lignes chargées
+2026-03-08 19:56:06 [INFO    ] cnss_etl.loader — [ODS] FAIT_CONTRAINTE → ods.FAIT_CONTRAINTE : 1144 lignes archivées
+2026-03-08 19:56:06 [INFO    ] cnss_etl.loader — [DWH] FAIT_CONTRAINTE TRUNCATE OK
+2026-03-08 19:56:07 [INFO    ] cnss_etl.loader — [FAIT_CONTRAINTE] 1144 lignes insérées
+2026-03-08 19:56:07 [INFO    ] cnss_etl.pipeline_facts — [FAIT_CONTRAINTE] 1144 lignes chargées
+2026-03-08 19:56:07 [INFO    ] cnss_etl.loader — [ODS] FAIT_CONTROLE → ods.FAIT_CONTROLE : 0 lignes archivées
+2026-03-08 19:56:08 [INFO    ] cnss_etl.loader — [DWH] FAIT_CONTROLE TRUNCATE OK
+2026-03-08 19:56:20 [ERROR   ] cnss_etl.pipeline_facts — [FAIT_CONTROLE] erreur : DPI-1001: out of memory
+2026-03-08 19:56:20 [ERROR   ] cnss_etl.pipeline_facts — Erreur pipeline FACTS
+Traceback (most recent call last):
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m47[0m, in [35mrun[0m
+    rows_loaded += [31mself._load_one[0m[1;31m(src_conn, loader, cfg)[0m
+                   [31m~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m97[0m, in [35m_load_one[0m
+    total += [31mloader.insert_chunk[0m[1;31m(target, df)[0m
+             [31m~~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\domaines\prestation_recouvrement\facts\pipeline_facts.py"[0m, line [35m118[0m, in [35minsert_chunk[0m
+    return [31mself._bulk_insert[0m[1;31m(table, df)[0m
+           [31m~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\shared\base\base_loader.py"[0m, line [35m86[0m, in [35m_bulk_insert[0m
+    [31mcursor.executemany[0m[1;31m(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))[0m
+    [31m~~~~~~~~~~~~~~~~~~[0m[1;31m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  File [35m"C:\Users\DEV1\Documents\ETL\.venv\Lib\site-packages\oracledb\cursor.py"[0m, line [35m916[0m, in [35mexecutemany[0m
+    manager = self._impl._prepare_for_executemany(
+        self,
+    ...<2 lines>...
+        batch_size,
+    )
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m454[0m, in [35moracledb.base_impl.BaseCursorImpl._prepare_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m160[0m, in [35moracledb.base_impl.BatchLoadManager.create_for_executemany[0m
+  File [35m"src/oracledb/impl/base/batch_load_manager.pyx"[0m, line [35m318[0m, in [35moracledb.base_impl.FullDataBatchLoadManager._next_batch[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m61[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values[0m
+  File [35m"src/oracledb/impl/base/cursor.pyx"[0m, line [35m122[0m, in [35moracledb.base_impl.BaseCursorImpl._bind_values_by_position[0m
+  File [35m"src/oracledb/impl/base/bind_var.pyx"[0m, line [35m137[0m, in [35moracledb.base_impl.BindVar._set_by_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m86[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_value[0m
+  File [35m"src/oracledb/impl/base/var.pyx"[0m, line [35m68[0m, in [35moracledb.base_impl.BaseVarImpl._check_and_set_scalar_value[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m238[0m, in [35moracledb.thick_impl.ThickVarImpl._resize[0m
+  File [35m"src/oracledb/impl/thick/var.pyx"[0m, line [35m91[0m, in [35moracledb.thick_impl.ThickVarImpl._create_handle[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m484[0m, in [35moracledb.thick_impl._raise_from_odpi[0m
+  File [35m"src/oracledb/impl/thick/utils.pyx"[0m, line [35m474[0m, in [35moracledb.thick_impl._raise_from_info[0m
+[1;35moracledb.exceptions.DatabaseError[0m: [35mDPI-1001: out of memory[0m
+2026-03-08 19:56:20 [CRITICAL] run_prestation_recouvrement_facts_pipeline — FactsPipeline échoué : DPI-1001: out of memory

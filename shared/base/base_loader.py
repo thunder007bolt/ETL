@@ -247,18 +247,105 @@ class BaseLoader(ABC):
       # ------------------------------------------------------------------
     # DELETE période — utilisé avant un INSERT en streaming
     # ------------------------------------------------------------------
-    def _delete_period(self, table: str, annee: int, mois: int) -> None:
-        cursor = self.conn.cursor()
-        # table columns have been renamed to L_ANNEE/L_MOIS in the DWH
-        cursor.execute(
-            f"DELETE FROM {table} WHERE L_ANNEE = :1 AND L_MOIS = :2", [annee, mois]
-        )
-        self.conn.commit()
-        logger.debug(f"[{table}] DELETE L_ANNEE={annee} L_MOIS={mois}")
+    def _delete_cliche(self, table: str, cliche: str) -> None:
+        """
+        Supprime par lots de _DELETE_BATCH lignes pour éviter ORA-30036
+        (UNDO tablespace full) sur les grandes tables de faits.
 
-     # ------------------------------------------------------------------
-    # DELETE + INSERT — par période (ANNEE / MOIS)
+        Chaque lot sélectionne au plus _DELETE_BATCH ROWID correspondant
+        au cliché MMYYYY, les supprime, puis committe. L'opération se répète
+        jusqu'à ce qu'il ne reste plus rien à supprimer.
+
+        Avec un index sur CLICHE la sélection des ROWID est un index range
+        scan — rapide même sur 40 M lignes.
+        """
+        cursor = self.conn.cursor()
+        total  = 0
+        sql    = (
+            f"DELETE FROM {table} WHERE ROWID IN ("
+            f"  SELECT ROWID FROM {table}"
+            f"  WHERE CLICHE = :1"
+            f"  AND ROWNUM <= :2"
+            f")"
+        )
+        while True:
+            cursor.execute(sql, [cliche, self._DELETE_BATCH])
+            deleted = cursor.rowcount
+            self.conn.commit()
+            total += deleted
+            logger.debug(f"[{table}] DELETE batch {total} lignes (CLICHE={cliche})")
+            if deleted < self._DELETE_BATCH:
+                break
+        logger.info(f"[{table}] DELETE CLICHE={cliche} — {total} lignes")
+
     # ------------------------------------------------------------------
+    # ARCHIVE ODS + TRUNCATE DWH — remplacement de delete_period
+    # ------------------------------------------------------------------
+    def _archive_to_ods_and_truncate(self, table: str, ods_schema: str,
+                                      cliche: str) -> int:
+        """
+        1. Nettoyage idempotent : DELETE ODS WHERE CLICHE = cliche — élimine tout
+           snapshot partiel d'un run précédent interrompu (rapide si index sur CLICHE).
+        2. Archive DWH → ODS via INSERT SELECT server-side (direct path, O(n) Oracle).
+        3. TRUNCATE DWH (DDL, 0 UNDO, instantané).
+        Retourne le nombre de lignes archivées.
+
+        cliche : identifiant de période au format MMYYYY (ex. "032026").
+        Le user DWH doit avoir DELETE + INSERT ON <ods_schema>.<table> (DBA).
+        """
+        cursor = self.conn.cursor()
+
+        # Étape 0 : idempotence — nettoie un éventuel snapshot partiel
+        cursor.execute(
+            f"DELETE FROM {ods_schema}.{table} WHERE CLICHE = :1",
+            [cliche],
+        )
+        deleted = cursor.rowcount
+        self.conn.commit()
+        if deleted:
+            logger.warning(
+                f"[ODS] {ods_schema}.{table} — {deleted} lignes partielles "
+                f"(CLICHE={cliche}) nettoyées avant réarchivage"
+            )
+
+        # Étape 1 : archive server-side via colonnes explicites (évite ORA-00932
+        # causé par un SELECT * qui mappe par position et non par nom lorsque
+        # les structures DWH/ODS ont divergé, ex. après ajout de CLICHE).
+        cursor.execute(
+            """
+            SELECT c.column_name
+            FROM   user_tab_columns c
+            JOIN   all_tab_columns  o
+                   ON  o.owner       = :ods
+                   AND o.table_name  = c.table_name
+                   AND o.column_name = c.column_name
+            WHERE  c.table_name = :tbl
+            ORDER BY c.column_id
+            """,
+            {"ods": ods_schema.upper(), "tbl": table.upper()},
+        )
+        common_cols = ", ".join(row[0] for row in cursor.fetchall())
+        if not common_cols:
+            raise RuntimeError(
+                f"Aucune colonne commune entre {table} (DWH) et "
+                f"{ods_schema}.{table} (ODS) — vérifier la structure des tables."
+            )
+        archive_sql = (
+            f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
+            f" SELECT {common_cols} FROM {table}"
+        )
+        logger.debug(f"[ODS] {archive_sql}")
+        cursor.execute(archive_sql)
+        archived = cursor.rowcount
+        self.conn.commit()
+        logger.info(f"[ODS] {table} → {ods_schema}.{table} : {archived} lignes archivées")
+
+        # Étape 2 : vidage DWH — DDL = auto-commit Oracle, 0 undo
+        cursor.execute(f"TRUNCATE TABLE {table}")
+        logger.info(f"[DWH] {table} TRUNCATE OK")
+
+        return archived
+   # ------------------------------------------------------------------
     def _delete_insert_period(self, table: str, df: pd.DataFrame,
                                period_cols: list | None = None,
                                seq_cols: dict | None = None) -> int:

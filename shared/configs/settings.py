@@ -53,3 +53,10 @@ STAGING_DIR     = os.environ.get("STAGING_DIR",  str(DEFAULT_STAGING_DIR))
 # ---------------------------------------------------------------------------
 ORA_THICK_MODE = os.environ.get("ORA_THICK_MODE", "true").lower() == "true"
 ORA_CLIENT_DIR = os.environ.get("ORA_CLIENT_DIR", str(DEFAULT_ORA_CLIENT))
+
+# ---------------------------------------------------------------------------
+# Archivage ODS (Operational Data Store)
+# ODS_SCHEMA : schéma Oracle cible pour l'archivage server-side avant TRUNCATE
+#              vide = désactive l'archivage (comportement historique delete_period)
+# ---------------------------------------------------------------------------
+ODS_SCHEMA: str = os.getenv("ODS_SCHEMA", "")  # ex. "CNSS_ODS"

@@ -97,8 +97,8 @@ def main():
 
             now = datetime.now()
             # new naming convention for period columns
-            df["L_ANNEE"] = now.year
-            df["L_MOIS"]  = now.month
+            df["CLICHE"] = f"{now.month:02d}{now.year}"   # MMYYYY ex. "032026"
+
 
             print(df.info())
             transform_fn = cfg.get("transform_fn")
@@ -120,9 +120,12 @@ def main():
             else:
                 loader = _GenericFactLoader(dw_conn)
                 # use renamed columns when determining period
-                l_annee  = int(df["L_ANNEE"].iloc[0])
-                l_mois   = int(df["L_MOIS"].iloc[0])
-                loader.delete_period(target, l_annee, l_mois)
+                cliche = str(df["CLICHE"].iloc[0])
+                ods = settings.ODS_SCHEMA
+                if ods:
+                    loader.archive_and_truncate(target, ods, cliche)
+                else:
+                    loader.delete_cliche(target, cliche)
                 count = loader.insert_chunk(target, df)
                 logger.info(f"[L] {target} — {count} lignes chargées")
 

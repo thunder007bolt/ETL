@@ -65,6 +65,7 @@ class FactsPipeline:
         try:
             sql    = load_sql(_SQL_DIR, cfg["sql_file"])
             cursor = src_conn.cursor()
+            cursor.arraysize = self._FETCH
             cursor.execute(sql)
 
             description  = cursor.description
@@ -73,11 +74,15 @@ class FactsPipeline:
 
             now     = datetime.now()
             # period values injected into every batch row
-            l_annee = now.year
-            l_mois  = now.month
+            cliche = f"{now.month:02d}{now.year}"   # MMYYYY ex. "032026"
+
 
             # delete rows matching the new period columns
-            loader.delete_period(target, l_annee, l_mois)
+            ods = settings.ODS_SCHEMA
+            if ods:
+                loader.archive_and_truncate(target, ods,cliche)
+            else:
+                loader.delete_cliche(target, cliche)
 
             total = 0
             while True:
@@ -86,8 +91,7 @@ class FactsPipeline:
                     break
                 df = pd.DataFrame(rows, columns=columns)
                 df = _cast_oracle_types(df, description)
-                df["L_ANNEE"] = l_annee
-                df["L_MOIS"]  = l_mois
+                df["CLICHE"] = cliche
                 if transform_fn is not None:
                     df = transform_fn(df)
                 total += loader.insert_chunk(target, df)
@@ -104,8 +108,11 @@ class _GenericFactLoader(BaseLoader):
     def load(self, df) -> int:
         raise NotImplementedError
 
-    def delete_period(self, table: str, annee: int, mois: int) -> None:
-        self._delete_period(table, annee, mois)
+    def archive_and_truncate(self, table: str, ods_schema: str, cliche: str) -> int:
+        return self._archive_to_ods_and_truncate(table, ods_schema, cliche)
+
+    def delete_cliche(self, table: str, cliche: str) -> None:
+        self._delete_cliche(table, cliche)
 
     def insert_chunk(self, table: str, df: pd.DataFrame) -> int:
         return self._bulk_insert(table, df)
