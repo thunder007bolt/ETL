@@ -7,6 +7,18 @@
 -- WHERE a.constraint_type = 'R'
 -- AND a.r_constraint_name IN (
 
+-- Exemple de GRANTS pour permettre à l'utilisateur DWH de modifier
+-- toutes les tables du schéma DTM (la boucle ci‑dessous peut être copiée
+-- dans un script SQL/PLSQL exécuté par un DBA) :
+--
+-- BEGIN
+--   FOR t IN (SELECT table_name FROM all_tables WHERE owner = 'DTM') LOOP
+--     EXECUTE IMMEDIATE 'GRANT SELECT, INSERT, UPDATE, DELETE ON dtm.'||t.table_name||' TO dwh';
+--   END LOOP;
+-- END;
+-- /
+
+
 --     SELECT constraint_name
 --     FROM user_constraints
 --     WHERE table_name = 'DIM_SINISTRE'
@@ -158,3 +170,5 @@
 -- CREATE INDEX IDX_CLICHE_TSIN ON FAIT_TSINISTRE (CLICHE);
 
 -- TRUNCATE TABLE FAIT_TRANSACTION_COTISATION
+
+select * from DIM_PERIODICITE_VERSEMENT

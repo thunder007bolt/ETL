@@ -1,0 +1,9 @@
+-- FAIT_PE_AJ � Source : PE_AJ (full reload)
+SELECT
+    PE_ID,
+    AJ_ID,
+    PE_AJ_DATE_INSERT,
+    PE_AJ_USAGER_INSERT,
+    PE_AJ_DATE_UPDATE,
+    PE_AJ_USAGER_UPDATE
+FROM PE_AJ

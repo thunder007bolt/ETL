@@ -3,6 +3,7 @@ Classe de base pour tous les loaders.
 """
 
 import decimal
+import hashlib
 import logging
 import math
 from abc import ABC, abstractmethod
@@ -141,9 +142,11 @@ class BaseLoader(ABC):
 
     def _ensure_gtt(self, table: str) -> str:
         """
-
+        Crée un nom GTT unique et court (≤30 caractères) via hash du nom complet.
         """
-        gtt = f"GTT_{table}"
+        # Créer un hash court du nom complet pour garantir l'unicité
+        table_hash = hashlib.md5(table.upper().encode()).hexdigest()[:8]
+        gtt = f"GTT_{table_hash}"
 
         cursor = self.conn.cursor()
 
@@ -152,21 +155,41 @@ class BaseLoader(ABC):
             [gtt],
         )
         if cursor.fetchone()[0] == 0:
-            cursor.execute(
-                """
-                SELECT column_name, data_type, data_length,
-                       data_precision, data_scale
-                FROM   user_tab_columns
-                WHERE  table_name = :1
-                ORDER  BY column_id
-                """,
-                [table],
-            )
+            # Parser schéma.table
+            if "." in table:
+                schema, tbl_name = table.split(".", 1)
+            else:
+                schema = None
+                tbl_name = table
+            
+            # Utiliser all_tab_columns pour voir les tables d'autres schémas
+            if schema:
+                cursor.execute(
+                    """
+                    SELECT column_name, data_type, data_length,
+                           data_precision, data_scale
+                    FROM   all_tab_columns
+                    WHERE  owner = :1 AND table_name = :2
+                    ORDER  BY column_id
+                    """,
+                    [schema.upper(), tbl_name.upper()],
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT column_name, data_type, data_length,
+                           data_precision, data_scale
+                    FROM   user_tab_columns
+                    WHERE  table_name = :1
+                    ORDER  BY column_id
+                    """,
+                    [tbl_name.upper()],
+                )
             rows = cursor.fetchall()
             if not rows:
                 raise RuntimeError(
-                    f"Table {table} introuvable dans user_tab_columns — "
-                    "vérifiez le schéma DW."
+                    f"Table {table} introuvable dans all_tab_columns — "
+                    "vérifiez le schéma et les permissions."
                 )
 
             col_defs = []

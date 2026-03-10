@@ -1,0 +1,13 @@
+-- FAIT_LIEN � Source : LIEN (full reload)
+SELECT
+    IND_ID_1,
+    IND_ID_2,
+    LN_TYPE,
+    LN_DATE_MARIAGE,
+    LN_DEPENDANT,
+    LN_DATE_INSERT,
+    LN_USAGER_INSERT,
+    LN_DATE_UPDATE,
+    LN_USAGER_UPDATE,
+    LN_ACTIF
+FROM LIEN

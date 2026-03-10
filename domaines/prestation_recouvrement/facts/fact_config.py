@@ -102,5 +102,89 @@ FACT_CONFIG = [
         "sql_file":   "tsinistre.sql",
         "target":     "FAIT_TSINISTRE",
     },
+    {
+        "sql_file":   "appel.sql",
+        "target":     "FAIT_APPEL",
+    },
+    {
+        "sql_file":   "bordereau_prest.sql",
+        "target":     "FAIT_BORDEREAU_PREST",
+    },
+    {
+        "sql_file":   "debours.sql",
+        "target":     "FAIT_DEBOURS",
+    },
+    {
+        "sql_file":   "declarat_groupe_assurance.sql",
+        "target":     "FAIT_DECLARAT_GROUPE_ASSURANCE",
+    },
+    {
+        "sql_file":   "dossier.sql",
+        "target":     "FAIT_DOSSIER",
+    },
+    {
+        "sql_file":   "echeancier.sql",
+        "target":     "FAIT_ECHEANCIER",
+    },
+    {
+        "sql_file":   "effet.sql",
+        "target":     "FAIT_EFFET",
+    },
+    {
+        "sql_file":   "element_controle.sql",
+        "target":     "FAIT_ELEMENT_CONTROLE",
+    },
+    {
+        "sql_file":   "element_taxation.sql",
+        "target":     "FAIT_ELEMENT_TAXATION",
+    },
+    {
+        "sql_file":   "etape.sql",
+        "target":     "FAIT_ETAPE",
+    },
+    {
+        "sql_file":   "ind_compte_bancaire.sql",
+        "target":     "FAIT_IND_COMPTE_BANCAIRE",
+    },
+    {
+        "sql_file":   "institution_financiere.sql",
+        "target":     "FAIT_INSTITUTION_FINANCIERE",
+    },
+    {
+        "sql_file":   "lien.sql",
+        "target":     "FAIT_LIEN",
+    },
+    {
+        "sql_file":   "periode_cotisation.sql",
+        "target":     "FAIT_PERIODE_COTISATION",
+    },
+    {
+        "sql_file":   "pe_aj.sql",
+        "target":     "FAIT_PE_AJ",
+    },
+    {
+        "sql_file":   "reception_dos_piece.sql",
+        "target":     "FAIT_RECEPTION_DOS_PIECE",
+    },
+    {
+        "sql_file":   "redevance.sql",
+        "target":     "FAIT_REDEVANCE",
+    },
+    {
+        "sql_file":   "salaire.sql",
+        "target":     "FAIT_SALAIRE",
+    },
+    {
+        "sql_file":   "supplement_salaire.sql",
+        "target":     "FAIT_SUPPLEMENT_SALAIRE",
+    },
+    {
+        "sql_file":   "taxation_doffice.sql",
+        "target":     "FAIT_TAXATION_DOFFICE",
+    },
+    # {
+    #     "sql_file":   "ixdepot.sql",
+    #     "target":     "FAIT_IXDEPOT",
+    # },
 
 ]
