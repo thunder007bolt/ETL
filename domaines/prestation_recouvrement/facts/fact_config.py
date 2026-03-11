@@ -182,9 +182,9 @@ FACT_CONFIG = [
         "sql_file":   "taxation_doffice.sql",
         "target":     "FAIT_TAXATION_DOFFICE",
     },
-    # {
-    #     "sql_file":   "ixdepot.sql",
-    #     "target":     "FAIT_IXDEPOT",
-    # },
+    {
+        "sql_file":   "txdepot.sql",
+        "target":     "FAIT_TXDEPOT",
+    },
 
 ]

@@ -47,11 +47,13 @@ DIM_CONFIG = [
     #   "transform_fn": transform_sinistre,
     # },
     ##### Demba doit rendre id_type auto increment
-    # {
-    #     "sql_file":  "type_ajustement.sql",
-    #     "target":    "DTM.DIM_TYPE_AJUSTEMENT",
-    #     "key_cols":  ["TAJ_CODE"],
-    # },
+    {
+        "sql_file":  "type_ajustement.sql",
+        
+        "target":    "DTM.DIM_TYPE_AJUSTEMENT",
+        "seq_cols":  {"ID_TYPE": "DTM.SEQ_DIM_TYPE_AJUSTEMENT"},
+        "key_cols":  ["TAJ_CODE"],
+    },
     {
         "sql_file":  "type_anomalie_bnts.sql",
         "target":    "DTM.DIM_TYPE_ANOMALIE_BNTS",
@@ -283,6 +285,17 @@ DIM_CONFIG = [
         "sql_file":  "periode.sql",
         "target":    "DTM.DIM_PERIODE",
         "key_cols":  ["PER_ID"],
+    },
+    {
+        "sql_file": "agence.sql",
+        "target":   "DTM.DIM_AGENCE",
+        "key_cols": ["IF_NO","AG_CODE"],
+        # facultatif : utiliser "strategy": "gtt" si la table est volumineuse
+    },
+    {
+        "sql_file":  "annee.sql",
+        "target":    "DTM.DIM_ANNEE",
+        "key_cols":  ["AN_ID"],
     },
     {
         # tableau DIM_PERIODICITE_VERSEMENT basé sur la source PERIODICITE
