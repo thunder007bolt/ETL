@@ -9,6 +9,7 @@ import math
 from abc import ABC, abstractmethod
 
 import numpy as np
+import oracledb
 import pandas as pd
 
 logger = logging.getLogger("cnss_etl.loader")
@@ -150,8 +151,11 @@ class BaseLoader(ABC):
 
         cursor = self.conn.cursor()
 
+        # user_tables only lists tables; a synonym or other object with
+        # the same name will still block CREATE TABLE with ORA-00955.  Use
+        # ALL_OBJECTS scoped to the current user to ensure the name is free.
         cursor.execute(
-            "SELECT COUNT(*) FROM user_tables WHERE table_name = :1",
+            "SELECT COUNT(*) FROM all_objects WHERE owner = USER AND object_name = :1",
             [gtt],
         )
         if cursor.fetchone()[0] == 0:
@@ -214,8 +218,19 @@ class BaseLoader(ABC):
                 f"CREATE GLOBAL TEMPORARY TABLE {gtt} "
                 f"({', '.join(col_defs)}) ON COMMIT DELETE ROWS"
             )
-            cursor.execute(ddl)
-            logger.info(f"[GTT] {gtt} créée automatiquement.")
+            try:
+                cursor.execute(ddl)
+            except oracledb.DatabaseError as err:
+                msg = str(err)
+                if "ORA-00955" in msg:
+                    # object already exists (table, synonym, etc.)
+                    logger.warning(
+                        f"[GTT] {gtt} existe déjà, création ignorée."
+                    )
+                else:
+                    raise
+            else:
+                logger.info(f"[GTT] {gtt} créée automatiquement.")
 
         return gtt
 
