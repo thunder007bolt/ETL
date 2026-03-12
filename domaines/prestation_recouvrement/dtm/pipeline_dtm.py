@@ -113,6 +113,8 @@ class DtmPipeline:
 class _DtmLoader(BaseLoader):
     """Loader DTM — wrapping BaseLoader pour les tables d'agrégats DTM."""
 
+    _DELETE_BATCH = 10_000
+
     def load(self, df) -> int:
         raise NotImplementedError
 
