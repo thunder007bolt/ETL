@@ -35,7 +35,7 @@ DTM_CONFIG = [
     },
     {
         "name": "controles",
-        "target": "DTM.DTM_CONTROLES",
+        "target": "DTM.DTM_CONTROLE",
         "sql_files": [
             {"file": "controles.sql", "label": "CONTROLES"},
         ],
