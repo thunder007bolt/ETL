@@ -42,7 +42,7 @@ DTM_CONFIG = [
     },
     {
         "name": "salaires",
-        "target": "DTM.DTM_SALAIRES",
+        "target": "DTM.DTM_SALAIRE",
         "sql_files": [
             {"file": "salaires.sql", "label": "SALAIRES"},
         ],
