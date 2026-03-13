@@ -339,6 +339,12 @@ DIM_CONFIG = [
         "key_cols":  ["SP_NO"],
     },
     {
+        "sql_file":  "region.sql",
+        "target":    "DTM.DIM_REGION",
+        "key_cols":  ["DR_NO", "SP_NO", "LP_NO"],
+        "seq_cols":  {"ID_REGION": "DTM.SEQ_DIM_REGION"},
+    },
+    {
         "sql_file":  "tranche_effectif.sql",
         "target":    "DTM.DIM_TRANCHE_EFFECTIF",
         "key_cols":  ["TEF_CODE"],
