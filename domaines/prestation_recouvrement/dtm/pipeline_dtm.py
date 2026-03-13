@@ -51,7 +51,7 @@ class DtmPipeline:
         batch_date: date de référence pour le CLICHE (défaut = maintenant)
         """
         batch_date = batch_date or datetime.now()
-        cliche     = f"{batch_date.year}{batch_date.month:02d}"   # YYYYMM
+        cliche     = f"{batch_date.month:02d}{batch_date.year}"   # MMYYYY — uniforme FAIT + DTM
         dw_conn    = get_dw_connection()
 
         configs = [
@@ -87,7 +87,7 @@ class DtmPipeline:
                 sql    = load_sql(_SQL_DIR, sql_entry["file"])
                 cursor = conn.cursor()
                 cursor.arraysize = self._FETCH
-                cursor.execute(sql)
+                cursor.execute(sql, [cliche])   # :1 = CLICHE MMYYYY (uniforme FAIT + DTM)
 
                 description = cursor.description
                 columns     = [col[0].upper() for col in description]
@@ -96,10 +96,9 @@ class DtmPipeline:
                     rows = cursor.fetchmany(self._FETCH)
                     if not rows:
                         break
-                    df           = pd.DataFrame(rows, columns=columns)
-                    df           = _cast_oracle_types(df, description)
-                    df["CLICHE"] = cliche
-                    total       += loader.insert_chunk(target, df)
+                    df    = pd.DataFrame(rows, columns=columns)
+                    df    = _cast_oracle_types(df, description)
+                    total += loader.insert_chunk(target, df)
 
                 logger.info(f"[{target}][{sql_entry['label']}] {total} lignes chargées")
 

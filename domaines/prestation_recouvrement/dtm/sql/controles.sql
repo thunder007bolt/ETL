@@ -69,14 +69,15 @@ SELECT
     ROUND(COUNT(CASE WHEN c.MISE_DEMEURE = 'O' THEN 1 END)
           / NULLIF(COUNT(c.CTL_ID), 0) * 100, 2)                   AS TAUX_MED,
     ROUND(SUM(NVL(c.CTL_MNT_PAYE, 0))
-          / NULLIF(SUM(NVL(c.CTL_MONTANT_DU, 0)), 0) * 100, 2)    AS TAUX_RECOUVREMENT_CTL
+          / NULLIF(SUM(NVL(c.CTL_MONTANT_DU, 0)), 0) * 100, 2)    AS TAUX_RECOUVREMENT_CTL,
+    c.CLICHE                                                         AS CLICHE
 FROM DWH.FAIT_CONTROLE                   c
 LEFT JOIN DWH.FAIT_EMPLOYEUR             e   ON  e.EMP_ID  = c.EMP_ID
 LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE       sa  ON  sa.SA_NO  = e.SA_NO
 LEFT JOIN DTM.DIM_TEMPS                  t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(c.CTL_DATE, 'MM'), 'YYYYMMDD'))
 LEFT JOIN DTM.DIM_DIRECTION_REGIONALE    dr  ON  dr.DR_NO  = c.DR_NO
-WHERE c.CTL_DATE IS NOT NULL
+WHERE c.CLICHE = :1
 GROUP BY
     TO_NUMBER(TO_CHAR(c.CTL_DATE, 'YYYYMM')),
     NVL(c.DR_NO, 0),
@@ -95,4 +96,5 @@ GROUP BY
          ELSE 'NC' END,
     t.ID_TEMPS,
     t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
-    dr.DR_DESC
+    dr.DR_DESC,
+    c.CLICHE

@@ -85,7 +85,8 @@ SELECT
         / NULLIF(
             SUM(CASE WHEN tx.TXRE_ID_RENVERSE IS NULL AND tx.TXRE_TYPE = 'P'
                      THEN tx.TXRE_MONTANT ELSE 0 END)
-          , 0) * 100, 2)                                            AS TAUX_RENVERSEMENT
+          , 0) * 100, 2)                                            AS TAUX_RENVERSEMENT,
+    tx.CLICHE                                                        AS CLICHE
 FROM DWH.FAIT_TRANSACTION_REGLEMENT          tx
 LEFT JOIN DWH.FAIT_EMPLOYEUR                 e   ON  e.EMP_ID  = tx.EMP_ID
 LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
@@ -97,7 +98,7 @@ LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL         sp  ON  sp.SP_NO  = tx.SP_NO
 LEFT JOIN DTM.DIM_LIEU_PAIEMENT              lp  ON  lp.LP_NO  = tx.LP_NO
                                                  AND lp.SP_NO  = tx.SP_NO
                                                  AND lp.DR_NO  = tx.DR_NO
-WHERE tx.TXRE_DATE_EFFECTUE IS NOT NULL
+WHERE tx.CLICHE = :1
 GROUP BY
     TO_NUMBER(TO_CHAR(tx.TXRE_DATE_EFFECTUE, 'YYYYMM')),
     NVL(tx.LP_NO, 0),
@@ -125,4 +126,5 @@ GROUP BY
     t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
     dr.DR_DESC,
     sp.SP_DESC,
-    lp.LP_DESC
+    lp.LP_DESC,
+    tx.CLICHE

@@ -8,9 +8,9 @@ Chaque entrée déclare :
                – file  : nom du fichier SQL dans le répertoire sql/
                – label : libellé pour les logs
 
-Les SQL ne contiennent PAS CLICHE ni DATE_CHARGEMENT :
-  - CLICHE est injecté par le pipeline (format YYYYMM)
-  - DATE_CHARGEMENT est géré par DEFAULT SYSDATE sur la table cible
+Les SQL sélectionnent CLICHE directement depuis la table de fait source (format MMYYYY uniforme).
+  - Chaque SQL reçoit :1 = CLICHE (MMYYYY) comme bind variable pour filtrer le snapshot.
+  - DATE_CHARGEMENT est géré par DEFAULT SYSDATE sur la table cible.
 """
 
 DTM_CONFIG = [

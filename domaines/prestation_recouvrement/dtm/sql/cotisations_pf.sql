@@ -72,10 +72,12 @@ SELECT
     SUM(NVL(tx.MONTANT_AVOIR,        0))                        AS MONTANT_AVOIR,
     ROUND(SUM(NVL(tx.MONTANT_ENCAISSE, 0))
           / NULLIF(SUM(NVL(tx.MONTANT_APPELE, 0)), 0) * 100
-    , 2)                                                         AS TAUX_RECOUVREMENT
+    , 2)                                                         AS TAUX_RECOUVREMENT,
+    pc.CLICHE                                                    AS CLICHE
 FROM DWH.FAIT_PERIODE_COTISATION        pc
 LEFT JOIN  tx_agg                       tx  ON  tx.PECO_ID          = pc.PECO_ID
 JOIN       DWH.FAIT_EMPLOYEUR           e   ON  e.EMP_ID             = pc.EMP_ID
+                                            AND e.CLICHE             = pc.CLICHE
 LEFT JOIN  DTM.DIM_TEMPS                t   ON  t.ANNEE              = TO_NUMBER(SUBSTR(pc.CLICHE, 3, 4))
                                             AND t.MOIS               = TO_NUMBER(SUBSTR(pc.CLICHE, 1, 2))
                                             AND t.JOUR               = 1
@@ -83,6 +85,7 @@ LEFT JOIN  DTM.DIM_SECTEUR_ACTIVITE     sa  ON  sa.SA_NO             = e.SA_NO
 LEFT JOIN  DTM.DIM_DIRECTION_REGIONALE  r   ON  r.DR_NO              = e.DR_NO
 LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL   sp  ON  sp.SP_NO             = e.SP_NO
 LEFT JOIN  DTM.DIM_PERIODICITE_VERSEMENT dp ON  dp.CODE_PERIODICITE  = e.EMP_PERIODICITE
+WHERE pc.CLICHE = :1
 GROUP BY
     pc.PER_ID,
     NVL(e.SP_NO, 0),
@@ -100,4 +103,5 @@ GROUP BY
     t.ID_TEMPS, t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
     NVL(dp.ID_PERIODICITE, 0),
     sp.SP_DESC,
-    r.DR_DESC
+    r.DR_DESC,
+    pc.CLICHE
