@@ -82,12 +82,16 @@ class DtmPipeline:
         try:
             loader.delete_cliche(target, cliche)
 
+            logger.info(f"[{target}] Cliche {cliche} supprimé, début chargement...")
+            
             total = 0
             for sql_entry in cfg["sql_files"]:
                 sql    = load_sql(_SQL_DIR, sql_entry["file"])
+                logger.info(f"[{target}][{sql_entry['label']}] Exécution de la requête SQL...")
                 cursor = conn.cursor()
                 cursor.arraysize = self._FETCH
                 cursor.execute(sql, [cliche])   # :1 = CLICHE MMYYYY (uniforme FAIT + DTM)
+                logger.info(f"[{target}][{sql_entry['label']}] Requête exécutée, début récupération des données...")
 
                 description = cursor.description
                 columns     = [col[0].upper() for col in description]
