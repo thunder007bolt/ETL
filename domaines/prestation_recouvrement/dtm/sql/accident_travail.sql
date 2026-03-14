@@ -39,6 +39,7 @@ base AS (
         NVL(sin.ENQUETE, 0)                                 AS FLAG_ENQUETE,
         CASE WHEN sin.DOS_DATE_NOTIFICATION IS NOT NULL
               AND sin.DOS_DATE_ACCIDENT    IS NOT NULL
+              AND (sin.DOS_DATE_NOTIFICATION - sin.DOS_DATE_ACCIDENT) BETWEEN 0 AND 9999
              THEN sin.DOS_DATE_NOTIFICATION - sin.DOS_DATE_ACCIDENT
         END                                                 AS DELAI_NOTIFICATION_JOURS,
         pe.PE_MOIS_COTISATION,
@@ -84,14 +85,14 @@ SELECT
     END                                                             AS LIBELLE_IPP,
     -- ── GÉOGRAPHIE ─────────────────────────────────────────────────
     b.DR_NO,
-    NULL                                                            AS SP_NO,
+    0                                                               AS SP_NO,
     b.LP_NO,
     -- ── DÉMOGRAPHIE ────────────────────────────────────────────────
-    b.IND_SEXE                                                      AS SEXE,
+    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE ELSE 1 END                                                   AS SEXE,
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'Masculin'
     END                                                             AS LIBELLE_SEXE,
     -- Tranche âge au 31/12/ANNEE (règle CIPRES — tranches 5 ans)
     CASE
@@ -139,6 +140,7 @@ SELECT
     -- ── CLICHE ─────────────────────────────────────────────────────
     b.CLICHE                                                        AS CLICHE
 FROM base b
+    -- WHERE ROWNUM BETWEEN 4000 AND 6000
 GROUP BY
     b.ANNEE,
     b.MOIS,
@@ -146,10 +148,10 @@ GROUP BY
     b.FLAG_IPP,
     CASE b.FLAG_IPP WHEN 1 THEN 'Avec IPP' ELSE 'Sans IPP' END,
     b.DR_NO,
-    NULL,
+    0,
     b.LP_NO,
-    b.IND_SEXE,
-    CASE b.IND_SEXE WHEN 1 THEN 'Masculin' WHEN 2 THEN 'Feminin' ELSE NULL END,
+    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE ELSE 1 END,                                              
+    CASE b.IND_SEXE WHEN 1 THEN 'Masculin' WHEN 2 THEN 'Feminin' ELSE 'Masculin' END,
     CASE
         WHEN b.IND_DATE_NAISSANCE IS NULL THEN NULL
         ELSE CASE

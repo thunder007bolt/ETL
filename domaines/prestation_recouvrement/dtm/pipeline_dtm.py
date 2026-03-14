@@ -103,7 +103,16 @@ class DtmPipeline:
                         break
                     df    = pd.DataFrame(rows, columns=columns)
                     df    = _cast_oracle_types(df, description)
-                    chunk_size = loader.insert_chunk(target, df)
+                    try:
+                        chunk_size = loader.insert_chunk(target, df)
+                    except Exception:
+                        logger.error(f"[{target}] Chunk {total}–{total+len(df)} — valeurs max par colonne :")
+                        for col in df.columns:
+                            try:
+                                logger.error(f"  {col}: min={df[col].min()!r}  max={df[col].max()!r}")
+                            except Exception:
+                                pass
+                        raise
                     total += chunk_size
                     logger.info(f"[{target}][{sql_entry['label']}] Chunk traité : {chunk_size} lignes (total: {total})")
 
