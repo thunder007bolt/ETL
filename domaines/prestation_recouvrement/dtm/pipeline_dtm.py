@@ -40,7 +40,8 @@ def _cast_oracle_types(df: pd.DataFrame, description) -> pd.DataFrame:
 
 class DtmPipeline:
 
-    _FETCH = 100_000
+    def __init__(self, fetch_size=100_000):
+        self._FETCH = fetch_size
 
     def run(self, names: list[str] = None, batch_date: datetime = None) -> None:
         """
@@ -102,7 +103,9 @@ class DtmPipeline:
                         break
                     df    = pd.DataFrame(rows, columns=columns)
                     df    = _cast_oracle_types(df, description)
-                    total += loader.insert_chunk(target, df)
+                    chunk_size = loader.insert_chunk(target, df)
+                    total += chunk_size
+                    logger.info(f"[{target}][{sql_entry['label']}] Chunk traité : {chunk_size} lignes (total: {total})")
 
                 logger.info(f"[{target}][{sql_entry['label']}] {total} lignes chargées")
 

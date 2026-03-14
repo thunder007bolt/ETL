@@ -6,6 +6,7 @@ Usage :
     python run_dtm.py --dtm cotisations recouvrement        # plusieurs tables
     python run_dtm.py                                        # toutes les tables DTM
     python run_dtm.py --date 20260301                        # CLICHE basé sur une date
+    python run_dtm.py --fetch 10000                          # taille des lots
 """
 
 import argparse
@@ -41,6 +42,12 @@ def main():
         default=None,
         help="Date de référence YYYYMMDD pour le CLICHE (défaut : aujourd'hui)",
     )
+    parser.add_argument(
+        "--fetch",
+        type=int,
+        default=100_000,
+        help="Taille des lots de récupération (défaut : 100000)",
+    )
     args = parser.parse_args()
 
     batch_date = None
@@ -62,7 +69,7 @@ def main():
     try:
         from domaines.prestation_recouvrement.dtm.pipeline_dtm import DtmPipeline
 
-        DtmPipeline().run(names=names, batch_date=batch_date)
+        DtmPipeline(fetch_size=args.fetch).run(names=names, batch_date=batch_date)
         sys.exit(0)
 
     except Exception as e:
