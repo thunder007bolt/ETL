@@ -55,6 +55,13 @@ DTM_CONFIG = [
         ],
     },
     {
+        "name": "med_employeur",
+        "target": "DTM.DTM_MED_EMPLOYEUR",
+        "sql_files": [
+            {"file": "med_employeur.sql", "label": "MED_EMP"},
+        ],
+    },
+    {
         "name": "immatriculation",
         "target": "DTM.DTM_IMMATRICULATION",
         "sql_files": [
