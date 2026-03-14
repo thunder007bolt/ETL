@@ -71,9 +71,9 @@ FROM DWH.FAIT_PERIODE_COTISATION        pc
 LEFT JOIN  tx_agg                       tx  ON  tx.PECO_ID          = pc.PECO_ID
 JOIN       DWH.FAIT_EMPLOYEUR           e   ON  e.EMP_ID             = pc.EMP_ID
                                             AND e.CLICHE             = pc.CLICHE
-LEFT JOIN  DTM.DIM_TEMPS                t   ON  t.ANNEE              = TO_NUMBER(SUBSTR(pc.CLICHE, 3, 4))
-                                            AND t.MOIS               = TO_NUMBER(SUBSTR(pc.CLICHE, 1, 2))
-                                            AND t.JOUR               = 1
+LEFT JOIN  DTM.DIM_TEMPS                t   ON  t.ID_TEMPS          = TO_NUMBER(TO_CHAR(
+        TRUNC(TO_DATE(TO_CHAR(pc.PER_ID), 'YYYYMM'), 'MM'),
+        'YYYYMMDD'))
 LEFT JOIN  DTM.DIM_SECTEUR_ACTIVITE     sa  ON  sa.SA_NO             = e.SA_NO
 LEFT JOIN  DTM.DIM_DIRECTION_REGIONALE  r   ON  r.DR_NO              = e.DR_NO
 LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL   sp  ON  sp.SP_NO             = e.SP_NO
