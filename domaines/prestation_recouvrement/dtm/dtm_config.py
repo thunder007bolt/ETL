@@ -62,11 +62,17 @@ DTM_CONFIG = [
         ],
     },
     {
-        "name": "immatriculation",
-        "target": "DTM.DTM_IMMATRICULATION",
+        "name": "immatriculation_emp",
+        "target": "DTM.DTM_IMM_EMPLOYEUR",
         "sql_files": [
             {"file": "immatriculation_emp.sql", "label": "EMP"},
-            {"file": "immatriculation_tr.sql",  "label": "TR"},
+        ],
+    },
+    {
+        "name": "immatriculation_tr",
+        "target": "DTM.DTM_IMM_TRAVAILLEUR",
+        "sql_files": [
+            {"file": "immatriculation_tr.sql", "label": "TR"},
         ],
     },
     # ------------------------------------------------------------------
