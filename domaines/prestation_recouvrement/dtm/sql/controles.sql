@@ -24,7 +24,7 @@ SELECT
     t.ID_TEMPS,
     -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
     t.ANNEE,
-    t.LIBELLE_MOIS,
+    t.MOIS,
     t.TRIMESTRE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(c.CTL_ID)                                                 AS NB_CONTROLES,
@@ -67,5 +67,5 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END,
     t.ID_TEMPS,
-    t.ANNEE, t.LIBELLE_MOIS, t.TRIMESTRE,
+    t.ANNEE, t.MOIS, t.TRIMESTRE,
     c.CLICHE
