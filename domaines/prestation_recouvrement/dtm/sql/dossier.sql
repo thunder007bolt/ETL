@@ -144,18 +144,6 @@ SELECT
     -- ── BRANCHE ─────────────────────────────────────────────────────
     b.TDOS_CODE,
 
-    -- ── CONFORMITÉ CIPRES (seuil 45 jours) — R4 ─────────────────────
-    CASE
-        WHEN b.DELAI_JOURS IS NULL THEN 'NC'
-        WHEN b.DELAI_JOURS <= 45   THEN 'O'
-        ELSE                            'N'
-    END                                                     AS EST_CONFORME_CIPRES,
-    CASE
-        WHEN b.DELAI_JOURS IS NULL THEN 'Non calculable'
-        WHEN b.DELAI_JOURS <= 45   THEN 'Conforme'
-        ELSE                            'Non conforme'
-    END                                                     AS LIBELLE_CONFORMITE,
-
     -- ── GROUPE BÉNÉFICIAIRE ──────────────────────────────────────────
     b.GROUPE,
     CASE b.GROUPE
@@ -229,12 +217,6 @@ GROUP BY
     b.MOIS,
     CEIL(b.MOIS / 3),
     b.TDOS_CODE,
-    CASE WHEN b.DELAI_JOURS IS NULL THEN 'NC'
-         WHEN b.DELAI_JOURS <= 45   THEN 'O'
-         ELSE                            'N' END,
-    CASE WHEN b.DELAI_JOURS IS NULL THEN 'Non calculable'
-         WHEN b.DELAI_JOURS <= 45   THEN 'Conforme'
-         ELSE                            'Non conforme' END,
     b.GROUPE,
     CASE b.GROUPE
         WHEN 'TIT' THEN 'Titulaire' WHEN 'VEU' THEN 'Veuf / Veuve'
