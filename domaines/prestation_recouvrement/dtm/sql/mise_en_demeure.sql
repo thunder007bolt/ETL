@@ -21,19 +21,10 @@ SELECT
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END                                              AS TRANCHE_EFFECTIF,
     -- ── AXES TEMPORELS ─────────────────────────────────────────────
-    t.LIBELLE_MOIS,
     t.TRIMESTRE,
     TO_CHAR(EXTRACT(YEAR FROM m.MED_DATE))                          AS ANNEE_LABEL,
     t.ID_TEMPS,
     -- ── LIBELLÉS ───────────────────────────────────────────────────
-    dr.DR_DESC                                                      AS LIBELLE_DR,
-    MIN(CASE NVL(e.EMP_REGIME, 'X')
-        WHEN 'G' THEN 'Regime General'
-        WHEN 'V' THEN 'Assure Volontaire'
-        WHEN 'M' THEN 'Gens de Maison'
-        ELSE 'Non determine'
-    END)                                                            AS LIBELLE_REGIME,
-    MIN(sa.SA_DESC)                                                 AS SA_DESC,
     MIN(CASE NVL(m.MED_STATUT, 'X')
         WHEN 'N' THEN 'Notifiee'
         WHEN 'V' THEN 'Soldee/Reglee'
@@ -73,8 +64,6 @@ SELECT
 FROM DWH.FAIT_MISE_EN_DEMEURE          m
 LEFT JOIN DWH.FAIT_EMPLOYEUR           e   ON  e.EMP_ID  = m.EMP_ID
                                            AND e.CLICHE   = m.CLICHE
-LEFT JOIN DTM.DIM_DIRECTION_REGIONALE  dr  ON  dr.DR_NO  = m.DR_NO
-LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE     sa  ON  sa.SA_NO  = e.SA_NO
 LEFT JOIN DTM.DIM_TEMPS                t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(m.MED_DATE, 'MM'), 'YYYYMMDD'))
 WHERE m.CLICHE = :1
@@ -94,6 +83,5 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END,
-    t.LIBELLE_MOIS, t.TRIMESTRE, t.ID_TEMPS,
-    dr.DR_DESC,
+    t.TRIMESTRE, t.ID_TEMPS,
     m.CLICHE

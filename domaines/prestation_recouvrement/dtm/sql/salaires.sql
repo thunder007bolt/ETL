@@ -32,25 +32,14 @@ SELECT
     -- ── AXES TEMPORELS ─────────────────────────────────────────────
     t.ANNEE,
     t.MOIS,
-    t.LIBELLE_MOIS,
     t.TRIMESTRE,
     t.ID_TEMPS,
-    -- ── LIBELLÉS GÉOGRAPHIE ────────────────────────────────────────
-    dr.DR_DESC                                                      AS LIBELLE_DR,
-    sp.SP_DESC                                                      AS LIBELLE_SP,
     -- ── LIBELLÉS CODIFICATIONS ─────────────────────────────────────
     MIN(CASE NVL(tr.TR_SEXE, 0)
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
         ELSE 'Inconnu'
     END)                                                            AS LIBELLE_SEXE,
-    MIN(CASE NVL(e.EMP_REGIME, 'X')
-        WHEN 'G' THEN 'Regime General'
-        WHEN 'V' THEN 'Assure Volontaire'
-        WHEN 'M' THEN 'Gens de Maison'
-        ELSE 'Non determine'
-    END)                                                            AS LIBELLE_REGIME,
-    MIN(sa.SA_DESC)                                                 AS SA_DESC,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(s.SAL_ID)                                                 AS NB_DECLARATIONS,
     COUNT(DISTINCT s.TR_ID)                                         AS NB_TRAVAILLEURS,
@@ -75,11 +64,9 @@ LEFT JOIN  DWH.FAIT_TRAVAILLEUR                tr  ON  tr.TR_ID    = s.TR_ID
                                                    AND tr.CLICHE   = s.CLICHE
 LEFT JOIN  DWH.FAIT_EMPLOYEUR                  e   ON  e.EMP_ID    = dn.EMP_ID
                                                    AND e.CLICHE    = s.CLICHE
-LEFT JOIN  DTM.DIM_SECTEUR_ACTIVITE            sa  ON  sa.SA_NO    = e.SA_NO
 LEFT JOIN  DTM.DIM_TEMPS                       t   ON  t.ID_TEMPS  =
     TO_NUMBER(TO_CHAR(dn.PER_ID) || '01')
 LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL          sp  ON  sp.SP_NO    = dn.SP_NO
-LEFT JOIN  DTM.DIM_DIRECTION_REGIONALE         dr  ON  dr.DR_NO    = sp.DR_NO
 WHERE s.CLICHE = :1
   AND (s.SAL_STATUT IS NULL OR s.SAL_STATUT NOT IN ('A', 'R'))
   AND dn.PER_ID IS NOT NULL
@@ -106,7 +93,5 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END,
-    t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE, t.ID_TEMPS,
-    dr.DR_DESC,
-    sp.SP_DESC,
+    t.ANNEE, t.MOIS, t.TRIMESTRE, t.ID_TEMPS,
     s.CLICHE

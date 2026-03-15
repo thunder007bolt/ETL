@@ -41,23 +41,9 @@ SELECT
          ELSE '100+' END                                         AS TRANCHE_EFFECTIF,
     t.ID_TEMPS,
     NVL(dp.ID_PERIODICITE, 0)                                   AS ID_PERIODICITE,
-    sp.SP_DESC                                                   AS LIBELLE_SP,
-    r.DR_DESC                                                    AS LIBELLE_DR,
     t.ANNEE,
     t.MOIS,
-    t.LIBELLE_MOIS,
     t.TRIMESTRE,
-    'Prestations Familiales'                                     AS LIBELLE_NATURE,
-    CASE NVL(e.EMP_REGIME, 'X')
-        WHEN 'G' THEN 'Regime General'
-        WHEN 'V' THEN 'Assure Volontaire'
-        WHEN 'M' THEN 'Gens de Maison'
-        ELSE 'Non determine' END                                  AS LIBELLE_REGIME,
-    sa.SA_DESC                                                   AS SA_LIBELLE,
-    CASE NVL(e.EMP_PERIODICITE, 'A')
-        WHEN 'M' THEN 'Mensuel'
-        WHEN 'T' THEN 'Trimestriel'
-        ELSE 'Autre' END                                          AS LIBELLE_PERIODICITE,
     COUNT(DISTINCT pc.EMP_ID)                                   AS NB_EMPLOYEURS,
     SUM(NVL(pc.PECO_NB_TRAV, 0))                               AS NB_TRAVAILLEURS,
     SUM(NVL(tx.MONTANT_APPELE,       0))                        AS MONTANT_APPELE,
@@ -81,9 +67,6 @@ JOIN       DWH.FAIT_EMPLOYEUR           e   ON  e.EMP_ID             = pc.EMP_ID
 LEFT JOIN  DTM.DIM_TEMPS                t   ON  t.ID_TEMPS          = TO_NUMBER(TO_CHAR(
         TRUNC(TO_DATE(TO_CHAR(pc.PER_ID), 'YYYYMM'), 'MM'),
         'YYYYMMDD'))
-LEFT JOIN  DTM.DIM_SECTEUR_ACTIVITE     sa  ON  sa.SA_NO             = e.SA_NO
-LEFT JOIN  DTM.DIM_DIRECTION_REGIONALE  r   ON  r.DR_NO              = e.DR_NO
-LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL   sp  ON  sp.SP_NO             = e.SP_NO
 LEFT JOIN  DTM.DIM_PERIODICITE_VERSEMENT dp ON  dp.CODE_PERIODICITE  = e.EMP_PERIODICITE
 WHERE pc.CLICHE = :1
 GROUP BY
@@ -91,7 +74,7 @@ GROUP BY
     NVL(e.SP_NO, 0),
     NVL(e.DR_NO, 0),
     NVL(e.EMP_REGIME,      'X'),
-    NVL(e.SA_NO,            0), sa.SA_DESC,
+    NVL(e.SA_NO,            0),
     NVL(e.EMP_PERIODICITE, 'A'),
     CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
          WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
@@ -100,8 +83,6 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
          WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
          ELSE '100+' END,
-    t.ID_TEMPS, t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
+    t.ID_TEMPS, t.ANNEE, t.MOIS, t.TRIMESTRE,
     NVL(dp.ID_PERIODICITE, 0),
-    sp.SP_DESC,
-    r.DR_DESC,
     pc.CLICHE

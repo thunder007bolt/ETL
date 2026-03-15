@@ -21,53 +21,8 @@ SELECT
     CEIL(EXTRACT(MONTH FROM b.DEB_DATE_EFFET) / 3)                  AS TRIMESTRE,
     -- ── BRANCHE ─────────────────────────────────────────────────────
     b.CODE_BRANCHE,
-    CASE b.CODE_BRANCHE
-        WHEN 'V' THEN 'PVID'
-        WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite'
-        ELSE          'Inconnu'
-    END                                                             AS LIBELLE_BRANCHE,
-    -- ── CODE / LIBELLÉ PRESTATION ────────────────────────────────────
+    -- ── CODE PRESTATION ─────────────────────────────────────────────
     NVL(b.TPE_CODE, b.TPN_CODE)                                     AS CODE_PRESTATION,
-    CASE NVL(b.TPE_CODE, b.TPN_CODE)
-        -- PVID ESP
-        WHEN 'PV'    THEN 'Pension Vieillesse'
-        WHEN 'PI'    THEN 'Pension Invalidite'
-        WHEN 'AV'    THEN 'Allocation Vieillesse'
-        WHEN 'PSV'   THEN 'Pension Survivant Veuf/Veuve'
-        WHEN 'PSO'   THEN 'Pension Survivant Orphelin'
-        WHEN 'PSA'   THEN 'Pension Survivant Ascendant'
-        -- AT/MP ESP
-        WHEN 'IJ'    THEN 'Indemnite Journaliere AT'
-        WHEN 'AI'    THEN 'Allocation Incapacite'
-        WHEN 'RV'    THEN 'Rente Viagere'
-        WHEN 'RSV'   THEN 'Rente Survivant Veuf/Veuve'
-        WHEN 'RSO'   THEN 'Rente Survivant Orphelin'
-        WHEN 'RSA'   THEN 'Rente Survivant Ascendant'
-        -- PF / Maternité ESP
-        WHEN 'FAF'   THEN 'Allocation Familiale'
-        WHEN 'FAP'   THEN 'Allocation Prenatale'
-        WHEN 'IJM'   THEN 'Indemnite Journaliere Maternite'
-        -- PVID NAT
-        WHEN 'RMG-V' THEN 'Remb. Frais Medicaux Generaux PVID'
-        WHEN 'RHO-V' THEN 'Remb. Frais Hospitalisation PVID'
-        WHEN 'RPH-V' THEN 'Remb. Frais Pharmacie PVID'
-        WHEN 'RAP-V' THEN 'Remb. Frais Appareillage PVID'
-        -- AT/MP NAT
-        WHEN 'RMG-A' THEN 'Remb. Frais Medicaux Generaux AT/MP'
-        WHEN 'RHO-A' THEN 'Remb. Frais Hospitalisation AT/MP'
-        WHEN 'RPH-A' THEN 'Remb. Frais Pharmacie AT/MP'
-        WHEN 'RAP-A' THEN 'Remb. Frais Appareillage AT/MP'
-        WHEN 'RRE-A' THEN 'Remb. Frais Readaptation AT/MP'
-        -- PF NAT
-        WHEN 'RMA-F' THEN 'Remb. Frais Soins Maternite'
-        WHEN 'RHO-F' THEN 'Remb. Hospitalisation Maternite'
-        -- Maternité NAT
-        WHEN 'RMA-M' THEN 'Remb. Frais Accouchement'
-        WHEN 'RPH-M' THEN 'Remb. Frais Pharmacie Maternite'
-        ELSE               NVL(b.TPE_CODE, b.TPN_CODE)
-    END                                                             AS LIBELLE_PRESTATION,
     -- ── TYPE PRESTATION ─────────────────────────────────────────────
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END            AS TYPE_PREST,
     -- ── GROUPE BÉNÉFICIAIRE ──────────────────────────────────────────
@@ -196,43 +151,7 @@ GROUP BY
     EXTRACT(MONTH FROM b.DEB_DATE_EFFET),
     CEIL(EXTRACT(MONTH FROM b.DEB_DATE_EFFET) / 3),
     b.CODE_BRANCHE,
-    CASE b.CODE_BRANCHE
-        WHEN 'V' THEN 'PVID' WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite' ELSE 'Inconnu'
-    END,
     NVL(b.TPE_CODE, b.TPN_CODE),
-    CASE NVL(b.TPE_CODE, b.TPN_CODE)
-        WHEN 'PV'    THEN 'Pension Vieillesse'
-        WHEN 'PI'    THEN 'Pension Invalidite'
-        WHEN 'AV'    THEN 'Allocation Vieillesse'
-        WHEN 'PSV'   THEN 'Pension Survivant Veuf/Veuve'
-        WHEN 'PSO'   THEN 'Pension Survivant Orphelin'
-        WHEN 'PSA'   THEN 'Pension Survivant Ascendant'
-        WHEN 'IJ'    THEN 'Indemnite Journaliere AT'
-        WHEN 'AI'    THEN 'Allocation Incapacite'
-        WHEN 'RV'    THEN 'Rente Viagere'
-        WHEN 'RSV'   THEN 'Rente Survivant Veuf/Veuve'
-        WHEN 'RSO'   THEN 'Rente Survivant Orphelin'
-        WHEN 'RSA'   THEN 'Rente Survivant Ascendant'
-        WHEN 'FAF'   THEN 'Allocation Familiale'
-        WHEN 'FAP'   THEN 'Allocation Prenatale'
-        WHEN 'IJM'   THEN 'Indemnite Journaliere Maternite'
-        WHEN 'RMG-V' THEN 'Remb. Frais Medicaux Generaux PVID'
-        WHEN 'RHO-V' THEN 'Remb. Frais Hospitalisation PVID'
-        WHEN 'RPH-V' THEN 'Remb. Frais Pharmacie PVID'
-        WHEN 'RAP-V' THEN 'Remb. Frais Appareillage PVID'
-        WHEN 'RMG-A' THEN 'Remb. Frais Medicaux Generaux AT/MP'
-        WHEN 'RHO-A' THEN 'Remb. Frais Hospitalisation AT/MP'
-        WHEN 'RPH-A' THEN 'Remb. Frais Pharmacie AT/MP'
-        WHEN 'RAP-A' THEN 'Remb. Frais Appareillage AT/MP'
-        WHEN 'RRE-A' THEN 'Remb. Frais Readaptation AT/MP'
-        WHEN 'RMA-F' THEN 'Remb. Frais Soins Maternite'
-        WHEN 'RHO-F' THEN 'Remb. Hospitalisation Maternite'
-        WHEN 'RMA-M' THEN 'Remb. Frais Accouchement'
-        WHEN 'RPH-M' THEN 'Remb. Frais Pharmacie Maternite'
-        ELSE               NVL(b.TPE_CODE, b.TPN_CODE)
-    END,
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END,
     b.GROUPE,
     b.LIBELLE_GROUPE,

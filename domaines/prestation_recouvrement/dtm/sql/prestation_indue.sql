@@ -74,21 +74,9 @@ SELECT
 
     -- ── BRANCHE ─────────────────────────────────────────────────────
     b.CODE_BRANCHE,
-    CASE b.CODE_BRANCHE
-        WHEN 'V' THEN 'PVID'
-        WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite'
-        ELSE          'Inconnu'
-    END                                                     AS LIBELLE_BRANCHE,
 
     -- ── TYPE AJUSTEMENT ─────────────────────────────────────────────
     b.TAJ_CODE,
-    CASE b.TAJ_CODE
-        WHEN 'TP'      THEN 'Trop-percu'
-        WHEN 'TP-CONV' THEN 'Trop-percu convention'
-        WHEN 'REM-TP'  THEN 'Remboursement trop-percu'
-    END                                                     AS LIBELLE_TAJ,
 
     -- ── STATUT RECOUVREMENT (R2) ─────────────────────────────────────
     CASE b.AJ_STATUT
@@ -165,17 +153,7 @@ GROUP BY
     EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT),
     CEIL(EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT) / 3),
     b.CODE_BRANCHE,
-    CASE b.CODE_BRANCHE
-        WHEN 'V' THEN 'PVID' WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite' ELSE 'Inconnu'
-    END,
     b.TAJ_CODE,
-    CASE b.TAJ_CODE
-        WHEN 'TP'      THEN 'Trop-percu'
-        WHEN 'TP-CONV' THEN 'Trop-percu convention'
-        WHEN 'REM-TP'  THEN 'Remboursement trop-percu'
-    END,
     CASE b.AJ_STATUT WHEN 'C' THEN 'RC' WHEN 'I' THEN 'IR' ELSE 'EN' END,
     CASE b.AJ_STATUT WHEN 'C' THEN 'Recouvre'
                      WHEN 'I' THEN 'Irrecuperable'

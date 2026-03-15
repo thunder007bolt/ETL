@@ -143,13 +143,6 @@ SELECT
 
     -- ── BRANCHE ─────────────────────────────────────────────────────
     b.TDOS_CODE,
-    CASE b.TDOS_CODE
-        WHEN 'V' THEN 'PVID'
-        WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite'
-        ELSE          'Inconnu'
-    END                                                     AS LIBELLE_BRANCHE,
 
     -- ── CONFORMITÉ CIPRES (seuil 45 jours) — R4 ─────────────────────
     CASE
@@ -236,11 +229,6 @@ GROUP BY
     b.MOIS,
     CEIL(b.MOIS / 3),
     b.TDOS_CODE,
-    CASE b.TDOS_CODE
-        WHEN 'V' THEN 'PVID' WHEN 'A' THEN 'AT/MP'
-        WHEN 'F' THEN 'Prestations Familiales'
-        WHEN 'M' THEN 'Maternite' ELSE 'Inconnu'
-    END,
     CASE WHEN b.DELAI_JOURS IS NULL THEN 'NC'
          WHEN b.DELAI_JOURS <= 45   THEN 'O'
          ELSE                            'N' END,

@@ -22,37 +22,10 @@ SELECT
          ELSE 'NC' END                                              AS TRANCHE_EFFECTIF,
     -- ── FK TEMPS ───────────────────────────────────────────────────
     t.ID_TEMPS,
-    -- ── LIBELLÉS GÉOGRAPHIE (DR uniquement) ────────────────────────
-    dr.DR_DESC                                                      AS LIBELLE_DR,
     -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
     t.ANNEE,
-    t.MOIS,
     t.LIBELLE_MOIS,
     t.TRIMESTRE,
-    -- ── LIBELLÉS CODIFICATIONS ─────────────────────────────────────
-    MIN(CASE NVL(c.CTL_TYPE, 'NA')
-        WHEN 'CT' THEN 'Controle de terrain'
-        WHEN 'EQ' THEN 'Enquete'
-        ELSE 'Inconnu'
-    END)                                                            AS LIBELLE_CTL_TYPE,
-    MIN(CASE NVL(c.CTL_NATURE, 'X')
-        WHEN 'I' THEN 'Inopinee'
-        WHEN 'P' THEN 'Programmee'
-        ELSE 'Inconnu'
-    END)                                                            AS LIBELLE_CTL_NATURE,
-    MIN(CASE NVL(c.CTL_STATUT, 'X')
-        WHEN 'V' THEN 'Valide'
-        WHEN 'A' THEN 'Annule'
-        WHEN 'E' THEN 'En cours'
-        ELSE 'Inconnu'
-    END)                                                            AS LIBELLE_CTL_STATUT,
-    MIN(CASE NVL(e.EMP_REGIME, 'X')
-        WHEN 'G' THEN 'Regime General'
-        WHEN 'V' THEN 'Assure Volontaire'
-        WHEN 'M' THEN 'Gens de Maison'
-        ELSE 'Non determine'
-    END)                                                            AS LIBELLE_REGIME,
-    MIN(sa.SA_DESC)                                                 AS SA_DESC,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(c.CTL_ID)                                                 AS NB_CONTROLES,
     COUNT(DISTINCT c.EMP_ID)                                        AS NB_EMPLOYEURS,
@@ -76,7 +49,6 @@ LEFT JOIN DWH.FAIT_EMPLOYEUR             e   ON  e.EMP_ID  = c.EMP_ID
 LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE       sa  ON  sa.SA_NO  = e.SA_NO
 LEFT JOIN DTM.DIM_TEMPS                  t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(c.CTL_DATE, 'MM'), 'YYYYMMDD'))
-LEFT JOIN DTM.DIM_DIRECTION_REGIONALE    dr  ON  dr.DR_NO  = c.DR_NO
 WHERE c.CLICHE = :1
 GROUP BY
     TO_NUMBER(TO_CHAR(c.CTL_DATE, 'YYYYMM')),
@@ -95,6 +67,5 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END,
     t.ID_TEMPS,
-    t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
-    dr.DR_DESC,
+    t.ANNEE, t.LIBELLE_MOIS, t.TRIMESTRE,
     c.CLICHE

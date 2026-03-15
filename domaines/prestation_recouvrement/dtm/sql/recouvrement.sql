@@ -30,40 +30,10 @@ SELECT
          ELSE 'NC' END                                              AS TRANCHE_EFFECTIF,
     -- ── FK TEMPS ───────────────────────────────────────────────────
     t.ID_TEMPS,
-    -- ── LIBELLÉS GÉOGRAPHIE ────────────────────────────────────────
-    dr.DR_DESC                                                      AS LIBELLE_DR,
-    sp.SP_DESC                                                      AS LIBELLE_SP,
-    lp.LP_DESC                                                      AS LIBELLE_LP,
     -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
     t.ANNEE,
     t.MOIS,
-    t.LIBELLE_MOIS,
     t.TRIMESTRE,
-    -- ── LIBELLÉS CODIFICATIONS ─────────────────────────────────────
-    MIN(CASE
-        WHEN tx.TXRE_ID_RENVERSE IS NOT NULL THEN 'Renversement'
-        WHEN tx.TXRE_TYPE = 'M'             THEN 'Majoration'
-        WHEN tx.TXRE_TYPE = 'F'             THEN 'Recouvrement force'
-        WHEN tx.TXRE_TYPE = 'P'             THEN 'Paiement spontane'
-        ELSE 'Inconnu'
-    END)                                                            AS LIBELLE_FAMILLE,
-    MIN(CASE NVL(tx.TXRE_MODE_PAIEMENT, 'NA')
-        WHEN 'ES' THEN 'Especes'
-        WHEN 'CH' THEN 'Cheque'
-        WHEN 'VB' THEN 'Virement bancaire'
-        WHEN 'RS' THEN 'Retenue sur salaire'
-        WHEN 'VE' THEN 'Virement electronique'
-        WHEN 'RE' THEN 'Remboursement'
-        WHEN 'LC' THEN 'Lettre de credit'
-        WHEN 'VM' THEN 'Virement manuel'
-        ELSE 'Non applicable'
-    END)                                                            AS LIBELLE_MODE_PAIEMENT,
-    MIN(CASE NVL(e.EMP_REGIME, 'X')
-        WHEN 'G' THEN 'Regime General'
-        WHEN 'V' THEN 'Assure Volontaire'
-        WHEN 'M' THEN 'Gens de Maison'
-        ELSE 'Non determine'
-    END)                                                            AS LIBELLE_REGIME,
     -- ── MESURES ────────────────────────────────────────────────────
     COUNT(tx.TXRE_ID)                                               AS NB_TRANSACTIONS,
     COUNT(DISTINCT tx.EMP_ID)                                       AS NB_EMPLOYEURS,
@@ -91,13 +61,7 @@ FROM DWH.FAIT_TRANSACTION_REGLEMENT          tx
 LEFT JOIN DWH.FAIT_EMPLOYEUR                 e   ON  e.EMP_ID  = tx.EMP_ID
 LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(tx.TXRE_DATE_EFFECTUE, 'MM'), 'YYYYMMDD'))
--- Géographie — hiérarchie stricte DR => SP => LP
-LEFT JOIN DTM.DIM_DIRECTION_REGIONALE        dr  ON  dr.DR_NO  = tx.DR_NO
-LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL         sp  ON  sp.SP_NO  = tx.SP_NO
-                                                 AND sp.DR_NO  = tx.DR_NO
-LEFT JOIN DTM.DIM_LIEU_PAIEMENT              lp  ON  lp.LP_NO  = tx.LP_NO
-                                                 AND lp.SP_NO  = tx.SP_NO
-                                                 AND lp.DR_NO  = tx.DR_NO
+-- (JOINs géographie dimension supprimés — codes suffisent pour le grain)
 WHERE tx.CLICHE = :1
 GROUP BY
     TO_NUMBER(TO_CHAR(tx.TXRE_DATE_EFFECTUE, 'YYYYMM')),
@@ -123,8 +87,5 @@ GROUP BY
          WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
          ELSE 'NC' END,
     t.ID_TEMPS,
-    t.ANNEE, t.MOIS, t.LIBELLE_MOIS, t.TRIMESTRE,
-    dr.DR_DESC,
-    sp.SP_DESC,
-    lp.LP_DESC,
+    t.ANNEE, t.MOIS, t.TRIMESTRE,
     tx.CLICHE
