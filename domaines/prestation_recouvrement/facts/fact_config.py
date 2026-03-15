@@ -159,6 +159,10 @@ FACT_CONFIG = [
         "target":     "FAIT_PERIODE_COTISATION",
     },
     {
+        "sql_file":   "ajustement.sql",
+        "target":     "FAIT_AJUSTEMENT",
+    },
+    {
         "sql_file":   "pe_aj.sql",
         "target":     "FAIT_PE_AJ",
     },
