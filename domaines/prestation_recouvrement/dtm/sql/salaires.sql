@@ -7,25 +7,14 @@
 -- Exclus     : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
-    dn.PER_ID,
+    t.ID_TEMPS,
     NVL(dn.SP_NO,      0)                                           AS SP_NO,
     NVL(sp.DR_NO,      0)                                           AS DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(tr.TR_SEXE,    0)                                           AS TR_SEXE,
     tag.TAG_CODE                                                    AS TAG_CODE,
-    tef.TEF_CODE                                         AS TEF_CODE,
-    -- ── AXES TEMPORELS ─────────────────────────────────────────────
-    t.ANNEE,
-    t.MOIS,
-    t.TRIMESTRE,
-    t.ID_TEMPS,
-    -- ── LIBELLÉS CODIFICATIONS ─────────────────────────────────────
-    MIN(CASE NVL(tr.TR_SEXE, 0)
-        WHEN 1 THEN 'Masculin'
-        WHEN 2 THEN 'Feminin'
-        ELSE 'Inconnu'
-    END)                                                            AS LIBELLE_SEXE,
+    tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(s.SAL_ID)                                                 AS NB_DECLARATIONS,
     COUNT(DISTINCT s.TR_ID)                                         AS NB_TRAVAILLEURS,
@@ -59,7 +48,7 @@ WHERE s.CLICHE = :1
   AND (s.SAL_STATUT IS NULL OR s.SAL_STATUT NOT IN ('A', 'R'))
   AND dn.PER_ID IS NOT NULL
 GROUP BY
-    dn.PER_ID,
+    t.ID_TEMPS,
     NVL(dn.SP_NO,      0),
     NVL(sp.DR_NO,      0),
     NVL(e.EMP_REGIME, 'X'),
@@ -67,5 +56,4 @@ GROUP BY
     NVL(tr.TR_SEXE,    0),
     tag.TAG_CODE,
     tef.TEF_CODE,
-    t.ANNEE, t.MOIS, t.TRIMESTRE, t.ID_TEMPS,
     s.CLICHE
