@@ -6,24 +6,12 @@
 -- Exclus     : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
-    EXTRACT(YEAR  FROM m.MED_DATE)                                  AS ANNEE,
-    EXTRACT(MONTH FROM m.MED_DATE)                                  AS MOIS,
+    t.ID_TEMPS,
     NVL(m.DR_NO,       0)                                           AS DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(m.MED_STATUT, 'X')                                          AS MED_STATUT,
-    tef.TEF_CODE                                         AS TEF_CODE,
-    -- ── AXES TEMPORELS ─────────────────────────────────────────────
-    t.TRIMESTRE,
-    TO_CHAR(EXTRACT(YEAR FROM m.MED_DATE))                          AS ANNEE_LABEL,
-    t.ID_TEMPS,
-    -- ── LIBELLÉS ───────────────────────────────────────────────────
-    MIN(CASE NVL(m.MED_STATUT, 'X')
-        WHEN 'N' THEN 'Notifiee'
-        WHEN 'V' THEN 'Soldee/Reglee'
-        WHEN 'A' THEN 'Annulee'
-        ELSE 'En cours'
-    END)                                                            AS LIBELLE_MED_STATUT,
+    tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(m.MED_ID)                                                 AS NB_MED,
     COUNT(DISTINCT m.EMP_ID)                                        AS NB_EMPLOYEURS,
@@ -63,12 +51,10 @@ LEFT JOIN DTM.DIM_TEMPS                t   ON  t.ID_TEMPS =
 WHERE m.CLICHE = :1
   AND m.MED_DATE IS NOT NULL
 GROUP BY
-    EXTRACT(YEAR  FROM m.MED_DATE),
-    EXTRACT(MONTH FROM m.MED_DATE),
+    t.ID_TEMPS,
     NVL(m.DR_NO,       0),
     NVL(e.EMP_REGIME, 'X'),
     NVL(e.SA_NO,       0),
     NVL(m.MED_STATUT, 'X'),
     tef.TEF_CODE,
-    t.TRIMESTRE, t.ID_TEMPS,
     m.CLICHE

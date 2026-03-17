@@ -6,7 +6,7 @@
 -- Exclus     : CLICHE et DATE_CHARGEMENT (injectés par le pipeline)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
-    TO_NUMBER(TO_CHAR(tx.TXRE_DATE_EFFECTUE, 'YYYYMM'))             AS PER_ID,
+    t.ID_TEMPS,
     NVL(tx.LP_NO, 0)                                                AS LP_NO,
     NVL(tx.SP_NO, 0)                                                AS SP_NO,
     NVL(tx.DR_NO, 0)                                                AS DR_NO,
@@ -20,13 +20,7 @@ SELECT
     NVL(tx.TXRE_MODE_PAIEMENT, 'NA')                               AS TXRE_MODE_PAIEMENT,
     NVL(tx.TXRE_NATURE,        'NC')                               AS TXRE_NATURE,
     NVL(e.EMP_REGIME,          'X')                                AS EMP_REGIME,
-    tef.TEF_CODE                                         AS TEF_CODE,
-    -- ── FK TEMPS ───────────────────────────────────────────────────
-    t.ID_TEMPS,
-    -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
-    t.ANNEE,
-    t.MOIS,
-    t.TRIMESTRE,
+    tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES ────────────────────────────────────────────────────
     COUNT(tx.TXRE_ID)                                               AS NB_TRANSACTIONS,
     COUNT(DISTINCT tx.EMP_ID)                                       AS NB_EMPLOYEURS,
@@ -52,13 +46,14 @@ SELECT
     tx.CLICHE                                                        AS CLICHE
 FROM DWH.FAIT_TRANSACTION_REGLEMENT          tx
 LEFT JOIN DWH.FAIT_EMPLOYEUR                 e   ON  e.EMP_ID  = tx.EMP_ID
+                                            AND e.CLICHE   = tx.CLICHE
 LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF           tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(tx.TXRE_DATE_EFFECTUE, 'MM'), 'YYYYMMDD'))
 -- (JOINs géographie dimension supprimés — codes suffisent pour le grain)
 WHERE tx.CLICHE = :1
 GROUP BY
-    TO_NUMBER(TO_CHAR(tx.TXRE_DATE_EFFECTUE, 'YYYYMM')),
+    t.ID_TEMPS,
     NVL(tx.LP_NO, 0),
     NVL(tx.SP_NO, 0),
     NVL(tx.DR_NO, 0),
@@ -73,6 +68,4 @@ GROUP BY
     NVL(tx.TXRE_NATURE,        'NC'),
     NVL(e.EMP_REGIME,          'X'),
     tef.TEF_CODE,
-    t.ID_TEMPS,
-    t.ANNEE, t.MOIS, t.TRIMESTRE,
     tx.CLICHE

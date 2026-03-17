@@ -5,20 +5,14 @@
 -- Exclus     : CLICHE et DATE_CHARGEMENT (injectés par le pipeline)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
-    TO_NUMBER(TO_CHAR(c.CTL_DATE, 'YYYYMM'))                        AS PER_ID,
+    t.ID_TEMPS,
     NVL(c.DR_NO, 0)                                                 AS DR_NO,
     NVL(c.CTL_TYPE,   'NA')                                         AS CTL_TYPE,
     NVL(c.CTL_NATURE, 'X')                                          AS CTL_NATURE,
     NVL(c.CTL_STATUT, 'X')                                          AS CTL_STATUT,
     NVL(e.EMP_REGIME,  'X')                                         AS EMP_REGIME,
     NVL(e.SA_NO,        0)                                          AS SA_NO,
-    tef.TEF_CODE                                         AS TEF_CODE,
-    -- ── FK TEMPS ───────────────────────────────────────────────────
-    t.ID_TEMPS,
-    -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
-    t.ANNEE,
-    t.MOIS,
-    t.TRIMESTRE,
+    tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(c.CTL_ID)                                                 AS NB_CONTROLES,
     COUNT(DISTINCT c.EMP_ID)                                        AS NB_EMPLOYEURS,
@@ -39,13 +33,13 @@ SELECT
     c.CLICHE                                                         AS CLICHE
 FROM DWH.FAIT_CONTROLE                   c
 LEFT JOIN DWH.FAIT_EMPLOYEUR             e   ON  e.EMP_ID  = c.EMP_ID
-LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE       sa  ON  sa.SA_NO  = e.SA_NO
+                                            AND e.CLICHE   = c.CLICHE
 LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF       tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_TEMPS                  t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(c.CTL_DATE, 'MM'), 'YYYYMMDD'))
 WHERE c.CLICHE = :1
 GROUP BY
-    TO_NUMBER(TO_CHAR(c.CTL_DATE, 'YYYYMM')),
+    t.ID_TEMPS,
     NVL(c.DR_NO, 0),
     NVL(c.CTL_TYPE,   'NA'),
     NVL(c.CTL_NATURE, 'X'),
@@ -53,6 +47,4 @@ GROUP BY
     NVL(e.EMP_REGIME,  'X'),
     NVL(e.SA_NO,        0),
     tef.TEF_CODE,
-    t.ID_TEMPS,
-    t.ANNEE, t.MOIS, t.TRIMESTRE,
     c.CLICHE
