@@ -18,7 +18,7 @@ flux_imm AS (
         NVL(e.EMP_FORME_JURIDIQUE, 'NC')          AS EMP_FORME_JURIDIQUE,
         NVL(dp.ID_PERIODICITE,      0)            AS ID_PERIODICITE,
         NVL(e.EMP_ETAT,            'X')           AS EMP_ETAT,
-        NVL(tef.TEF_CODE,          'NC')          AS TEF_CODE,
+        tef.TEF_CODE                          AS TEF_CODE,
         COUNT(DISTINCT e.EMP_ID)                  AS NB_EMP
     FROM DWH.FAIT_EMPLOYEUR                    e
     LEFT JOIN DWH.FAIT_DOSSIER_IMMATRICULATION di
@@ -43,7 +43,7 @@ flux_imm AS (
         NVL(e.EMP_FORME_JURIDIQUE, 'NC'),
         NVL(dp.ID_PERIODICITE,      0),
         NVL(e.EMP_ETAT,            'X'),
-        NVL(tef.TEF_CODE,          'NC')
+        tef.TEF_CODE                
 ),
 
 -- ── flux radiations (DI_TYPE=R — grain sans EMP_ETAT) ──────────
@@ -57,7 +57,7 @@ flux_rad AS (
         NVL(e.SA_NO,                0)            AS SA_NO,
         NVL(e.EMP_FORME_JURIDIQUE, 'NC')          AS EMP_FORME_JURIDIQUE,
         NVL(dp.ID_PERIODICITE,      0)            AS ID_PERIODICITE,
-        NVL(tef.TEF_CODE,          'NC')          AS TEF_CODE,
+        tef.TEF_CODE                          AS TEF_CODE,
         COUNT(*)                                  AS NB_RAD
     FROM DWH.FAIT_DOSSIER_IMMATRICULATION      di
     LEFT JOIN DWH.FAIT_EMPLOYEUR               e
@@ -80,7 +80,7 @@ flux_rad AS (
         NVL(e.SA_NO,                0),
         NVL(e.EMP_FORME_JURIDIQUE, 'NC'),
         NVL(dp.ID_PERIODICITE,      0),
-        NVL(tef.TEF_CODE,          'NC')
+        tef.TEF_CODE                
 )
 
 SELECT
