@@ -17,20 +17,15 @@ WITH tx_agg AS (
     GROUP BY PECO_ID
 )
 SELECT
-    pc.PER_ID,
     0                                                            AS LP_NO,
     NVL(e.SP_NO, 0)                                             AS SP_NO,
     NVL(e.DR_NO, 0)                                             AS DR_NO,
     'AT'                                                         AS CODE_NATURE,
     NVL(e.EMP_REGIME,      'X')                                 AS EMP_REGIME,
     NVL(e.SA_NO,            0)                                  AS SA_NO,
-    NVL(e.EMP_PERIODICITE, 'A')                                 AS EMP_PERIODICITE,
     tef.TEF_CODE                                     AS TEF_CODE,
-    t.ID_TEMPS,
     NVL(dp.ID_PERIODICITE, 0)                                   AS ID_PERIODICITE,
-    t.ANNEE,
-    t.MOIS,
-    t.TRIMESTRE,
+    t.ID_TEMPS,
     COUNT(DISTINCT pc.EMP_ID)                                   AS NB_EMPLOYEURS,
     SUM(NVL(pc.PECO_NB_TRAV, 0))                               AS NB_TRAVAILLEURS,
     SUM(NVL(tx.MONTANT_APPELE,       0))                        AS MONTANT_APPELE,
@@ -58,13 +53,11 @@ LEFT JOIN  DTM.DIM_PERIODICITE_VERSEMENT dp ON  dp.CODE_PERIODICITE  = e.EMP_PER
 LEFT JOIN  DTM.DIM_TRANCHE_EFFECTIF      tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 WHERE pc.CLICHE = :1
 GROUP BY
-    pc.PER_ID,
     NVL(e.SP_NO, 0),
     NVL(e.DR_NO, 0),
     NVL(e.EMP_REGIME,      'X'),
     NVL(e.SA_NO,            0),
-    NVL(e.EMP_PERIODICITE, 'A'),
     tef.TEF_CODE,
-    t.ID_TEMPS, t.ANNEE, t.MOIS, t.TRIMESTRE,
     NVL(dp.ID_PERIODICITE, 0),
+    t.ID_TEMPS,
     pc.CLICHE
