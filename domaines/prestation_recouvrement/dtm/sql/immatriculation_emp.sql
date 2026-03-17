@@ -1,7 +1,7 @@
--- DTM_IMMATRICULATION_EMPLOYEUR V6
+-- DTM_IMMATRICULATION_EMPLOYEUR V7
 -- Source    : DWH.FAIT_EMPLOYEUR (principale — snapshot CLICHE)
 --             DWH.FAIT_DOSSIER_IMMATRICULATION (radiations DI_TYPE=R)
--- Grain     : ANNEE x MOIS x DR_NO x SP_NO x EMP_REGIME x EMP_ETAT
+-- Grain     : ID_TEMPS x DR_NO x SP_NO x EMP_REGIME x EMP_ETAT
 --             x SA_NO x EMP_FORME_JURIDIQUE x ID_PERIODICITE x TEF_CODE
 -- Exclus    : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 WITH
@@ -9,8 +9,7 @@ WITH
 -- ── flux immatriculations (date officielle EMP_DATE_IMM) ───────
 flux_imm AS (
     SELECT
-        EXTRACT(YEAR  FROM e.EMP_DATE_IMM)        AS ANNEE,
-        EXTRACT(MONTH FROM e.EMP_DATE_IMM)        AS MOIS,
+        TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')) AS ID_TEMPS,
         NVL(e.DR_NO, NVL(sp.DR_NO, 0))           AS DR_NO,
         NVL(e.SP_NO,                0)            AS SP_NO,
         NVL(e.EMP_REGIME,          'X')           AS EMP_REGIME,
@@ -34,8 +33,7 @@ flux_imm AS (
     WHERE e.EMP_DATE_IMM IS NOT NULL
       AND e.CLICHE = :1
     GROUP BY
-        EXTRACT(YEAR  FROM e.EMP_DATE_IMM),
-        EXTRACT(MONTH FROM e.EMP_DATE_IMM),
+        TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')),
         NVL(e.DR_NO, NVL(sp.DR_NO, 0)),
         NVL(e.SP_NO,                0),
         NVL(e.EMP_REGIME,          'X'),
@@ -49,8 +47,7 @@ flux_imm AS (
 -- ── flux radiations (DI_TYPE=R — grain sans EMP_ETAT) ──────────
 flux_rad AS (
     SELECT
-        EXTRACT(YEAR  FROM di.DI_DATE_RECEPTION)  AS ANNEE,
-        EXTRACT(MONTH FROM di.DI_DATE_RECEPTION)  AS MOIS,
+        TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')) AS ID_TEMPS,
         NVL(di.DR_NO, NVL(sp.DR_NO, 0))          AS DR_NO,
         NVL(e.SP_NO,                0)            AS SP_NO,
         NVL(e.EMP_REGIME,          'X')           AS EMP_REGIME,
@@ -72,8 +69,7 @@ flux_rad AS (
     WHERE di.DI_TYPE           = 'R'
       AND di.DI_DATE_RECEPTION IS NOT NULL
     GROUP BY
-        EXTRACT(YEAR  FROM di.DI_DATE_RECEPTION),
-        EXTRACT(MONTH FROM di.DI_DATE_RECEPTION),
+        TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')),
         NVL(di.DR_NO, NVL(sp.DR_NO, 0)),
         NVL(e.SP_NO,                0),
         NVL(e.EMP_REGIME,          'X'),
@@ -84,8 +80,7 @@ flux_rad AS (
 )
 
 SELECT
-    fi.ANNEE,
-    fi.MOIS,
+    t.ID_TEMPS,
     fi.DR_NO,
     fi.SP_NO,
     fi.EMP_REGIME,
@@ -94,14 +89,12 @@ SELECT
     fi.ID_PERIODICITE,
     fi.EMP_ETAT,
     fi.TEF_CODE,
-    t.ID_TEMPS,
     fi.NB_EMP                               AS NB_NOUVELLE_IMM_EMP,
     NVL(fr.NB_RAD, 0)                       AS NB_RADIATIONS,
     :1                                      AS CLICHE
 FROM flux_imm                              fi
 LEFT JOIN flux_rad                         fr
-       ON fr.ANNEE               = fi.ANNEE
-      AND fr.MOIS                = fi.MOIS
+       ON fr.ID_TEMPS            = fi.ID_TEMPS
       AND fr.DR_NO               = fi.DR_NO
       AND fr.SP_NO               = fi.SP_NO
       AND fr.EMP_REGIME          = fi.EMP_REGIME
@@ -110,9 +103,4 @@ LEFT JOIN flux_rad                         fr
       AND fr.ID_PERIODICITE      = fi.ID_PERIODICITE
       AND fr.TEF_CODE            = fi.TEF_CODE
 LEFT JOIN DTM.DIM_TEMPS                    t
-       ON t.ID_TEMPS = TO_NUMBER(TO_CHAR(
-              TRUNC(ADD_MONTHS(
-                  TO_DATE(fi.ANNEE || '0101', 'YYYYMMDD'),
-                  fi.MOIS - 1
-              ), 'MM'),
-          'YYYYMMDD'))
+       ON t.ID_TEMPS = fi.ID_TEMPS
