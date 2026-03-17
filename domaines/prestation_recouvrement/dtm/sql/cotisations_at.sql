@@ -25,7 +25,7 @@ SELECT
     NVL(e.EMP_REGIME,      'X')                                 AS EMP_REGIME,
     NVL(e.SA_NO,            0)                                  AS SA_NO,
     NVL(e.EMP_PERIODICITE, 'A')                                 AS EMP_PERIODICITE,
-    NVL(tef.TEF_CODE, 'NC')                                     AS TEF_CODE,
+    tef.TEF_CODE                                     AS TEF_CODE,
     t.ID_TEMPS,
     NVL(dp.ID_PERIODICITE, 0)                                   AS ID_PERIODICITE,
     t.ANNEE,
@@ -64,7 +64,7 @@ GROUP BY
     NVL(e.EMP_REGIME,      'X'),
     NVL(e.SA_NO,            0),
     NVL(e.EMP_PERIODICITE, 'A'),
-    NVL(tef.TEF_CODE, 'NC'),
+    tef.TEF_CODE,
     t.ID_TEMPS, t.ANNEE, t.MOIS, t.TRIMESTRE,
     NVL(dp.ID_PERIODICITE, 0),
     pc.CLICHE

@@ -90,7 +90,7 @@ SELECT
     ma.DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
-    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
+    tef.TEF_CODE                                         AS TEF_CODE,
     -- ── LIBELLÉS ─────────────────────────────────────────────────
     dr.DR_DESC                                                      AS LIBELLE_DR,
     CASE NVL(e.EMP_REGIME, 'X')

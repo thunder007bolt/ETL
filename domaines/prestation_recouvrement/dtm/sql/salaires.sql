@@ -14,7 +14,7 @@ SELECT
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(tr.TR_SEXE,    0)                                           AS TR_SEXE,
     tag.TAG_CODE                                                    AS TAG_CODE,
-    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
+    tef.TEF_CODE                                         AS TEF_CODE,
     -- ── AXES TEMPORELS ─────────────────────────────────────────────
     t.ANNEE,
     t.MOIS,
@@ -66,6 +66,6 @@ GROUP BY
     NVL(e.SA_NO,       0),
     NVL(tr.TR_SEXE,    0),
     tag.TAG_CODE,
-    NVL(tef.TEF_CODE, 'NC'),
+    tef.TEF_CODE,
     t.ANNEE, t.MOIS, t.TRIMESTRE, t.ID_TEMPS,
     s.CLICHE

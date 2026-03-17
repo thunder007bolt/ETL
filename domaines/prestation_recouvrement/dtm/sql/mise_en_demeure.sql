@@ -12,7 +12,7 @@ SELECT
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(m.MED_STATUT, 'X')                                          AS MED_STATUT,
-    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
+    tef.TEF_CODE                                         AS TEF_CODE,
     -- ── AXES TEMPORELS ─────────────────────────────────────────────
     t.TRIMESTRE,
     TO_CHAR(EXTRACT(YEAR FROM m.MED_DATE))                          AS ANNEE_LABEL,
@@ -69,6 +69,6 @@ GROUP BY
     NVL(e.EMP_REGIME, 'X'),
     NVL(e.SA_NO,       0),
     NVL(m.MED_STATUT, 'X'),
-    NVL(tef.TEF_CODE, 'NC'),
+    tef.TEF_CODE,
     t.TRIMESTRE, t.ID_TEMPS,
     m.CLICHE

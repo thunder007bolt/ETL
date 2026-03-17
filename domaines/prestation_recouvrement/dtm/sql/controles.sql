@@ -12,7 +12,7 @@ SELECT
     NVL(c.CTL_STATUT, 'X')                                          AS CTL_STATUT,
     NVL(e.EMP_REGIME,  'X')                                         AS EMP_REGIME,
     NVL(e.SA_NO,        0)                                          AS SA_NO,
-    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
+    tef.TEF_CODE                                         AS TEF_CODE,
     -- ── FK TEMPS ───────────────────────────────────────────────────
     t.ID_TEMPS,
     -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
@@ -52,7 +52,7 @@ GROUP BY
     NVL(c.CTL_STATUT, 'X'),
     NVL(e.EMP_REGIME,  'X'),
     NVL(e.SA_NO,        0),
-    NVL(tef.TEF_CODE, 'NC'),
+    tef.TEF_CODE,
     t.ID_TEMPS,
     t.ANNEE, t.MOIS, t.TRIMESTRE,
     c.CLICHE

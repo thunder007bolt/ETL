@@ -20,7 +20,7 @@ SELECT
     NVL(tx.TXRE_MODE_PAIEMENT, 'NA')                               AS TXRE_MODE_PAIEMENT,
     NVL(tx.TXRE_NATURE,        'NC')                               AS TXRE_NATURE,
     NVL(e.EMP_REGIME,          'X')                                AS EMP_REGIME,
-    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
+    tef.TEF_CODE                                         AS TEF_CODE,
     -- ── FK TEMPS ───────────────────────────────────────────────────
     t.ID_TEMPS,
     -- ── LIBELLÉS TEMPS ─────────────────────────────────────────────
@@ -72,7 +72,7 @@ GROUP BY
     NVL(tx.TXRE_MODE_PAIEMENT, 'NA'),
     NVL(tx.TXRE_NATURE,        'NC'),
     NVL(e.EMP_REGIME,          'X'),
-    NVL(tef.TEF_CODE, 'NC'),
+    tef.TEF_CODE,
     t.ID_TEMPS,
     t.ANNEE, t.MOIS, t.TRIMESTRE,
     tx.CLICHE
