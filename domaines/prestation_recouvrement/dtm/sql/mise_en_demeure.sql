@@ -12,14 +12,7 @@ SELECT
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(m.MED_STATUT, 'X')                                          AS MED_STATUT,
-    CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 5  AND 9   THEN '5-9'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 10 AND 19  THEN '10-19'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
-         WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
-         ELSE 'NC' END                                              AS TRANCHE_EFFECTIF,
+    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
     -- ── AXES TEMPORELS ─────────────────────────────────────────────
     t.TRIMESTRE,
     TO_CHAR(EXTRACT(YEAR FROM m.MED_DATE))                          AS ANNEE_LABEL,
@@ -64,6 +57,7 @@ SELECT
 FROM DWH.FAIT_MISE_EN_DEMEURE          m
 LEFT JOIN DWH.FAIT_EMPLOYEUR           e   ON  e.EMP_ID  = m.EMP_ID
                                            AND e.CLICHE   = m.CLICHE
+LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF     tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_TEMPS                t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(m.MED_DATE, 'MM'), 'YYYYMMDD'))
 WHERE m.CLICHE = :1
@@ -75,13 +69,6 @@ GROUP BY
     NVL(e.EMP_REGIME, 'X'),
     NVL(e.SA_NO,       0),
     NVL(m.MED_STATUT, 'X'),
-    CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 5  AND 9   THEN '5-9'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 10 AND 19  THEN '10-19'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
-         WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
-         ELSE 'NC' END,
+    NVL(tef.TEF_CODE, 'NC'),
     t.TRIMESTRE, t.ID_TEMPS,
     m.CLICHE

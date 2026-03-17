@@ -345,6 +345,11 @@ DIM_CONFIG = [
         "seq_cols":  {"ID_REGION": "DTM.SEQ_DIM_REGION"},
     },
     {
+        "sql_file":  "tranche_age.sql",
+        "target":    "DTM.DIM_TRANCHE_AGE",
+        "key_cols":  ["TAG_CODE"],
+    },
+    {
         "sql_file":  "tranche_effectif.sql",
         "target":    "DTM.DIM_TRANCHE_EFFECTIF",
         "key_cols":  ["TEF_CODE"],

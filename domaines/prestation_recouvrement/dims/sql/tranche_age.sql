@@ -1,0 +1,6 @@
+SELECT
+    TAG_CODE,
+    TRANCHE,
+    INF,
+    SUP
+FROM TRANCHE_AGE

@@ -32,13 +32,7 @@ SELECT
     NVL(e.EMP_REGIME,      'X')                                 AS EMP_REGIME,
     NVL(e.SA_NO,            0)                                  AS SA_NO,
     NVL(e.EMP_PERIODICITE, 'A')                                 AS EMP_PERIODICITE,
-    CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 5  AND 9   THEN '5-9'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 10 AND 19  THEN '10-19'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
-         ELSE '100+' END                                         AS TRANCHE_EFFECTIF,
+    NVL(tef.TEF_CODE, 'NC')                                     AS TEF_CODE,
     t.ID_TEMPS,
     NVL(dp.ID_PERIODICITE, 0)                                   AS ID_PERIODICITE,
     t.ANNEE,
@@ -68,6 +62,7 @@ LEFT JOIN  DTM.DIM_TEMPS                t   ON  t.ID_TEMPS          = TO_NUMBER(
         TRUNC(TO_DATE(TO_CHAR(pc.PER_ID), 'YYYYMM'), 'MM'),
         'YYYYMMDD'))
 LEFT JOIN  DTM.DIM_PERIODICITE_VERSEMENT dp ON  dp.CODE_PERIODICITE  = e.EMP_PERIODICITE
+LEFT JOIN  DTM.DIM_TRANCHE_EFFECTIF      tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 WHERE pc.CLICHE = :1
 GROUP BY
     pc.PER_ID,
@@ -76,13 +71,7 @@ GROUP BY
     NVL(e.EMP_REGIME,      'X'),
     NVL(e.SA_NO,            0),
     NVL(e.EMP_PERIODICITE, 'A'),
-    CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 5  AND 9   THEN '5-9'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 10 AND 19  THEN '10-19'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
-         ELSE '100+' END,
+    NVL(tef.TEF_CODE, 'NC'),
     t.ID_TEMPS, t.ANNEE, t.MOIS, t.TRIMESTRE,
     NVL(dp.ID_PERIODICITE, 0),
     pc.CLICHE

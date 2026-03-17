@@ -90,14 +90,7 @@ SELECT
     ma.DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
-    CASE WHEN NVL(e.EMP_NO_TR_DECLAR, 0) = 0       THEN 'NC'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 1  AND 4   THEN '1-4'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 5  AND 9   THEN '5-9'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 10 AND 19  THEN '10-19'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 20 AND 49  THEN '20-49'
-         WHEN e.EMP_NO_TR_DECLAR BETWEEN 50 AND 99  THEN '50-99'
-         WHEN e.EMP_NO_TR_DECLAR >= 100              THEN '100+'
-         ELSE 'NC' END                                              AS TRANCHE_EFFECTIF,
+    NVL(tef.TEF_CODE, 'NC')                                         AS TEF_CODE,
     -- ── LIBELLÉS ─────────────────────────────────────────────────
     dr.DR_DESC                                                      AS LIBELLE_DR,
     CASE NVL(e.EMP_REGIME, 'X')
@@ -150,5 +143,6 @@ SELECT
 FROM med_agg                              ma
 LEFT JOIN DWH.FAIT_EMPLOYEUR              e   ON  e.EMP_ID  = ma.EMP_ID
 LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE        sa  ON  sa.SA_NO  = e.SA_NO
+LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF        tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_DIRECTION_REGIONALE     dr  ON  dr.DR_NO  = ma.DR_NO
 LEFT JOIN cot_agg                         ca  ON  ca.EMP_ID = ma.EMP_ID
