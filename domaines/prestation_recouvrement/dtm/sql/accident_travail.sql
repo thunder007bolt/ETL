@@ -34,9 +34,9 @@ base AS (
         sin.IND_SEXE,
         sin.IND_DATE_NAISSANCE,
         sin.DOS_CODE,
-        NVL(sin.NBREJOUR, 0)                                                AS NBREJOUR,
-        NVL(sin.DOS_DECES_IMMEDIAT, 0)                                      AS FLAG_DECES_IMMEDIAT,
-        NVL(sin.ENQUETE, 0)                                                 AS FLAG_ENQUETE,
+        sin.NBREJOUR,
+        sin.DOS_DECES_IMMEDIAT                                              AS FLAG_DECES_IMMEDIAT,
+        sin.ENQUETE                                                         AS FLAG_ENQUETE,
         CASE WHEN sin.DOS_DATE_NOTIFICATION IS NOT NULL
               AND sin.DOS_DATE_ACCIDENT    IS NOT NULL
               AND (sin.DOS_DATE_NOTIFICATION - sin.DOS_DATE_ACCIDENT) BETWEEN 0 AND 9999
@@ -49,8 +49,8 @@ base AS (
         pe.PE_SAL_MOYEN_ASSU_OBLI,
         pe.PE_SAL_MOYEN_ASSU_VOL,
         pe.PE_MT_ANNUEL_ME_COL,
-        NVL(mat.MONTANT_IJ,    0)                                           AS MONTANT_IJ,
-        NVL(mat.MONTANT_RENTE, 0)                                           AS MONTANT_RENTE,
+        mat.MONTANT_IJ,
+        mat.MONTANT_RENTE,
         sin.CLICHE
     FROM DWH.FAIT_TSINISTRE sin
     LEFT JOIN (

@@ -6,19 +6,19 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    NVL(tx.LP_NO, 0)                                                AS LP_NO,
-    NVL(tx.SP_NO, 0)                                                AS SP_NO,
-    NVL(tx.DR_NO, 0)                                                AS DR_NO,
-    tx.TXRE_TYPE                                                    AS TXRE_TYPE,
-    NVL(tx.TXRE_MODE_PAIEMENT, 'NA')                               AS TXRE_MODE_PAIEMENT,
-    NVL(tx.TXRE_NATURE,        'NC')                               AS TXRE_NATURE,
-    NVL(e.EMP_REGIME,          'X')                                AS EMP_REGIME,
-    tef.TEF_CODE                                                    AS TEF_CODE,
+    tx.LP_NO,
+    tx.SP_NO,
+    tx.DR_NO,
+    tx.TXRE_TYPE,
+    tx.TXRE_MODE_PAIEMENT,
+    tx.TXRE_NATURE,
+    e.EMP_REGIME,
+    tef.TEF_CODE,
     -- ── MESURES ────────────────────────────────────────────────────
     COUNT(tx.TXRE_ID)                                               AS NB_TRANSACTIONS,
     COUNT(DISTINCT tx.EMP_ID)                                       AS NB_EMPLOYEURS,
     SUM(tx.TXRE_MONTANT)                                            AS MONTANT_TOTAL,
-    SUM(NVL(tx.TXRE_MNT_FRAIS, 0))                                 AS MONTANT_FRAIS,
+    SUM(tx.TXRE_MNT_FRAIS)                                         AS MONTANT_FRAIS,
     SUM(CASE WHEN tx.TXRE_ID_RENVERSE IS NULL AND tx.TXRE_TYPE = 'P'
              THEN tx.TXRE_MONTANT ELSE 0 END)                       AS MONTANT_PAIEMENT,
     SUM(CASE WHEN tx.TXRE_ID_RENVERSE IS NOT NULL
@@ -46,12 +46,12 @@ LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
 WHERE tx.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
-    NVL(tx.LP_NO, 0),
-    NVL(tx.SP_NO, 0),
-    NVL(tx.DR_NO, 0),
+    tx.LP_NO,
+    tx.SP_NO,
+    tx.DR_NO,
     tx.TXRE_TYPE,
-    NVL(tx.TXRE_MODE_PAIEMENT, 'NA'),
-    NVL(tx.TXRE_NATURE,        'NC'),
-    NVL(e.EMP_REGIME,          'X'),
+    tx.TXRE_MODE_PAIEMENT,
+    tx.TXRE_NATURE,
+    e.EMP_REGIME,
     tef.TEF_CODE,
     tx.CLICHE

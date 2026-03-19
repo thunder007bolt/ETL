@@ -10,14 +10,14 @@ WITH
 flux_imm AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')) AS ID_TEMPS,
-        NVL(e.DR_NO, NVL(sp.DR_NO, 0))           AS DR_NO,
-        NVL(e.SP_NO,                0)            AS SP_NO,
-        NVL(e.EMP_REGIME,          'X')           AS EMP_REGIME,
-        NVL(e.SA_NO,                0)            AS SA_NO,
-        NVL(e.EMP_FORME_JURIDIQUE, 'NC')          AS EMP_FORME_JURIDIQUE,
-        NVL(dp.ID_PERIODICITE,      0)            AS ID_PERIODICITE,
-        NVL(e.EMP_ETAT,            'X')           AS EMP_ETAT,
-        tef.TEF_CODE                          AS TEF_CODE,
+        NVL(e.DR_NO, sp.DR_NO)                    AS DR_NO,
+        e.SP_NO,
+        e.EMP_REGIME,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE,
+        dp.ID_PERIODICITE,
+        e.EMP_ETAT,
+        tef.TEF_CODE,
         COUNT(DISTINCT e.EMP_ID)                  AS NB_EMP
     FROM DWH.FAIT_EMPLOYEUR                    e
     LEFT JOIN DWH.FAIT_DOSSIER_IMMATRICULATION di
@@ -25,7 +25,7 @@ flux_imm AS (
           AND di.DI_TYPE       = 'N'
           AND di.TR_NOM_PRENOM IS NULL
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL       sp
-           ON sp.SP_NO         = NVL(e.SP_NO, 0)
+           ON sp.SP_NO         = e.SP_NO
     LEFT JOIN DTM.DIM_PERIODICITE_VERSEMENT    dp
            ON dp.CODE_PERIODICITE = e.EMP_PERIODICITE
     LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF         tef
@@ -34,34 +34,34 @@ flux_imm AS (
       AND e.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')),
-        NVL(e.DR_NO, NVL(sp.DR_NO, 0)),
-        NVL(e.SP_NO,                0),
-        NVL(e.EMP_REGIME,          'X'),
-        NVL(e.SA_NO,                0),
-        NVL(e.EMP_FORME_JURIDIQUE, 'NC'),
-        NVL(dp.ID_PERIODICITE,      0),
-        NVL(e.EMP_ETAT,            'X'),
-        tef.TEF_CODE                
+        NVL(e.DR_NO, sp.DR_NO),
+        e.SP_NO,
+        e.EMP_REGIME,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE,
+        dp.ID_PERIODICITE,
+        e.EMP_ETAT,
+        tef.TEF_CODE
 ),
 
 -- ── flux radiations (DI_TYPE=R — grain sans EMP_ETAT) ──────────
 flux_rad AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')) AS ID_TEMPS,
-        NVL(di.DR_NO, NVL(sp.DR_NO, 0))          AS DR_NO,
-        NVL(e.SP_NO,                0)            AS SP_NO,
-        NVL(e.EMP_REGIME,          'X')           AS EMP_REGIME,
-        NVL(e.SA_NO,                0)            AS SA_NO,
-        NVL(e.EMP_FORME_JURIDIQUE, 'NC')          AS EMP_FORME_JURIDIQUE,
-        NVL(dp.ID_PERIODICITE,      0)            AS ID_PERIODICITE,
-        tef.TEF_CODE                          AS TEF_CODE,
+        NVL(di.DR_NO, sp.DR_NO)                   AS DR_NO,
+        e.SP_NO,
+        e.EMP_REGIME,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE,
+        dp.ID_PERIODICITE,
+        tef.TEF_CODE,
         COUNT(*)                                  AS NB_RAD
     FROM DWH.FAIT_DOSSIER_IMMATRICULATION      di
     LEFT JOIN DWH.FAIT_EMPLOYEUR               e
            ON e.EMP_ID   = di.EMP_ID
           AND e.CLICHE   = :1
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL       sp
-           ON sp.SP_NO   = NVL(e.SP_NO, 0)
+           ON sp.SP_NO   = e.SP_NO
     LEFT JOIN DTM.DIM_PERIODICITE_VERSEMENT    dp
            ON dp.CODE_PERIODICITE = e.EMP_PERIODICITE
     LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF         tef
@@ -70,13 +70,13 @@ flux_rad AS (
       AND di.DI_DATE_RECEPTION IS NOT NULL
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')),
-        NVL(di.DR_NO, NVL(sp.DR_NO, 0)),
-        NVL(e.SP_NO,                0),
-        NVL(e.EMP_REGIME,          'X'),
-        NVL(e.SA_NO,                0),
-        NVL(e.EMP_FORME_JURIDIQUE, 'NC'),
-        NVL(dp.ID_PERIODICITE,      0),
-        tef.TEF_CODE                
+        NVL(di.DR_NO, sp.DR_NO),
+        e.SP_NO,
+        e.EMP_REGIME,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE,
+        dp.ID_PERIODICITE,
+        tef.TEF_CODE
 )
 
 SELECT
@@ -90,7 +90,7 @@ SELECT
     fi.EMP_ETAT,
     fi.TEF_CODE,
     fi.NB_EMP                               AS NB_NOUVELLE_IMM_EMP,
-    NVL(fr.NB_RAD, 0)                       AS NB_RADIATIONS,
+    fr.NB_RAD                               AS NB_RADIATIONS,
     :1                                      AS CLICHE
 FROM flux_imm                              fi
 LEFT JOIN flux_rad                         fr

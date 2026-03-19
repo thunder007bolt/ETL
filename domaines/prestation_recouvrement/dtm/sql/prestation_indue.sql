@@ -70,7 +70,7 @@ SELECT
     TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')) AS ID_TEMPS,
 
     -- ── BRANCHE ─────────────────────────────────────────────────────
-    b.CODE_BRANCHE AS TDOS_CODE,
+    b.CODE_BRANCHE                                                  AS TDOS_CODE,
 
     -- ── TYPE AJUSTEMENT ─────────────────────────────────────────────
     b.TAJ_CODE,
@@ -129,7 +129,7 @@ LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(TO_DATE('
 
 GROUP BY
     TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')),
-    b.CODE_BRANCHE AS TDOS_CODE,
+    b.CODE_BRANCHE,
     b.TAJ_CODE,
     CASE b.AJ_STATUT WHEN 'C' THEN 'RC' WHEN 'I' THEN 'IR' ELSE 'EN' END,
     CASE b.AJ_STATUT WHEN 'C' THEN 'Recouvre'

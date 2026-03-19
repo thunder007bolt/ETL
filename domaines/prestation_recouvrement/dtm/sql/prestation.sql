@@ -17,7 +17,7 @@ SELECT
     -- ── TEMPOREL ────────────────────────────────────────────────────
     TO_NUMBER(TO_CHAR(TRUNC(b.DEB_DATE_EFFET, 'MM'), 'YYYYMMDD'))   AS ID_TEMPS,
     -- ── BRANCHE ─────────────────────────────────────────────────────
-    b.CODE_BRANCHE AS TDOS_CODE,
+    b.CODE_BRANCHE                                                  AS TDOS_CODE,
     -- ── CODE PRESTATION ─────────────────────────────────────────────
     NVL(b.TPE_CODE, b.TPN_CODE)                                     AS CODE_PRESTATION,
     -- ── TYPE PRESTATION ─────────────────────────────────────────────
@@ -126,7 +126,7 @@ FROM (
 LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(ADD_MONTHS(TRUNC(b.DEB_DATE_EFFET,'YYYY'),12)-1, b.IND_DATE_NAISSANCE)/12) BETWEEN tag.INF AND tag.SUP
 GROUP BY
     TO_NUMBER(TO_CHAR(TRUNC(b.DEB_DATE_EFFET, 'MM'), 'YYYYMMDD')),
-    b.CODE_BRANCHE AS TDOS_CODE,
+    b.CODE_BRANCHE,
     NVL(b.TPE_CODE, b.TPN_CODE),
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END,
     b.GROUPE,

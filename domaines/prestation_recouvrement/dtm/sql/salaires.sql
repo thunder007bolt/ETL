@@ -8,18 +8,18 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    NVL(dn.SP_NO,      0)                                           AS SP_NO,
-    NVL(sp.DR_NO,      0)                                           AS DR_NO,
-    NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
-    NVL(e.SA_NO,       0)                                           AS SA_NO,
-    NVL(tr.TR_SEXE,    0)                                           AS TR_SEXE,
-    CASE NVL(tr.TR_SEXE, 0)
+    dn.SP_NO,
+    sp.DR_NO,
+    e.EMP_REGIME,
+    e.SA_NO,
+    tr.TR_SEXE,
+    CASE tr.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
         ELSE        NULL
     END                                                             AS LIBELLE_SEXE,
-    tag.TAG_CODE                                                    AS TAG_CODE,
-    tef.TEF_CODE                                                    AS TEF_CODE,
+    tag.TAG_CODE,
+    tef.TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(s.SAL_ID)                                                 AS NB_DECLARATIONS,
     COUNT(DISTINCT s.TR_ID)                                         AS NB_TRAVAILLEURS,
@@ -28,10 +28,10 @@ SELECT
     COUNT(CASE WHEN s.SAL_COTISANT_AT = 'O' THEN 1 END)            AS NB_COTISANTS_AT,
     COUNT(CASE WHEN s.SAL_COTISANT_AV = 'O' THEN 1 END)            AS NB_COTISANTS_AV,
     -- ── MESURES SALARIALES ─────────────────────────────────────────
-    SUM(NVL(s.SAL_BASE_COTISATION, 0))                             AS MASSE_BASE_COTISATION,
-    SUM(NVL(s.SAL_MONTANT_BRUT,    0))                             AS MASSE_BRUT,
-    SUM(NVL(s.SAL_MONTANT_SALAIRE, 0))                             AS MASSE_NET,
-    SUM(NVL(s.SAL_NB,              0))                             AS NB_JOURS_TOTAL,
+    SUM(s.SAL_BASE_COTISATION)                                     AS MASSE_BASE_COTISATION,
+    SUM(s.SAL_MONTANT_BRUT)                                        AS MASSE_BRUT,
+    SUM(s.SAL_MONTANT_SALAIRE)                                     AS MASSE_NET,
+    SUM(s.SAL_NB)                                                  AS NB_JOURS_TOTAL,
     ROUND(AVG(s.SAL_BASE_COTISATION), 2)                           AS SALAIRE_MOYEN,
     MIN(s.SAL_BASE_COTISATION)                                     AS SALAIRE_MIN,
     MAX(s.SAL_BASE_COTISATION)                                     AS SALAIRE_MAX,
@@ -54,12 +54,12 @@ WHERE s.CLICHE = :1
   AND dn.PER_ID IS NOT NULL
 GROUP BY
     t.ID_TEMPS,
-    NVL(dn.SP_NO,      0),
-    NVL(sp.DR_NO,      0),
-    NVL(e.EMP_REGIME, 'X'),
-    NVL(e.SA_NO,       0),
-    NVL(tr.TR_SEXE,    0),
-    CASE NVL(tr.TR_SEXE, 0)
+    dn.SP_NO,
+    sp.DR_NO,
+    e.EMP_REGIME,
+    e.SA_NO,
+    tr.TR_SEXE,
+    CASE tr.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
         ELSE        NULL
