@@ -144,13 +144,13 @@ SELECT
     b.TDOS_CODE,
 
     -- ── GROUPE BÉNÉFICIAIRE ──────────────────────────────────────────
-    b.GROUPE,
+    b.GROUPE                                                AS LN_TYPE,
     CASE b.GROUPE
         WHEN 'TIT' THEN 'Titulaire'
         WHEN 'VEU' THEN 'Veuf / Veuve'
         WHEN 'ORP' THEN 'Orphelin'
         WHEN 'ASC' THEN 'Ascendant'
-    END                                                     AS LIBELLE_GROUPE,
+    END                                                     AS LIBELLE_LN_TYPE,
 
     -- ── GÉOGRAPHIE ──────────────────────────────────────────────────
     b.DR_NO,
@@ -177,16 +177,6 @@ SELECT
     MAX(b.DELAI_JOURS)                                      AS DELAI_MAX_JOURS,
     MIN(b.DELAI_JOURS)                                      AS DELAI_MIN_JOURS,
 
-    -- ── MESURES CONFORMITÉ ───────────────────────────────────────────
-    SUM(CASE WHEN b.DELAI_JOURS IS NULL  THEN 0
-             WHEN b.DELAI_JOURS <= 45    THEN 1
-             ELSE 0 END)                                    AS NB_CONFORMES,
-    SUM(CASE WHEN b.DELAI_JOURS IS NULL  THEN 0
-             WHEN b.DELAI_JOURS > 45     THEN 1
-             ELSE 0 END)                                    AS NB_NON_CONFORMES,
-    SUM(CASE WHEN b.DELAI_JOURS IS NULL  THEN 1
-             ELSE 0 END)                                    AS NB_NON_CALCULABLES,
-
     -- ── CLICHE ──────────────────────────────────────────────────────
     b.CLICHE                                                AS CLICHE
 
@@ -198,10 +188,8 @@ GROUP BY
     t.ID_TEMPS,
     b.TDOS_CODE,
     b.GROUPE,
-    CASE b.GROUPE
-        WHEN 'TIT' THEN 'Titulaire' WHEN 'VEU' THEN 'Veuf / Veuve'
-        WHEN 'ORP' THEN 'Orphelin'  WHEN 'ASC' THEN 'Ascendant'
-    END,
+    CASE b.GROUPE WHEN 'TIT' THEN 'Titulaire' WHEN 'VEU' THEN 'Veuf / Veuve'
+                  WHEN 'ORP' THEN 'Orphelin'  WHEN 'ASC' THEN 'Ascendant' END,
     b.DR_NO,
     b.SP_NO,
     b.LP_NO,
