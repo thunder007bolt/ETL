@@ -80,12 +80,7 @@ SELECT
         WHEN 'C' THEN 'RC'
         WHEN 'I' THEN 'IR'
         ELSE          'EN'
-    END                                                     AS AJ_STATUT_GROUPE,
-    CASE b.AJ_STATUT
-        WHEN 'C' THEN 'Recouvre'
-        WHEN 'I' THEN 'Irrecuperable'
-        ELSE          'En cours'
-    END                                                     AS LIBELLE_STATUT_INDU,
+    END                                                     AS AJ_STATUT,
 
     -- ── GÉOGRAPHIE ──────────────────────────────────────────────────
     b.DR_NO,
@@ -132,9 +127,6 @@ GROUP BY
     b.CODE_BRANCHE,
     b.TAJ_CODE,
     CASE b.AJ_STATUT WHEN 'C' THEN 'RC' WHEN 'I' THEN 'IR' ELSE 'EN' END,
-    CASE b.AJ_STATUT WHEN 'C' THEN 'Recouvre'
-                     WHEN 'I' THEN 'Irrecuperable'
-                     ELSE          'En cours' END,
     b.DR_NO,
     b.SP_NO,
     b.LP_NO,
