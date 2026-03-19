@@ -6,9 +6,9 @@
 --           LEFT JOIN DWH.FAIT_LIEN          (GROUPE bénéficiaire)
 --           LEFT JOIN DWH.FAIT_INDIVIDU      (SEXE, DATE_NAISSANCE, DATE_DECES)
 --           LEFT JOIN DWH.FAIT_PRESTATION_ESP (NB_MOIS_COTISES — dédupliqué par MAX)
--- Grain   : ID_TEMPS × CODE_BRANCHE × CODE_BRANCHE_PRESTATION × CODE_PRESTATION × TYPE_PREST × GROUPE
+-- Grain   : ID_TEMPS × CODE_BRANCHE × CODE_BRANCHE_PRESTATION × CODE_PRESTATION × TYPE_PREST × LN_TYPE
 --           × DR_NO × SP_NO × LP_NO × SEXE
--- GROUPE  : TIT=Titulaire | VEU=Veuf/Veuve | ORP=Orphelin | ASC=Ascendant | NAT=Prestations nature
+-- LN_TYPE : TIT=Titulaire | VEU=Veuf/Veuve | ORP=Orphelin | ASC=Ascendant | NAT=Prestations nature
 -- TYPE_PREST : ESP (PM/AJ) | NAT (RB)
 -- NB_DECES : IND_DATE_DECES IS NOT NULL AND EXTRACT(YEAR FROM IND_DATE_DECES) = YEAR(DEB_DATE_EFFET)
 --            ⚠ source partielle (MAX=2011 au 11/03/2026) — activé pour usage futur
@@ -23,8 +23,8 @@ SELECT
     -- ── TYPE PRESTATION ─────────────────────────────────────────────
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END            AS TYPE_PREST,
     -- ── GROUPE BÉNÉFICIAIRE ──────────────────────────────────────────
-    b.GROUPE,
-    b.LIBELLE_GROUPE,
+    b.LN_TYPE,
+    b.LIBELLE_LN_TYPE,
     -- ── GÉOGRAPHIE ──────────────────────────────────────────────────
     b.DR_NO,
     b.SP_NO,
@@ -80,17 +80,7 @@ FROM (
             THEN 1 ELSE 0
         END                                                         AS FLAG_DECES,
         -- GROUPE bénéficiaire
-        CASE
-            WHEN deb.DEB_TYPE = 'RB'                                THEN 'NAT'
-            WHEN dos.IND_ID IS NOT NULL
-             AND efp.IND_ID_BENEF = dos.IND_ID                      THEN 'TIT'
-            ELSE NVL(CASE lg.LN_TYPE
-                         WHEN 'C' THEN 'VEU'
-                         WHEN 'E' THEN 'ORP'
-                         WHEN 'A' THEN 'ASC'
-                         ELSE          'TIT'
-                     END, 'TIT')
-        END                                                         AS GROUPE,
+        lg.LN_TYPE                                                  AS LN_TYPE,
         CASE
             WHEN deb.DEB_TYPE = 'RB'                                THEN 'Prestation en nature'
             WHEN dos.IND_ID IS NOT NULL
@@ -101,7 +91,7 @@ FROM (
                          WHEN 'A' THEN 'Ascendant'
                          ELSE          'Titulaire'
                      END, 'Titulaire')
-        END                                                         AS LIBELLE_GROUPE
+        END                                                         AS LIBELLE_LN_TYPE
     FROM      DWH.FAIT_DEBOURS              deb
     LEFT JOIN DWH.FAIT_DOSSIER              dos ON dos.DOS_CODE = deb.DOS_CODE
     LEFT JOIN DTM.DIM_LIEU_PAIEMENT         lp  ON lp.LP_NO    = dos.LP_NO
@@ -129,8 +119,8 @@ GROUP BY
     b.CODE_BRANCHE,
     NVL(b.TPE_CODE, b.TPN_CODE),
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END,
-    b.GROUPE,
-    b.LIBELLE_GROUPE,
+    b.LN_TYPE,
+    b.LIBELLE_LN_TYPE,
     b.DR_NO,
     b.SP_NO,
     b.LP_NO,
