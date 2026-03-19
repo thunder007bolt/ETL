@@ -1,17 +1,17 @@
 -- DTM_COTISATIONS — Branche AT (Accidents du Travail / Risques Professionnels)
 -- CTE tx_agg : pré-agrégation FAIT_TRANSACTION_COTISATION par PECO_ID
--- Branche    : TXCO_SOUS_TYPE = 'RP'
+-- Branche    : TXCO_SOUS_TYPE = 'AT'
 -- Temps      : join DTM.DIM_TEMPS via CLICHE (MMYYYY) → ANNEE + MOIS + JOUR=1
 -- Note       : MONTANT_MAJORATION/PENALITE/REMISE/AVOIR = 0 (transversaux PF uniquement)
 -- Exclus     : CLICHE et DATE_CHARGEMENT (injectés par le pipeline)
 WITH tx_agg AS (
     SELECT
         PECO_ID,
-        SUM(CASE WHEN TXCO_TYPE IN ('DD','DR','DT') AND TXCO_SOUS_TYPE = 'RP'
+        SUM(CASE WHEN TXCO_TYPE IN ('DD','DR','DT') AND TXCO_SOUS_TYPE = 'AT'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_APPELE,
-        SUM(CASE WHEN TXCO_TYPE IN ('RP','RA')      AND TXCO_SOUS_TYPE = 'RP'
+        SUM(CASE WHEN TXCO_TYPE IN ('RP','RA')      AND TXCO_SOUS_TYPE = 'AT'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_ENCAISSE,
-        SUM(CASE WHEN TXCO_TYPE IN ('RR','RU','RM') AND TXCO_SOUS_TYPE = 'RP'
+        SUM(CASE WHEN TXCO_TYPE IN ('RR','RU','RM') AND TXCO_SOUS_TYPE = 'AT'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_RENVERSEMENT
     FROM DWH.FAIT_TRANSACTION_COTISATION
     GROUP BY PECO_ID

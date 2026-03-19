@@ -21,7 +21,7 @@ DTM_CONFIG = [
         "name": "cotisations",
         "target": "DTM.DTM_COTISATIONS",
         "sql_files": [
-            {"file": "cotisations_pf.sql", "label": "PF"},
+            # {"file": "cotisations_pf.sql", "label": "PF"},
             {"file": "cotisations_at.sql", "label": "AT"},
             {"file": "cotisations_av.sql", "label": "AV"},
         ],

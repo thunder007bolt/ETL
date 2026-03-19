@@ -1,16 +1,16 @@
 -- DTM_COTISATIONS — Branche AV (Assurance Vieillesse / Pensions)
 -- CTE tx_agg : pré-agrégation FAIT_TRANSACTION_COTISATION par PECO_ID
--- Branche    : TXCO_SOUS_TYPE = 'PE'
+-- Branche    : TXCO_SOUS_TYPE = 'AV'
 -- Temps      : join DTM.DIM_TEMPS via CLICHE (MMYYYY) → ANNEE + MOIS + JOUR=1
 -- Exclus     : CLICHE et DATE_CHARGEMENT (injectés par le pipeline)
 WITH tx_agg AS (
     SELECT
         PECO_ID,
-        SUM(CASE WHEN TXCO_TYPE IN ('DD','DR','DT') AND TXCO_SOUS_TYPE = 'PE'
+        SUM(CASE WHEN TXCO_TYPE IN ('DD','DR','DT') AND TXCO_SOUS_TYPE = 'AV'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_APPELE,
-        SUM(CASE WHEN TXCO_TYPE IN ('RP','RA')      AND TXCO_SOUS_TYPE = 'PE'
+        SUM(CASE WHEN TXCO_TYPE IN ('RP','RA')      AND TXCO_SOUS_TYPE = 'AV'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_ENCAISSE,
-        SUM(CASE WHEN TXCO_TYPE IN ('RR','RU','RM') AND TXCO_SOUS_TYPE = 'PE'
+        SUM(CASE WHEN TXCO_TYPE IN ('RR','RU','RM') AND TXCO_SOUS_TYPE = 'AV'
                  THEN TXCO_MONTANT ELSE 0 END)                  AS MONTANT_RENVERSEMENT
     FROM DWH.FAIT_TRANSACTION_COTISATION
     GROUP BY PECO_ID
