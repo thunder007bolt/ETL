@@ -1,13 +1,12 @@
--- DTM_PRESTATION_INDUE V2
+-- DTM_PRESTATION_INDUE V3
 -- Sources : DWH.FAIT_AJUSTEMENT   (principal)
 --           JOIN DWH.FAIT_DOSSIER  (branche, géographie)
 --           JOIN DWH.FAIT_INDIVIDU (sexe, date naissance)
 --           LEFT JOIN montants_recouvres (débours négatifs statut 'D')
--- Grain   : ANNEE × MOIS × CODE_BRANCHE × TAJ_CODE × AJ_STATUT_GROUPE
---           × DR_NO × SP_NO × LP_NO × SEXE × TRANCHE_AGE
+-- Grain   : ID_TEMPS × CODE_BRANCHE × CODE_BRANCHE_PRESTATION × TAJ_CODE × AJ_STATUT_GROUPE
+--           × DR_NO × SP_NO × LP_NO × SEXE
 -- R1      : MONTANT_RECOUVRE = SUM(ABS(DEB_MONTANT)) WHERE DEB_MONTANT<0 AND DEB_STATUT='D'
 -- R2      : AJ_STATUT → RC (C) | IR (I) | EN (autres)
--- TRANCHE_AGE : au 31/12/ANNEE (règle CIPRES — tranches 5 ans)
 -- Exclus  : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 WITH
 
@@ -68,12 +67,10 @@ base AS (
 
 SELECT
     -- ── TEMPOREL ────────────────────────────────────────────────────
-    EXTRACT(YEAR  FROM b.AJ_DATE_ETABLISSEMENT)             AS ANNEE,
-    EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT)             AS MOIS,
-    CEIL(EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT) / 3)   AS TRIMESTRE,
+    TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')) AS ID_TEMPS,
 
     -- ── BRANCHE ─────────────────────────────────────────────────────
-    b.CODE_BRANCHE,
+    b.CODE_BRANCHE AS TDOS_CODE,
 
     -- ── TYPE AJUSTEMENT ─────────────────────────────────────────────
     b.TAJ_CODE,
@@ -131,10 +128,8 @@ FROM base b
 LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(TO_DATE('31/12/'||TO_CHAR(EXTRACT(YEAR FROM b.AJ_DATE_ETABLISSEMENT)),'DD/MM/YYYY'), b.IND_DATE_NAISSANCE)/12) BETWEEN tag.INF AND tag.SUP
 
 GROUP BY
-    EXTRACT(YEAR  FROM b.AJ_DATE_ETABLISSEMENT),
-    EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT),
-    CEIL(EXTRACT(MONTH FROM b.AJ_DATE_ETABLISSEMENT) / 3),
-    b.CODE_BRANCHE,
+    TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')),
+    b.CODE_BRANCHE AS TDOS_CODE,
     b.TAJ_CODE,
     CASE b.AJ_STATUT WHEN 'C' THEN 'RC' WHEN 'I' THEN 'IR' ELSE 'EN' END,
     CASE b.AJ_STATUT WHEN 'C' THEN 'Recouvre'

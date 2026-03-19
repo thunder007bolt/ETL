@@ -1,0 +1,20 @@
+-- DTM.DIM_BRANCHE_COTISATION V1
+-- Source  : TRANSACTION_COTISATION (DISTINCT TXCO_SOUS_TYPE)
+-- Grain   : 1 ligne par CODE_BRANCHE_COTISATION
+-- Valeurs : 'RT' | 'AV' | 'RE' | 'PF' | 'NP' | 'AT'
+SELECT
+    TXCO_SOUS_TYPE AS CODE_BRANCHE_COTISATION,
+    CASE TXCO_SOUS_TYPE
+        WHEN 'RT' THEN 'A definir'
+        WHEN 'AV' THEN 'A definir'
+        WHEN 'RE' THEN 'A definir'
+        WHEN 'PF' THEN 'A definir'
+        WHEN 'NP' THEN 'A definir'
+        WHEN 'AT' THEN 'A definir'
+        ELSE            TXCO_SOUS_TYPE
+    END            AS LIBELLE_BRANCHE_COTISATION
+FROM (
+    SELECT DISTINCT TXCO_SOUS_TYPE
+    FROM TRANSACTION_COTISATION
+    WHERE TXCO_SOUS_TYPE IS NOT NULL
+)

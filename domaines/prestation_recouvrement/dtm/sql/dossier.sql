@@ -1,10 +1,10 @@
--- DTM_DOSSIER V1
+-- DTM_DOSSIER V2
 -- Sources : DWH.FAIT_DOSSIER            (principal)
 --           JOIN DWH.FAIT_INDIVIDU      (sexe, date naissance)
 --           LEFT JOIN mois_cotises      (PE_MOIS_COTISATION, PE_DATE_NOTIFICATION)
 --           LEFT JOIN FAIT_RECEPTION_DOSSIER (RD_DATE_RECEPTION — délai R2)
 --           LEFT JOIN premier_deb_nat   (DEB_DATE_APPROBATION/INSERT — délai R3)
--- Grain   : ANNEE × MOIS × TDOS_CODE × EST_CONFORME_CIPRES × GROUPE
+-- Grain   : ID_TEMPS × TDOS_CODE × EST_CONFORME_CIPRES × GROUPE
 --           × DR_NO × SP_NO × LP_NO × SEXE × TRANCHE_AGE
 -- R1      : date référence = DOS_DATE_OUVERTURE
 -- R2      : délai ESP = PE_DATE_NOTIFICATION - RD_DATE_RECEPTION (filtre >= 2018-01-01)
@@ -43,8 +43,8 @@ mois_cotises AS (
 base AS (
     SELECT
         -- Temporel — R1 : date ouverture dossier
-        EXTRACT(YEAR  FROM dos.DOS_DATE_OUVERTURE)          AS ANNEE,
-        EXTRACT(MONTH FROM dos.DOS_DATE_OUVERTURE)          AS MOIS,
+        TO_NUMBER(TO_CHAR(TRUNC(dos.DOS_DATE_OUVERTURE, 'MM'), 'YYYYMMDD')) AS ID_TEMPS,
+        EXTRACT(YEAR FROM dos.DOS_DATE_OUVERTURE)                           AS ANNEE,
 
         -- Identifiants
         dos.DOS_CODE,
@@ -138,9 +138,7 @@ base AS (
 SELECT
 
     -- ── TEMPOREL ────────────────────────────────────────────────────
-    b.ANNEE,
-    b.MOIS,
-    CEIL(b.MOIS / 3)                                        AS TRIMESTRE,
+    t.ID_TEMPS,
 
     -- ── BRANCHE ─────────────────────────────────────────────────────
     b.TDOS_CODE,
@@ -194,11 +192,10 @@ SELECT
 
 FROM base b
 LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(TO_DATE('31/12/'||TO_CHAR(b.ANNEE),'DD/MM/YYYY'), b.IND_DATE_NAISSANCE)/12) BETWEEN tag.INF AND tag.SUP
+LEFT JOIN DTM.DIM_TEMPS                    t   ON t.ID_TEMPS = b.ID_TEMPS
 
 GROUP BY
-    b.ANNEE,
-    b.MOIS,
-    CEIL(b.MOIS / 3),
+    t.ID_TEMPS,
     b.TDOS_CODE,
     b.GROUPE,
     CASE b.GROUPE

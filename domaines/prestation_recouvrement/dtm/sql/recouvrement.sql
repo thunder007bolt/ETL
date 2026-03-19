@@ -1,8 +1,7 @@
--- DTM_RECOUVREMENT V4
+-- DTM_RECOUVREMENT V5
 -- Source     : DWH.FAIT_TRANSACTION_REGLEMENT + DWH.FAIT_EMPLOYEUR
 -- Géographie : DR => SP (SP_NO + DR_NO) => LP (LP_NO + SP_NO + DR_NO)
 -- Temps      : DIM_TEMPS via TRUNC(TXRE_DATE_EFFECTUE, 'MM') → ID_TEMPS
--- Famille    : REN prioritaire (TXRE_ID_RENVERSE IS NOT NULL), puis TXRE_TYPE
 -- Exclus     : CLICHE et DATE_CHARGEMENT (injectés par le pipeline)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
@@ -10,13 +9,7 @@ SELECT
     NVL(tx.LP_NO, 0)                                                AS LP_NO,
     NVL(tx.SP_NO, 0)                                                AS SP_NO,
     NVL(tx.DR_NO, 0)                                                AS DR_NO,
-    CASE
-        WHEN tx.TXRE_ID_RENVERSE IS NOT NULL THEN 'REN'
-        WHEN tx.TXRE_TYPE = 'M'             THEN 'MAJ'
-        WHEN tx.TXRE_TYPE = 'F'             THEN 'FOR'
-        WHEN tx.TXRE_TYPE = 'P'             THEN 'PAY'
-        ELSE 'INC'
-    END                                                             AS FAMILLE,
+    tx.TXRE_TYPE                                                    AS TXRE_TYPE,
     NVL(tx.TXRE_MODE_PAIEMENT, 'NA')                               AS TXRE_MODE_PAIEMENT,
     NVL(tx.TXRE_NATURE,        'NC')                               AS TXRE_NATURE,
     NVL(e.EMP_REGIME,          'X')                                AS EMP_REGIME,
@@ -50,20 +43,13 @@ LEFT JOIN DWH.FAIT_EMPLOYEUR                 e   ON  e.EMP_ID  = tx.EMP_ID
 LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF           tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
     TO_NUMBER(TO_CHAR(TRUNC(tx.TXRE_DATE_EFFECTUE, 'MM'), 'YYYYMMDD'))
--- (JOINs géographie dimension supprimés — codes suffisent pour le grain)
 WHERE tx.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
     NVL(tx.LP_NO, 0),
     NVL(tx.SP_NO, 0),
     NVL(tx.DR_NO, 0),
-    CASE
-        WHEN tx.TXRE_ID_RENVERSE IS NOT NULL THEN 'REN'
-        WHEN tx.TXRE_TYPE = 'M'             THEN 'MAJ'
-        WHEN tx.TXRE_TYPE = 'F'             THEN 'FOR'
-        WHEN tx.TXRE_TYPE = 'P'             THEN 'PAY'
-        ELSE 'INC'
-    END,
+    tx.TXRE_TYPE,
     NVL(tx.TXRE_MODE_PAIEMENT, 'NA'),
     NVL(tx.TXRE_NATURE,        'NC'),
     NVL(e.EMP_REGIME,          'X'),

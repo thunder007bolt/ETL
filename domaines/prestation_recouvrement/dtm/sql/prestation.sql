@@ -1,4 +1,4 @@
--- DTM_PRESTATION V1
+-- DTM_PRESTATION V2
 -- Sources : DWH.FAIT_DEBOURS          (principal — grain DEB_ID)
 --           LEFT JOIN DWH.FAIT_DOSSIER       (LP_NO, IND_ID)
 --           LEFT JOIN DTM.DIM_LIEU_PAIEMENT  (SP_NO, DR_NO — hiérarchie)
@@ -6,21 +6,18 @@
 --           LEFT JOIN DWH.FAIT_LIEN          (GROUPE bénéficiaire)
 --           LEFT JOIN DWH.FAIT_INDIVIDU      (SEXE, DATE_NAISSANCE, DATE_DECES)
 --           LEFT JOIN DWH.FAIT_PRESTATION_ESP (NB_MOIS_COTISES — dédupliqué par MAX)
--- Grain   : ANNEE × MOIS × CODE_BRANCHE × CODE_PRESTATION × TYPE_PREST × GROUPE
---           × DR_NO × SP_NO × LP_NO × SEXE × TRANCHE_AGE
+-- Grain   : ID_TEMPS × CODE_BRANCHE × CODE_BRANCHE_PRESTATION × CODE_PRESTATION × TYPE_PREST × GROUPE
+--           × DR_NO × SP_NO × LP_NO × SEXE
 -- GROUPE  : TIT=Titulaire | VEU=Veuf/Veuve | ORP=Orphelin | ASC=Ascendant | NAT=Prestations nature
 -- TYPE_PREST : ESP (PM/AJ) | NAT (RB)
--- TRANCHE_AGE : au 31/12/ANNEE (règle CIPRES — tranches 5 ans) — NULL pour NAT
--- NB_DECES : IND_DATE_DECES IS NOT NULL AND EXTRACT(YEAR FROM IND_DATE_DECES) = ANNEE
+-- NB_DECES : IND_DATE_DECES IS NOT NULL AND EXTRACT(YEAR FROM IND_DATE_DECES) = YEAR(DEB_DATE_EFFET)
 --            ⚠ source partielle (MAX=2011 au 11/03/2026) — activé pour usage futur
 -- Exclus  : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 SELECT
     -- ── TEMPOREL ────────────────────────────────────────────────────
-    EXTRACT(YEAR  FROM b.DEB_DATE_EFFET)                            AS ANNEE,
-    EXTRACT(MONTH FROM b.DEB_DATE_EFFET)                            AS MOIS,
-    CEIL(EXTRACT(MONTH FROM b.DEB_DATE_EFFET) / 3)                  AS TRIMESTRE,
+    TO_NUMBER(TO_CHAR(TRUNC(b.DEB_DATE_EFFET, 'MM'), 'YYYYMMDD'))   AS ID_TEMPS,
     -- ── BRANCHE ─────────────────────────────────────────────────────
-    b.CODE_BRANCHE,
+    b.CODE_BRANCHE AS TDOS_CODE,
     -- ── CODE PRESTATION ─────────────────────────────────────────────
     NVL(b.TPE_CODE, b.TPN_CODE)                                     AS CODE_PRESTATION,
     -- ── TYPE PRESTATION ─────────────────────────────────────────────
@@ -128,10 +125,8 @@ FROM (
 ) b
 LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(ADD_MONTHS(TRUNC(b.DEB_DATE_EFFET,'YYYY'),12)-1, b.IND_DATE_NAISSANCE)/12) BETWEEN tag.INF AND tag.SUP
 GROUP BY
-    EXTRACT(YEAR  FROM b.DEB_DATE_EFFET),
-    EXTRACT(MONTH FROM b.DEB_DATE_EFFET),
-    CEIL(EXTRACT(MONTH FROM b.DEB_DATE_EFFET) / 3),
-    b.CODE_BRANCHE,
+    TO_NUMBER(TO_CHAR(TRUNC(b.DEB_DATE_EFFET, 'MM'), 'YYYYMMDD')),
+    b.CODE_BRANCHE AS TDOS_CODE,
     NVL(b.TPE_CODE, b.TPN_CODE),
     CASE b.DEB_TYPE WHEN 'RB' THEN 'NAT' ELSE 'ESP' END,
     b.GROUPE,

@@ -21,7 +21,7 @@ SELECT
     0                                                            AS LP_NO,
     NVL(e.SP_NO, 0)                                             AS SP_NO,
     NVL(e.DR_NO, 0)                                             AS DR_NO,
-    'AT'                                                         AS CODE_NATURE,
+    'AT'                                                         AS CODE_BRANCHE_COTISATION,
     NVL(e.EMP_REGIME,      'X')                                 AS EMP_REGIME,
     NVL(e.SA_NO,            0)                                  AS SA_NO,
     NVL(dp.ID_PERIODICITE, 0)                                   AS ID_PERIODICITE,

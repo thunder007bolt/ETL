@@ -1,4 +1,4 @@
--- DTM_SALAIRE V5
+-- DTM_SALAIRE V6
 -- Sources    : DWH.FAIT_SALAIRE + DWH.FAIT_DECLARATION_NOMINATIVE
 --              + DWH.FAIT_TRAVAILLEUR + DWH.FAIT_EMPLOYEUR
 -- Géographie : DR <= sp.DR_NO => SP (SP_NO de dn.SP_NO)
@@ -13,6 +13,11 @@ SELECT
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
     NVL(e.SA_NO,       0)                                           AS SA_NO,
     NVL(tr.TR_SEXE,    0)                                           AS TR_SEXE,
+    CASE NVL(tr.TR_SEXE, 0)
+        WHEN 1 THEN 'Masculin'
+        WHEN 2 THEN 'Feminin'
+        ELSE        NULL
+    END                                                             AS LIBELLE_SEXE,
     tag.TAG_CODE                                                    AS TAG_CODE,
     tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
@@ -54,6 +59,11 @@ GROUP BY
     NVL(e.EMP_REGIME, 'X'),
     NVL(e.SA_NO,       0),
     NVL(tr.TR_SEXE,    0),
+    CASE NVL(tr.TR_SEXE, 0)
+        WHEN 1 THEN 'Masculin'
+        WHEN 2 THEN 'Feminin'
+        ELSE        NULL
+    END,
     tag.TAG_CODE,
     tef.TEF_CODE,
     s.CLICHE

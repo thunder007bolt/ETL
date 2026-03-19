@@ -1,5 +1,5 @@
 """
-Configuration centralisée des 52 dimensions.
+Configuration centralisée des 54 dimensions.
 
 Chaque entrée déclare :
     sql_file    : fichier SQL dans shared/dimensions/sql/
@@ -171,11 +171,15 @@ DIM_CONFIG = [
         "key_cols":  ["BR_CODE"],
     },
     {
+        "sql_file":  "branche_cotisation.sql",
+        "target":    "DTM.DIM_BRANCHE_COTISATION",
+        "key_cols":  ["CODE_BRANCHE_COTISATION"],
+    },
+    {
         "sql_file":  "caisse_paiement.sql",
         "target":    "DTM.DIM_CAISSE_PAIEMENT",
         "key_cols":  ["DR_NO", "CAP_ID", "LP_NO"],
         "strategy":  "gtt",
-        
     },
     {
         "sql_file":  "caissier.sql",
@@ -189,7 +193,6 @@ DIM_CONFIG = [
     #     "target":    "DTM.DIM_CATEGORIE_EMPLOYEUR",
     #     "key_cols":  ["EMP_ID","CAT_CODE", "SCAT_CODE", "ACT_CODE"],
     #     "strategy":  "gtt",
-        
     # },
     {
         "sql_file":  "categorie_pension.sql",
