@@ -24,13 +24,21 @@ _SQL_DIR = str(
     Path(__file__).parent
     / "domaines" / "prestation_recouvrement" / "facts" / "sql"
 )
+_GRH_FACT_SQL_DIR = str(
+    Path(__file__).parent / "domaines" / "grh" / "facts" / "sql"
+)
 
 
 def main():
     setup_logging()
     logger = logging.getLogger("cnss_etl.run_fact")
 
-    from domaines.prestation_recouvrement.facts.fact_config import FACT_CONFIG
+    from domaines.prestation_recouvrement.facts.fact_config import FACT_CONFIG as _PR_FACT
+    from domaines.grh.facts.fact_config import FACT_CONFIG as _GRH_FACT
+    for _c in _GRH_FACT:
+        _c.setdefault("sql_dir", _GRH_FACT_SQL_DIR)
+        _c.setdefault("_domain", "grh")
+    FACT_CONFIG = _PR_FACT + _GRH_FACT
     available = [cfg["sql_file"].removesuffix(".sql") for cfg in FACT_CONFIG]
 
     parser = argparse.ArgumentParser(description="Relance un seul fait ETL")
@@ -59,7 +67,7 @@ def main():
             from shared.utils.db_utils import get_source_connection
 
             src_conn = get_source_connection()
-            sql      = load_sql(_SQL_DIR, cfg["sql_file"])
+            sql      = load_sql(cfg.get("sql_dir", _SQL_DIR), cfg["sql_file"])
             cursor   = src_conn.cursor()
             cursor.execute(sql)
 
@@ -111,7 +119,10 @@ def main():
         # ── L : chargement ← staging/transformed/ ───────────────────────────
         elif args.step == "L":
             from shared.utils.db_utils import get_dw_connection
-            from domaines.prestation_recouvrement.facts.pipeline_facts import _GenericFactLoader
+            if cfg.get("_domain") == "grh":
+                from domaines.grh.facts.pipeline_facts import _GenericFactLoader
+            else:
+                from domaines.prestation_recouvrement.facts.pipeline_facts import _GenericFactLoader
 
             dw_conn = get_dw_connection()
             df      = staging.read_transformed(settings.STAGING_DIR, args.fact, run_date)
@@ -132,9 +143,12 @@ def main():
         # ── ETL complet en mémoire (sans --step) ────────────────────────────
         else:
             from shared.utils.db_utils import get_source_connection, get_dw_connection
-            from domaines.prestation_recouvrement.facts.pipeline_facts import (
-                FactsPipeline, _GenericFactLoader,
-            )
+            if cfg.get("_domain") == "grh":
+                from domaines.grh.facts.pipeline_facts import FactsPipeline, _GenericFactLoader
+            else:
+                from domaines.prestation_recouvrement.facts.pipeline_facts import (
+                    FactsPipeline, _GenericFactLoader,
+                )
 
             src_conn = get_source_connection()
             dw_conn  = get_dw_connection()

@@ -21,7 +21,9 @@ def main():
     setup_logging()
     logger = logging.getLogger("cnss_etl.run_dtm")
 
-    from domaines.prestation_recouvrement.dtm.dtm_config import DTM_CONFIG
+    from domaines.prestation_recouvrement.dtm.dtm_config import DTM_CONFIG as _PR_DTM
+    from domaines.grh.dtm.dtm_config import DTM_CONFIG as _GRH_DTM
+    DTM_CONFIG = _PR_DTM + _GRH_DTM
 
     available = [cfg["name"] for cfg in DTM_CONFIG]
 

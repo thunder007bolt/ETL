@@ -25,6 +25,9 @@ _SQL_DIR = str(
     Path(__file__).parent
     / "domaines" / "prestation_recouvrement" / "dims" / "sql"
 )
+_GRH_DIM_SQL_DIR = str(
+    Path(__file__).parent / "domaines" / "grh" / "dims" / "sql"
+)
 
 
 def main():
@@ -33,7 +36,12 @@ def main():
     setup_logging()
     logger = logging.getLogger("cnss_etl.run_dim")
 
-    from domaines.prestation_recouvrement.dims.dim_config import DIM_CONFIG
+    from domaines.prestation_recouvrement.dims.dim_config import DIM_CONFIG as _PR_DIM
+    from domaines.grh.dims.dim_config import DIM_CONFIG as _GRH_DIM
+    for _c in _GRH_DIM:
+        _c.setdefault("sql_dir", _GRH_DIM_SQL_DIR)
+        _c.setdefault("_domain", "grh")
+    DIM_CONFIG = _PR_DIM + _GRH_DIM
     available = [cfg["sql_file"].removesuffix(".sql") for cfg in DIM_CONFIG]
 
     parser = argparse.ArgumentParser(description="Relance une seule dimension ETL")
@@ -72,7 +80,7 @@ def main():
             src_conn = get_source_connection()
             dw_conn  = get_dw_connection()
 
-            sql    = load_sql(_SQL_DIR, cfg["sql_file"])
+            sql    = load_sql(cfg.get("sql_dir", _SQL_DIR), cfg["sql_file"])
             cursor = src_conn.cursor()
             cursor.execute(sql)
             cols  = [col[0].upper() for col in cursor.description]
@@ -161,11 +169,12 @@ def main():
         # ── ETL complet en mémoire (sans --step) ────────────────────────────
         else:
             from shared.utils.db_utils import get_source_connection, get_dw_connection
-            from domaines.prestation_recouvrement.dims.pipeline_dims import (
-                DimsPipeline, _GenericDimLoader,
-            )
             src_conn = get_source_connection()
             dw_conn  = get_dw_connection()
+            if cfg.get("_domain") == "grh":
+                from domaines.grh.dims.pipeline_dims import DimsPipeline, _GenericDimLoader
+            else:
+                from domaines.prestation_recouvrement.dims.pipeline_dims import DimsPipeline, _GenericDimLoader
             loader   = _GenericDimLoader(dw_conn)
             count    = DimsPipeline()._load_one(src_conn, loader, cfg)
             logger.info(f"[ETL] {target} — {count} lignes chargées")
