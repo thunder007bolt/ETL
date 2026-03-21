@@ -7,6 +7,7 @@ Usage :
     python run_fact.py --fact contrainte --step T           # Transform → staging/transformed/
     python run_fact.py --fact contrainte --step L           # Load     ← staging/transformed/
     python run_fact.py --fact contrainte --step L --date 20260301
+    python run_fact.py --fact grh_absence --fetch 100000        # lot de 100k lignes
 """
 
 import argparse
@@ -48,6 +49,8 @@ def main():
                         help="E=extract, T=transform, L=load  (défaut: ETL complet en mémoire)")
     parser.add_argument("--date", default=date.today().strftime("%Y%m%d"),
                         help="Date du fichier staging YYYYMMDD (défaut: aujourd'hui)")
+    parser.add_argument("--fetch", type=int, default=50_000,
+                        help="Taille des lots de récupération (défaut: 50000)")
     args = parser.parse_args()
 
     cfg      = next(c for c in FACT_CONFIG if c["sql_file"] == f"{args.fact}.sql")
@@ -69,6 +72,7 @@ def main():
             src_conn = get_source_connection()
             sql      = load_sql(cfg.get("sql_dir", _SQL_DIR), cfg["sql_file"])
             cursor   = src_conn.cursor()
+            cursor.arraysize = args.fetch
             cursor.execute(sql)
 
             cols          = [col[0].upper() for col in cursor.description]
@@ -78,7 +82,7 @@ def main():
             total         = 0
             try:
                 while True:
-                    rows = cursor.fetchmany(50_000)
+                    rows = cursor.fetchmany(args.fetch)
                     if not rows:
                         break
                     chunk = pd.DataFrame(rows, columns=cols)
