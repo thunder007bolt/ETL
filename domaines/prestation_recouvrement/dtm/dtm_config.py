@@ -54,13 +54,13 @@ DTM_CONFIG = [
             {"file": "mise_en_demeure.sql", "label": "MED"},
         ],
     },
-    {
-        "name": "med_employeur",
-        "target": "DTM.DTM_MED_EMPLOYEUR",
-        "sql_files": [
-            {"file": "med_employeur.sql", "label": "MED_EMP"},
-        ],
-    },
+    #{
+    #    "name": "med_employeur",
+    #    "target": "DTM.DTM_MED_EMPLOYEUR",
+    #    "sql_files": [
+    #        {"file": "med_employeur.sql", "label": "MED_EMP"},
+    #    ],
+    #},
     {
         "name": "immatriculation_emp",
         "target": "DTM.DTM_IMM_EMPLOYEUR",
