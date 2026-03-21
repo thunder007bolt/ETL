@@ -1,0 +1,5 @@
+-- FAIT_GRH_ABS_LIEU — Source : GRH_ABS_LIEU (full reload)
+SELECT
+    ABSE_NO,
+    LIEU_ID
+FROM GRH_ABS_LIEU

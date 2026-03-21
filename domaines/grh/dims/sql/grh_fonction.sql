@@ -1,0 +1,8 @@
+-- DIM_GRH_FONCTION — Source : GRH_FONCTION (full reload)
+SELECT
+    FNCT_CODE,
+    NOM,
+    FNCT_TYPE,
+    FNCT_ETAT,
+    FNCT_RANG
+FROM GRH_FONCTION

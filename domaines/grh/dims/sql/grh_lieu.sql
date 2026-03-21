@@ -1,0 +1,9 @@
+-- DIM_GRH_LIEU — Source : GRH_LIEU (full reload)
+SELECT
+    LIEU_ID,
+    DESCRIPTION,
+    LIEU_SUP_ID,
+    LIEU_NATURE,
+    LIEU_PAIEMENT,
+    LIEU_TYPE
+FROM GRH_LIEU

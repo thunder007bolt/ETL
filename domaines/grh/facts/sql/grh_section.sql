@@ -1,0 +1,11 @@
+-- FAIT_GRH_SECTION — Source : GRH_SECTION (full reload)
+SELECT
+    SECT_CODE,
+    SECT_NOM,
+    UA_CODE_SUP,
+    SECT_DESIGNATION,
+    LIEU_ID,
+    REGION,
+    DR_NO,
+    GP_CODE
+FROM GRH_SECTION

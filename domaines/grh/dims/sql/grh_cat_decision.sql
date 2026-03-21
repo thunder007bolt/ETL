@@ -1,0 +1,8 @@
+-- DIM_GRH_CAT_DECISION — Source : GRH_CAT_DECISION (full reload)
+SELECT
+    CDEC_CODE,
+    OBJET,
+    CABS_CODE,
+    CORPS,
+    PIED
+FROM GRH_CAT_DECISION
