@@ -36,11 +36,11 @@ DIM_CONFIG = [
         "target":   "DTM.DIM_GRH_CAT_DIPLOME",
         "key_cols": ["CDIP_NO"],
     },
-    {
-        "sql_file": "grh_cat_formation.sql",
-        "target":   "DTM.DIM_GRH_CAT_FORMATION",
-        "key_cols": ["CAT_FORM_CODE"],
-    },
+#    {
+#        "sql_file": "grh_cat_formation.sql",
+#        "target":   "DTM.DIM_GRH_CAT_FORMATION",
+#        "key_cols": ["CAT_FORM_CODE"],
+#    },
     {
         "sql_file": "grh_cat_frais.sql",
         "target":   "DTM.DIM_GRH_CAT_FRAIS",
