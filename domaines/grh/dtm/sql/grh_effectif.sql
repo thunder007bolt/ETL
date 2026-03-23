@@ -54,8 +54,8 @@ SELECT
     tan.TRANCHE_ANC_CODE,
     b.SEXE,
     CASE b.SEXE
-        WHEN '1' THEN 'Masculin'
-        WHEN '2' THEN 'Féminin'
+        WHEN 'M' THEN 'Masculin'
+        WHEN 'F' THEN 'Féminin'
         ELSE NULL
     END                                                   AS LIBELLE_SEXE,
     b.CODE_DOMAINE,
