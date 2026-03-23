@@ -1,14 +1,12 @@
 -- DTM_GRH_EFFECTIF — Effectif au 31/12 par exercice, qualification, tranche d'âge/ancienneté, sexe, domaine, UA, lieu, fonction
 -- :1 = CLICHE (MMYYYY) — filtre les snapshots DWH source et étiquette les lignes insérées
 WITH
--- ── Toutes les années disponibles dans le snapshot ────────────────────────
 ANNEES AS (
     SELECT DISTINCT EXTRACT(YEAR FROM s.DATE_DEBUT) AS ANNEE
     FROM DWH.FAIT_GRH_SITUATION s
     WHERE s.CLICHE        = :1
       AND s.DATE_DEBUT   IS NOT NULL
 ),
--- ── Date de référence : 31/12 de chaque année ─────────────────────────────
 REF AS (
     SELECT
         ANNEE,
@@ -16,20 +14,21 @@ REF AS (
         TO_DATE(TO_CHAR(ANNEE)   || '1231','YYYYMMDD') AS DT_REF
     FROM ANNEES
 ),
--- ── Situation active au 31/12 pour chaque année ───────────────────────────
 BASE AS (
     SELECT
         r.ID_TEMPS,
         s.PERS_ID,
-        NVL(s.QUAL_CODE,        'NC')                     AS QUAL_CODE,
-        NVL(s.CODE_DOMAINE_ACT, 'NC')                     AS CODE_DOMAINE,
-        NVL(u.UA_NATURE,        'NC')                     AS UA_NATURE,
+        s.QUAL_CODE,
+        s.CODE_DOMAINE_ACT                                        AS CODE_DOMAINE,
+        u.UA_NATURE,
         s.LIEU_ID,
         s.FNCT_CODE,
         p.SEXE,
-        FLOOR((r.DT_REF - p.DATE_NAISS)                         / 365.25) AS AGE_REF,
-        FLOOR((r.DT_REF - NVL(p.DATE_EMBAUCHE,
-                              p.DATE_PRISE_SERVICE))            / 365.25) AS ANC_REF,
+        FLOOR((r.DT_REF - p.DATE_NAISS) / 365.25)                AS AGE_REF,
+        GREATEST(
+            FLOOR((r.DT_REF
+                - COALESCE(p.DATE_EMBAUCHE,
+                           p.DATE_PRISE_SERVICE)) / 365.25), 0)  AS ANC_REF,
         s.STATUT_EMPLOYE
     FROM REF r
     INNER JOIN DWH.FAIT_GRH_SITUATION s
@@ -44,7 +43,6 @@ BASE AS (
     WHERE UPPER(TRIM(s.NATURE_SITUATION))
               IN ('AVA','CLA','AFF','NOM','REC','MUT','PRO','RET','BON')
       AND s.DATE_DEBUT >= DATE '2000-01-01'
-      AND NVL(s.VALIDE, 'N') = 'O'
 )
 
 SELECT
@@ -65,7 +63,7 @@ SELECT
     COUNT(DISTINCT b.PERS_ID)                             AS NB_AGENTS,
     COUNT(DISTINCT CASE WHEN b.STATUT_EMPLOYE = 'A'
                         THEN b.PERS_ID END)               AS NB_AGENTS_ACTIFS,
-    COUNT(DISTINCT CASE WHEN NVL(b.STATUT_EMPLOYE,'X') != 'A'
+    COUNT(DISTINCT CASE WHEN b.STATUT_EMPLOYE != 'A'
                         THEN b.PERS_ID END)               AS NB_AGENTS_INACTIFS,
     ROUND(AVG(b.AGE_REF), 1)                              AS AGE_MOYEN,
     ROUND(AVG(b.ANC_REF), 1)                              AS ANCIENNETE_MOYENNE,
