@@ -69,6 +69,7 @@ SELECT
                         THEN b.PERS_ID END)               AS NB_AGENTS_INACTIFS,
     ROUND(AVG(b.AGE_REF), 1)                              AS AGE_MOYEN,
     ROUND(AVG(b.ANC_REF), 1)                              AS ANCIENNETE_MOYENNE,
+    SYSDATE                                               AS DATE_CHARGEMENT,
     :1                                                    AS CLICHE
 FROM BASE b
 INNER JOIN DTM.DIM_GRH_TRANCHE_AGE ta

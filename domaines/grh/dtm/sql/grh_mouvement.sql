@@ -66,6 +66,7 @@ SELECT
     END                        AS LIBELLE_SEXE,
     COUNT(mc.MVT_ID)           AS NB_MOUVEMENTS,
     COUNT(DISTINCT mc.PERS_ID) AS NB_AGENTS,
+    SYSDATE                    AS DATE_CHARGEMENT,
     :1                         AS CLICHE
 FROM MVT_COMPLET mc
 GROUP BY

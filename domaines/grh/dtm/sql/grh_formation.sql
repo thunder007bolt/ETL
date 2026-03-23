@@ -69,6 +69,7 @@ SELECT
     SUM(ic.DUREE)                                         AS NB_JOURS_FORMATION,
     SUM(ic.COUT_REEL)                                     AS COUT_TOTAL,
     SUM(ic.BUDGET)                                        AS BUDGET_FORMATION,
+    SYSDATE                                               AS DATE_CHARGEMENT,
     :1                                                    AS CLICHE
 FROM INS_COMPLET ic
 GROUP BY
