@@ -6,8 +6,8 @@ FORM_BASE AS (
     SELECT
         f.FORM_NO,
         TO_NUMBER(TO_CHAR(EXTRACT(YEAR FROM
-            NVL(f.DATE_FIN, f.DATE_DEBUT))) || '1231')   AS ID_TEMPS,
-        NVL(f.CATEGORIE, 'NC')                            AS CAT_FORM_CODE,
+            COALESCE(f.DATE_FIN, f.DATE_DEBUT))) || '1231') AS ID_TEMPS,
+        f.CATEGORIE                                         AS CAT_FORM_CODE,
         CASE
             WHEN REGEXP_LIKE(f.BUDGET, '^[0-9]+(\.[0-9]+)?$')
             THEN TO_NUMBER(f.BUDGET)
@@ -15,7 +15,7 @@ FORM_BASE AS (
         END                                               AS BUDGET
     FROM DTM.DIM_GRH_FORMATION f
     WHERE f.STATUT = 'T'
-      AND NVL(f.DATE_FIN, f.DATE_DEBUT) IS NOT NULL
+      AND COALESCE(f.DATE_FIN, f.DATE_DEBUT) IS NOT NULL
 ),
 -- ── Inscriptions avec détail des frais ────────────────────────────────────
 INS_BASE AS (
@@ -23,7 +23,7 @@ INS_BASE AS (
         i.FORM_NO,
         i.PERS_ID,
         i.INS_ID,
-        NVL(i.QUAL_CODE_INS, 'NC')                        AS QUAL_CODE,
+        i.QUAL_CODE_INS                                    AS QUAL_CODE,
         i.DUREE                                           AS DUREE,
         i.FRAIS_INSCRIPTION
       + i.FRAIS_SCOLARITE

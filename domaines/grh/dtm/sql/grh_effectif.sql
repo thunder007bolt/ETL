@@ -45,7 +45,6 @@ BASE AS (
         ON  u.UA_CODE    = s.UA_CODE
     WHERE UPPER(TRIM(s.NATURE_SITUATION))
               IN ('AVA','CLA','AFF','NOM','REC','MUT','PRO','RET','BON')
-      AND s.DATE_DEBUT >= DATE '2000-01-01'
 )
 
 SELECT
@@ -84,6 +83,7 @@ GROUP BY
     ta.TRANCHE_AGE_CODE,
     tan.TRANCHE_ANC_CODE,
     b.SEXE,
+    CASE b.SEXE WHEN '1' THEN 'Masculin' WHEN '2' THEN 'Féminin' ELSE NULL END,
     b.CODE_DOMAINE,
     b.UA_NATURE,
     b.LIEU_ID,

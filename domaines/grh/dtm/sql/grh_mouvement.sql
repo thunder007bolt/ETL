@@ -16,7 +16,7 @@ MVT_BASE AS (
     FROM DWH.FAIT_GRH_MOUVEMENT m
     WHERE m.CLICHE       = :1
       AND m.DATE_DEBUT  IS NOT NULL
-      AND NVL(m.VALIDE, 'N') = 'O'
+      AND m.VALIDE = 'O'
 ),
 -- ── Jointure avec type mouvement ──────────────────────────────────────────
 MVT_AVEC_TYPE AS (
