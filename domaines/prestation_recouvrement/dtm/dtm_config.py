@@ -15,6 +15,16 @@ Les SQL sélectionnent CLICHE directement depuis la table de fait source (format
 
 DTM_CONFIG = [
     # ------------------------------------------------------------------
+    # Domaine Employeur
+    # ------------------------------------------------------------------
+    {
+        "name": "employeur",
+        "target": "DTM.DTM_EMPLOYEUR",
+        "sql_files": [
+            {"file": "employeur.sql", "label": "EMPLOYEUR"},
+        ],
+    },
+    # ------------------------------------------------------------------
     # Domaine Recouvrement
     # ------------------------------------------------------------------
     {

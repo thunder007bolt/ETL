@@ -68,10 +68,26 @@ def main():
         f"date={display_date}"
     )
 
-    try:
-        from domaines.prestation_recouvrement.dtm.pipeline_dtm import DtmPipeline
+    pr_names  = [c["name"] for c in _PR_DTM]
+    grh_names = [c["name"] for c in _GRH_DTM]
 
-        DtmPipeline(fetch_size=args.fetch).run(names=names, batch_date=batch_date)
+    # Répartition par domaine (None = toutes)
+    pr_run  = [n for n in names if n in pr_names]  if names else None
+    grh_run = [n for n in names if n in grh_names] if names else None
+
+    try:
+        if pr_run is not None and len(pr_run) == 0 and grh_run is not None and len(grh_run) == 0:
+            logger.warning("Aucune table DTM reconnue dans les domaines disponibles.")
+            sys.exit(1)
+
+        if pr_run is None or pr_run:
+            from domaines.prestation_recouvrement.dtm.pipeline_dtm import DtmPipeline as PrDtm
+            PrDtm(fetch_size=args.fetch).run(names=pr_run, batch_date=batch_date)
+
+        if grh_run is None or grh_run:
+            from domaines.grh.dtm.pipeline_dtm import DtmPipeline as GrhDtm
+            GrhDtm(fetch_size=args.fetch).run(names=grh_run, batch_date=batch_date)
+
         sys.exit(0)
 
     except Exception as e:
