@@ -84,7 +84,7 @@ GROUP BY
     ta.TRANCHE_AGE_CODE,
     tan.TRANCHE_ANC_CODE,
     b.SEXE,
-    CASE b.SEXE WHEN '1' THEN 'Masculin' WHEN '2' THEN 'Féminin' ELSE NULL END,
+    CASE b.SEXE WHEN 'M' THEN 'Masculin' WHEN 'F' THEN 'Féminin' ELSE NULL END,
     b.CODE_DOMAINE,
     b.UA_NATURE,
     b.LIEU_ID,
