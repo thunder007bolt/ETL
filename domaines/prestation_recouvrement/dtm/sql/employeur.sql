@@ -13,7 +13,13 @@ SELECT
     dp.ID_PERIODICITE             AS ID_PERIODICITE,
     e.EMP_ETAT                    AS EMP_ETAT,
     tef.TEF_CODE                  AS TEF_CODE,
-    fj.FJ_CODE,
+    fj.FJ_CODE                        AS EMP_FJ_CODE,
+    fj.FJ_CODE_SUP                    AS EMP_FJ_CODE_SUP,
+    CASE fj.SECT_CODE
+        WHEN 'PB' THEN 'PUBLIC'
+        WHEN 'PV' THEN 'PRIVE'
+        ELSE fj.SECT_CODE
+    END                               AS EMP_CAT_LIBELLE,
     -- ── Mesures flux ───────────────────────────────────────────────────────
     -- NB_NOUVELLES_IMM : immatriculations dans la période
     COUNT(DISTINCT CASE
@@ -91,4 +97,6 @@ GROUP BY
     dp.ID_PERIODICITE,
     e.EMP_ETAT,
     tef.TEF_CODE,
-    fj.FJ_CODE
+    fj.FJ_CODE,
+    fj.FJ_CODE_SUP,
+    fj.SECT_CODE   -- CASE résolu dans le SELECT via EMP_cat_libelle
