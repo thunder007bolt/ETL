@@ -68,7 +68,7 @@ LEFT JOIN DTM.DIM_DEPARTEMENT              dpt
        ON dpt.DPT_NO        = e.DPT_NO
 -- Forme juridique
 LEFT JOIN DTM.DIM_FORME_JURIDIQUE          fj
-       ON fj.FJ_CODE        = e.EMP_FJ_CODE
+       ON fj.FJ_CODE        = e.EMP_FORME_JURIDIQUE
 -- Periodicité
 LEFT JOIN DTM.DIM_PERIODICITE_VERSEMENT    dp
        ON dp.CODE_PERIODICITE = e.EMP_PERIODICITE
