@@ -72,6 +72,13 @@ DTM_CONFIG = [
     #    ],
     #},
     {
+        "name": "travailleur",
+        "target": "DTM.DTM_TRAVAILLEUR",
+        "sql_files": [
+            {"file": "travailleur.sql", "label": "TRAVAILLEUR"},
+        ],
+    },
+    {
         "name": "immatriculation_emp",
         "target": "DTM.DTM_IMM_EMPLOYEUR",
         "sql_files": [
