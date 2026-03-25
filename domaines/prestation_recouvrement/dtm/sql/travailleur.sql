@@ -13,6 +13,7 @@ contrat_actif AS (
                ) rn
         FROM DWH.FAIT_EMPLOI em
         WHERE em.EM_DATE_FIN IS NULL
+          AND em.CLICHE = :1
     )
     WHERE rn = 1
 ),
@@ -50,7 +51,7 @@ flux_imm AS (
               BETWEEN tar.INF AND tar.SUP
 
     WHERE tr.TR_DATE_IMM IS NOT NULL
-      AND TRUNC(tr.TR_DATE_IMM,'MM') = TRUNC(TO_DATE(:1,'MMYYYY'),'MM')
+      AND tr.CLICHE = :1
 
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD')),
@@ -93,7 +94,7 @@ flux_mvt AS (
               BETWEEN tar.INF AND tar.SUP
     WHERE em.EM_DATE_FIN IS NOT NULL
       AND em.EM_MOTIF_SORTIE IS NOT NULL
-      AND TRUNC(em.EM_DATE_FIN,'MM') = TRUNC(TO_DATE(:1,'MMYYYY'),'MM')
+      AND em.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD')),
         sp.DR_NO,
@@ -123,7 +124,7 @@ flux_sal AS (
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
               BETWEEN tar.INF AND tar.SUP
     CROSS JOIN USER_DWH.PARAMETRE_GLOBAL pg
-    WHERE dn.PER_ID = TO_NUMBER(TO_CHAR(TO_DATE(:1,'MMYYYY'),'YYYYMM'))
+    WHERE dn.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(
             TO_DATE(TO_CHAR(dn.PER_ID),'YYYYMM'),'MM'),'YYYYMMDD')),
