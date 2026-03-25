@@ -25,7 +25,9 @@ flux_imm AS (
         tr.SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
-        emp.EMP_FORME_JURIDIQUE,
+        fj.FJ_CODE                                                  AS EMP_FJ_CODE,
+        fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
+        fj.SECT_CODE,
         COUNT(DISTINCT tr.TR_ID)                                    AS NB_IMM,
         COUNT(DISTINCT CASE WHEN tr.TR_ETAT = 'A'
               THEN tr.TR_ID END)                                    AS NB_ACTIFS
@@ -36,6 +38,9 @@ flux_imm AS (
 
     LEFT JOIN DWH.FAIT_EMPLOYEUR emp
            ON emp.EMP_ID = ca.EMP_ID
+
+    LEFT JOIN DTM.DIM_FORME_JURIDIQUE fj
+           ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
 
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp
            ON sp.SP_NO = tr.SP_NO
@@ -53,7 +58,9 @@ flux_imm AS (
         tr.SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
-        emp.EMP_FORME_JURIDIQUE
+        fj.FJ_CODE,
+        fj.FJ_CODE_SUP,
+        fj.SECT_CODE
 ),
 
 -- ── CTE 3 : mouvements ───────────────────────────────────────────────────
@@ -149,7 +156,13 @@ SELECT
     m.NB_AUT                                    AS TR_AUTRES,
     sl.MASSE_PLAFON                             AS MASSE_SAL_PLAFON,
     sl.MASSE_BRUT                               AS MASSE_SAL_NON_PLAFON,
-    i.EMP_FORME_JURIDIQUE,
+    i.EMP_FJ_CODE,
+    i.EMP_FJ_CODE_SUP,
+    CASE i.SECT_CODE
+        WHEN 'PB' THEN 'PUBLIC'
+        WHEN 'PV' THEN 'PRIVE'
+        ELSE i.SECT_CODE
+    END                                         AS EMP_CAT_LIBELLE,
     :1                                          AS CLICHE
 FROM flux_imm i
 LEFT JOIN flux_mvt m
