@@ -24,6 +24,7 @@ premier_deb_nat AS (
         MIN(deb.DEB_DATE_INSERT)      AS DEB_DATE_INSERT
     FROM  DWH.FAIT_DEBOURS deb
     WHERE deb.DEB_TYPE = 'RB'
+      AND deb.CLICHE   = :1
     GROUP BY deb.DOS_CODE
 ),
 
@@ -36,6 +37,7 @@ mois_cotises AS (
         MAX(pe.PE_MOIS_COTISATION)   AS PE_MOIS_COTISATION,
         MAX(pe.PE_DATE_NOTIFICATION) AS PE_DATE_NOTIFICATION
     FROM  DWH.FAIT_PRESTATION_ESP pe
+    WHERE pe.CLICHE = :1
     GROUP BY pe.DOS_CODE
 ),
 
@@ -77,6 +79,7 @@ base AS (
                  FROM  DWH.FAIT_LIEN lien
                  WHERE lien.IND_ID_1 = dos.IND_ID
                    AND lien.LN_ACTIF = 'O'
+                   AND lien.CLICHE   = :1
                    AND ROWNUM = 1),
                 'TIT'
             )
@@ -121,11 +124,13 @@ base AS (
     FROM      DWH.FAIT_DOSSIER            dos
     JOIN      DWH.FAIT_INDIVIDU           ind
         ON    ind.IND_ID    = dos.IND_ID
+        AND   ind.CLICHE    = :1
     LEFT JOIN mois_cotises                mc
         ON    mc.DOS_CODE   = dos.DOS_CODE
     LEFT JOIN (
         SELECT DOS_CODE, MIN(RD_DATE_RECEPTION) AS RD_DATE_RECEPTION
         FROM   DWH.FAIT_RECEPTION_DOSSIER
+        WHERE  CLICHE = :1
         GROUP BY DOS_CODE
     )                                     rd
         ON    rd.DOS_CODE   = dos.DOS_CODE

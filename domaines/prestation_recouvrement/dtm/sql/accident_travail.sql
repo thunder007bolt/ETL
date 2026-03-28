@@ -18,6 +18,7 @@ montants_at AS (
         SUM(CASE WHEN deb.TPE_CODE = 'RV' THEN deb.DEB_MONTANT ELSE 0 END) AS MONTANT_RENTE
     FROM DWH.FAIT_DEBOURS deb
     WHERE deb.TPE_CODE IN ('IJ', 'RV')
+      AND deb.CLICHE   = :1
     GROUP BY deb.DOS_CODE
 ),
 -- ── Base sinistres AT/MP enrichis ─────────────────────────────────────────────
@@ -65,6 +66,7 @@ base AS (
             MAX(PE_SAL_MOYEN_ASSU_VOL)  AS PE_SAL_MOYEN_ASSU_VOL,
             MAX(PE_MT_ANNUEL_ME_COL)    AS PE_MT_ANNUEL_ME_COL
         FROM DWH.FAIT_PRESTATION_ESP
+        WHERE CLICHE = :1
         GROUP BY DOS_CODE
     ) pe  ON pe.DOS_CODE  = sin.DOS_CODE
     LEFT JOIN montants_at mat ON mat.DOS_CODE = sin.DOS_CODE

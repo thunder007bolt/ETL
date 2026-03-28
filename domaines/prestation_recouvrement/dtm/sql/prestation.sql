@@ -93,14 +93,15 @@ FROM (
                      END, 'Titulaire')
         END                                                         AS LIBELLE_LN_TYPE
     FROM      DWH.FAIT_DEBOURS              deb
-    LEFT JOIN DWH.FAIT_DOSSIER              dos ON dos.DOS_CODE = deb.DOS_CODE
+    LEFT JOIN DWH.FAIT_DOSSIER              dos ON dos.DOS_CODE = deb.DOS_CODE AND dos.CLICHE = :1
     LEFT JOIN DTM.DIM_LIEU_PAIEMENT         lp  ON lp.LP_NO    = dos.LP_NO
-    LEFT JOIN DWH.FAIT_EFFET                efp ON efp.EFP_ID   = deb.EFP_ID
-    LEFT JOIN DWH.FAIT_INDIVIDU             ind ON ind.IND_ID   = efp.IND_ID_BENEF
+    LEFT JOIN DWH.FAIT_EFFET                efp ON efp.EFP_ID   = deb.EFP_ID  AND efp.CLICHE = :1
+    LEFT JOIN DWH.FAIT_INDIVIDU             ind ON ind.IND_ID   = efp.IND_ID_BENEF AND ind.CLICHE = :1
     LEFT JOIN (
         SELECT DOS_CODE, TPE_CODE,
                MAX(PE_MOIS_COTISATION) AS PE_MOIS_COTISATION
         FROM   DWH.FAIT_PRESTATION_ESP
+        WHERE  CLICHE = :1
         GROUP BY DOS_CODE, TPE_CODE
     )                                       pe  ON pe.DOS_CODE  = deb.DOS_CODE
                                                AND pe.TPE_CODE  = deb.TPE_CODE
@@ -108,6 +109,7 @@ FROM (
         SELECT IND_ID_1, IND_ID_2, MIN(LN_TYPE) AS LN_TYPE
         FROM   DWH.FAIT_LIEN
         WHERE  LN_ACTIF = 'O'
+          AND  CLICHE   = :1
         GROUP BY IND_ID_1, IND_ID_2
     )                                       lg  ON lg.IND_ID_1  = dos.IND_ID
                                                AND lg.IND_ID_2  = efp.IND_ID_BENEF

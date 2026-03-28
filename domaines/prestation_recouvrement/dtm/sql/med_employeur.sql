@@ -80,7 +80,8 @@ cot_agg AS (
         FROM med_agg
     ) mf ON  mf.EMP_ID = pc.EMP_ID
          AND pc.PER_ID BETWEEN NVL(mf.PER_DU_MIN, 0) AND NVL(mf.PER_AU_MAX, 999999)
-    LEFT JOIN DWH.FAIT_TRANSACTION_COTISATION tx ON tx.PECO_ID = pc.PECO_ID
+    LEFT JOIN DWH.FAIT_TRANSACTION_COTISATION tx ON tx.PECO_ID = pc.PECO_ID AND tx.CLICHE = :1
+    WHERE pc.CLICHE = :1
     GROUP BY pc.EMP_ID
 )
 -- ── Requête principale ─────────────────────────────────────────
@@ -141,7 +142,7 @@ SELECT
     -- ── CLICHE ───────────────────────────────────────────────────
     ma.CLICHE                                                       AS CLICHE
 FROM med_agg                              ma
-LEFT JOIN DWH.FAIT_EMPLOYEUR              e   ON  e.EMP_ID  = ma.EMP_ID
+LEFT JOIN DWH.FAIT_EMPLOYEUR              e   ON  e.EMP_ID  = ma.EMP_ID AND e.CLICHE = :1
 LEFT JOIN DTM.DIM_SECTEUR_ACTIVITE        sa  ON  sa.SA_NO  = e.SA_NO
 LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF        tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN DTM.DIM_DIRECTION_REGIONALE     dr  ON  dr.DR_NO  = ma.DR_NO

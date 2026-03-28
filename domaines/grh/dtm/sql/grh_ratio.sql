@@ -1,5 +1,5 @@
 -- DTM_GRH_RATIO — Ratios d'encadrement par exercice (effectif actif au 31/12)
--- :1 = CLICHE (MMYYYY) — étiquette les lignes insérées (pas de filtre snapshot : agrégation toutes périodes)
+-- :1 = CLICHE (MMYYYY) — filtre le snapshot DWH source et étiquette les lignes insérées
 WITH
 -- ── Années valides ─────────────────────────────────────────────────────────
 ANNEES AS (
@@ -8,7 +8,8 @@ ANNEES AS (
         EXTRACT(YEAR FROM DATE_DEBUT) * 10000 + 1231                    AS ID_TEMPS,
         TO_DATE(EXTRACT(YEAR FROM DATE_DEBUT) || '-12-31', 'YYYY-MM-DD') AS DT_REF
     FROM DWH.FAIT_GRH_SITUATION
-    WHERE DATE_DEBUT IS NOT NULL
+    WHERE CLICHE     = :1
+      AND DATE_DEBUT IS NOT NULL
       AND EXTRACT(YEAR FROM DATE_DEBUT) BETWEEN 1960 AND 2099
 ),
 -- ── Effectif actif au 31/12 par exercice ──────────────────────────────────
@@ -30,6 +31,7 @@ EFFECTIF AS (
     INNER JOIN DWH.FAIT_GRH_SITUATION s
         ON  s.DATE_DEBUT <= a.DT_REF
         AND (s.DATE_FIN IS NULL OR s.DATE_FIN > a.DT_REF)
+        AND s.CLICHE     = :1
     WHERE s.STATUT_EMPLOYE = 'A'
       AND UPPER(TRIM(s.NATURE_SITUATION))
               IN ('AVA','CLA','AFF','NOM','REC','MUT','PRO','RET','BON')

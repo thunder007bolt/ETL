@@ -17,6 +17,7 @@ montants_recouvres AS (
     FROM     DWH.FAIT_DEBOURS           deb
     WHERE    deb.DEB_MONTANT < 0
       AND    deb.DEB_STATUT  = 'D'
+      AND    deb.CLICHE      = :1
     GROUP BY deb.DOS_CODE
 ),
 
@@ -57,8 +58,8 @@ base AS (
         NVL(recouv.MONTANT_RECOUVRE, 0)                 AS MONTANT_RECOUVRE
 
     FROM      DWH.FAIT_AJUSTEMENT         aj
-    JOIN      DWH.FAIT_DOSSIER            dos ON dos.DOS_CODE = aj.DOS_CODE
-    JOIN      DWH.FAIT_INDIVIDU           ind ON ind.IND_ID   = aj.IND_ID
+    JOIN      DWH.FAIT_DOSSIER            dos ON dos.DOS_CODE = aj.DOS_CODE AND dos.CLICHE = :1
+    JOIN      DWH.FAIT_INDIVIDU           ind ON ind.IND_ID   = aj.IND_ID   AND ind.CLICHE = :1
     LEFT JOIN montants_recouvres          recouv ON recouv.DOS_CODE = aj.DOS_CODE
 
     WHERE aj.TAJ_CODE IN ('TP', 'TP-CONV', 'REM-TP')

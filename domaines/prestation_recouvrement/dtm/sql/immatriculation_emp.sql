@@ -24,6 +24,7 @@ flux_imm AS (
            ON di.EMP_ID        = e.EMP_ID
           AND di.DI_TYPE       = 'N'
           AND di.TR_NOM_PRENOM IS NULL
+          AND di.CLICHE        = :1
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL       sp
            ON sp.SP_NO         = e.SP_NO
     LEFT JOIN DTM.DIM_PERIODICITE_VERSEMENT    dp
@@ -66,7 +67,8 @@ flux_rad AS (
            ON dp.CODE_PERIODICITE = e.EMP_PERIODICITE
     LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF         tef
            ON e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
-    WHERE di.DI_TYPE           = 'R'
+    WHERE di.CLICHE            = :1
+      AND di.DI_TYPE           = 'R'
       AND di.DI_DATE_RECEPTION IS NOT NULL
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')),

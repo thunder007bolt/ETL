@@ -39,6 +39,7 @@ flux_imm AS (
 
     LEFT JOIN DWH.FAIT_EMPLOYEUR emp
            ON emp.EMP_ID = ca.EMP_ID
+          AND emp.CLICHE = :1
 
     LEFT JOIN DTM.DIM_FORME_JURIDIQUE fj
            ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
@@ -86,8 +87,8 @@ flux_mvt AS (
                    ('RETRAITE','DECES','LICENCIEMENT','DEMISSION')
               THEN em.TR_ID END)                                    AS NB_AUT
     FROM DWH.FAIT_EMPLOI em
-    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr        ON tr.TR_ID = em.TR_ID
-    LEFT JOIN DWH.FAIT_EMPLOYEUR e           ON e.EMP_ID = em.EMP_ID
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr        ON tr.TR_ID = em.TR_ID AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR e           ON e.EMP_ID = em.EMP_ID AND e.CLICHE = :1
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO = e.SP_NO
     LEFT JOIN DTM.DIM_TRANCHE_AGE tar
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
@@ -116,15 +117,16 @@ flux_sal AS (
             pg.PG_SALAIRE_MAX))                                     AS MASSE_PLAFON,
         SUM(NVL(s.SAL_MONTANT_BRUT,0))                             AS MASSE_BRUT
     FROM DWH.FAIT_SALAIRE s
-    INNER JOIN DWH.FAIT_DECLARATION_NOMINATIVE dn ON dn.DN_ID = s.DN_ID
-    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr             ON tr.TR_ID = s.TR_ID
-    LEFT JOIN DWH.FAIT_EMPLOYEUR e                ON e.EMP_ID = dn.EMP_ID
+    INNER JOIN DWH.FAIT_DECLARATION_NOMINATIVE dn ON dn.DN_ID = s.DN_ID AND dn.CLICHE = :1
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr             ON tr.TR_ID = s.TR_ID AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR e                ON e.EMP_ID = dn.EMP_ID AND e.CLICHE = :1
     LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp        ON sp.SP_NO = e.SP_NO
     LEFT JOIN DTM.DIM_TRANCHE_AGE tar
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
               BETWEEN tar.INF AND tar.SUP
     CROSS JOIN DTM.DIM_PARAMETRE_GLOBAL pg
-    WHERE dn.CLICHE = :1
+    WHERE s.CLICHE  = :1
+      AND dn.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(
             TO_DATE(TO_CHAR(dn.PER_ID),'YYYYMM'),'MM'),'YYYYMMDD')),
