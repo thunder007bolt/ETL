@@ -57,44 +57,94 @@ class FactsPipeline:
 
     _FETCH = 100_000
 
+    @staticmethod
+    def _compute_rowid_chunks(cursor, table: str, chunk_size: int) -> list:
+        """
+        Scan unique O(n) sur les ROWID de la table source pour calculer
+        les bornes (min_rowid, max_rowid) de chaque chunk de chunk_size lignes.
+        Très rapide : Oracle ne lit que les ROWID (8 octets/ligne), pas les données.
+        """
+        cursor.execute(f"""
+            SELECT MIN(RID), MAX(RID)
+            FROM (
+                SELECT ROWID AS RID,
+                       CEIL(ROWNUM / :1) AS chunk_num
+                FROM {table}
+            )
+            GROUP BY chunk_num
+            ORDER BY MIN(RID)
+        """, [chunk_size])
+        return cursor.fetchall()
+
     def _load_one(self, src_conn, loader, cfg: dict) -> int:
         target = cfg["target"]
         import gc
         gc.collect()
-        
+
         try:
-            sql    = load_sql(_SQL_DIR, cfg["sql_file"])
-            cursor = src_conn.cursor()
-            cursor.arraysize = self._FETCH
-            cursor.execute(sql)
-
-            description  = cursor.description
-            columns      = [col[0].upper() for col in description]
+            sql          = load_sql(_SQL_DIR, cfg["sql_file"])
             transform_fn = cfg.get("transform_fn")
+            rowid_table  = cfg.get("rowid_chunk_table")
 
-            now     = datetime.now()
-            # period values injected into every batch row
-            cliche = f"{now.month:02d}{now.year}"   # MMYYYY ex. "032026"
+            now    = datetime.now()
+            cliche = f"{now.month:02d}{now.year}"   # MMYYYY ex. "042026"
 
-
-            # delete rows matching the new period columns
             ods = settings.ODS_SCHEMA
             if ods:
-                loader.archive_and_truncate(target, ods,cliche)
+                loader.archive_and_truncate(target, ods, cliche)
             else:
                 loader.delete_cliche(target, cliche)
 
-            total = 0
-            while True:
-                rows = cursor.fetchmany(self._FETCH)
-                if not rows:
-                    break
-                df = pd.DataFrame(rows, columns=columns)
-                df = _cast_oracle_types(df, description)
-                df["CLICHE"] = cliche
-                if transform_fn is not None:
-                    df = transform_fn(df)
-                total += loader.insert_chunk(target, df)
+            description = None
+            columns     = None
+            total       = 0
+
+            if rowid_table:
+                # --- Chunking ROWID (grandes tables) ---
+                # Calcul des bornes en une seule passe sur la table source.
+                # Chaque chunk interroge exactement chunk_size lignes via ROWID
+                # → curseur de quelques secondes, pas de risque ORA-01555.
+                pre    = src_conn.cursor()
+                chunks = self._compute_rowid_chunks(pre, rowid_table, self._FETCH)
+                pre.close()
+                logger.info(f"[{target}] {len(chunks)} chunks ROWID à traiter")
+
+                for min_rid, max_rid in chunks:
+                    cursor = src_conn.cursor()
+                    cursor.execute(sql, {"min_rid": min_rid, "max_rid": max_rid})
+                    if description is None:
+                        description = cursor.description
+                        columns     = [col[0].upper() for col in description]
+                    rows = cursor.fetchall()
+                    cursor.close()
+                    if not rows:
+                        continue
+                    df = pd.DataFrame(rows, columns=columns)
+                    df = _cast_oracle_types(df, description)
+                    df["CLICHE"] = cliche
+                    if transform_fn is not None:
+                        df = transform_fn(df)
+                    total += loader.insert_chunk(target, df)
+                    logger.info(f"[{target}] {total} lignes insérées")
+
+            else:
+                # --- fetchmany (petites/moyennes tables) ---
+                cursor = src_conn.cursor()
+                cursor.arraysize = self._FETCH
+                cursor.execute(sql)
+                description = cursor.description
+                columns     = [col[0].upper() for col in description]
+
+                while True:
+                    rows = cursor.fetchmany(self._FETCH)
+                    if not rows:
+                        break
+                    df = pd.DataFrame(rows, columns=columns)
+                    df = _cast_oracle_types(df, description)
+                    df["CLICHE"] = cliche
+                    if transform_fn is not None:
+                        df = transform_fn(df)
+                    total += loader.insert_chunk(target, df)
 
             logger.info(f"[{target}] {total} lignes chargées")
             return total

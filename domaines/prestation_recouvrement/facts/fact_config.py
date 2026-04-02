@@ -111,8 +111,9 @@ FACT_CONFIG = [
         "target":     "FAIT_BORDEREAU_PREST",
     },
     {
-        "sql_file":   "debours.sql",
-        "target":     "FAIT_DEBOURS",
+        "sql_file":          "debours.sql",
+        "target":            "FAIT_DEBOURS",
+        "rowid_chunk_table": "DEBOURS",
     },
     {
         "sql_file":   "declarat_groupe_assurance.sql",
