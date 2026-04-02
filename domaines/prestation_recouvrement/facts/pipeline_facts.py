@@ -145,6 +145,8 @@ class FactsPipeline:
                     if transform_fn is not None:
                         df = transform_fn(df)
                     total += loader.insert_chunk(target, df)
+                    del df, rows
+                    gc.collect()
 
             logger.info(f"[{target}] {total} lignes chargées")
             return total
