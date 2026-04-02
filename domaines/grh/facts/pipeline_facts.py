@@ -83,16 +83,20 @@ class FactsPipeline:
                 loader.delete_cliche(target, cliche)
 
             total = 0
-            while True:
-                rows = cursor.fetchmany(self._FETCH)
-                if not rows:
-                    break
-                df = pd.DataFrame(rows, columns=columns)
-                df = _cast_oracle_types(df, description)
-                df["CLICHE"] = cliche
-                if transform_fn is not None:
-                    df = transform_fn(df)
-                total += loader.insert_chunk(target, df)
+            loader.disable_indexes(target)
+            try:
+                while True:
+                    rows = cursor.fetchmany(self._FETCH)
+                    if not rows:
+                        break
+                    df = pd.DataFrame(rows, columns=columns)
+                    df = _cast_oracle_types(df, description)
+                    df["CLICHE"] = cliche
+                    if transform_fn is not None:
+                        df = transform_fn(df)
+                    total += loader.insert_chunk(target, df)
+            finally:
+                loader.rebuild_indexes(target)
 
             logger.info(f"[{target}] {total} lignes chargées")
             return total
@@ -114,3 +118,9 @@ class _GenericFactLoader(BaseLoader):
 
     def insert_chunk(self, table: str, df: pd.DataFrame) -> int:
         return self._bulk_insert(table, df)
+
+    def disable_indexes(self, table: str) -> None:
+        self._disable_indexes(table)
+
+    def rebuild_indexes(self, table: str) -> None:
+        self._rebuild_indexes(table)

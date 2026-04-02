@@ -141,7 +141,12 @@ def main():
                     loader.archive_and_truncate(target, ods, cliche)
                 else:
                     loader.delete_cliche(target, cliche)
-                count = loader.insert_chunk(target, df)
+                
+                loader.disable_indexes(target)
+                try:
+                    count = loader.insert_chunk(target, df)
+                finally:
+                    loader.rebuild_indexes(target)
                 logger.info(f"[L] {target} — {count} lignes chargées")
 
         # ── ETL complet en mémoire (sans --step) ────────────────────────────

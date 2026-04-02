@@ -99,54 +99,59 @@ class FactsPipeline:
             columns     = None
             total       = 0
 
-            if rowid_table:
-                # --- Chunking ROWID (grandes tables) ---
-                # Calcul des bornes en une seule passe sur la table source.
-                # Chaque chunk interroge exactement chunk_size lignes via ROWID
-                # → curseur de quelques secondes, pas de risque ORA-01555.
-                pre    = src_conn.cursor()
-                chunks = self._compute_rowid_chunks(pre, rowid_table, self._FETCH)
-                pre.close()
-                logger.info(f"[{target}] {len(chunks)} chunks ROWID à traiter")
+            loader.disable_indexes(target)
+            try:
+                if rowid_table:
+                    # --- Chunking ROWID (grandes tables) ---
+                    # Calcul des bornes en une seule passe sur la table source.
+                    # Chaque chunk interroge exactement chunk_size lignes via ROWID
+                    # → curseur de quelques secondes, pas de risque ORA-01555.
+                    pre    = src_conn.cursor()
+                    chunks = self._compute_rowid_chunks(pre, rowid_table, self._FETCH)
+                    pre.close()
+                    logger.info(f"[{target}] {len(chunks)} chunks ROWID à traiter")
 
-                for min_rid, max_rid in chunks:
+                    for min_rid, max_rid in chunks:
+                        cursor = src_conn.cursor()
+                        cursor.execute(sql, {"min_rid": min_rid, "max_rid": max_rid})
+                        if description is None:
+                            description = cursor.description
+                            columns     = [col[0].upper() for col in description]
+                        rows = cursor.fetchall()
+                        cursor.close()
+                        if not rows:
+                            continue
+                        df = pd.DataFrame(rows, columns=columns)
+                        df = _cast_oracle_types(df, description)
+                        df["CLICHE"] = cliche
+                        if transform_fn is not None:
+                            df = transform_fn(df)
+                        total += loader.insert_chunk(target, df)
+                        logger.info(f"[{target}] {total} lignes insérées")
+
+                else:
+                    # --- fetchmany (petites/moyennes tables) ---
                     cursor = src_conn.cursor()
-                    cursor.execute(sql, {"min_rid": min_rid, "max_rid": max_rid})
-                    if description is None:
-                        description = cursor.description
-                        columns     = [col[0].upper() for col in description]
-                    rows = cursor.fetchall()
-                    cursor.close()
-                    if not rows:
-                        continue
-                    df = pd.DataFrame(rows, columns=columns)
-                    df = _cast_oracle_types(df, description)
-                    df["CLICHE"] = cliche
-                    if transform_fn is not None:
-                        df = transform_fn(df)
-                    total += loader.insert_chunk(target, df)
-                    logger.info(f"[{target}] {total} lignes insérées")
+                    cursor.arraysize = self._FETCH
+                    cursor.execute(sql)
+                    description = cursor.description
+                    columns     = [col[0].upper() for col in description]
 
-            else:
-                # --- fetchmany (petites/moyennes tables) ---
-                cursor = src_conn.cursor()
-                cursor.arraysize = self._FETCH
-                cursor.execute(sql)
-                description = cursor.description
-                columns     = [col[0].upper() for col in description]
+                    while True:
+                        rows = cursor.fetchmany(self._FETCH)
+                        if not rows:
+                            break
+                        df = pd.DataFrame(rows, columns=columns)
+                        df = _cast_oracle_types(df, description)
+                        df["CLICHE"] = cliche
+                        if transform_fn is not None:
+                            df = transform_fn(df)
+                        total += loader.insert_chunk(target, df)
+                        del df, rows
+                        gc.collect()
 
-                while True:
-                    rows = cursor.fetchmany(self._FETCH)
-                    if not rows:
-                        break
-                    df = pd.DataFrame(rows, columns=columns)
-                    df = _cast_oracle_types(df, description)
-                    df["CLICHE"] = cliche
-                    if transform_fn is not None:
-                        df = transform_fn(df)
-                    total += loader.insert_chunk(target, df)
-                    del df, rows
-                    gc.collect()
+            finally:
+                loader.rebuild_indexes(target)
 
             logger.info(f"[{target}] {total} lignes chargées")
             return total
@@ -168,3 +173,9 @@ class _GenericFactLoader(BaseLoader):
 
     def insert_chunk(self, table: str, df: pd.DataFrame) -> int:
         return self._bulk_insert(table, df)
+
+    def disable_indexes(self, table: str) -> None:
+        self._disable_indexes(table)
+
+    def rebuild_indexes(self, table: str) -> None:
+        self._rebuild_indexes(table)

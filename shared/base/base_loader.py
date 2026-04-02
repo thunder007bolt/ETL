@@ -383,6 +383,68 @@ class BaseLoader(ABC):
         logger.info(f"[DWH] {table} TRUNCATE OK")
 
         return archived
+
+    # ------------------------------------------------------------------
+    # GESTION DES INDEX (BULK LOAD)
+    # ------------------------------------------------------------------
+    def _disable_indexes(self, table: str):
+        """
+        Désactive (UNUSABLE) tous les index non-uniques de la table.
+        Indispensable pour de bonnes performances en INSERT /*+ APPEND */.
+        """
+        schema, tbl = (table.split(".", 1) if "." in table else (None, table))
+        cursor = self.conn.cursor()
+        
+        if schema:
+            cursor.execute("""
+                SELECT index_name FROM all_indexes 
+                WHERE owner = :1 AND table_name = :2 
+                AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
+            """, [schema.upper(), tbl.upper()])
+        else:
+            cursor.execute("""
+                SELECT index_name FROM user_indexes 
+                WHERE table_name = :1 
+                AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
+            """, [tbl.upper()])
+            
+        indexes = [r[0] for r in cursor.fetchall()]
+        for idx in indexes:
+            try:
+                idx_name = f"{schema}.{idx}" if schema else idx
+                cursor.execute(f"ALTER INDEX {idx_name} UNUSABLE")
+                logger.info(f"[INDEX] {idx_name} disabled (UNUSABLE).")
+            except Exception as e:
+                logger.warning(f"[INDEX] Impossible de désactiver {idx_name}: {e}")
+
+    def _rebuild_indexes(self, table: str):
+        """
+        Reconstruit tous les index en état UNUSABLE pour la table.
+        À appeler dans un bloc finally après l'insertion batch.
+        """
+        schema, tbl = (table.split(".", 1) if "." in table else (None, table))
+        cursor = self.conn.cursor()
+        
+        if schema:
+            cursor.execute("""
+                SELECT index_name FROM all_indexes 
+                WHERE owner = :1 AND table_name = :2 AND status = 'UNUSABLE'
+            """, [schema.upper(), tbl.upper()])
+        else:
+            cursor.execute("""
+                SELECT index_name FROM user_indexes 
+                WHERE table_name = :1 AND status = 'UNUSABLE'
+            """, [tbl.upper()])
+            
+        indexes = [r[0] for r in cursor.fetchall()]
+        for idx in indexes:
+            try:
+                idx_name = f"{schema}.{idx}" if schema else idx
+                cursor.execute(f"ALTER INDEX {idx_name} REBUILD")
+                logger.info(f"[INDEX] {idx_name} rebuilt.")
+            except Exception as e:
+                logger.warning(f"[INDEX] Impossible de reconstruire {idx_name}: {e}")
+
    # ------------------------------------------------------------------
     def _delete_insert_period(self, table: str, df: pd.DataFrame,
                                period_cols: list | None = None,
