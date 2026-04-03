@@ -49,13 +49,12 @@ class DimsPipeline:
         gc.collect()
 
         try:
-            sql    = load_sql(_SQL_DIR, sql_file)
-            cursor = src_conn.cursor()
-            cursor.execute(sql)
-
-            columns = [col[0].upper() for col in cursor.description]
-            rows    = cursor.fetchall()
-            df      = pd.DataFrame(rows, columns=columns)
+            sql = load_sql(_SQL_DIR, sql_file)
+            with src_conn.cursor() as cursor:
+                cursor.execute(sql)
+                columns = [col[0].upper() for col in cursor.description]
+                rows    = cursor.fetchall()
+            df = pd.DataFrame(rows, columns=columns)
 
             if df.empty:
                 logger.info(f"[{target}] aucune donnée")

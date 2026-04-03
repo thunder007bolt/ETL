@@ -131,24 +131,24 @@ class FactsPipeline:
 
                 else:
                     # --- fetchmany (petites/moyennes tables) ---
-                    cursor = src_conn.cursor()
-                    cursor.arraysize = self._FETCH
-                    cursor.execute(sql)
-                    description = cursor.description
-                    columns     = [col[0].upper() for col in description]
+                    with src_conn.cursor() as cursor:
+                        cursor.arraysize = self._FETCH
+                        cursor.execute(sql)
+                        description = cursor.description
+                        columns     = [col[0].upper() for col in description]
 
-                    while True:
-                        rows = cursor.fetchmany(self._FETCH)
-                        if not rows:
-                            break
-                        df = pd.DataFrame(rows, columns=columns)
-                        df = _cast_oracle_types(df, description)
-                        df["CLICHE"] = cliche
-                        if transform_fn is not None:
-                            df = transform_fn(df)
-                        total += loader.insert_chunk(target, df)
-                        del df, rows
-                        gc.collect()
+                        while True:
+                            rows = cursor.fetchmany(self._FETCH)
+                            if not rows:
+                                break
+                            df = pd.DataFrame(rows, columns=columns)
+                            df = _cast_oracle_types(df, description)
+                            df["CLICHE"] = cliche
+                            if transform_fn is not None:
+                                df = transform_fn(df)
+                            total += loader.insert_chunk(target, df)
+                            del df, rows
+                            gc.collect()
 
             finally:
                 loader.rebuild_indexes(target)

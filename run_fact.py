@@ -95,6 +95,7 @@ def main():
                     writer.write_table(table)
                     total += len(chunk)
             finally:
+                cursor.close()
                 if writer:
                     writer.close()
             logger.info(f"[E] {target} — {total} lignes extraites → {path}")

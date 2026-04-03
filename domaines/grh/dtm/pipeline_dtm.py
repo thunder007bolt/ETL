@@ -88,32 +88,32 @@ class DtmPipeline:
             for sql_entry in cfg["sql_files"]:
                 sql    = load_sql(_SQL_DIR, sql_entry["file"])
                 logger.info(f"[{target}][{sql_entry['label']}] Exécution de la requête SQL...")
-                cursor = conn.cursor()
-                cursor.arraysize = self._FETCH
-                cursor.execute(sql, [cliche])
-                logger.info(f"[{target}][{sql_entry['label']}] Requête exécutée, début récupération des données...")
+                with conn.cursor() as cursor:
+                    cursor.arraysize = self._FETCH
+                    cursor.execute(sql, [cliche])
+                    logger.info(f"[{target}][{sql_entry['label']}] Requête exécutée, début récupération des données...")
 
-                description = cursor.description
-                columns     = [col[0].upper() for col in description]
+                    description = cursor.description
+                    columns     = [col[0].upper() for col in description]
 
-                while True:
-                    rows = cursor.fetchmany(self._FETCH)
-                    if not rows:
-                        break
-                    df    = pd.DataFrame(rows, columns=columns)
-                    df    = _cast_oracle_types(df, description)
-                    try:
-                        chunk_size = loader.insert_chunk(target, df)
-                    except Exception:
-                        logger.error(f"[{target}] Chunk {total}–{total+len(df)} — valeurs max par colonne :")
-                        for col in df.columns:
-                            try:
-                                logger.error(f"  {col}: min={df[col].min()!r}  max={df[col].max()!r}")
-                            except Exception:
-                                pass
-                        raise
-                    total += chunk_size
-                    logger.info(f"[{target}][{sql_entry['label']}] Chunk traité : {chunk_size} lignes (total: {total})")
+                    while True:
+                        rows = cursor.fetchmany(self._FETCH)
+                        if not rows:
+                            break
+                        df    = pd.DataFrame(rows, columns=columns)
+                        df    = _cast_oracle_types(df, description)
+                        try:
+                            chunk_size = loader.insert_chunk(target, df)
+                        except Exception:
+                            logger.error(f"[{target}] Chunk {total}–{total+len(df)} — valeurs max par colonne :")
+                            for col in df.columns:
+                                try:
+                                    logger.error(f"  {col}: min={df[col].min()!r}  max={df[col].max()!r}")
+                                except Exception:
+                                    pass
+                            raise
+                        total += chunk_size
+                        logger.info(f"[{target}][{sql_entry['label']}] Chunk traité : {chunk_size} lignes (total: {total})")
 
                 logger.info(f"[{target}][{sql_entry['label']}] {total} lignes chargées")
 

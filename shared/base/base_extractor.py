@@ -56,10 +56,10 @@ class BaseExtractor(ABC):
 
     def _fetch(self, sql: str, params: list = None) -> pd.DataFrame:
         """Exécute une requête et retourne un DataFrame."""
-        cursor = self.conn.cursor()
-        cursor.execute(sql, params or [])
-        columns = [col[0].lower() for col in cursor.description]
-        rows    = cursor.fetchall()
+        with self.conn.cursor() as cursor:
+            cursor.execute(sql, params or [])
+            columns = [col[0].lower() for col in cursor.description]
+            rows    = cursor.fetchall()
         logger.info(f"[{self.PIPELINE_NAME}] {len(rows)} lignes extraites")
         return pd.DataFrame(rows, columns=columns)
 

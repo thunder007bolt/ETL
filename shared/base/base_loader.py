@@ -79,13 +79,13 @@ class BaseLoader(ABC):
         ins_vals  = [f"{s}.NEXTVAL" for s in seq_cols.values()] \
                   + [f":{i+1}" for i in range(len(df_cols))]
 
-        sql    = (f"INSERT /*+ APPEND */ INTO {table}"
-                  f" ({', '.join(ins_cols)}) VALUES ({', '.join(ins_vals)})")
-        cursor = self.conn.cursor()
-        total  = len(df)
+        sql   = (f"INSERT /*+ APPEND */ INTO {table}"
+                 f" ({', '.join(ins_cols)}) VALUES ({', '.join(ins_vals)})")
+        total = len(df)
 
-        for start in range(0, total, self._MERGE_BATCH):
-            cursor.executemany(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))
+        with self.conn.cursor() as cursor:
+            for start in range(0, total, self._MERGE_BATCH):
+                cursor.executemany(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))
         self.conn.commit()
         logger.info(f"[{table}] {total} lignes insérées")
         return total
@@ -128,14 +128,14 @@ class BaseLoader(ABC):
                 INSERT ({', '.join(_ins_cols)}) VALUES ({', '.join(_ins_vals)})
         """
 
-        cursor = self.conn.cursor()
-        total  = len(df)
+        total = len(df)
 
-        for start in range(0, total, self._MERGE_BATCH):
-            chunk = df.iloc[start: start + self._MERGE_BATCH]
-            cursor.executemany(sql, _prepare(chunk))
-            self.conn.commit()
-            logger.debug(f"[{table}] MERGE {min(start + self._MERGE_BATCH, total)}/{total}")
+        with self.conn.cursor() as cursor:
+            for start in range(0, total, self._MERGE_BATCH):
+                chunk = df.iloc[start: start + self._MERGE_BATCH]
+                cursor.executemany(sql, _prepare(chunk))
+                self.conn.commit()
+                logger.debug(f"[{table}] MERGE {min(start + self._MERGE_BATCH, total)}/{total}")
 
         logger.info(f"[{table}] MERGE {total} lignes")
         return total
@@ -149,88 +149,90 @@ class BaseLoader(ABC):
         table_hash = hashlib.md5(table.upper().encode()).hexdigest()[:8]
         gtt = f"GTT_{table_hash}"
 
-        cursor = self.conn.cursor()
+        with self.conn.cursor() as cursor:
+            # user_tables only lists tables; a synonym or other object with
+            # the same name will still block CREATE TABLE with ORA-00955.  Use
+            # ALL_OBJECTS scoped to the current user to ensure the name is free.
+            cursor.execute(
+                "SELECT COUNT(*) FROM all_objects WHERE owner = USER AND object_name = :1",
+                [gtt],
+            )
+            gtt_exists = cursor.fetchone()[0] != 0
 
-        # user_tables only lists tables; a synonym or other object with
-        # the same name will still block CREATE TABLE with ORA-00955.  Use
-        # ALL_OBJECTS scoped to the current user to ensure the name is free.
-        cursor.execute(
-            "SELECT COUNT(*) FROM all_objects WHERE owner = USER AND object_name = :1",
-            [gtt],
-        )
-        if cursor.fetchone()[0] == 0:
+        if not gtt_exists:
             # Parser schéma.table
             if "." in table:
                 schema, tbl_name = table.split(".", 1)
             else:
                 schema = None
                 tbl_name = table
-            
-            # Utiliser all_tab_columns pour voir les tables d'autres schémas
-            if schema:
-                cursor.execute(
-                    """
-                    SELECT column_name, data_type, data_length,
-                           data_precision, data_scale
-                    FROM   all_tab_columns
-                    WHERE  owner = :1 AND table_name = :2
-                    ORDER  BY column_id
-                    """,
-                    [schema.upper(), tbl_name.upper()],
-                )
-            else:
-                cursor.execute(
-                    """
-                    SELECT column_name, data_type, data_length,
-                           data_precision, data_scale
-                    FROM   user_tab_columns
-                    WHERE  table_name = :1
-                    ORDER  BY column_id
-                    """,
-                    [tbl_name.upper()],
-                )
-            rows = cursor.fetchall()
-            if not rows:
-                raise RuntimeError(
-                    f"Table {table} introuvable dans all_tab_columns — "
-                    "vérifiez le schéma et les permissions."
-                )
 
-            col_defs = []
-            for col_name, dtype, length, precision, scale in rows:
-                if dtype == "NUMBER":
-                    if precision and scale is not None:
-                        col_defs.append(f"{col_name} NUMBER({precision},{scale})")
-                    elif precision:
-                        col_defs.append(f"{col_name} NUMBER({precision})")
-                    else:
-                        col_defs.append(f"{col_name} NUMBER")
-                elif dtype in ("VARCHAR2", "CHAR", "NVARCHAR2", "NCHAR"):
-                    col_defs.append(f"{col_name} {dtype}({length})")
-                elif dtype == "DATE":
-                    col_defs.append(f"{col_name} DATE")
-                elif dtype.startswith("TIMESTAMP"):
-                    col_defs.append(f"{col_name} TIMESTAMP")
-                else:
-                    col_defs.append(f"{col_name} {dtype}")
-
-            ddl = (
-                f"CREATE GLOBAL TEMPORARY TABLE {gtt} "
-                f"({', '.join(col_defs)}) ON COMMIT DELETE ROWS"
-            )
-            try:
-                cursor.execute(ddl)
-            except oracledb.DatabaseError as err:
-                msg = str(err)
-                if "ORA-00955" in msg:
-                    # object already exists (table, synonym, etc.)
-                    logger.warning(
-                        f"[GTT] {gtt} existe déjà, création ignorée."
+            with self.conn.cursor() as cursor:
+                # Utiliser all_tab_columns pour voir les tables d'autres schémas
+                if schema:
+                    cursor.execute(
+                        """
+                        SELECT column_name, data_type, data_length,
+                               data_precision, data_scale
+                        FROM   all_tab_columns
+                        WHERE  owner = :1 AND table_name = :2
+                        ORDER  BY column_id
+                        """,
+                        [schema.upper(), tbl_name.upper()],
                     )
                 else:
-                    raise
-            else:
-                logger.info(f"[GTT] {gtt} créée automatiquement.")
+                    cursor.execute(
+                        """
+                        SELECT column_name, data_type, data_length,
+                               data_precision, data_scale
+                        FROM   user_tab_columns
+                        WHERE  table_name = :1
+                        ORDER  BY column_id
+                        """,
+                        [tbl_name.upper()],
+                    )
+                rows = cursor.fetchall()
+                if not rows:
+                    raise RuntimeError(
+                        f"Table {table} introuvable dans all_tab_columns — "
+                        "vérifiez le schéma et les permissions."
+                    )
+
+                col_defs = []
+                for col_name, dtype, length, precision, scale in rows:
+                    if dtype == "NUMBER":
+                        if precision and scale is not None:
+                            col_defs.append(f"{col_name} NUMBER({precision},{scale})")
+                        elif precision:
+                            col_defs.append(f"{col_name} NUMBER({precision})")
+                        else:
+                            col_defs.append(f"{col_name} NUMBER")
+                    elif dtype in ("VARCHAR2", "CHAR", "NVARCHAR2", "NCHAR"):
+                        col_defs.append(f"{col_name} {dtype}({length})")
+                    elif dtype == "DATE":
+                        col_defs.append(f"{col_name} DATE")
+                    elif dtype.startswith("TIMESTAMP"):
+                        col_defs.append(f"{col_name} TIMESTAMP")
+                    else:
+                        col_defs.append(f"{col_name} {dtype}")
+
+                ddl = (
+                    f"CREATE GLOBAL TEMPORARY TABLE {gtt} "
+                    f"({', '.join(col_defs)}) ON COMMIT DELETE ROWS"
+                )
+                try:
+                    cursor.execute(ddl)
+                except oracledb.DatabaseError as err:
+                    msg = str(err)
+                    if "ORA-00955" in msg:
+                        # object already exists (table, synonym, etc.)
+                        logger.warning(
+                            f"[GTT] {gtt} existe déjà, création ignorée."
+                        )
+                    else:
+                        raise
+                else:
+                    logger.info(f"[GTT] {gtt} créée automatiquement.")
 
         return gtt
 
@@ -264,20 +266,20 @@ class BaseLoader(ABC):
             WHEN NOT MATCHED THEN
                 INSERT ({', '.join(_ins_cols)}) VALUES ({', '.join(_ins_vals)})
 
-        """      
-        cursor = self.conn.cursor()
-        total  = len(df)
+        """
+        total = len(df)
 
-        for start in range(0, total, self._MERGE_BATCH):
-            chunk = df.iloc[start: start + self._MERGE_BATCH]
-            cursor.executemany(insert_sql, _prepare(chunk))
-        logger.debug(f"[{table}] GTT chargée ({total} lignes)")
+        with self.conn.cursor() as cursor:
+            for start in range(0, total, self._MERGE_BATCH):
+                chunk = df.iloc[start: start + self._MERGE_BATCH]
+                cursor.executemany(insert_sql, _prepare(chunk))
+            logger.debug(f"[{table}] GTT chargée ({total} lignes)")
 
-        cursor.execute(merge_sql)
-        self.conn.commit()
+            cursor.execute(merge_sql)
+            self.conn.commit()
 
-        cursor.execute(f"DROP TABLE {gtt}")
-        logger.debug(f"[GTT] {gtt} supprimée.")
+            cursor.execute(f"DROP TABLE {gtt}")
+            logger.debug(f"[GTT] {gtt} supprimée.")
 
         logger.info(f"[{table}] MERGE via GTT {total} lignes")
         return total
@@ -297,23 +299,23 @@ class BaseLoader(ABC):
         Avec un index sur CLICHE la sélection des ROWID est un index range
         scan — rapide même sur 40 M lignes.
         """
-        cursor = self.conn.cursor()
-        total  = 0
-        sql    = (
+        total = 0
+        sql   = (
             f"DELETE FROM {table} WHERE ROWID IN ("
             f"  SELECT ROWID FROM {table}"
             f"  WHERE CLICHE = :1"
             f"  AND ROWNUM <= :2"
             f")"
         )
-        while True:
-            cursor.execute(sql, [cliche, self._DELETE_BATCH])
-            deleted = cursor.rowcount
-            self.conn.commit()
-            total += deleted
-            logger.debug(f"[{table}] DELETE batch {total} lignes (CLICHE={cliche})")
-            if deleted < self._DELETE_BATCH:
-                break
+        with self.conn.cursor() as cursor:
+            while True:
+                cursor.execute(sql, [cliche, self._DELETE_BATCH])
+                deleted = cursor.rowcount
+                self.conn.commit()
+                total += deleted
+                logger.debug(f"[{table}] DELETE batch {total} lignes (CLICHE={cliche})")
+                if deleted < self._DELETE_BATCH:
+                    break
         logger.info(f"[{table}] DELETE CLICHE={cliche} — {total} lignes")
 
     # ------------------------------------------------------------------
@@ -331,56 +333,55 @@ class BaseLoader(ABC):
         cliche : identifiant de période au format MMYYYY (ex. "032026").
         Le user DWH doit avoir DELETE + INSERT ON <ods_schema>.<table> (DBA).
         """
-        cursor = self.conn.cursor()
-
-        # Étape 0 : idempotence — nettoie un éventuel snapshot partiel
-        cursor.execute(
-            f"DELETE FROM {ods_schema}.{table} WHERE CLICHE = :1",
-            [cliche],
-        )
-        deleted = cursor.rowcount
-        self.conn.commit()
-        if deleted:
-            logger.warning(
-                f"[ODS] {ods_schema}.{table} — {deleted} lignes partielles "
-                f"(CLICHE={cliche}) nettoyées avant réarchivage"
+        with self.conn.cursor() as cursor:
+            # Étape 0 : idempotence — nettoie un éventuel snapshot partiel
+            cursor.execute(
+                f"DELETE FROM {ods_schema}.{table} WHERE CLICHE = :1",
+                [cliche],
             )
+            deleted = cursor.rowcount
+            self.conn.commit()
+            if deleted:
+                logger.warning(
+                    f"[ODS] {ods_schema}.{table} — {deleted} lignes partielles "
+                    f"(CLICHE={cliche}) nettoyées avant réarchivage"
+                )
 
-        # Étape 1 : archive server-side via colonnes explicites (évite ORA-00932
-        # causé par un SELECT * qui mappe par position et non par nom lorsque
-        # les structures DWH/ODS ont divergé, ex. après ajout de CLICHE).
-        cursor.execute(
-            """
-            SELECT c.column_name
-            FROM   user_tab_columns c
-            JOIN   all_tab_columns  o
-                   ON  o.owner       = :ods
-                   AND o.table_name  = c.table_name
-                   AND o.column_name = c.column_name
-            WHERE  c.table_name = :tbl
-            ORDER BY c.column_id
-            """,
-            {"ods": ods_schema.upper(), "tbl": table.upper()},
-        )
-        common_cols = ", ".join(row[0] for row in cursor.fetchall())
-        if not common_cols:
-            raise RuntimeError(
-                f"Aucune colonne commune entre {table} (DWH) et "
-                f"{ods_schema}.{table} (ODS) — vérifier la structure des tables."
+            # Étape 1 : archive server-side via colonnes explicites (évite ORA-00932
+            # causé par un SELECT * qui mappe par position et non par nom lorsque
+            # les structures DWH/ODS ont divergé, ex. après ajout de CLICHE).
+            cursor.execute(
+                """
+                SELECT c.column_name
+                FROM   user_tab_columns c
+                JOIN   all_tab_columns  o
+                       ON  o.owner       = :ods
+                       AND o.table_name  = c.table_name
+                       AND o.column_name = c.column_name
+                WHERE  c.table_name = :tbl
+                ORDER BY c.column_id
+                """,
+                {"ods": ods_schema.upper(), "tbl": table.upper()},
             )
-        archive_sql = (
-            f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
-            f" SELECT {common_cols} FROM {table}"
-        )
-        logger.debug(f"[ODS] {archive_sql}")
-        cursor.execute(archive_sql)
-        archived = cursor.rowcount
-        self.conn.commit()
-        logger.info(f"[ODS] {table} → {ods_schema}.{table} : {archived} lignes archivées")
+            common_cols = ", ".join(row[0] for row in cursor.fetchall())
+            if not common_cols:
+                raise RuntimeError(
+                    f"Aucune colonne commune entre {table} (DWH) et "
+                    f"{ods_schema}.{table} (ODS) — vérifier la structure des tables."
+                )
+            archive_sql = (
+                f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
+                f" SELECT {common_cols} FROM {table}"
+            )
+            logger.debug(f"[ODS] {archive_sql}")
+            cursor.execute(archive_sql)
+            archived = cursor.rowcount
+            self.conn.commit()
+            logger.info(f"[ODS] {table} → {ods_schema}.{table} : {archived} lignes archivées")
 
-        # Étape 2 : vidage DWH — DDL = auto-commit Oracle, 0 undo
-        cursor.execute(f"TRUNCATE TABLE {table}")
-        logger.info(f"[DWH] {table} TRUNCATE OK")
+            # Étape 2 : vidage DWH — DDL = auto-commit Oracle, 0 undo
+            cursor.execute(f"TRUNCATE TABLE {table}")
+            logger.info(f"[DWH] {table} TRUNCATE OK")
 
         return archived
 
@@ -393,29 +394,28 @@ class BaseLoader(ABC):
         Indispensable pour de bonnes performances en INSERT /*+ APPEND */.
         """
         schema, tbl = (table.split(".", 1) if "." in table else (None, table))
-        cursor = self.conn.cursor()
-        
-        if schema:
-            cursor.execute("""
-                SELECT index_name FROM all_indexes 
-                WHERE owner = :1 AND table_name = :2 
-                AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
-            """, [schema.upper(), tbl.upper()])
-        else:
-            cursor.execute("""
-                SELECT index_name FROM user_indexes 
-                WHERE table_name = :1 
-                AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
-            """, [tbl.upper()])
-            
-        indexes = [r[0] for r in cursor.fetchall()]
-        for idx in indexes:
-            try:
-                idx_name = f"{schema}.{idx}" if schema else idx
-                cursor.execute(f"ALTER INDEX {idx_name} UNUSABLE")
-                logger.info(f"[INDEX] {idx_name} disabled (UNUSABLE).")
-            except Exception as e:
-                logger.warning(f"[INDEX] Impossible de désactiver {idx_name}: {e}")
+        with self.conn.cursor() as cursor:
+            if schema:
+                cursor.execute("""
+                    SELECT index_name FROM all_indexes
+                    WHERE owner = :1 AND table_name = :2
+                    AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
+                """, [schema.upper(), tbl.upper()])
+            else:
+                cursor.execute("""
+                    SELECT index_name FROM user_indexes
+                    WHERE table_name = :1
+                    AND index_type != 'LOB' AND uniqueness = 'NONUNIQUE'
+                """, [tbl.upper()])
+
+            indexes = [r[0] for r in cursor.fetchall()]
+            for idx in indexes:
+                try:
+                    idx_name = f"{schema}.{idx}" if schema else idx
+                    cursor.execute(f"ALTER INDEX {idx_name} UNUSABLE")
+                    logger.info(f"[INDEX] {idx_name} disabled (UNUSABLE).")
+                except Exception as e:
+                    logger.warning(f"[INDEX] Impossible de désactiver {idx_name}: {e}")
 
     def _rebuild_indexes(self, table: str):
         """
@@ -423,27 +423,26 @@ class BaseLoader(ABC):
         À appeler dans un bloc finally après l'insertion batch.
         """
         schema, tbl = (table.split(".", 1) if "." in table else (None, table))
-        cursor = self.conn.cursor()
-        
-        if schema:
-            cursor.execute("""
-                SELECT index_name FROM all_indexes 
-                WHERE owner = :1 AND table_name = :2 AND status = 'UNUSABLE'
-            """, [schema.upper(), tbl.upper()])
-        else:
-            cursor.execute("""
-                SELECT index_name FROM user_indexes 
-                WHERE table_name = :1 AND status = 'UNUSABLE'
-            """, [tbl.upper()])
-            
-        indexes = [r[0] for r in cursor.fetchall()]
-        for idx in indexes:
-            try:
-                idx_name = f"{schema}.{idx}" if schema else idx
-                cursor.execute(f"ALTER INDEX {idx_name} REBUILD")
-                logger.info(f"[INDEX] {idx_name} rebuilt.")
-            except Exception as e:
-                logger.warning(f"[INDEX] Impossible de reconstruire {idx_name}: {e}")
+        with self.conn.cursor() as cursor:
+            if schema:
+                cursor.execute("""
+                    SELECT index_name FROM all_indexes
+                    WHERE owner = :1 AND table_name = :2 AND status = 'UNUSABLE'
+                """, [schema.upper(), tbl.upper()])
+            else:
+                cursor.execute("""
+                    SELECT index_name FROM user_indexes
+                    WHERE table_name = :1 AND status = 'UNUSABLE'
+                """, [tbl.upper()])
+
+            indexes = [r[0] for r in cursor.fetchall()]
+            for idx in indexes:
+                try:
+                    idx_name = f"{schema}.{idx}" if schema else idx
+                    cursor.execute(f"ALTER INDEX {idx_name} REBUILD")
+                    logger.info(f"[INDEX] {idx_name} rebuilt.")
+                except Exception as e:
+                    logger.warning(f"[INDEX] Impossible de reconstruire {idx_name}: {e}")
 
    # ------------------------------------------------------------------
     def _delete_insert_period(self, table: str, df: pd.DataFrame,
@@ -469,8 +468,8 @@ class BaseLoader(ABC):
         period_vals = [_to_python(df[c].iloc[0]) for c in period_cols]
         where       = " AND ".join(f"{c} = :{i+1}" for i, c in enumerate(period_cols))
 
-        cursor = self.conn.cursor()
-        cursor.execute(f"DELETE FROM {table} WHERE {where}", period_vals)
+        with self.conn.cursor() as cursor:
+            cursor.execute(f"DELETE FROM {table} WHERE {where}", period_vals)
         self.conn.commit()
         logger.debug(f"[{table}] DELETE période {dict(zip(period_cols, period_vals))}")
 
@@ -484,8 +483,8 @@ class BaseLoader(ABC):
         if df.empty:
             return 0
 
-        cursor = self.conn.cursor()
-        cursor.execute(f"DELETE FROM {table}")
+        with self.conn.cursor() as cursor:
+            cursor.execute(f"DELETE FROM {table}")
         self.conn.commit()
         logger.debug(f"[{table}] DELETE — table vidée")
 

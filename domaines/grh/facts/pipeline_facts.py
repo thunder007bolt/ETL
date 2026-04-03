@@ -64,13 +64,7 @@ class FactsPipeline:
         gc.collect()
 
         try:
-            sql    = load_sql(_SQL_DIR, cfg["sql_file"])
-            cursor = src_conn.cursor()
-            cursor.arraysize = self._FETCH
-            cursor.execute(sql)
-
-            description  = cursor.description
-            columns      = [col[0].upper() for col in description]
+            sql          = load_sql(_SQL_DIR, cfg["sql_file"])
             transform_fn = cfg.get("transform_fn")
 
             now    = datetime.now()
@@ -85,16 +79,22 @@ class FactsPipeline:
             total = 0
             loader.disable_indexes(target)
             try:
-                while True:
-                    rows = cursor.fetchmany(self._FETCH)
-                    if not rows:
-                        break
-                    df = pd.DataFrame(rows, columns=columns)
-                    df = _cast_oracle_types(df, description)
-                    df["CLICHE"] = cliche
-                    if transform_fn is not None:
-                        df = transform_fn(df)
-                    total += loader.insert_chunk(target, df)
+                with src_conn.cursor() as cursor:
+                    cursor.arraysize = self._FETCH
+                    cursor.execute(sql)
+                    description = cursor.description
+                    columns     = [col[0].upper() for col in description]
+
+                    while True:
+                        rows = cursor.fetchmany(self._FETCH)
+                        if not rows:
+                            break
+                        df = pd.DataFrame(rows, columns=columns)
+                        df = _cast_oracle_types(df, description)
+                        df["CLICHE"] = cliche
+                        if transform_fn is not None:
+                            df = transform_fn(df)
+                        total += loader.insert_chunk(target, df)
             finally:
                 loader.rebuild_indexes(target)
 
