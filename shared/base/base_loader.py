@@ -48,7 +48,8 @@ class BaseLoader(ABC):
     Chargement des données transformées dans le Data Warehouse Oracle.
 
     """
-    _MERGE_BATCH = 15_000   
+    _MERGE_BATCH  = 15_000
+    _DELETE_BATCH = 50_000
 
     def __init__(self, dw_conn):
         self.conn = dw_conn
@@ -86,7 +87,7 @@ class BaseLoader(ABC):
         with self.conn.cursor() as cursor:
             for start in range(0, total, self._MERGE_BATCH):
                 cursor.executemany(sql, _prepare(df.iloc[start: start + self._MERGE_BATCH]))
-        self.conn.commit()
+                self.conn.commit()
         logger.info(f"[{table}] {total} lignes insérées")
         return total
 
@@ -321,12 +322,15 @@ class BaseLoader(ABC):
     # ------------------------------------------------------------------
     # ARCHIVE ODS + TRUNCATE DWH — remplacement de delete_period
     # ------------------------------------------------------------------
+    _ARCHIVE_BATCH = 500_000   # lignes par chunk lors de l'archivage ODS
+
     def _archive_to_ods_and_truncate(self, table: str, ods_schema: str,
                                       cliche: str) -> int:
         """
         1. Nettoyage idempotent : DELETE ODS WHERE CLICHE = cliche — élimine tout
            snapshot partiel d'un run précédent interrompu (rapide si index sur CLICHE).
-        2. Archive DWH → ODS via INSERT SELECT server-side (direct path, O(n) Oracle).
+        2. Archive DWH → ODS par chunks ROWID avec commit par chunk pour éviter
+           ORA-30036 (saturation UNDO) sur les grandes tables.
         3. TRUNCATE DWH (DDL, 0 UNDO, instantané).
         Retourne le nombre de lignes archivées.
 
@@ -335,21 +339,28 @@ class BaseLoader(ABC):
         """
         with self.conn.cursor() as cursor:
             # Étape 0 : idempotence — nettoie un éventuel snapshot partiel
-            cursor.execute(
-                f"DELETE FROM {ods_schema}.{table} WHERE CLICHE = :1",
-                [cliche],
-            )
-            deleted = cursor.rowcount
-            self.conn.commit()
+            # Chunké par lots de _ARCHIVE_BATCH pour éviter ORA-30036 sur
+            # les grandes tables ODS (ex. FAIT_DEBOURS).
+            deleted = 0
+            while True:
+                cursor.execute(
+                    f"DELETE FROM {ods_schema}.{table}"
+                    f" WHERE CLICHE = :cliche AND ROWNUM <= :batch",
+                    {"cliche": cliche, "batch": self._ARCHIVE_BATCH},
+                )
+                n = cursor.rowcount
+                deleted += n
+                self.conn.commit()
+                if n == 0:
+                    break
             if deleted:
                 logger.warning(
                     f"[ODS] {ods_schema}.{table} — {deleted} lignes partielles "
                     f"(CLICHE={cliche}) nettoyées avant réarchivage"
                 )
 
-            # Étape 1 : archive server-side via colonnes explicites (évite ORA-00932
-            # causé par un SELECT * qui mappe par position et non par nom lorsque
-            # les structures DWH/ODS ont divergé, ex. après ajout de CLICHE).
+            # Étape 1 : colonnes communes DWH/ODS (évite ORA-00932 si structures
+            # ont divergé, ex. après ajout de CLICHE).
             cursor.execute(
                 """
                 SELECT c.column_name
@@ -369,17 +380,42 @@ class BaseLoader(ABC):
                     f"Aucune colonne commune entre {table} (DWH) et "
                     f"{ods_schema}.{table} (ODS) — vérifier la structure des tables."
                 )
-            archive_sql = (
-                f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
-                f" SELECT {common_cols} FROM {table}"
+
+            # Étape 2 : calcul des bornes ROWID (une seule passe O(n) sur les ROWID,
+            # pas les données — très rapide même sur 40 M lignes).
+            cursor.execute(
+                """
+                SELECT MIN(RID), MAX(RID)
+                FROM (
+                    SELECT ROWID AS RID,
+                           CEIL(ROWNUM / :1) AS chunk_num
+                    FROM   """ + table + """
+                )
+                GROUP BY chunk_num
+                ORDER BY MIN(RID)
+                """,
+                [self._ARCHIVE_BATCH],
             )
-            logger.debug(f"[ODS] {archive_sql}")
-            cursor.execute(archive_sql)
-            archived = cursor.rowcount
-            self.conn.commit()
+            chunks = cursor.fetchall()
+            logger.info(f"[ODS] {table} — {len(chunks)} chunks ROWID à archiver")
+
+            # Étape 3 : archive chunk par chunk, commit à chaque itération
+            # → l'UNDO est libéré progressivement, évite ORA-30036.
+            archived = 0
+            for min_rid, max_rid in chunks:
+                cursor.execute(
+                    f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
+                    f" SELECT {common_cols} FROM {table}"
+                    f" WHERE ROWID BETWEEN :1 AND :2",
+                    [min_rid, max_rid],
+                )
+                archived += cursor.rowcount
+                self.conn.commit()
+                logger.debug(f"[ODS] {table} archivé {archived} lignes")
+
             logger.info(f"[ODS] {table} → {ods_schema}.{table} : {archived} lignes archivées")
 
-            # Étape 2 : vidage DWH — DDL = auto-commit Oracle, 0 undo
+            # Étape 4 : vidage DWH — DDL = auto-commit Oracle, 0 undo
             cursor.execute(f"TRUNCATE TABLE {table}")
             logger.info(f"[DWH] {table} TRUNCATE OK")
 
