@@ -387,9 +387,13 @@ class BaseLoader(ABC):
                 """
                 SELECT MIN(RID), MAX(RID)
                 FROM (
-                    SELECT ROWID AS RID,
+                    SELECT RID,
                            CEIL(ROWNUM / :1) AS chunk_num
-                    FROM   """ + table + """
+                    FROM (
+                        SELECT ROWID AS RID
+                        FROM   """ + table + """
+                        ORDER BY ROWID
+                    )
                 )
                 GROUP BY chunk_num
                 ORDER BY MIN(RID)
