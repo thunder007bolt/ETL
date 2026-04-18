@@ -1,4 +1,4 @@
--- DTM_PRESTATION V3
+-- DTM_PRESTATION V4
 -- Sources : DWH.FAIT_DEBOURS          (principal — grain DEB_ID)
 --           DWH.FAIT_DOSSIER          (LP_NO)
 --           DWH.FAIT_EFFET            (IND_ID_BENEF, NET_A_PAYER, DR_NO, SP_NO)
@@ -6,7 +6,7 @@
 --           DWH.FAIT_PRESTATION_ESP   (mois cotisés, nouveaux bénéficiaires, premier effet, taux IPP)
 -- Grain   : ID_TEMPS × TDOS_CODE × CODE_PRESTATION × TYPE_PREST
 --           × DR_NO × SP_NO × LP_NO × SEXE × TAG_CODE
--- Filtré  : CODE_BRANCHE='V', DR_NO=10 (PVID)
+-- Branches : V (PVID), A (AT/MP), F (Prestations Familiales), M (Maladie)
 -- Métriques : NB_PRESTATIONS, NB_BENEFICIAIRES, NB_MOIS_COTISES,
 --             MONTANT_TOTAL, MONTANT_NET, NB_CONTROLES_POST,
 --             NB_DECES, NB_NOUVEAUX, TAUX_IPP_MOYEN (ARI)
@@ -16,20 +16,16 @@ WITH
 
 -- ── CTE 1 : nouveaux bénéficiaires — historique toutes années ────────────
 -- Détermine l'ANNEE_ENTREE de chaque (bénéficiaire, type prestation)
--- Non filtré par CLICHE sur pe car besoin de l'historique complet du snapshot courant
+-- Non filtré par branche : le join dans base filtre via DEB_CODE_BRANCHE
 nouveaux_beneficiaires AS (
     SELECT pe.IND_ID_BENEF,
            pe.TPE_CODE,
            EXTRACT(YEAR FROM MIN(pe.PE_DATE_EFFET)) AS ANNEE_ENTREE
     FROM   DWH.FAIT_PRESTATION_ESP pe
-    JOIN   DWH.FAIT_DOSSIER        dos ON dos.DOS_CODE  = pe.DOS_CODE
-                                      AND dos.CLICHE    = :1
     WHERE  pe.CLICHE              = :1
       AND  pe.PE_STATUT          != 'R'
       AND  pe.PE_DATE_EFFET      >= DATE '1990-01-01'
       AND  pe.IND_ID_BENEF        IS NOT NULL
-      AND  dos.TDOS_CODE          = 'V'
-      AND  dos.DR_NO              = 10
     GROUP BY pe.IND_ID_BENEF, pe.TPE_CODE
 ),
 
@@ -42,14 +38,10 @@ premier_effet AS (
                TRUNC(MIN(pe.PE_DATE_EFFET), 'MM'),
                'YYYYMMDD'))                              AS PREMIER_ID_TEMPS
     FROM   DWH.FAIT_PRESTATION_ESP pe
-    JOIN   DWH.FAIT_DOSSIER        dos ON dos.DOS_CODE  = pe.DOS_CODE
-                                      AND dos.CLICHE    = :1
     WHERE  pe.CLICHE              = :1
       AND  pe.PE_STATUT          != 'R'
       AND  pe.PE_DATE_EFFET      >= DATE '1990-01-01'
       AND  pe.IND_ID_BENEF        IS NOT NULL
-      AND  dos.TDOS_CODE          = 'V'
-      AND  dos.DR_NO              = 10
     GROUP BY pe.IND_ID_BENEF, pe.TPE_CODE
 ),
 
@@ -165,8 +157,7 @@ base AS (
           AND deb.TPE_CODE      = 'ARI'
 
     WHERE deb.CLICHE            = :1
-      AND deb.CODE_BRANCHE      = 'V'
-      AND efp.DR_NO             = 10
+      AND deb.CODE_BRANCHE      IN ('V', 'A', 'F', 'M')
       AND deb.DEB_DATE_EFFET    IS NOT NULL
 )
 
@@ -179,11 +170,6 @@ SELECT
     b.SP_NO,
     b.LP_NO,
     b.IND_SEXE                                          AS SEXE,
-    CASE b.IND_SEXE
-        WHEN 1 THEN 'Masculin'
-        WHEN 2 THEN 'Feminin'
-        ELSE        NULL
-    END                                                 AS LIBELLE_SEXE,
     b.TAG_CODE,
 
     COUNT(b.DEB_ID)                                     AS NB_PRESTATIONS,
@@ -196,7 +182,6 @@ SELECT
                THEN b.DEB_ID END)                       AS NB_CONTROLES_POST,
 
     -- NB_DECES : bénéficiaires décédés dans l'année du débours
-    -- ⚠ source partielle (MAX=2011 au 11/03/2026) — activé pour usage futur
     COUNT(DISTINCT CASE
         WHEN b.IND_DATE_DECES IS NOT NULL
          AND EXTRACT(YEAR FROM b.IND_DATE_DECES) = b.ANNEE
@@ -226,10 +211,5 @@ GROUP BY
     b.SP_NO,
     b.LP_NO,
     b.IND_SEXE,
-    CASE b.IND_SEXE
-        WHEN 1 THEN 'Masculin'
-        WHEN 2 THEN 'Feminin'
-        ELSE        NULL
-    END,
     b.TAG_CODE,
     :1

@@ -1,137 +1,144 @@
--- DTM_PRESTATION_INDUE V3
--- Sources : DWH.FAIT_AJUSTEMENT   (principal)
---           JOIN DWH.FAIT_DOSSIER  (branche, géographie)
---           JOIN DWH.FAIT_INDIVIDU (sexe, date naissance)
---           LEFT JOIN montants_recouvres (débours négatifs statut 'D')
--- Grain   : ID_TEMPS × CODE_BRANCHE × CODE_BRANCHE_PRESTATION × TAJ_CODE × AJ_STATUT_GROUPE
---           × DR_NO × SP_NO × LP_NO × SEXE
--- R1      : MONTANT_RECOUVRE = SUM(ABS(DEB_MONTANT)) WHERE DEB_MONTANT<0 AND DEB_STATUT='D'
--- R2      : AJ_STATUT → RC (C) | IR (I) | EN (autres)
--- Exclus  : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
+-- DTM_PRESTATION_INDUE V4
+-- Sources : DWH.FAIT_AJUSTEMENT   (principal — grain AJ_ID)
+--           DWH.FAIT_DOSSIER      (branche, géographie)
+--           DWH.FAIT_INDIVIDU     (sexe, date naissance)
+-- Grain   : ID_TEMPS × TDOS_CODE × TAJ_CODE × TYPE_INDU × AJ_STATUT
+--           × DR_NO × SP_NO × LP_NO × SEXE × TAG_CODE
+-- Branches : V (PVID), A (AT/MP), F (Prestations Familiales)
+-- TYPE_INDU : TROP_PERCU (TP / TP-CONV / REM-TP) | MOINS_PERCU (MP / RC)
+-- AJ_STATUT : EN (A) | RC (C) | RJ (R) | IN (autres)
+-- Métriques : NB_AJUSTEMENTS, NB_DOSSIERS, NB_BENEFICIAIRES,
+--             NB_TROP_PERCU, NB_MOINS_PERCU,
+--             MONTANT_INDU, MONTANT_TROP_PERCU, MONTANT_MOINS_PERCU,
+--             MONTANT_RECOUVRE, RESTE_A_RECOUVRIR,
+--             NB_RECOUVRES, NB_IRRECUPERABLES
+-- :1 = CLICHE (YYYYMM) — snapshot DWH uniforme
+
 WITH
 
--- ── R1 : montants récupérés depuis FAIT_DEBOURS ───────────────
-montants_recouvres AS (
-    SELECT   deb.DOS_CODE,
-             SUM(ABS(deb.DEB_MONTANT))  AS MONTANT_RECOUVRE
-    FROM     DWH.FAIT_DEBOURS           deb
-    WHERE    deb.DEB_MONTANT < 0
-      AND    deb.DEB_STATUT  = 'D'
-      AND    deb.CLICHE      = :1
-    GROUP BY deb.DOS_CODE
-),
-
--- ── Base : ajustements indus enrichis ────────────────────────
+-- ── CTE base ajustements enrichis ────────────────────────────────────────
 base AS (
     SELECT
+        TO_NUMBER(TO_CHAR(
+            TRUNC(aj.AJ_DATE_ETABLISSEMENT, 'MM'),
+            'YYYYMMDD'))                                     AS ID_TEMPS,
+
         aj.AJ_ID,
         aj.DOS_CODE,
         aj.IND_ID,
         aj.TAJ_CODE,
         aj.AJ_MONTANT,
-        aj.AJ_STATUT,
-        aj.AJ_DATE_ETABLISSEMENT,
-        aj.AJ_NB_PRECOMPTE,
-        aj.AJ_VERIFIE,
-        aj.AJ_ORDRE_DE_RECETTE,
-        aj.CLICHE,
 
-        -- Branche depuis TDOS_CODE
-        CASE dos.TDOS_CODE
-            WHEN 'V' THEN 'V'
-            WHEN 'A' THEN 'A'
-            WHEN 'F' THEN 'F'
-            WHEN 'M' THEN 'M'
-            ELSE          'V'
-        END                                              AS CODE_BRANCHE,
+        -- Classification indu
+        CASE WHEN aj.TAJ_CODE IN ('TP', 'TP-CONV', 'REM-TP')
+             THEN 'TROP_PERCU'
+             ELSE 'MOINS_PERCU'
+        END                                                  AS TYPE_INDU,
 
-        -- Géographie
-        dos.LP_NO,
-        dos.SP_NO,
-        dos.DR_NO,
+        -- Statut recouvrement
+        CASE aj.AJ_STATUT
+            WHEN 'A' THEN 'EN'
+            WHEN 'C' THEN 'RC'
+            WHEN 'R' THEN 'RJ'
+            ELSE          'IN'
+        END                                                  AS AJ_STATUT,
 
-        -- Démographie bénéficiaire
+        d.TDOS_CODE,
+        d.DR_NO,
+        d.SP_NO,
+        d.LP_NO,
+
         ind.IND_SEXE,
         ind.IND_DATE_NAISSANCE,
 
-        -- Montant recouvré (R1)
-        NVL(recouv.MONTANT_RECOUVRE, 0)                 AS MONTANT_RECOUVRE
+        -- Tranche d'âge au 31/12 de l'année d'établissement
+        tag.TAG_CODE
 
-    FROM      DWH.FAIT_AJUSTEMENT         aj
-    JOIN      DWH.FAIT_DOSSIER            dos ON dos.DOS_CODE = aj.DOS_CODE AND dos.CLICHE = :1
-    JOIN      DWH.FAIT_INDIVIDU           ind ON ind.IND_ID   = aj.IND_ID   AND ind.CLICHE = :1
-    LEFT JOIN montants_recouvres          recouv ON recouv.DOS_CODE = aj.DOS_CODE
+    FROM      DWH.FAIT_AJUSTEMENT               aj
 
-    WHERE aj.TAJ_CODE IN ('TP', 'TP-CONV', 'REM-TP')
-      AND aj.CLICHE = :1
+    LEFT JOIN DWH.FAIT_DOSSIER                  d
+           ON d.DOS_CODE          = aj.DOS_CODE
+          AND d.CLICHE            = :1
+
+    LEFT JOIN DWH.FAIT_INDIVIDU                 ind
+           ON ind.IND_ID          = aj.IND_ID
+          AND ind.CLICHE          = :1
+
+    LEFT JOIN DTM.DIM_TRANCHE_AGE               tag
+           ON TRUNC(
+                  MONTHS_BETWEEN(
+                      ADD_MONTHS(TRUNC(aj.AJ_DATE_ETABLISSEMENT, 'YYYY'), 12) - 1,
+                      ind.IND_DATE_NAISSANCE
+                  ) / 12
+              ) BETWEEN tag.INF AND tag.SUP
+
+    WHERE aj.CLICHE                   = :1
+      AND aj.TAJ_CODE                 IN ('TP', 'TP-CONV', 'REM-TP', 'MP', 'RC')
+      AND aj.AJ_DATE_ETABLISSEMENT    IS NOT NULL
+      AND d.TDOS_CODE                 IN ('V', 'A', 'F')
 )
 
 SELECT
-    -- ── TEMPOREL ────────────────────────────────────────────────────
-    TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')) AS ID_TEMPS,
-
-    -- ── BRANCHE ─────────────────────────────────────────────────────
-    b.CODE_BRANCHE                                                  AS TDOS_CODE,
-
-    -- ── TYPE AJUSTEMENT ─────────────────────────────────────────────
+    b.ID_TEMPS,
+    b.TDOS_CODE,
     b.TAJ_CODE,
-
-    -- ── STATUT RECOUVREMENT (R2) ─────────────────────────────────────
-    CASE b.AJ_STATUT
-        WHEN 'C' THEN 'RC'
-        WHEN 'I' THEN 'IR'
-        ELSE          'EN'
-    END                                                     AS AJ_STATUT,
-
-    -- ── GÉOGRAPHIE ──────────────────────────────────────────────────
+    b.TYPE_INDU,
+    b.AJ_STATUT,
     b.DR_NO,
     b.SP_NO,
     b.LP_NO,
-
-    -- ── DÉMOGRAPHIE ─────────────────────────────────────────────────
-    b.IND_SEXE                                              AS SEXE,
+    b.IND_SEXE                                               AS SEXE,
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
         ELSE        NULL
-    END                                                     AS LIBELLE_SEXE,
+    END                                                      AS LIBELLE_SEXE,
+    b.TAG_CODE,
 
-    tag.TAG_CODE                                            AS TAG_CODE,
+    COUNT(b.AJ_ID)                                           AS NB_AJUSTEMENTS,
+    COUNT(DISTINCT b.DOS_CODE)                               AS NB_DOSSIERS,
+    COUNT(DISTINCT b.IND_ID)                                 AS NB_BENEFICIAIRES,
 
-    -- ── MESURES VOLUMES ──────────────────────────────────────────────
-    COUNT(b.AJ_ID)                                          AS NB_PRESTATIONS_INDUS,
-    COUNT(DISTINCT b.DOS_CODE)                              AS NB_DOSSIERS,
-    COUNT(DISTINCT b.IND_ID)                                AS NB_BENEFICIAIRES,
+    COUNT(CASE WHEN b.TYPE_INDU = 'TROP_PERCU'
+               THEN b.AJ_ID END)                             AS NB_TROP_PERCU,
+    COUNT(CASE WHEN b.TYPE_INDU = 'MOINS_PERCU'
+               THEN b.AJ_ID END)                             AS NB_MOINS_PERCU,
 
-    -- ── MESURES MONTANTS ─────────────────────────────────────────────
-    SUM(b.AJ_MONTANT)                                       AS MONTANT_INDU,
-    SUM(b.MONTANT_RECOUVRE)                                 AS MONTANT_RECOUVRE,
-    SUM(b.AJ_MONTANT) - SUM(b.MONTANT_RECOUVRE)            AS RESTE_A_RECOUVRIR,
+    SUM(b.AJ_MONTANT)                                        AS MONTANT_INDU,
+    SUM(CASE WHEN b.TYPE_INDU = 'TROP_PERCU'
+             THEN b.AJ_MONTANT ELSE 0 END)                   AS MONTANT_TROP_PERCU,
+    SUM(CASE WHEN b.TYPE_INDU = 'MOINS_PERCU'
+             THEN b.AJ_MONTANT ELSE 0 END)                   AS MONTANT_MOINS_PERCU,
 
-    -- ── MESURES RECOUVREMENT (R2/R3) ────────────────────────────────
-    SUM(NVL(b.AJ_NB_PRECOMPTE, 0))                         AS NB_ECHEANCES_PRECOMPTE,
-    SUM(CASE WHEN b.AJ_STATUT = 'C' THEN 1 ELSE 0 END)     AS NB_RECOUVRES,
-    SUM(CASE WHEN b.AJ_STATUT = 'I' THEN 1 ELSE 0 END)     AS NB_IRRECUPERABLES,
+    SUM(CASE WHEN b.AJ_STATUT = 'RC'
+             THEN b.AJ_MONTANT ELSE 0 END)                   AS MONTANT_RECOUVRE,
+    SUM(b.AJ_MONTANT) -
+    SUM(CASE WHEN b.AJ_STATUT = 'RC'
+             THEN b.AJ_MONTANT ELSE 0 END)                   AS RESTE_A_RECOUVRIR,
 
-    -- ── FLAGS AGRÉGÉS (R4) ───────────────────────────────────────────
-    SUM(CASE WHEN b.AJ_VERIFIE          = 'O' THEN 1 ELSE 0 END) AS NB_VERIFIES,
-    SUM(CASE WHEN b.AJ_ORDRE_DE_RECETTE = 'O' THEN 1 ELSE 0 END) AS NB_ORDRE_RECETTE,
+    COUNT(CASE WHEN b.AJ_STATUT = 'RC'
+               THEN b.AJ_ID END)                             AS NB_RECOUVRES,
+    COUNT(CASE WHEN b.AJ_STATUT = 'RJ'
+               THEN b.AJ_ID END)                             AS NB_IRRECUPERABLES,
 
-    -- ── CLICHE ──────────────────────────────────────────────────────
-    b.CLICHE                                                AS CLICHE
+    :1                                                       AS CLICHE
 
 FROM base b
-LEFT JOIN DTM.DIM_TRANCHE_AGE              tag ON TRUNC(MONTHS_BETWEEN(TO_DATE('31/12/'||TO_CHAR(EXTRACT(YEAR FROM b.AJ_DATE_ETABLISSEMENT)),'DD/MM/YYYY'), b.IND_DATE_NAISSANCE)/12) BETWEEN tag.INF AND tag.SUP
 
 GROUP BY
-    TO_NUMBER(TO_CHAR(TRUNC(b.AJ_DATE_ETABLISSEMENT, 'MM'), 'YYYYMMDD')),
-    b.CODE_BRANCHE,
+    b.ID_TEMPS,
+    b.TDOS_CODE,
     b.TAJ_CODE,
-    CASE b.AJ_STATUT WHEN 'C' THEN 'RC' WHEN 'I' THEN 'IR' ELSE 'EN' END,
+    b.TYPE_INDU,
+    b.AJ_STATUT,
     b.DR_NO,
     b.SP_NO,
     b.LP_NO,
     b.IND_SEXE,
-    CASE b.IND_SEXE WHEN 1 THEN 'Masculin' WHEN 2 THEN 'Feminin' ELSE NULL END,
-    tag.TAG_CODE,
-    b.CLICHE
+    CASE b.IND_SEXE
+        WHEN 1 THEN 'Masculin'
+        WHEN 2 THEN 'Feminin'
+        ELSE        NULL
+    END,
+    b.TAG_CODE,
+    :1

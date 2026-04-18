@@ -1,9 +1,11 @@
--- DTM_SALAIRE V6
+-- DTM_SALAIRE V7
 -- Sources    : DWH.FAIT_SALAIRE + DWH.FAIT_DECLARATION_NOMINATIVE
 --              + DWH.FAIT_TRAVAILLEUR + DWH.FAIT_EMPLOYEUR
+--              + USER_DWH.PARAMETRE_GLOBAL (plafond salaire)
 -- Géographie : DR <= sp.DR_NO => SP (SP_NO de dn.SP_NO)
 -- Temps      : DIM_TEMPS via PER_ID YYYYMM → ID_TEMPS = PER_ID * 100 + 1
 -- Filtre     : SAL_STATUT IS NULL OR SAL_STATUT NOT IN ('A','R')
+-- Métriques  : + MASSE_SAL_PLAFON = SUM(LEAST(SAL_BASE_COTISATION, PG_SALAIRE_MAX))
 -- Exclus     : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
@@ -35,6 +37,7 @@ SELECT
     ROUND(AVG(s.SAL_BASE_COTISATION), 2)                           AS SALAIRE_MOYEN,
     MIN(s.SAL_BASE_COTISATION)                                     AS SALAIRE_MIN,
     MAX(s.SAL_BASE_COTISATION)                                     AS SALAIRE_MAX,
+    SUM(LEAST(s.SAL_BASE_COTISATION, pg.PG_SALAIRE_MAX))           AS MASSE_SAL_PLAFON,
     -- ── CLICHE ─────────────────────────────────────────────────────
     s.CLICHE                                                        AS CLICHE
 FROM DWH.FAIT_SALAIRE                          s
@@ -49,6 +52,7 @@ LEFT JOIN  DTM.DIM_TEMPS                       t   ON  t.ID_TEMPS  =
 LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL          sp  ON  sp.SP_NO    = dn.SP_NO
 LEFT JOIN  DTM.DIM_TRANCHE_EFFECTIF            tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN  DTM.DIM_TRANCHE_AGE                 tag ON  FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE) / 12) BETWEEN tag.INF AND tag.SUP
+CROSS JOIN DTM.DIM_PARAMETRE_GLOBAL          pg
 WHERE s.CLICHE = :1
   AND (s.SAL_STATUT IS NULL OR s.SAL_STATUT NOT IN ('A', 'R'))
   AND dn.PER_ID IS NOT NULL
@@ -66,4 +70,5 @@ GROUP BY
     END,
     tag.TAG_CODE,
     tef.TEF_CODE,
+    pg.PG_SALAIRE_MAX,
     s.CLICHE
