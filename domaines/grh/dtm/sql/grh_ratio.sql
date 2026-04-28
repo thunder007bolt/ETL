@@ -16,17 +16,20 @@ ANNEES AS (
 EFFECTIF AS (
     SELECT
         a.ID_TEMPS,
-        COUNT(DISTINCT s.PERS_ID) AS NB_TOTAL,
+        COUNT(DISTINCT s.PERS_ID)                             AS NB_TOTAL,
+        -- Encadrants : Cadres Sup (HC/05/06) + Cadres Moyens (04)
         COUNT(DISTINCT
-            CASE WHEN s.QUAL_CODE IN ('S','M')
-                 THEN s.PERS_ID END) AS NB_ENC,
+            CASE WHEN s.QUAL_CODE IN ('HC','05','06','04')
+                 THEN s.PERS_ID END)                          AS NB_ENC,
+        -- Non encadrants : Agents d'exécution (01/02) + Agents de Maîtrise (03)
         COUNT(DISTINCT
-            CASE WHEN s.QUAL_CODE IN ('I','A')
-                 THEN s.PERS_ID END) AS NB_NENC,
+            CASE WHEN s.QUAL_CODE IN ('01','02','03')
+                 THEN s.PERS_ID END)                          AS NB_NENC,
+        -- Inconnus : QUAL_CODE NULL ou hors HC/01-06
         COUNT(DISTINCT
-            CASE WHEN s.QUAL_CODE NOT IN ('S','M','I','A')
-                  OR s.QUAL_CODE IS NULL
-                 THEN s.PERS_ID END) AS NB_INC
+            CASE WHEN s.QUAL_CODE NOT IN ('HC','05','06','04','01','02','03')
+                   OR s.QUAL_CODE IS NULL
+                 THEN s.PERS_ID END)                          AS NB_INC
     FROM ANNEES a
     INNER JOIN DWH.FAIT_GRH_SITUATION s
         ON  s.DATE_DEBUT <= a.DT_REF
