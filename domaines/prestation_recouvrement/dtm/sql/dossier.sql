@@ -76,9 +76,12 @@ premier_deb_nat AS (
 base AS (
     SELECT
         -- Temporel R1
-        TO_NUMBER(TO_CHAR(
-            TRUNC(dos.DOS_DATE_OUVERTURE, 'MM'),
-            'YYYYMMDD'))                                     AS ID_TEMPS,
+        CASE 
+            WHEN TO_NUMBER(TO_CHAR(TRUNC(dos.DOS_DATE_OUVERTURE, 'MM'), 'YYYYMMDD'))
+                 BETWEEN 19500101 AND 20351231
+            THEN TO_NUMBER(TO_CHAR(TRUNC(dos.DOS_DATE_OUVERTURE, 'MM'), 'YYYYMMDD'))
+            ELSE 20000101
+        END                                                  AS ID_TEMPS,
 
         -- Identifiants
         dos.DOS_CODE,
