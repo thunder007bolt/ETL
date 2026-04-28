@@ -11,6 +11,9 @@ L_ANNEE et L_MOIS sont injectés automatiquement par le pipeline à partir de la
 Champ optionnel :
     col_map      : dict {col_source: col_cible} — renommage de colonnes
     transform_fn : callable (df: DataFrame) -> DataFrame
+    heavy        : bool — True si la table est volumineuse (>10M lignes).
+                   Ces tables sont exclues du job Jenkins principal
+                   (ETL_FAITS_PIPELINE) et tournent sur des jobs dédiés.
 """
 
 FACT_CONFIG = [
@@ -113,6 +116,7 @@ FACT_CONFIG = [
     {
         "sql_file":   "debours.sql",
         "target":     "FAIT_DEBOURS",
+        "heavy":      True,   # ~71M lignes — job Jenkins dédié
     },
     {
         "sql_file":   "declarat_groupe_assurance.sql",
@@ -121,6 +125,7 @@ FACT_CONFIG = [
     {
         "sql_file":   "dossier.sql",
         "target":     "FAIT_DOSSIER",
+        "heavy":      True,   # volumineuse — job Jenkins dédié
     },
     {
         "sql_file":   "echeancier.sql",

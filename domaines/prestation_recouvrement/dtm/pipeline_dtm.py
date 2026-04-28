@@ -9,6 +9,7 @@ Source ET cible utilisent la même connexion get_dw_connection()
 """
 
 import logging
+import argparse
 from datetime import datetime
 from pathlib import Path
 
@@ -43,24 +44,28 @@ class DtmPipeline:
     def __init__(self, fetch_size=100_000):
         self._FETCH = fetch_size
 
-    def run(self, names: list[str] = None, batch_date: datetime = None) -> None:
+    def run(self, names: list[str] = None, batch_date: datetime = None,
+             exclude_heavy: bool = False) -> None:
         """
         Charge les tables DTM spécifiées (toutes si names=None).
 
-        names     : liste de noms courts déclarés dans DTM_CONFIG
-                    ex. ['cotisations', 'recouvrement']
-        batch_date: date de référence pour le CLICHE (défaut = maintenant)
+        names         : liste de noms courts déclarés dans DTM_CONFIG
+                        ex. ['cotisations', 'recouvrement']
+        exclude_heavy : si True, exclut les tables marquées heavy=True dans DTM_CONFIG
+        batch_date    : date de référence pour le CLICHE (défaut = maintenant)
         """
         batch_date = batch_date or datetime.now()
         cliche     = f"{batch_date.month:02d}{batch_date.year}"   # MMYYYY — uniforme FAIT + DTM
         dw_conn    = get_dw_connection()
 
-        configs = [
-            c for c in DTM_CONFIG
-            if names is None or c["name"] in names
-        ]
+        configs = DTM_CONFIG
+        if names is not None:
+            configs = [c for c in configs if c["name"] in names]
+        elif exclude_heavy:
+            configs = [c for c in configs if not c.get("heavy", False)]
+
         if not configs:
-            logger.warning(f"Aucune table DTM correspondant à : {names}")
+            logger.warning(f"Aucune table DTM correspondant à : names={names}, exclude_heavy={exclude_heavy}")
             return
 
         rows_loaded = 0

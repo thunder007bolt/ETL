@@ -7,6 +7,9 @@ Chaque entrée déclare :
   sql_files : liste ordonnée de { file, label }
                – file  : nom du fichier SQL dans le répertoire sql/
                – label : libellé pour les logs
+  heavy     : bool — True si la table est volumineuse (agrégats sur >10M lignes).
+               Ces tables sont exclues du job Jenkins principal (ETL_DTM_PIPELINE)
+               et tournent sur des jobs dédiés avec --dtm <name>.
 
 Les SQL sélectionnent CLICHE directement depuis la table de fait source (format MMYYYY uniforme).
   - Chaque SQL reçoit :1 = CLICHE (MMYYYY) comme bind variable pour filtrer le snapshot.
@@ -56,6 +59,7 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "salaires.sql", "label": "SALAIRES"},
         ],
+        "heavy": True,   # agrégat sur FAIT_SALAIRE — volumineuse
     },
     {
         "name": "mise_en_demeure",
@@ -122,5 +126,6 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "dossier.sql", "label": "DOSSIER"},
         ],
+        "heavy": True,   # agrégat sur FAIT_DOSSIER — volumineuse
     },
 ]

@@ -3,6 +3,7 @@ Pipeline faits — charge les tables de faits via fact_config.
 """
 
 import logging
+import argparse
 from datetime import datetime
 from pathlib import Path
 
@@ -35,15 +36,26 @@ def _cast_oracle_types(df: pd.DataFrame, description) -> pd.DataFrame:
 
 class FactsPipeline:
 
-    def run(self, batch_date: datetime = None) -> None:
+    def run(self, batch_date: datetime = None,
+             table_filter: str = None,
+             exclude_heavy: bool = False) -> None:
         batch_date  = batch_date or datetime.now()
         src_conn    = get_source_connection()
         dw_conn     = get_dw_connection()
         rows_loaded = 0
 
+        # --- Filtrage de la config ---
+        configs = FACT_CONFIG
+        if table_filter:
+            configs = [c for c in configs if c["target"] == table_filter]
+            if not configs:
+                raise ValueError(f"Table '{table_filter}' introuvable dans FACT_CONFIG.")
+        elif exclude_heavy:
+            configs = [c for c in configs if not c.get("heavy", False)]
+
         try:
             loader = _GenericFactLoader(dw_conn)
-            for cfg in FACT_CONFIG:
+            for cfg in configs:
                 rows_loaded += self._load_one(src_conn, loader, cfg)
 
             logger.info(f"Pipeline FACTS terminé — {rows_loaded} lignes chargées")

@@ -96,7 +96,7 @@ base AS (
         ind.IND_DATE_NAISSANCE,
 
         -- Tranche d'âge au 31/12 de l'année d'ouverture (R6)
-        tag.TAG_CODE,
+        NVL(tag.TAG_CODE, 1000)                              AS TAG_CODE,
 
         -- Mois cotisés
         ne.PE_MOIS_COTISATION,
