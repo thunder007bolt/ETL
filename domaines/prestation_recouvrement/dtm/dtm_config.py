@@ -54,6 +54,20 @@ DTM_CONFIG = [
         ],
     },
     {
+        "name": "controle_prestation",
+        "target": "DTM.DTM_CONTROLE_PRESTATION",
+        "sql_files": [
+            {"file": "controle_prestation.sql", "label": "CONTROLE_PRESTATION"},
+        ],
+    },
+    {
+        "name": "controle_freq_emp",
+        "target": "DTM.DTM_CONTROLE_FREQ_EMP",
+        "sql_files": [
+            {"file": "controle_freq_emp.sql", "label": "CONTROLE_FREQ_EMP"},
+        ],
+    },
+    {
         "name": "salaires",
         "target": "DTM.DTM_SALAIRE",
         "sql_files": [
@@ -111,6 +125,20 @@ DTM_CONFIG = [
         "target": "DTM.DTM_PRESTATION_INDUE",
         "sql_files": [
             {"file": "prestation_indue.sql", "label": "PRESTATION_INDUE"},
+        ],
+    },
+    {
+        "name": "declaration",
+        "target": "DTM.DTM_DECLARATION",
+        "sql_files": [
+            {"file": "declaration.sql", "label": "DECLARATION"},
+        ],
+    },
+    {
+        "name": "duree_assurance",
+        "target": "DTM.DTM_DUREE_ASSURANCE",
+        "sql_files": [
+            {"file": "duree_assurance.sql", "label": "DUREE_ASSURANCE"},
         ],
     },
     {
