@@ -12,9 +12,12 @@ WITH
 -- ── CTE base contrôles enrichis ───────────────────────────────────────────
 base AS (
     SELECT
-        TO_NUMBER(TO_CHAR(
-            TRUNC(dc.DC_DATE_CONTROLE, 'MM'),
-            'YYYYMMDD'))                                     AS ID_TEMPS,
+     CASE 
+            WHEN TO_NUMBER(TO_CHAR(TRUNC(dos.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
+                 BETWEEN 19500101 AND 20351231
+            THEN TO_NUMBER(TO_CHAR(TRUNC(dos.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
+            ELSE 20000101
+        END                                     AS ID_TEMPS,
 
         dc.DC_ID,
         dc.DOS_CODE,
