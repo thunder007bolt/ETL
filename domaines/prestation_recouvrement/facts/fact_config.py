@@ -38,6 +38,10 @@ FACT_CONFIG = [
         "target":     "FAIT_CONTROLE",
     },
     {
+        "sql_file":   "controle_prestation.sql",
+        "target":     "FAIT_CONTROLE_PRESTATION",
+    },
+    {
         "sql_file":   "declaration_nominative.sql",
         "target":     "FAIT_DECLARATION_NOMINATIVE",
     },
