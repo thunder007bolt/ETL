@@ -26,7 +26,7 @@ base AS (
         aj.AJ_ID,
         aj.DOS_CODE,
         aj.IND_ID,
-        NVL(aj.TAJ_CODE, 1000)                                AS TAJ_CODE,
+        aj.TAJ_CODE,
         aj.AJ_MONTANT,
 
         -- Classification indu
@@ -52,7 +52,7 @@ base AS (
         ind.IND_DATE_NAISSANCE,
 
         -- Tranche d'âge au 31/12 de l'année d'établissement
-        tag.TAG_CODE
+        NVL(tag.TAG_CODE, 1000)                              AS TAG_CODE
 
     FROM      DWH.FAIT_AJUSTEMENT               aj
 
