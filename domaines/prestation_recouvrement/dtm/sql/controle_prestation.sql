@@ -13,9 +13,9 @@ WITH
 base AS (
     SELECT
      CASE 
-            WHEN TO_NUMBER(TO_CHAR(TRUNC(dos.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
+            WHEN TO_NUMBER(TO_CHAR(TRUNC(dc.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
                  BETWEEN 19500101 AND 20351231
-            THEN TO_NUMBER(TO_CHAR(TRUNC(dos.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
+            THEN TO_NUMBER(TO_CHAR(TRUNC(dc.DC_DATE_CONTROLE, 'MM'), 'YYYYMMDD'))
             ELSE 20000101
         END                                     AS ID_TEMPS,
 
