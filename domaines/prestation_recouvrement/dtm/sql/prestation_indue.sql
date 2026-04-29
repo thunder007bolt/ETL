@@ -26,7 +26,7 @@ base AS (
         aj.AJ_ID,
         aj.DOS_CODE,
         aj.IND_ID,
-        aj.TAJ_CODE,
+        NVL(aj.TAJ_CODE, 1000)                                AS TAJ_CODE,
         aj.AJ_MONTANT,
 
         -- Classification indu
@@ -43,7 +43,7 @@ base AS (
             ELSE          'IN'
         END                                                  AS AJ_STATUT,
 
-        NVL(d.TDOS_CODE, 1000)                                AS TDOS_CODE,
+        d.TDOS_CODE,
         d.DR_NO,
         d.SP_NO,
         d.LP_NO,
