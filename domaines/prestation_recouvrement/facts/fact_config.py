@@ -128,6 +128,10 @@ FACT_CONFIG = [
         "heavy":      True,   # volumineuse — job Jenkins dédié
     },
     {
+        "sql_file":   "dossier_rejete.sql",
+        "target":     "FAIT_DOSSIER_REJETE",
+    },
+    {
         "sql_file":   "echeancier.sql",
         "target":     "FAIT_ECHEANCIER",
     },

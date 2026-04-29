@@ -43,7 +43,7 @@ base AS (
             ELSE          'IN'
         END                                                  AS AJ_STATUT,
 
-        d.TDOS_CODE,
+        NVL(d.TDOS_CODE, 1000)                                AS TDOS_CODE,
         d.DR_NO,
         d.SP_NO,
         d.LP_NO,
