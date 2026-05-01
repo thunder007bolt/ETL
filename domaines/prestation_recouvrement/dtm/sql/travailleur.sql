@@ -29,6 +29,8 @@ flux_imm AS (
         fj.FJ_CODE                                                  AS EMP_FJ_CODE,
         fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
         fj.SECT_CODE,
+        emp.SA_NO,
+        emp.EMP_REGIME,
         COUNT(DISTINCT tr.TR_ID)                                    AS NB_IMM,
         COUNT(DISTINCT CASE WHEN tr.TR_ETAT = 'A'
               THEN tr.TR_ID END)                                    AS NB_ACTIFS
@@ -58,6 +60,8 @@ flux_imm AS (
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD')),
         sp.DR_NO,
         tr.SP_NO,
+        emp.SA_NO,
+        emp.EMP_REGIME,
         tr.TR_SEXE,
         tar.TAG_CODE,
         fj.FJ_CODE,
@@ -141,7 +145,8 @@ SELECT
     i.ID_TEMPS,
     i.DR_NO,
     i.SP_NO,
-    NULL                                        AS SA_NO,
+    i.SA_NO                                       AS SA_NO,
+    i.EMP_REGIME,
     i.TR_SEXE,
     CASE i.TR_SEXE
         WHEN 1 THEN 'Masculin'
