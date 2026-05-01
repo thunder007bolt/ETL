@@ -1,11 +1,16 @@
 """
 Pipeline DTM — alimente les tables d'agrégats DTM du domaine GRH.
 
-Stratégie : DELETE WHERE CLICHE = :cliche  puis  INSERT (streaming).
+Stratégie : ARCHIVE ODS + TRUNCATE + INSERT (identique aux tables de faits).
+  1. Archive DTM.TABLE → ODS.TABLE par chunks ROWID (commit par chunk).
+  2. TRUNCATE DTM.TABLE (DDL, 0 undo, instantané).
+  3. INSERT /*+ APPEND */ les nouvelles données (streaming fetchmany).
+
 CLICHE format : MMYYYY  (ex. '032026')  — uniforme avec les faits DWH.
 
 Source ET cible utilisent la même connexion get_dw_connection()
 (DWH.* et DTM.* sont dans le même Data Warehouse Oracle).
+Si ODS_SCHEMA n'est pas configuré, repli sur DELETE WHERE CLICHE = :cliche.
 """
 
 import logging
@@ -17,6 +22,7 @@ import pandas as pd
 
 from domaines.grh.dtm.dtm_config import DTM_CONFIG
 from shared.base.base_loader import BaseLoader
+from shared.configs import settings
 from shared.utils.db_utils import get_dw_connection
 from shared.utils.sql_loader import load_sql
 
@@ -81,12 +87,18 @@ class DtmPipeline:
         target = cfg["target"]
 
         try:
-            loader.delete_cliche(target, cliche)
-            logger.info(f"[{target}] Cliche {cliche} supprimé, début chargement...")
+            # --- Archivage ODS + TRUNCATE (identique aux faits) ---
+            ods = settings.ODS_SCHEMA
+            if ods:
+                loader.archive_and_truncate(target, ods, cliche)
+            else:
+                loader.delete_cliche(target, cliche)
+
+            logger.info(f"[{target}] Table purgée, début chargement (CLICHE={cliche})...")
 
             total = 0
             for sql_entry in cfg["sql_files"]:
-                sql    = load_sql(_SQL_DIR, sql_entry["file"])
+                sql = load_sql(_SQL_DIR, sql_entry["file"])
                 logger.info(f"[{target}][{sql_entry['label']}] Exécution de la requête SQL...")
                 with conn.cursor() as cursor:
                     cursor.arraysize = self._FETCH
@@ -100,8 +112,8 @@ class DtmPipeline:
                         rows = cursor.fetchmany(self._FETCH)
                         if not rows:
                             break
-                        df    = pd.DataFrame(rows, columns=columns)
-                        df    = _cast_oracle_types(df, description)
+                        df = pd.DataFrame(rows, columns=columns)
+                        df = _cast_oracle_types(df, description)
                         try:
                             chunk_size = loader.insert_chunk(target, df)
                         except Exception:
@@ -132,7 +144,12 @@ class _DtmLoader(BaseLoader):
     def load(self, df) -> int:
         raise NotImplementedError
 
+    def archive_and_truncate(self, table: str, ods_schema: str, cliche: str) -> int:
+        """Archive DTM.TABLE → ODS.TABLE puis TRUNCATE DTM.TABLE."""
+        return self._archive_to_ods_and_truncate(table, ods_schema, cliche)
+
     def delete_cliche(self, table: str, cliche: str) -> None:
+        """Repli si ODS_SCHEMA non configuré : DELETE WHERE CLICHE = :cliche."""
         self._delete_cliche(table, cliche)
 
     def insert_chunk(self, table: str, df: pd.DataFrame) -> int:

@@ -68,6 +68,13 @@ DTM_CONFIG = [
         ],
     },
     {
+        "name": "controle_freq_trim_emp",
+        "target": "DTM.DTM_CONTROLE_FREQ_TRIM_EMP",
+        "sql_files": [
+            {"file": "controle_freq_trim_emp.sql", "label": "CONTROLE_FREQ_TRIM_EMP"},
+        ],
+    },
+    {
         "name": "salaires",
         "target": "DTM.DTM_SALAIRE",
         "sql_files": [

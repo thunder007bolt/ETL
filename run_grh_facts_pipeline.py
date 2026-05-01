@@ -1,5 +1,10 @@
 """
+Point d'entrée Jenkins — pipeline des faits GRH.
 
+Usage :
+    python run_grh_facts_pipeline.py
+    python run_grh_facts_pipeline.py --exclude-heavy
+    python run_grh_facts_pipeline.py --table FAIT_GRH_ABSENCE
 """
 
 import argparse
@@ -13,17 +18,40 @@ def main():
     setup_logging()
     logger = logging.getLogger("run_grh_facts_pipeline")
 
-    logger.info(f"Démarrage")
+    parser = argparse.ArgumentParser(
+        description="Lance le pipeline des faits GRH"
+    )
+    parser.add_argument(
+        "--exclude-heavy",
+        action="store_true",
+        help="Exclut les tables marquées heavy=True",
+    )
+    parser.add_argument(
+        "--table",
+        default=None,
+        metavar="TABLE",
+        help="Lance uniquement la table cible indiquée",
+    )
+    args = parser.parse_args()
+
+    logger.info(
+        f"Démarrage pipeline faits GRH — exclude_heavy={args.exclude_heavy}"
+        + (f" — table={args.table}" if args.table else "")
+    )
 
     try:
         from domaines.grh.facts.pipeline_facts import FactsPipeline
-        FactsPipeline().run()
 
-        logger.info("FactsPipeline terminé avec succès.")
+        FactsPipeline().run(
+            exclude_heavy=args.exclude_heavy,
+            table_filter=args.table,
+        )
+
+        logger.info("FactsPipeline GRH terminé avec succès.")
         sys.exit(0)
 
     except Exception as e:
-        logger.critical(f"FactsPipeline échoué : {e}")
+        logger.critical(f"FactsPipeline GRH échoué : {e}", exc_info=True)
         sys.exit(1)
 
 
