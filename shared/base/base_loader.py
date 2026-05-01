@@ -338,13 +338,15 @@ class BaseLoader(ABC):
         Le user DWH doit avoir DELETE + INSERT ON <ods_schema>.<table> (DBA).
         """
         with self.conn.cursor() as cursor:
+            table_schema, table_name = table.split(".", 1) if "." in table else (None, table)
+
             # Étape 0 : idempotence — nettoie un éventuel snapshot partiel
             # Chunké par lots de _ARCHIVE_BATCH pour éviter ORA-30036 sur
             # les grandes tables ODS (ex. FAIT_DEBOURS).
             deleted = 0
             while True:
                 cursor.execute(
-                    f"DELETE FROM {ods_schema}.{table}"
+                    f"DELETE FROM {ods_schema}.{table_name}"
                     f" WHERE CLICHE = :cliche AND ROWNUM <= :batch",
                     {"cliche": cliche, "batch": self._ARCHIVE_BATCH},
                 )
@@ -355,30 +357,46 @@ class BaseLoader(ABC):
                     break
             if deleted:
                 logger.warning(
-                    f"[ODS] {ods_schema}.{table} — {deleted} lignes partielles "
+                    f"[ODS] {ods_schema}.{table_name} — {deleted} lignes partielles "
                     f"(CLICHE={cliche}) nettoyées avant réarchivage"
                 )
 
             # Étape 1 : colonnes communes DWH/ODS (évite ORA-00932 si structures
             # ont divergé, ex. après ajout de CLICHE).
-            cursor.execute(
-                """
-                SELECT c.column_name
-                FROM   user_tab_columns c
-                JOIN   all_tab_columns  o
-                       ON  o.owner       = :ods
-                       AND o.table_name  = c.table_name
-                       AND o.column_name = c.column_name
-                WHERE  c.table_name = :tbl
-                ORDER BY c.column_id
-                """,
-                {"ods": ods_schema.upper(), "tbl": table.upper()},
-            )
+            if table_schema:
+                cursor.execute(
+                    """
+                    SELECT c.column_name
+                    FROM   all_tab_columns c
+                    JOIN   all_tab_columns  o
+                           ON  o.owner       = :ods
+                           AND o.table_name  = c.table_name
+                           AND o.column_name = c.column_name
+                    WHERE  c.owner = :owner AND c.table_name = :tbl
+                    ORDER BY c.column_id
+                    """,
+                    {"ods": ods_schema.upper(), "owner": table_schema.upper(), "tbl": table_name.upper()},
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT c.column_name
+                    FROM   user_tab_columns c
+                    JOIN   all_tab_columns  o
+                           ON  o.owner       = :ods
+                           AND o.table_name  = c.table_name
+                           AND o.column_name = c.column_name
+                    WHERE  c.table_name = :tbl
+                    ORDER BY c.column_id
+                    """,
+                    {"ods": ods_schema.upper(), "tbl": table_name.upper()},
+                )
+            
             common_cols = ", ".join(row[0] for row in cursor.fetchall())
             if not common_cols:
                 raise RuntimeError(
                     f"Aucune colonne commune entre {table} (DWH) et "
-                    f"{ods_schema}.{table} (ODS) — vérifier la structure des tables."
+                    f"{ods_schema}.{table_name} (ODS) — vérifier la structure des tables."
                 )
 
             # Étape 2 : calcul des bornes ROWID (une seule passe O(n) sur les ROWID,
@@ -408,7 +426,7 @@ class BaseLoader(ABC):
             archived = 0
             for min_rid, max_rid in chunks:
                 cursor.execute(
-                    f"INSERT /*+ APPEND */ INTO {ods_schema}.{table} ({common_cols})"
+                    f"INSERT /*+ APPEND */ INTO {ods_schema}.{table_name} ({common_cols})"
                     f" SELECT {common_cols} FROM {table}"
                     f" WHERE ROWID BETWEEN :1 AND :2",
                     [min_rid, max_rid],
@@ -417,7 +435,7 @@ class BaseLoader(ABC):
                 self.conn.commit()
                 logger.debug(f"[ODS] {table} archivé {archived} lignes")
 
-            logger.info(f"[ODS] {table} → {ods_schema}.{table} : {archived} lignes archivées")
+            logger.info(f"[ODS] {table} → {ods_schema}.{table_name} : {archived} lignes archivées")
 
             # Étape 4 : vidage DWH — DDL = auto-commit Oracle, 0 undo
             cursor.execute(f"TRUNCATE TABLE {table}")
