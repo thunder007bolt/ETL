@@ -50,7 +50,7 @@ SELECT
 FROM   req1
 GROUP BY ANNEE, NBRE_CONTROLE
 
-UNION ALL
+-- UNION ALL
 
 -- ── Employeurs sans contrôle (fréquence 0) ─────────────────────────────────
 -- SELECT
