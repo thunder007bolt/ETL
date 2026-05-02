@@ -53,9 +53,9 @@ GROUP BY ANNEE, NBRE_CONTROLE
 UNION ALL
 
 -- ── Employeurs sans contrôle (fréquence 0) ─────────────────────────────────
-SELECT
-    TO_CHAR(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')))  AS AN_ID,
-    0                                                    AS NBRE_CONTROLE,
-    COUNT(*)                                             AS NB_EMPLOYEURS,
-    :1                                                   AS CLICHE
-FROM   req
+-- SELECT
+--     TO_CHAR(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')))  AS AN_ID,
+--     0                                                    AS NBRE_CONTROLE,
+--     COUNT(*)                                             AS NB_EMPLOYEURS,
+--     :1                                                   AS CLICHE
+-- FROM   req
