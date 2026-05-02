@@ -43,7 +43,7 @@ req1 AS (
 
 -- ── Employeurs avec contrôles : distribution par fréquence ─────────────────
 SELECT
-    TO_CHAR(ANNEE)  AS ANNEE,
+    TO_CHAR(ANNEE)  AS  AN_ID,
     NBRE_CONTROLE,
     COUNT(EMP_ID)   AS NB_EMPLOYEURS,
     :1              AS CLICHE
@@ -54,7 +54,7 @@ UNION ALL
 
 -- ── Employeurs sans contrôle (fréquence 0) ─────────────────────────────────
 SELECT
-    TO_CHAR(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')))  AS ANNEE,
+    TO_CHAR(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')))  AS AN_ID,
     0                                                    AS NBRE_CONTROLE,
     COUNT(*)                                             AS NB_EMPLOYEURS,
     :1                                                   AS CLICHE

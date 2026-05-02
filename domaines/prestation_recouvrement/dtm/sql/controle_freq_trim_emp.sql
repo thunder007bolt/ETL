@@ -6,7 +6,7 @@
 -- :1 = CLICHE (MMYYYY) — snapshot DWH uniforme
 
 SELECT
-    EXTRACT(YEAR FROM TO_DATE(fc.CTL_DATE, 'DD/MM/YY'))       AS ANNEE,
+    EXTRACT(YEAR FROM TO_DATE(fc.CTL_DATE, 'DD/MM/YY'))       AS AN_ID,
     TO_CHAR(TO_DATE(fc.CTL_DATE, 'DD/MM/YY'), 'Q')            AS TRIMESTRE,
     fc.CTL_TYPE,
     COUNT(fc.EMP_ID)                                           AS NB_CONTROLES,
