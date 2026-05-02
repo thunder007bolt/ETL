@@ -43,8 +43,7 @@ duree AS (
     SELECT
         cp.TR_ID,
         tr.TR_SEXE,
-        SUM(cp.COEFF)                                    AS NB_MOIS,
-        MAX(cp.PER_ID)                                   AS MAX_PER_ID
+        SUM(cp.COEFF)                                    AS NB_MOIS
     FROM coeff_periode               cp
     JOIN DWH.FAIT_TRAVAILLEUR        tr
       ON tr.TR_ID    = cp.TR_ID
@@ -54,7 +53,13 @@ duree AS (
 )
 
 SELECT
-    FLOOR(MAX(d.MAX_PER_ID) / 100) * 10000 + 101        AS ID_TEMPS,
+    FLOOR((SELECT MAX(dn2.PER_ID)
+           FROM DWH.FAIT_DECLARATION_NOMINATIVE dn2
+           JOIN DWH.FAIT_SALAIRE s2 ON s2.DN_ID = dn2.DN_ID
+           WHERE (s2.SAL_STATUT IS NULL OR s2.SAL_STATUT NOT IN ('A', 'R'))
+             AND dn2.PER_ID IS NOT NULL
+             AND dn2.CLICHE = :1
+             AND s2.CLICHE = :1) / 100) * 10000 + 101    AS ID_TEMPS,
     d.TR_SEXE,
     tda.TDA_CODE,
     CASE d.TR_SEXE
