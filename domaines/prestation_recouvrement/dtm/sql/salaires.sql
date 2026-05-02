@@ -22,6 +22,7 @@ SELECT
     END                                                             AS LIBELLE_SEXE,
     tag.TAG_CODE,
     tef.TEF_CODE,
+    fj.FJ_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(s.SAL_ID)                                                 AS NB_DECLARATIONS,
     COUNT(DISTINCT s.TR_ID)                                         AS NB_TRAVAILLEURS,
@@ -52,6 +53,7 @@ LEFT JOIN  DTM.DIM_TEMPS                       t   ON  t.ID_TEMPS  =
 LEFT JOIN  DTM.DIM_SERVICE_PROVINCIAL          sp  ON  sp.SP_NO    = dn.SP_NO
 LEFT JOIN  DTM.DIM_TRANCHE_EFFECTIF            tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.INF AND tef.SUP
 LEFT JOIN  DTM.DIM_TRANCHE_AGE                 tag ON  FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE) / 12) BETWEEN tag.INF AND tag.SUP
+LEFT JOIN  DTM.DIM_FORME_JURIDIQUE             fj  ON  fj.FJ_CODE  = e.EMP_FORME_JURIDIQUE
 CROSS JOIN DTM.DIM_PARAMETRE_GLOBAL          pg
 WHERE s.CLICHE = :1
   AND (s.SAL_STATUT IS NULL OR s.SAL_STATUT NOT IN ('A', 'R'))
@@ -70,5 +72,6 @@ GROUP BY
     END,
     tag.TAG_CODE,
     tef.TEF_CODE,
+    fj.FJ_CODE,
     pg.PG_SALAIRE_MAX,
     s.CLICHE
