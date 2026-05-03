@@ -92,6 +92,7 @@ FACT_CONFIG = [
     {
         "sql_file":   "transaction_cotisation.sql",
         "target":     "FAIT_TRANSACTION_COTISATION",
+        "heavy":      True,  
     },
     {
         "sql_file":   "transaction_declaration.sql",
@@ -120,7 +121,7 @@ FACT_CONFIG = [
     {
         "sql_file":   "debours.sql",
         "target":     "FAIT_DEBOURS",
-        "heavy":      True,   # ~71M lignes — job Jenkins dédié
+        "heavy":      True,  
     },
     {
         "sql_file":   "declarat_groupe_assurance.sql",
@@ -129,7 +130,6 @@ FACT_CONFIG = [
     {
         "sql_file":   "dossier.sql",
         "target":     "FAIT_DOSSIER",
-        "heavy":      True,   # volumineuse — job Jenkins dédié
     },
     {
         "sql_file":   "dossier_rejete.sql",
@@ -190,6 +190,7 @@ FACT_CONFIG = [
     {
         "sql_file":   "salaire.sql",
         "target":     "FAIT_SALAIRE",
+        "heavy":      True,  
     },
     {
         "sql_file":   "supplement_salaire.sql",

@@ -38,6 +38,7 @@ DTM_CONFIG = [
             {"file": "cotisations_at.sql", "label": "AT"},
             {"file": "cotisations_av.sql", "label": "AV"},
         ],
+        "heavy": True,  
     },
     {
         "name": "recouvrement",
@@ -80,7 +81,7 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "salaires.sql", "label": "SALAIRES"},
         ],
-        "heavy": True,   # agrégat sur FAIT_SALAIRE — volumineuse
+        "heavy": True,   
     },
     {
         "name": "mise_en_demeure",
@@ -126,6 +127,7 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "prestation.sql", "label": "PRESTATION"},
         ],
+        "heavy": True,  
     },
     {
         "name": "prestation_indue",
@@ -140,6 +142,7 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "declaration.sql", "label": "DECLARATION"},
         ],
+        "heavy": True,  
     },
     {
         "name": "duree_assurance",
@@ -161,6 +164,5 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "dossier.sql", "label": "DOSSIER"},
         ],
-        "heavy": True,   # agrégat sur FAIT_DOSSIER — volumineuse
     },
 ]
