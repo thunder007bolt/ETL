@@ -268,4 +268,4 @@ base AS (
 )
 
 -- ── TABLEAU 7 : agrégation multi-axes + ligne TOTAL ──────────────────────
-SELECT * FROM base;
+SELECT * FROM base
