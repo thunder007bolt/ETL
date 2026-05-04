@@ -1,16 +1,68 @@
--- DTM_TRAVAILLEUR — Indicateurs travailleur par mois, géographie, sexe, tranche d'âge, forme juridique
--- :1 = CLICHE (MMYYYY) — filtre la période et étiquette les lignes insérées
+
 WITH
 
--- ── CTE 1 : contrat actif le plus récent ────────────────────────────────
-contrat_actif AS (
+-- ── SNAPSHOT DEBUT (reconstitution au 31/12) ─────────────────────────────
+emp_post_dec AS (
+    SELECT EMP_ID
+    FROM DWH.FAIT_EMPLOI
+    WHERE TO_DATE(EM_DATE_DEBUT, 'DD/MM/RR') > TO_DATE('3112' || (TO_NUMBER(SUBSTR(:1, 3, 4)) - 1), 'DDMMYYYY')
+      AND CLICHE = :1
+),
+emp_actifs_au_dec AS (
+    SELECT EMP_ID
+    FROM DWH.FAIT_EMPLOI
+    WHERE EM_DATE_FIN IS NOT NULL
+      AND TO_DATE(EM_DATE_FIN, 'DD/MM/RR') > TO_DATE('3112' || (TO_NUMBER(SUBSTR(:1, 3, 4)) - 1), 'DDMMYYYY')
+      AND CLICHE = :1
+      AND EMP_ID NOT IN (SELECT EMP_ID FROM emp_post_dec)
+),
+emp_base_dec AS (
+    SELECT *
+    FROM DWH.FAIT_EMPLOI
+    WHERE EMP_ID NOT IN (SELECT EMP_ID FROM emp_post_dec)
+      AND CLICHE = :1
+),
+emp_snapshot_debut AS (
+    SELECT
+        e.EMP_ID,
+        e.EM_DATE_DEBUT,
+        CASE WHEN a.EMP_ID IS NOT NULL THEN NULL ELSE e.EM_DATE_FIN END AS EM_DATE_FIN,
+        e.TR_ID,
+        e.EM_QUALIFICATION,
+        e.EM_TYPE_EMPLOI,
+        e.EM_PROFESSION,
+        e.EM_CATEGORIE,
+        e.EM_ASSURE_VOL,
+        e.EM_DATE_INSERT,
+        e.EM_DATE_UPDATE,
+        e.EM_USAGER_INSERT,
+        e.EM_USAGER_UPDATE,
+        e.EM_SALAIRE,
+        e.EM_MOTIF_SORTIE,
+        e.EM_REGUL,
+        e.EM_ID,
+        e.DMD_ID_ECNSS_INS,
+        e.DMD_ID_ECNSS_UPD,
+        e.SP_NO,
+        e.SP_NO_UPD
+    FROM emp_base_dec e
+    LEFT JOIN emp_actifs_au_dec a ON e.EMP_ID = a.EMP_ID
+),
+snapshot_debut_contrat_actif AS (
     SELECT *
     FROM (
         SELECT em.*,
-               ROW_NUMBER() OVER (
-                   PARTITION BY em.TR_ID
-                   ORDER BY em.EM_DATE_DEBUT DESC
-               ) rn
+               ROW_NUMBER() OVER (PARTITION BY em.TR_ID ORDER BY em.EM_DATE_DEBUT DESC) rn
+        FROM emp_snapshot_debut em
+        WHERE em.EM_DATE_FIN IS NULL
+    )
+    WHERE rn = 1
+),
+snapshot_actu_contrat_actif AS (
+    SELECT *
+    FROM (
+        SELECT em.*,
+               ROW_NUMBER() OVER (PARTITION BY em.TR_ID ORDER BY em.EM_DATE_DEBUT DESC) rn
         FROM DWH.FAIT_EMPLOI em
         WHERE em.EM_DATE_FIN IS NULL
           AND em.CLICHE = :1
@@ -18,10 +70,46 @@ contrat_actif AS (
     WHERE rn = 1
 ),
 
--- ── CTE 2 : immatriculations ─────────────────────────────────────────────
+-- ── FLUX MUTATIONS (sorties : retraites, décès, autres) ───────────────────
+flux_mutations AS (
+    SELECT
+        sp.DR_NO,
+        e.SP_NO,
+        tr.TR_SEXE,
+        tar.TAG_CODE,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE                                                          AS EMP_FJ_CODE,
+        e.EMP_REGIME,
+        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'RETRAITE'     THEN em.TR_ID END) AS NB_RET,
+        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'DECES'        THEN em.TR_ID END) AS NB_DEC,
+        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'LICENCIEMENT' THEN em.TR_ID END) AS NB_LIC,
+        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'DEMISSION'    THEN em.TR_ID END) AS NB_DEM,
+        COUNT(DISTINCT CASE
+              WHEN em.EM_MOTIF_SORTIE IS NOT NULL
+               AND em.EM_MOTIF_SORTIE NOT IN ('RETRAITE','DECES','LICENCIEMENT','DEMISSION')
+              THEN em.TR_ID END)                                                         AS NB_AUT
+    FROM DWH.FAIT_EMPLOI em
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR       tr  ON tr.TR_ID  = em.TR_ID  AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR         e   ON e.EMP_ID  = em.EMP_ID AND e.CLICHE  = :1
+    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO  = e.SP_NO
+    LEFT JOIN DTM.DIM_TRANCHE_AGE        tar
+           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
+    WHERE em.EM_DATE_FIN   IS NOT NULL
+      AND em.EM_MOTIF_SORTIE IS NOT NULL
+      AND em.CLICHE = :1
+    GROUP BY
+        sp.DR_NO,
+        e.SP_NO,
+        tr.TR_SEXE,
+        tar.TAG_CODE,
+        e.SA_NO,
+        e.EMP_FORME_JURIDIQUE,
+        e.EMP_REGIME
+),
+
+-- ── FLUX IMMATRICULATIONS (nouvelles entrées sur la période) ──────────────
 flux_imm AS (
     SELECT
-        TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD'))  AS ID_TEMPS,
         sp.DR_NO,
         tr.SP_NO,
         tr.TR_SEXE,
@@ -31,33 +119,19 @@ flux_imm AS (
         fj.SECT_CODE,
         emp.SA_NO,
         emp.EMP_REGIME,
-        COUNT(DISTINCT tr.TR_ID)                                    AS NB_IMM,
-        COUNT(DISTINCT CASE WHEN tr.TR_ETAT = 'A'
-              THEN tr.TR_ID END)                                    AS NB_ACTIFS
-    FROM DWH.FAIT_TRAVAILLEUR tr
-
-    LEFT JOIN contrat_actif ca
-           ON ca.TR_ID = tr.TR_ID
-
-    LEFT JOIN DWH.FAIT_EMPLOYEUR emp
-           ON emp.EMP_ID = ca.EMP_ID
-          AND emp.CLICHE = :1
-
-    LEFT JOIN DTM.DIM_FORME_JURIDIQUE fj
-           ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
-
-    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp
-           ON sp.SP_NO = tr.SP_NO
-
-    LEFT JOIN DTM.DIM_TRANCHE_AGE tar
-           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
-              BETWEEN tar.INF AND tar.SUP
-
-    WHERE tr.TR_DATE_IMM IS NOT NULL
+        COUNT(DISTINCT snap.TR_ID)                                  AS NB_IMM,
+        COUNT(DISTINCT CASE WHEN tr.TR_ETAT = 'A' THEN snap.TR_ID END) AS NB_ACTIFS
+    FROM snapshot_actu_contrat_actif snap
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR       tr  ON tr.TR_ID  = snap.TR_ID  AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR         emp ON emp.EMP_ID = snap.EMP_ID AND emp.CLICHE = :1
+    LEFT JOIN DTM.DIM_FORME_JURIDIQUE    fj  ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
+    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO   = tr.SP_NO
+    LEFT JOIN DTM.DIM_TRANCHE_AGE        tar
+           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
+    WHERE tr.TR_DATE_IMM >= TO_DATE('0101' || SUBSTR(:1, 3, 4), 'DDMMYYYY')
+      AND tr.TR_DATE_IMM <  TO_DATE('0101' || (TO_NUMBER(SUBSTR(:1, 3, 4)) + 1), 'DDMMYYYY')
       AND tr.CLICHE = :1
-
     GROUP BY
-        TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD')),
         sp.DR_NO,
         tr.SP_NO,
         emp.SA_NO,
@@ -69,119 +143,129 @@ flux_imm AS (
         fj.SECT_CODE
 ),
 
--- ── CTE 3 : mouvements ───────────────────────────────────────────────────
-flux_mvt AS (
+-- ── EFFECTIFS DEBUT PERIODE ───────────────────────────────────────────────
+flux_debut AS (
     SELECT
-        TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD'))  AS ID_TEMPS,
         sp.DR_NO,
-        e.SP_NO,
+        tr.SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
-        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'RETRAITE'
-              THEN em.TR_ID END)                                    AS NB_RET,
-        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'DECES'
-              THEN em.TR_ID END)                                    AS NB_DEC,
-        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'LICENCIEMENT'
-              THEN em.TR_ID END)                                    AS NB_LIC,
-        COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'DEMISSION'
-              THEN em.TR_ID END)                                    AS NB_DEM,
-        COUNT(DISTINCT CASE
-              WHEN em.EM_MOTIF_SORTIE IS NOT NULL
-               AND em.EM_MOTIF_SORTIE NOT IN
-                   ('RETRAITE','DECES','LICENCIEMENT','DEMISSION')
-              THEN em.TR_ID END)                                    AS NB_AUT
-    FROM DWH.FAIT_EMPLOI em
-    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr        ON tr.TR_ID = em.TR_ID AND tr.CLICHE = :1
-    LEFT JOIN DWH.FAIT_EMPLOYEUR e           ON e.EMP_ID = em.EMP_ID AND e.CLICHE = :1
-    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO = e.SP_NO
-    LEFT JOIN DTM.DIM_TRANCHE_AGE tar
-           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
-              BETWEEN tar.INF AND tar.SUP
-    WHERE em.EM_DATE_FIN IS NOT NULL
-      AND em.EM_MOTIF_SORTIE IS NOT NULL
-      AND em.CLICHE = :1
+        fj.FJ_CODE                                                  AS EMP_FJ_CODE,
+        fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
+        fj.SECT_CODE,
+        emp.SA_NO,
+        emp.EMP_REGIME,
+        COUNT(DISTINCT snap.TR_ID)                                  AS NB_DEBUT
+    FROM snapshot_debut_contrat_actif snap
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR       tr  ON tr.TR_ID  = snap.TR_ID  AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR         emp ON emp.EMP_ID = snap.EMP_ID AND emp.CLICHE = :1
+    LEFT JOIN DTM.DIM_FORME_JURIDIQUE    fj  ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
+    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO   = tr.SP_NO
+    LEFT JOIN DTM.DIM_TRANCHE_AGE        tar
+           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
+    WHERE tr.CLICHE = :1
     GROUP BY
-        TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD')),
         sp.DR_NO,
-        e.SP_NO,
+        tr.SP_NO,
+        emp.SA_NO,
+        emp.EMP_REGIME,
         tr.TR_SEXE,
-        tar.TAG_CODE
+        tar.TAG_CODE,
+        fj.FJ_CODE,
+        fj.FJ_CODE_SUP,
+        fj.SECT_CODE
 ),
 
--- ── CTE 4 : salaires ─────────────────────────────────────────────────────
-flux_sal AS (
+-- ── EFFECTIFS FIN PERIODE ─────────────────────────────────────────────────
+flux_fin AS (
     SELECT
-        TO_NUMBER(TO_CHAR(TRUNC(
-            TO_DATE(TO_CHAR(dn.PER_ID),'YYYYMM'),'MM'),'YYYYMMDD')) AS ID_TEMPS,
         sp.DR_NO,
-        e.SP_NO,
+        tr.SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
-        SUM(LEAST(NVL(s.SAL_BASE_COTISATION,0),
-            pg.PG_SALAIRE_MAX))                                     AS MASSE_PLAFON,
-        SUM(NVL(s.SAL_MONTANT_BRUT,0))                             AS MASSE_BRUT
-    FROM DWH.FAIT_SALAIRE s
-    INNER JOIN DWH.FAIT_DECLARATION_NOMINATIVE dn ON dn.DN_ID = s.DN_ID AND dn.CLICHE = :1
-    LEFT JOIN DWH.FAIT_TRAVAILLEUR tr             ON tr.TR_ID = s.TR_ID AND tr.CLICHE = :1
-    LEFT JOIN DWH.FAIT_EMPLOYEUR e                ON e.EMP_ID = dn.EMP_ID AND e.CLICHE = :1
-    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp        ON sp.SP_NO = e.SP_NO
-    LEFT JOIN DTM.DIM_TRANCHE_AGE tar
-           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12)
-              BETWEEN tar.INF AND tar.SUP
-    CROSS JOIN DTM.DIM_PARAMETRE_GLOBAL pg
-    WHERE s.CLICHE  = :1
-      AND dn.CLICHE = :1
+        fj.FJ_CODE                                                  AS EMP_FJ_CODE,
+        fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
+        fj.SECT_CODE,
+        emp.SA_NO,
+        emp.EMP_REGIME,
+        COUNT(DISTINCT snap.TR_ID)                                  AS NB_FIN
+    FROM snapshot_actu_contrat_actif snap
+    LEFT JOIN DWH.FAIT_TRAVAILLEUR       tr  ON tr.TR_ID  = snap.TR_ID  AND tr.CLICHE = :1
+    LEFT JOIN DWH.FAIT_EMPLOYEUR         emp ON emp.EMP_ID = snap.EMP_ID AND emp.CLICHE = :1
+    LEFT JOIN DTM.DIM_FORME_JURIDIQUE    fj  ON fj.FJ_CODE = emp.EMP_FORME_JURIDIQUE
+    LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL sp  ON sp.SP_NO   = tr.SP_NO
+    LEFT JOIN DTM.DIM_TRANCHE_AGE        tar
+           ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
+    WHERE tr.CLICHE = :1
     GROUP BY
-        TO_NUMBER(TO_CHAR(TRUNC(
-            TO_DATE(TO_CHAR(dn.PER_ID),'YYYYMM'),'MM'),'YYYYMMDD')),
         sp.DR_NO,
-        e.SP_NO,
+        tr.SP_NO,
+        emp.SA_NO,
+        emp.EMP_REGIME,
         tr.TR_SEXE,
-        tar.TAG_CODE
+        tar.TAG_CODE,
+        fj.FJ_CODE,
+        fj.FJ_CODE_SUP,
+        fj.SECT_CODE
+),
+
+-- ── ASSEMBLAGE ─────────────────────
+base AS (
+    SELECT
+        CAST(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')) AS NUMBER(4))       AS AN_ID,
+        COALESCE(i.DR_NO,      d.DR_NO,      f.DR_NO,      m.DR_NO)     AS DR_NO,
+        COALESCE(i.SP_NO,      d.SP_NO,      f.SP_NO,      m.SP_NO)     AS SP_NO,
+        COALESCE(i.SA_NO,      d.SA_NO,      f.SA_NO)                   AS SA_NO,
+        COALESCE(i.TR_SEXE,    d.TR_SEXE,    f.TR_SEXE,    m.TR_SEXE)   AS TR_SEXE,
+        CASE COALESCE(i.TR_SEXE, d.TR_SEXE, f.TR_SEXE, m.TR_SEXE)
+            WHEN 1 THEN 'Masculin'
+            WHEN 2 THEN 'Feminin'
+            ELSE        'Inconnu'
+        END                                                              AS TR_SEXE_LIBELLE,
+        COALESCE(i.TAG_CODE,   d.TAG_CODE,   f.TAG_CODE,   m.TAG_CODE)  AS TAG_CODE,
+        COALESCE(i.EMP_FJ_CODE,d.EMP_FJ_CODE,f.EMP_FJ_CODE,m.EMP_FJ_CODE) AS EMP_FJ_CODE,
+        COALESCE(i.EMP_FJ_CODE_SUP, d.EMP_FJ_CODE_SUP, f.EMP_FJ_CODE_SUP) AS EMP_FJ_CODE_SUP,
+        COALESCE(i.EMP_REGIME, d.EMP_REGIME, f.EMP_REGIME)              AS EMP_REGIME,
+        CASE COALESCE(i.SECT_CODE, d.SECT_CODE, f.SECT_CODE)
+            WHEN 'PB' THEN 'PUBLIC'
+            WHEN 'PV' THEN 'PRIVE'
+            ELSE COALESCE(i.SECT_CODE, d.SECT_CODE, f.SECT_CODE)
+        END                                                              AS EMP_CAT_LIBELLE,
+        d.NB_DEBUT                                                       AS TR_EFFECTIFS_DEBUT,
+        i.NB_IMM                                                         AS TR_IMMATRICULES,
+        m.NB_RET                                                         AS TR_RETRAITES,
+        m.NB_DEC                                                         AS TR_DECEDES,
+        m.NB_LIC                                                         AS TR_LICENCIES,
+        m.NB_DEM                                                         AS TR_DEMISSIONS,
+        m.NB_AUT                                                         AS TR_AUTRES,
+        f.NB_FIN                                                         AS TR_EFFECTIFS_FIN,
+        :1                                                               AS CLICHE
+    FROM flux_imm i
+    FULL OUTER JOIN flux_debut d
+           ON d.DR_NO       = i.DR_NO
+          AND d.SP_NO       = i.SP_NO
+          AND d.SA_NO       = i.SA_NO
+          AND d.EMP_REGIME  = i.EMP_REGIME
+          AND d.TR_SEXE     = i.TR_SEXE
+          AND d.TAG_CODE    = i.TAG_CODE
+          AND d.EMP_FJ_CODE = i.EMP_FJ_CODE
+    FULL OUTER JOIN flux_fin f
+           ON f.DR_NO       = COALESCE(i.DR_NO,      d.DR_NO)
+          AND f.SP_NO       = COALESCE(i.SP_NO,      d.SP_NO)
+          AND f.SA_NO       = COALESCE(i.SA_NO,      d.SA_NO)
+          AND f.EMP_REGIME  = COALESCE(i.EMP_REGIME, d.EMP_REGIME)
+          AND f.TR_SEXE     = COALESCE(i.TR_SEXE,    d.TR_SEXE)
+          AND f.TAG_CODE    = COALESCE(i.TAG_CODE,   d.TAG_CODE)
+          AND f.EMP_FJ_CODE = COALESCE(i.EMP_FJ_CODE, d.EMP_FJ_CODE)
+    FULL OUTER JOIN flux_mutations m
+           ON m.SA_NO      = COALESCE(i.SA_NO,      d.SA_NO,      f.SA_NO)
+          AND m.DR_NO      = COALESCE(i.DR_NO,      d.DR_NO,      f.DR_NO)
+          AND m.SP_NO      = COALESCE(i.SP_NO,      d.SP_NO,      f.SP_NO)
+          AND m.TR_SEXE    = COALESCE(i.TR_SEXE,    d.TR_SEXE,    f.TR_SEXE)
+          AND m.TAG_CODE   = COALESCE(i.TAG_CODE,   d.TAG_CODE,   f.TAG_CODE)
+          AND m.EMP_FJ_CODE = COALESCE(i.EMP_FJ_CODE, d.EMP_FJ_CODE, f.EMP_FJ_CODE)
+          AND m.EMP_REGIME  = COALESCE(i.EMP_REGIME,  d.EMP_REGIME,  f.EMP_REGIME)
 )
 
--- ── SELECT FINAL ─────────────────────────────────────────────────────────
-SELECT
-    i.ID_TEMPS,
-    i.DR_NO,
-    i.SP_NO,
-    i.SA_NO                                       AS SA_NO,
-    i.EMP_REGIME,
-    i.TR_SEXE,
-    CASE i.TR_SEXE
-        WHEN 1 THEN 'Masculin'
-        WHEN 2 THEN 'Feminin'
-        ELSE        'Inconnu'
-    END                                         AS TR_SEXE_LIBELLE,
-    i.TAG_CODE,
-    NULL                                        AS TR_EFFECTIFS_DEBUT,
-    i.NB_ACTIFS                                 AS TR_EFFECTIF,
-    i.NB_IMM                                    AS TR_IMMATRICULES,
-    m.NB_RET                                    AS TR_RETRAITES,
-    m.NB_DEC                                    AS TR_DECEDES,
-    m.NB_LIC                                    AS TR_LICENCIES,
-    m.NB_DEM                                    AS TR_DEMISSIONS,
-    m.NB_AUT                                    AS TR_AUTRES,
-    sl.MASSE_PLAFON                             AS MASSE_SAL_PLAFON,
-    sl.MASSE_BRUT                               AS MASSE_SAL_NON_PLAFON,
-    i.EMP_FJ_CODE,
-    i.EMP_FJ_CODE_SUP,
-    CASE i.SECT_CODE
-        WHEN 'PB' THEN 'PUBLIC'
-        WHEN 'PV' THEN 'PRIVE'
-        ELSE i.SECT_CODE
-    END                                         AS EMP_CAT_LIBELLE,
-    :1                                          AS CLICHE
-FROM flux_imm i
-LEFT JOIN flux_mvt m
-       ON m.ID_TEMPS  = i.ID_TEMPS
-      AND m.DR_NO     = i.DR_NO
-      AND m.SP_NO     = i.SP_NO
-      AND m.TR_SEXE   = i.TR_SEXE
-      AND m.TAG_CODE  = i.TAG_CODE
-LEFT JOIN flux_sal sl
-       ON sl.ID_TEMPS = i.ID_TEMPS
-      AND sl.DR_NO    = i.DR_NO
-      AND sl.SP_NO    = i.SP_NO
-      AND sl.TR_SEXE  = i.TR_SEXE
-      AND sl.TAG_CODE = i.TAG_CODE
+-- ── TABLEAU 7 : agrégation multi-axes + ligne TOTAL ──────────────────────
+SELECT * FROM base;
