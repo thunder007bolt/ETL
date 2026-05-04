@@ -73,12 +73,13 @@ snapshot_actu_contrat_actif AS (
 -- ── FLUX MUTATIONS (sorties : retraites, décès, autres) ───────────────────
 flux_mutations AS (
     SELECT
+        TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD'))          AS ID_TEMPS,
         sp.DR_NO,
         e.SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
         e.SA_NO,
-        e.EMP_FORME_JURIDIQUE                                                          AS EMP_FJ_CODE,
+        e.EMP_FORME_JURIDIQUE                                              AS EMP_FJ_CODE,
         e.EMP_REGIME,
         COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'RETRAITE'     THEN em.TR_ID END) AS NB_RET,
         COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'DECES'        THEN em.TR_ID END) AS NB_DEC,
@@ -87,7 +88,7 @@ flux_mutations AS (
         COUNT(DISTINCT CASE
               WHEN em.EM_MOTIF_SORTIE IS NOT NULL
                AND em.EM_MOTIF_SORTIE NOT IN ('RETRAITE','DECES','LICENCIEMENT','DEMISSION')
-              THEN em.TR_ID END)                                                         AS NB_AUT
+              THEN em.TR_ID END)                                            AS NB_AUT
     FROM DWH.FAIT_EMPLOI em
     LEFT JOIN DWH.FAIT_TRAVAILLEUR       tr  ON tr.TR_ID  = em.TR_ID  AND tr.CLICHE = :1
     LEFT JOIN DWH.FAIT_EMPLOYEUR         e   ON e.EMP_ID  = em.EMP_ID AND e.CLICHE  = :1
@@ -96,8 +97,11 @@ flux_mutations AS (
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
     WHERE em.EM_DATE_FIN   IS NOT NULL
       AND em.EM_MOTIF_SORTIE IS NOT NULL
+      AND TO_DATE(em.EM_DATE_FIN, 'DD/MM/RR') >= TO_DATE('0101' || SUBSTR(:1, 3, 4), 'DDMMYYYY')
+      --AND TO_DATE(em.EM_DATE_FIN, 'DD/MM/RR') <  TO_DATE('0101' || (TO_NUMBER(SUBSTR(:1, 3, 4)) + 1), 'DDMMYYYY')
       AND em.CLICHE = :1
     GROUP BY
+        TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD')),
         sp.DR_NO,
         e.SP_NO,
         tr.TR_SEXE,
@@ -110,6 +114,7 @@ flux_mutations AS (
 -- ── FLUX IMMATRICULATIONS (nouvelles entrées sur la période) ──────────────
 flux_imm AS (
     SELECT
+        TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD'))          AS ID_TEMPS,
         sp.DR_NO,
         tr.SP_NO,
         tr.TR_SEXE,
@@ -132,6 +137,7 @@ flux_imm AS (
       AND tr.TR_DATE_IMM <  TO_DATE('0101' || (TO_NUMBER(SUBSTR(:1, 3, 4)) + 1), 'DDMMYYYY')
       AND tr.CLICHE = :1
     GROUP BY
+        TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD')),
         sp.DR_NO,
         tr.SP_NO,
         emp.SA_NO,
@@ -146,6 +152,7 @@ flux_imm AS (
 -- ── EFFECTIFS DEBUT PERIODE ───────────────────────────────────────────────
 flux_debut AS (
     SELECT
+        TO_NUMBER(TO_CHAR(TO_DATE('0101' || SUBSTR(:1, 3, 4), 'DDMMYYYY'), 'YYYYMMDD')) AS ID_TEMPS,
         sp.DR_NO,
         tr.SP_NO,
         tr.TR_SEXE,
@@ -179,6 +186,7 @@ flux_debut AS (
 -- ── EFFECTIFS FIN PERIODE ─────────────────────────────────────────────────
 flux_fin AS (
     SELECT
+        TO_NUMBER(TO_CHAR(TRUNC(TO_DATE(:1, 'MMYYYY'), 'MM'), 'YYYYMMDD'))             AS ID_TEMPS,
         sp.DR_NO,
         tr.SP_NO,
         tr.TR_SEXE,
@@ -209,63 +217,116 @@ flux_fin AS (
         fj.SECT_CODE
 ),
 
--- ── ASSEMBLAGE ─────────────────────
+-- ── ASSEMBLAGE ─────────────────────────────────────────────────────────────
 base AS (
+    -- Partie 1 : événements mensuels (immatriculations + mutations par mois)
     SELECT
-        CAST(EXTRACT(YEAR FROM TO_DATE(:1, 'MMYYYY')) AS NUMBER(4))       AS AN_ID,
-        COALESCE(i.DR_NO,      d.DR_NO,      f.DR_NO,      m.DR_NO)     AS DR_NO,
-        COALESCE(i.SP_NO,      d.SP_NO,      f.SP_NO,      m.SP_NO)     AS SP_NO,
-        COALESCE(i.SA_NO,      d.SA_NO,      f.SA_NO)                   AS SA_NO,
-        COALESCE(i.TR_SEXE,    d.TR_SEXE,    f.TR_SEXE,    m.TR_SEXE)   AS TR_SEXE,
-        CASE COALESCE(i.TR_SEXE, d.TR_SEXE, f.TR_SEXE, m.TR_SEXE)
+        COALESCE(i.ID_TEMPS,    m.ID_TEMPS)                              AS ID_TEMPS,
+        COALESCE(i.DR_NO,       m.DR_NO)                                 AS DR_NO,
+        COALESCE(i.SP_NO,       m.SP_NO)                                 AS SP_NO,
+        COALESCE(i.SA_NO,       m.SA_NO)                                 AS SA_NO,
+        COALESCE(i.TR_SEXE,     m.TR_SEXE)                               AS TR_SEXE,
+        CASE COALESCE(i.TR_SEXE, m.TR_SEXE)
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
             ELSE        'Inconnu'
         END                                                              AS TR_SEXE_LIBELLE,
-        COALESCE(i.TAG_CODE,   d.TAG_CODE,   f.TAG_CODE,   m.TAG_CODE)  AS TAG_CODE,
-        COALESCE(i.EMP_FJ_CODE,d.EMP_FJ_CODE,f.EMP_FJ_CODE,m.EMP_FJ_CODE) AS EMP_FJ_CODE,
-        COALESCE(i.EMP_FJ_CODE_SUP, d.EMP_FJ_CODE_SUP, f.EMP_FJ_CODE_SUP) AS EMP_FJ_CODE_SUP,
-        COALESCE(i.EMP_REGIME, d.EMP_REGIME, f.EMP_REGIME)              AS EMP_REGIME,
-        CASE COALESCE(i.SECT_CODE, d.SECT_CODE, f.SECT_CODE)
+        COALESCE(i.TAG_CODE,    m.TAG_CODE)                              AS TAG_CODE,
+        COALESCE(i.EMP_FJ_CODE, m.EMP_FJ_CODE)                          AS EMP_FJ_CODE,
+        i.EMP_FJ_CODE_SUP                                                AS EMP_FJ_CODE_SUP,
+        COALESCE(i.EMP_REGIME,  m.EMP_REGIME)                            AS EMP_REGIME,
+        CASE i.SECT_CODE
             WHEN 'PB' THEN 'PUBLIC'
             WHEN 'PV' THEN 'PRIVE'
-            ELSE COALESCE(i.SECT_CODE, d.SECT_CODE, f.SECT_CODE)
+            ELSE i.SECT_CODE
         END                                                              AS EMP_CAT_LIBELLE,
-        d.NB_DEBUT                                                       AS TR_EFFECTIFS_DEBUT,
+        0                                                                AS TR_EFFECTIFS_DEBUT,
         i.NB_IMM                                                         AS TR_IMMATRICULES,
         m.NB_RET                                                         AS TR_RETRAITES,
         m.NB_DEC                                                         AS TR_DECEDES,
         m.NB_LIC                                                         AS TR_LICENCIES,
         m.NB_DEM                                                         AS TR_DEMISSIONS,
         m.NB_AUT                                                         AS TR_AUTRES,
-        f.NB_FIN                                                         AS TR_EFFECTIFS_FIN,
+        0                                                                AS TR_EFFECTIFS_FIN,
         :1                                                               AS CLICHE
     FROM flux_imm i
-    FULL OUTER JOIN flux_debut d
-           ON d.DR_NO       = i.DR_NO
-          AND d.SP_NO       = i.SP_NO
-          AND d.SA_NO       = i.SA_NO
-          AND d.EMP_REGIME  = i.EMP_REGIME
-          AND d.TR_SEXE     = i.TR_SEXE
-          AND d.TAG_CODE    = i.TAG_CODE
-          AND d.EMP_FJ_CODE = i.EMP_FJ_CODE
-    FULL OUTER JOIN flux_fin f
-           ON f.DR_NO       = COALESCE(i.DR_NO,      d.DR_NO)
-          AND f.SP_NO       = COALESCE(i.SP_NO,      d.SP_NO)
-          AND f.SA_NO       = COALESCE(i.SA_NO,      d.SA_NO)
-          AND f.EMP_REGIME  = COALESCE(i.EMP_REGIME, d.EMP_REGIME)
-          AND f.TR_SEXE     = COALESCE(i.TR_SEXE,    d.TR_SEXE)
-          AND f.TAG_CODE    = COALESCE(i.TAG_CODE,   d.TAG_CODE)
-          AND f.EMP_FJ_CODE = COALESCE(i.EMP_FJ_CODE, d.EMP_FJ_CODE)
     FULL OUTER JOIN flux_mutations m
-           ON m.SA_NO      = COALESCE(i.SA_NO,      d.SA_NO,      f.SA_NO)
-          AND m.DR_NO      = COALESCE(i.DR_NO,      d.DR_NO,      f.DR_NO)
-          AND m.SP_NO      = COALESCE(i.SP_NO,      d.SP_NO,      f.SP_NO)
-          AND m.TR_SEXE    = COALESCE(i.TR_SEXE,    d.TR_SEXE,    f.TR_SEXE)
-          AND m.TAG_CODE   = COALESCE(i.TAG_CODE,   d.TAG_CODE,   f.TAG_CODE)
-          AND m.EMP_FJ_CODE = COALESCE(i.EMP_FJ_CODE, d.EMP_FJ_CODE, f.EMP_FJ_CODE)
-          AND m.EMP_REGIME  = COALESCE(i.EMP_REGIME,  d.EMP_REGIME,  f.EMP_REGIME)
+           ON m.ID_TEMPS    = i.ID_TEMPS
+          AND m.SA_NO       = i.SA_NO
+          AND m.DR_NO       = i.DR_NO
+          AND m.SP_NO       = i.SP_NO
+          AND m.TR_SEXE     = i.TR_SEXE
+          AND m.TAG_CODE    = i.TAG_CODE
+          AND m.EMP_FJ_CODE = i.EMP_FJ_CODE
+          AND m.EMP_REGIME  = i.EMP_REGIME
+
+    UNION ALL
+
+    -- Partie 2a : effectifs début de période (01/01 de l'année)
+    SELECT
+        d.ID_TEMPS,
+        d.DR_NO,
+        d.SP_NO,
+        d.SA_NO,
+        d.TR_SEXE,
+        CASE d.TR_SEXE
+            WHEN 1 THEN 'Masculin'
+            WHEN 2 THEN 'Feminin'
+            ELSE        'Inconnu'
+        END                                                              AS TR_SEXE_LIBELLE,
+        d.TAG_CODE,
+        d.EMP_FJ_CODE,
+        d.EMP_FJ_CODE_SUP,
+        d.EMP_REGIME,
+        CASE d.SECT_CODE
+            WHEN 'PB' THEN 'PUBLIC'
+            WHEN 'PV' THEN 'PRIVE'
+            ELSE d.SECT_CODE
+        END                                                              AS EMP_CAT_LIBELLE,
+        d.NB_DEBUT                                                       AS TR_EFFECTIFS_DEBUT,
+        0                                                                AS TR_IMMATRICULES,
+        0                                                                AS TR_RETRAITES,
+        0                                                                AS TR_DECEDES,
+        0                                                                AS TR_LICENCIES,
+        0                                                                AS TR_DEMISSIONS,
+        0                                                                AS TR_AUTRES,
+        0                                                                AS TR_EFFECTIFS_FIN,
+        :1                                                               AS CLICHE
+    FROM flux_debut d
+
+    UNION ALL
+
+    -- Partie 2b : effectifs fin de période (date du cliché)
+    SELECT
+        f.ID_TEMPS,
+        f.DR_NO,
+        f.SP_NO,
+        f.SA_NO,
+        f.TR_SEXE,
+        CASE f.TR_SEXE
+            WHEN 1 THEN 'Masculin'
+            WHEN 2 THEN 'Feminin'
+            ELSE        'Inconnu'
+        END                                                              AS TR_SEXE_LIBELLE,
+        f.TAG_CODE,
+        f.EMP_FJ_CODE,
+        f.EMP_FJ_CODE_SUP,
+        f.EMP_REGIME,
+        CASE f.SECT_CODE
+            WHEN 'PB' THEN 'PUBLIC'
+            WHEN 'PV' THEN 'PRIVE'
+            ELSE f.SECT_CODE
+        END                                                              AS EMP_CAT_LIBELLE,
+        0                                                                AS TR_EFFECTIFS_DEBUT,
+        0                                                                AS TR_IMMATRICULES,
+        0                                                                AS TR_RETRAITES,
+        0                                                                AS TR_DECEDES,
+        0                                                                AS TR_LICENCIES,
+        0                                                                AS TR_DEMISSIONS,
+        0                                                                AS TR_AUTRES,
+        f.NB_FIN                                                         AS TR_EFFECTIFS_FIN,
+        :1                                                               AS CLICHE
+    FROM flux_fin f
 )
 
--- ── TABLEAU 7 : agrégation multi-axes + ligne TOTAL ──────────────────────
 SELECT * FROM base
