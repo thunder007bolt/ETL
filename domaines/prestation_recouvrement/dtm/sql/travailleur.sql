@@ -247,7 +247,7 @@ base AS (
         m.NB_LIC                                                         AS TR_LICENCIES,
         m.NB_DEM                                                         AS TR_DEMISSIONS,
         m.NB_AUT                                                         AS TR_AUTRES,
-        0                                                                AS TR_EFFECTIFS_FIN,
+        0                                                                AS TR_EFFECTIF,
         :1                                                               AS CLICHE
     FROM flux_imm i
     FULL OUTER JOIN flux_mutations m
@@ -290,7 +290,7 @@ base AS (
         0                                                                AS TR_LICENCIES,
         0                                                                AS TR_DEMISSIONS,
         0                                                                AS TR_AUTRES,
-        0                                                                AS TR_EFFECTIFS_FIN,
+        0                                                                AS TR_EFFECTIF,
         :1                                                               AS CLICHE
     FROM flux_debut d
 
@@ -324,7 +324,7 @@ base AS (
         0                                                                AS TR_LICENCIES,
         0                                                                AS TR_DEMISSIONS,
         0                                                                AS TR_AUTRES,
-        f.NB_FIN                                                         AS TR_EFFECTIFS_FIN,
+        f.NB_FIN                                                         AS TR_EFFECTIF,
         :1                                                               AS CLICHE
     FROM flux_fin f
 )
