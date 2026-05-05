@@ -1,48 +1,60 @@
--- DTM_PRESTATION V4
+-- DTM_PRESTATION V5
 -- Sources : DWH.FAIT_DEBOURS          (principal — grain DEB_ID)
 --           DWH.FAIT_DOSSIER          (LP_NO)
 --           DWH.FAIT_EFFET            (IND_ID_BENEF, NET_A_PAYER, DR_NO, SP_NO)
 --           DWH.FAIT_INDIVIDU         (SEXE, DATE_NAISSANCE, DATE_DECES)
---           DWH.FAIT_PRESTATION_ESP   (mois cotisés, nouveaux bénéficiaires, premier effet, taux IPP)
+--           DWH.FAIT_PRESTATION_ESP   (mois cotisés, taux IPP)
 -- Grain   : ID_TEMPS × TDOS_CODE × CODE_PRESTATION × TYPE_PREST
 --           × DR_NO × SP_NO × LP_NO × SEXE × TAG_CODE
 -- Branches : V (PVID), A (AT/MP), F (Prestations Familiales), M (Maladie)
 -- Métriques : NB_PRESTATIONS, NB_BENEFICIAIRES, NB_MOIS_COTISES,
 --             MONTANT_TOTAL, MONTANT_NET, NB_CONTROLES_POST,
 --             NB_DECES, NB_NOUVEAUX, TAUX_IPP_MOYEN (ARI)
+-- nouveaux_beneficiaires / premier_effet : source FAIT_DEBOURS+FAIT_EFFET
+--   (137 324 bénéficiaires vs 26 988 dans FAIT_PRESTATION_ESP)
 -- :1 = CLICHE (MMYYYY) — snapshot DWH uniforme
 
 WITH
 
--- ── CTE 1 : nouveaux bénéficiaires — historique toutes années ────────────
--- Détermine l'ANNEE_ENTREE de chaque (bénéficiaire, type prestation)
--- Non filtré par branche : le join dans base filtre via DEB_CODE_BRANCHE
+-- ── CTE 1 : nouveaux bénéficiaires (R7) ──────────────────────────────────
+-- Nouveau = IND_ID_BENEF dont MIN(DEB_DATE_EFFET) pour un TPE_CODE
+-- tombe dans l'année du débours — Source : FAIT_DEBOURS (paiement effectif)
+-- FAIT_PRESTATION_ESP abandonné : couvre 26 988 bénéf vs 137 324 dans FAIT_DEBOURS
+-- Grain IND_ID_BENEF + TPE_CODE
 nouveaux_beneficiaires AS (
-    SELECT pe.IND_ID_BENEF,
-           pe.TPE_CODE,
-           EXTRACT(YEAR FROM MIN(pe.PE_DATE_EFFET)) AS ANNEE_ENTREE
-    FROM   DWH.FAIT_PRESTATION_ESP pe
-    WHERE  pe.CLICHE              = :1
-      AND  pe.PE_STATUT          != 'R'
-      AND  pe.PE_DATE_EFFET      >= DATE '1990-01-01'
-      AND  pe.IND_ID_BENEF        IS NOT NULL
-    GROUP BY pe.IND_ID_BENEF, pe.TPE_CODE
+    SELECT
+        efp2.IND_ID_BENEF,
+        deb2.TPE_CODE,
+        EXTRACT(YEAR FROM MIN(deb2.DEB_DATE_EFFET)) AS ANNEE_ENTREE
+    FROM   DWH.FAIT_DEBOURS  deb2
+    JOIN   DWH.FAIT_EFFET    efp2 ON efp2.EFP_ID       = deb2.EFP_ID
+                                 AND efp2.CLICHE        = :1
+    WHERE  deb2.CLICHE          = :1
+      AND  deb2.TPE_CODE        IS NOT NULL
+      AND  efp2.IND_ID_BENEF    IS NOT NULL
+      AND  deb2.DEB_DATE_EFFET  IS NOT NULL
+    GROUP BY efp2.IND_ID_BENEF, deb2.TPE_CODE
 ),
 
--- ── CTE 2 : premier mois de droit (Option A CIPRES — PE_DATE_EFFET) ──────
--- PREMIER_ID_TEMPS : ID_TEMPS du premier mois d'ouverture de droit
+-- ── CTE 2 : premier mois de débours par nouveau bénéficiaire ─────────────
+-- Basé sur DEB_DATE_EFFET (premier paiement effectif)
+-- NB_NOUVEAUX = 1 uniquement sur le premier ID_TEMPS du débours
+-- Évite double comptage sur plusieurs mois de l'année
 premier_effet AS (
-    SELECT pe.IND_ID_BENEF,
-           pe.TPE_CODE,
-           TO_NUMBER(TO_CHAR(
-               TRUNC(MIN(pe.PE_DATE_EFFET), 'MM'),
-               'YYYYMMDD'))                              AS PREMIER_ID_TEMPS
-    FROM   DWH.FAIT_PRESTATION_ESP pe
-    WHERE  pe.CLICHE              = :1
-      AND  pe.PE_STATUT          != 'R'
-      AND  pe.PE_DATE_EFFET      >= DATE '1990-01-01'
-      AND  pe.IND_ID_BENEF        IS NOT NULL
-    GROUP BY pe.IND_ID_BENEF, pe.TPE_CODE
+    SELECT
+        efp2.IND_ID_BENEF,
+        deb2.TPE_CODE,
+        TO_NUMBER(TO_CHAR(
+            TRUNC(MIN(deb2.DEB_DATE_EFFET), 'MM'),
+            'YYYYMMDD'))                                AS PREMIER_ID_TEMPS
+    FROM   DWH.FAIT_DEBOURS  deb2
+    JOIN   DWH.FAIT_EFFET    efp2 ON efp2.EFP_ID       = deb2.EFP_ID
+                                 AND efp2.CLICHE        = :1
+    WHERE  deb2.CLICHE          = :1
+      AND  deb2.TPE_CODE        IS NOT NULL
+      AND  efp2.IND_ID_BENEF    IS NOT NULL
+      AND  deb2.DEB_DATE_EFFET  IS NOT NULL
+    GROUP BY efp2.IND_ID_BENEF, deb2.TPE_CODE
 ),
 
 -- ── CTE 3 : taux IPP à l'entrée pour les dossiers ARI ───────────────────
@@ -135,7 +147,9 @@ base AS (
     LEFT JOIN DTM.DIM_TRANCHE_AGE             tag
            ON TRUNC(
                   MONTHS_BETWEEN(
-                      ADD_MONTHS(TRUNC(deb.DEB_DATE_EFFET, 'YYYY'), 12) - 1,
+                      TO_DATE('31/12/' ||
+                          TO_CHAR(EXTRACT(YEAR FROM deb.DEB_DATE_EFFET)),
+                          'DD/MM/YYYY'),
                       ind.IND_DATE_NAISSANCE
                   ) / 12
               ) BETWEEN tag.INF AND tag.SUP
@@ -156,9 +170,14 @@ base AS (
            ON ti.DOS_CODE       = deb.DOS_CODE
           AND deb.TPE_CODE      = 'ARI'
 
-    WHERE deb.CLICHE            = :1
+    WHERE deb.DEB_DATE_EFFET  <= LAST_DAY(TO_DATE(:1, 'MMYYYY'))
       AND deb.CODE_BRANCHE      IN ('V', 'A', 'F', 'M')
       AND deb.DEB_DATE_EFFET    IS NOT NULL
+      -- Exclure AJ sans code prestation — ajustements comptables génériques
+      -- non rattachés à un type CIPRES (175 050 débours, -1 198 446 614 FCFA)
+      AND NOT (    deb.DEB_TYPE  = 'AJ'
+               AND deb.TPE_CODE IS NULL
+               AND deb.TPN_CODE IS NULL)
 )
 
 SELECT
@@ -188,6 +207,7 @@ SELECT
         THEN b.IND_ID_BENEF END)                        AS NB_DECES,
 
     -- NB_NOUVEAUX : bénéficiaires entrant pour la 1ère fois ce mois-ci
+    -- Comptés uniquement sur le premier mois de débours — évite double comptage
     COUNT(DISTINCT CASE
         WHEN b.ANNEE_ENTREE = b.ANNEE
          AND b.ID_TEMPS     = b.PREMIER_ID_TEMPS
@@ -198,6 +218,7 @@ SELECT
              THEN b.TAUX_IPP_ENTREE
              ELSE NULL END)                             AS TAUX_IPP_MOYEN,
 
+    SYSDATE                                             AS DATE_CHARGEMENT,
     :1                                                  AS CLICHE
 
 FROM base b
