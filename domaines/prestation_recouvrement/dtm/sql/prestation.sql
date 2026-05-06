@@ -33,6 +33,7 @@ nouveaux_beneficiaires AS (
       AND  deb2.TPE_CODE        IS NOT NULL
       AND  efp2.IND_ID_BENEF    IS NOT NULL
       AND  deb2.DEB_DATE_EFFET  IS NOT NULL
+      AND  deb2.DEB_DATE_EFFET  <= LAST_DAY(TO_DATE(:1, 'MMYYYY'))
     GROUP BY efp2.IND_ID_BENEF, deb2.TPE_CODE
 ),
 
@@ -54,11 +55,13 @@ premier_effet AS (
       AND  deb2.TPE_CODE        IS NOT NULL
       AND  efp2.IND_ID_BENEF    IS NOT NULL
       AND  deb2.DEB_DATE_EFFET  IS NOT NULL
+      AND  deb2.DEB_DATE_EFFET  <= LAST_DAY(TO_DATE(:1, 'MMYYYY'))
     GROUP BY efp2.IND_ID_BENEF, deb2.TPE_CODE
 ),
 
 -- ── CTE 3 : taux IPP à l'entrée pour les dossiers ARI ───────────────────
--- Prend le taux de la première ligne ordonnée par PE_DATE_EFFET
+-- Premier taux IPP = PE_TAUX_INCAPACITE à MIN(PE_DATE_EFFET)
+-- ROW_NUMBER pour gérer les doublons à la même date
 taux_ipp_entree AS (
     SELECT DOS_CODE, PE_TAUX_INCAPACITE
     FROM (
@@ -78,9 +81,10 @@ taux_ipp_entree AS (
 
 -- ── CTE 4 : mois cotisés — dédupliqué par MAX par (DOS_CODE, TPE_CODE) ───
 mois_cotises AS (
-    SELECT DOS_CODE,
-           TPE_CODE,
-           MAX(PE_MOIS_COTISATION) AS PE_MOIS_COTISATION
+    SELECT
+        DOS_CODE,
+        TPE_CODE,
+        MAX(PE_MOIS_COTISATION) AS PE_MOIS_COTISATION
     FROM   DWH.FAIT_PRESTATION_ESP
     WHERE  CLICHE = :1
     GROUP BY DOS_CODE, TPE_CODE
@@ -89,42 +93,56 @@ mois_cotises AS (
 -- ── CTE 5 : base débours enrichis ────────────────────────────────────────
 base AS (
     SELECT
-        -- Temporel
+        -- Temporel R1
         TO_NUMBER(TO_CHAR(
             TRUNC(deb.DEB_DATE_EFFET, 'MM'),
             'YYYYMMDD'))                                AS ID_TEMPS,
         EXTRACT(YEAR FROM deb.DEB_DATE_EFFET)           AS ANNEE,
+
         -- Clés
         deb.DEB_ID,
         deb.DOS_CODE,
         deb.CODE_BRANCHE                                AS TDOS_CODE,
+
         -- Code prestation : TPN pour remboursements (RB), TPE sinon
         CASE deb.DEB_TYPE
             WHEN 'RB' THEN deb.TPN_CODE
             ELSE           deb.TPE_CODE
         END                                             AS CODE_PRESTATION,
+
         -- Type prestation
         CASE deb.DEB_TYPE
             WHEN 'RB' THEN 'NAT'
             ELSE           'ESP'
         END                                             AS TYPE_PREST,
-        -- Géographie
+
+        -- Géographie — depuis EFFET (DR_NO/SP_NO) et DOSSIER (LP_NO)
         efp.DR_NO,
         efp.SP_NO,
         dos.LP_NO,
-        -- Démographie
+
+        -- Bénéficiaire
+        efp.IND_ID_BENEF,
+
+        -- Démographie R6
         ind.IND_SEXE,
         ind.IND_DATE_NAISSANCE,
         ind.IND_DATE_DECES,
-        efp.IND_ID_BENEF,
+
         -- Tranche d'âge (31 décembre de l'année du débours)
         tag.TAG_CODE,
-        -- Mesures
-        mc.PE_MOIS_COTISATION,
+
+        -- Montants
         deb.DEB_MONTANT,
         efp.NET_A_PAYER,
+
+        -- Qualité
         deb.DEB_VERIFIE,
-        -- Métriques nouveaux
+
+        -- Mois cotisés R42/R50
+        mc.PE_MOIS_COTISATION,
+
+        -- Nouveau bénéficiaire R7
         pb.ANNEE_ENTREE,
         pd.PREMIER_ID_TEMPS,
         ti.PE_TAUX_INCAPACITE                           AS TAUX_IPP_ENTREE
