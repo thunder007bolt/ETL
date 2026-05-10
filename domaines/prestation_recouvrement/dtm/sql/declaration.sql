@@ -36,12 +36,11 @@ sal AS (
 -- ── CTE 2 : déclarations nominatives agrégées par grain ──────────────────
 dcl AS (
     SELECT
-        WHEN TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE, 'MM'), 'YYYYMMDD')) BETWEEN 19500101 AND 20351231
-        THEN TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE, 'MM'), 'YYYYMMDD'))
-        ELSE 20000101
-    END                                                           AS ID_TEMPS,
-
-    -- DR_NO en cascade : déclaration → employeur → service provincial
+        CASE
+            WHEN TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE, 'MM'), 'YYYYMMDD')) BETWEEN 19500101 AND 20351231
+            THEN TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE, 'MM'), 'YYYYMMDD'))
+            ELSE 20000101
+        END                                                           AS ID_TEMPS,
         CASE WHEN dn.DR_NO IS NOT NULL THEN dn.DR_NO
              WHEN e.DR_NO  IS NOT NULL THEN e.DR_NO
              WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
