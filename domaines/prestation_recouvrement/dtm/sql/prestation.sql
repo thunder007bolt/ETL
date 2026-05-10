@@ -207,6 +207,11 @@ SELECT
     b.SP_NO,
     b.LP_NO,
     b.IND_SEXE                                          AS SEXE,
+    CASE b.IND_SEXE
+        WHEN 1 THEN 'Masculin'
+        WHEN 2 THEN 'Féminin'
+        ELSE NULL
+    END                                                 AS LIBELLE_SEXE,
     b.TAG_CODE,
 
     COUNT(b.DEB_ID)                                     AS NB_PRESTATIONS,
@@ -244,6 +249,11 @@ FROM base b
 GROUP BY
     b.ID_TEMPS,
     b.TDOS_CODE,
+    CASE b.IND_SEXE
+        WHEN 1 THEN 'Masculin'
+        WHEN 2 THEN 'Féminin'
+        ELSE NULL
+    END,  
     b.CODE_PRESTATION,
     b.TYPE_PREST,
     b.DR_NO,
