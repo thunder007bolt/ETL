@@ -18,6 +18,8 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+import re
+
 import oracledb
 import pandas as pd
 
@@ -103,42 +105,85 @@ class DtmPipeline:
 
             total = 0
             for sql_entry in cfg["sql_files"]:
-                sql = load_sql(_SQL_DIR, sql_entry["file"])
-                logger.info(f"[{target}][{sql_entry['label']}] Exécution de la requête SQL...")
-                with conn.cursor() as cursor:
-                    cursor.arraysize = self._FETCH
-                    cursor.execute(sql, [cliche])   # :1 = CLICHE MMYYYY (uniforme FAIT + DTM)
-                    logger.info(f"[{target}][{sql_entry['label']}] Requête exécutée, début récupération des données...")
+                sql   = load_sql(_SQL_DIR, sql_entry["file"])
+                mode  = sql_entry.get("mode", "insert")
+                label = sql_entry["label"]
 
-                    description = cursor.description
-                    columns     = [col[0].upper() for col in description]
+                if mode == "exec":
+                    logger.info(f"[{target}][{label}] Exécution DDL/DML multi-étapes...")
+                    self._exec_steps(conn, sql, cliche, target, label)
+                    logger.info(f"[{target}][{label}] DDL/DML terminé")
+                else:
+                    logger.info(f"[{target}][{label}] Exécution de la requête SQL...")
+                    with conn.cursor() as cursor:
+                        cursor.arraysize = self._FETCH
+                        cursor.execute(sql, [cliche])   # :1 = CLICHE MMYYYY (uniforme FAIT + DTM)
+                        logger.info(f"[{target}][{label}] Requête exécutée, début récupération des données...")
 
-                    while True:
-                        rows = cursor.fetchmany(self._FETCH)
-                        if not rows:
-                            break
-                        df = pd.DataFrame(rows, columns=columns)
-                        df = _cast_oracle_types(df, description)
-                        try:
-                            chunk_size = loader.insert_chunk(target, df)
-                        except Exception:
-                            logger.error(f"[{target}] Chunk {total}–{total+len(df)} — valeurs max par colonne :")
-                            for col in df.columns:
-                                try:
-                                    logger.error(f"  {col}: min={df[col].min()!r}  max={df[col].max()!r}")
-                                except Exception:
-                                    pass
-                            raise
-                        total += chunk_size
-                        logger.info(f"[{target}][{sql_entry['label']}] Chunk traité : {chunk_size} lignes (total: {total})")
+                        description = cursor.description
+                        columns     = [col[0].upper() for col in description]
 
-                logger.info(f"[{target}][{sql_entry['label']}] {total} lignes chargées")
+                        while True:
+                            rows = cursor.fetchmany(self._FETCH)
+                            if not rows:
+                                break
+                            df = pd.DataFrame(rows, columns=columns)
+                            df = _cast_oracle_types(df, description)
+                            try:
+                                chunk_size = loader.insert_chunk(target, df)
+                            except Exception:
+                                logger.error(f"[{target}] Chunk {total}–{total+len(df)} — valeurs max par colonne :")
+                                for col in df.columns:
+                                    try:
+                                        logger.error(f"  {col}: min={df[col].min()!r}  max={df[col].max()!r}")
+                                    except Exception:
+                                        pass
+                                raise
+                            total += chunk_size
+                            logger.info(f"[{target}][{label}] Chunk traité : {chunk_size} lignes (total: {total})")
+
+                    logger.info(f"[{target}][{label}] {total} lignes chargées")
 
             return total
 
         except Exception as e:
             logger.error(f"[{target}] erreur : {e}")
             raise
+
+
+    def _exec_steps(self, conn, sql_text: str, cliche: str, target: str, label: str) -> None:
+        """Exécute une suite de statements DDL/DML séparés par ';'.
+
+        Avant chaque CREATE TABLE détecté, tente un DROP préventif (ignore ORA-00942)
+        pour nettoyer un éventuel résidu d'un run précédent ayant échoué.
+        Les DDL Oracle (CREATE TABLE, CREATE INDEX, DROP TABLE) auto-committent.
+        Le UPDATE est commité implicitement par le DROP TABLE suivant.
+        """
+        _create_re = re.compile(r'CREATE\s+TABLE\s+(\S+)', re.IGNORECASE)
+
+        statements = [
+            s.strip() for s in sql_text.split(';')
+            if s.strip() and s.strip().upper() not in ('COMMIT', '/')
+        ]
+
+        with conn.cursor() as cursor:
+            for stmt in statements:
+                m = _create_re.match(stmt)
+                if m:
+                    table_name = m.group(1)
+                    try:
+                        cursor.execute(f'DROP TABLE {table_name} PURGE')
+                        logger.debug(f"[{target}][{label}] Pré-nettoyage : {table_name} supprimée")
+                    except Exception:
+                        pass
+                short = stmt[:120].replace('\n', ' ')
+                logger.info(f"[{target}][{label}] {short}...")
+                if ':1' in stmt:
+                    cursor.execute(stmt, [cliche])
+                else:
+                    cursor.execute(stmt)
+
+        conn.commit()
 
 
 class _DtmLoader(BaseLoader):

@@ -1,0 +1,66 @@
+-- DTM_DECLARATION — Étape 3/3 : UPDATE NB_TR_RECUS + NB_TR_SAISIS
+-- Source : DWH.FAIT_TRANSACTION_DECLARATION (TXDE_TYPE='D', EMP_PERIODICITE='T')
+-- Fenêtre : année N-1 relative à SYSDATE
+-- ID_TEMPS cible = premier mois du mois de période (PER_ID_AU)
+-- NB_TR_RECUS = NB_TR_SAISIS = SUM(TXDE_NB_TOTAL) — travailleurs attendus = saisis pour salariés T
+-- :1 = CLICHE (MMYYYY) — utilisé uniquement dans le CREATE TABLE AS SELECT
+
+CREATE TABLE DTM.TMP_DECL_TR_RECUS AS
+SELECT
+    TO_NUMBER(TO_CHAR(TRUNC(
+        TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'),'MM'),'YYYYMMDD'))  AS ID_TEMPS,
+    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
+    END                                                               AS DR_NO,
+    e.EMP_REGIME,
+    e.SA_NO,
+    NVL(fj.FJ_CODE, 'X')                                             AS FJ_CODE,
+    dp.ID_PERIODICITE,
+    tef.TEF_CODE,
+    SUM(td.TXDE_NB_TOTAL)                                            AS NB_TR
+FROM DWH.FAIT_TRANSACTION_DECLARATION                                 td
+LEFT JOIN DWH.FAIT_EMPLOYEUR            e   ON e.EMP_ID              = td.EMP_ID
+LEFT JOIN DTM.DIM_SERVICE_PROVINCIAL    sp  ON sp.SP_NO              = e.SP_NO
+LEFT JOIN DTM.DIM_FORME_JURIDIQUE       fj  ON fj.FJ_CODE            = e.EMP_FORME_JURIDIQUE
+LEFT JOIN DTM.DIM_PERIODICITE_VERSEMENT dp  ON dp.CODE_PERIODICITE   = e.EMP_PERIODICITE
+LEFT JOIN DTM.DIM_TRANCHE_EFFECTIF      tef ON e.EMP_NO_TR_DECLAR    BETWEEN tef.INF AND tef.SUP
+WHERE td.CLICHE          = :1
+  AND td.TXDE_TYPE       = 'D'
+  AND td.EMP_PERIODICITE = 'T'
+  AND EXTRACT(YEAR FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))
+      = EXTRACT(YEAR FROM SYSDATE) - 1
+GROUP BY
+    TO_NUMBER(TO_CHAR(TRUNC(
+        TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'),'MM'),'YYYYMMDD')),
+    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END,
+    e.EMP_REGIME, e.SA_NO, NVL(fj.FJ_CODE,'X'),
+    dp.ID_PERIODICITE, tef.TEF_CODE;
+
+CREATE INDEX DTM.IDX_TMP_DECL_TR_RECUS ON DTM.TMP_DECL_TR_RECUS
+    (ID_TEMPS, DR_NO, EMP_REGIME, SA_NO, FJ_CODE, ID_PERIODICITE, TEF_CODE);
+
+UPDATE DTM.DTM_DECLARATION d
+SET (d.NB_TR_RECUS, d.NB_TR_SAISIS) = (
+    SELECT t.NB_TR, t.NB_TR
+    FROM DTM.TMP_DECL_TR_RECUS t
+    WHERE  t.ID_TEMPS        = d.ID_TEMPS
+      AND (t.DR_NO           = d.DR_NO          OR (t.DR_NO IS NULL          AND d.DR_NO IS NULL))
+      AND (t.EMP_REGIME      = d.EMP_REGIME     OR (t.EMP_REGIME IS NULL     AND d.EMP_REGIME IS NULL))
+      AND (t.SA_NO           = d.SA_NO          OR (t.SA_NO IS NULL          AND d.SA_NO IS NULL))
+      AND  t.FJ_CODE         = d.FJ_CODE
+      AND (t.ID_PERIODICITE  = d.ID_PERIODICITE OR (t.ID_PERIODICITE IS NULL AND d.ID_PERIODICITE IS NULL))
+      AND (t.TEF_CODE        = d.TEF_CODE       OR (t.TEF_CODE IS NULL       AND d.TEF_CODE IS NULL))
+)
+WHERE EXISTS (
+    SELECT 1 FROM DTM.TMP_DECL_TR_RECUS t
+    WHERE  t.ID_TEMPS        = d.ID_TEMPS
+      AND (t.DR_NO           = d.DR_NO          OR (t.DR_NO IS NULL          AND d.DR_NO IS NULL))
+      AND (t.EMP_REGIME      = d.EMP_REGIME     OR (t.EMP_REGIME IS NULL     AND d.EMP_REGIME IS NULL))
+      AND (t.SA_NO           = d.SA_NO          OR (t.SA_NO IS NULL          AND d.SA_NO IS NULL))
+      AND  t.FJ_CODE         = d.FJ_CODE
+      AND (t.ID_PERIODICITE  = d.ID_PERIODICITE OR (t.ID_PERIODICITE IS NULL AND d.ID_PERIODICITE IS NULL))
+      AND (t.TEF_CODE        = d.TEF_CODE       OR (t.TEF_CODE IS NULL       AND d.TEF_CODE IS NULL))
+);
+
+DROP TABLE DTM.TMP_DECL_TR_RECUS PURGE

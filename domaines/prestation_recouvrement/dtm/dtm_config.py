@@ -140,9 +140,11 @@ DTM_CONFIG = [
         "name": "declaration",
         "target": "DTM.DTM_DECLARATION",
         "sql_files": [
-            {"file": "declaration.sql", "label": "DECLARATION"},
+            {"file": "declaration.sql",       "label": "STEP1_INSERT"},
+            {"file": "declaration_step2.sql", "label": "STEP2_NB_EMP_EMIS", "mode": "exec"},
+            {"file": "declaration_step3.sql", "label": "STEP3_NB_TR_RECUS", "mode": "exec"},
         ],
-        "heavy": True,  
+        "heavy": True,
     },
     {
         "name": "duree_assurance",
