@@ -178,10 +178,11 @@ class DtmPipeline:
                         pass
                 short = stmt[:120].replace('\n', ' ')
                 logger.info(f"[{target}][{label}] {short}...")
+                # DDL ne supporte pas les bind variables — substitution directe
+                # (cliche est toujours MMYYYY généré par le pipeline, pas une entrée externe)
                 if ':1' in stmt:
-                    cursor.execute(stmt, [cliche])
-                else:
-                    cursor.execute(stmt)
+                    stmt = stmt.replace(':1', f"'{cliche}'")
+                cursor.execute(stmt)
 
         conn.commit()
 
