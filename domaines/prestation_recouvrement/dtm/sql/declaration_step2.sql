@@ -1,12 +1,12 @@
 -- DTM_DECLARATION — Étape 2/3 : UPDATE NB_EMP_EMIS + NB_TR_EMIS
 -- Source : DWH.FAIT_TRANSACTION_DECLARATION (TXDE_TYPE='D', EMP_PERIODICITE='T')
 -- Fenêtre : années N-1 et N-2 relative à SYSDATE
--- ID_TEMPS cible = premier mois du trimestre suivant (décalage déclaratif trimestriel)
--- NB_EMP_EMIS : écrase le fallback DNM uniquement pour les employeurs trimestriels matchés
--- NB_TR_EMIS  : SUM(TXDE_NB_TOTAL) du trimestre précédent
+-- ID_TEMPS_SUIVANT = premier mois du trimestre suivant (décalage déclaratif trimestriel)
+-- NB_EMP_EMIS : COUNT(DISTINCT EMP_ID) trimestre T-1
+-- NB_TR_EMIS  : SUM(TXDE_NB_TOTAL)     trimestre T-1
 -- :1 = CLICHE (MMYYYY) — utilisé uniquement dans le CREATE TABLE AS SELECT
 
-CREATE TABLE DTM.TMP_DECL_EMIS AS
+CREATE TABLE DTM.TMP_EMIS AS
 SELECT
     CASE
         WHEN CEIL(EXTRACT(MONTH FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))/3) = 1
@@ -17,7 +17,7 @@ SELECT
              THEN TO_NUMBER(TO_CHAR(EXTRACT(YEAR FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM')))||'1001')
         WHEN CEIL(EXTRACT(MONTH FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))/3) = 4
              THEN TO_NUMBER(TO_CHAR(EXTRACT(YEAR FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))+1)||'0101')
-    END                                                          AS ID_TEMPS,
+    END                                                          AS ID_TEMPS_SUIVANT,
     CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
          WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
     END                                                          AS DR_NO,
@@ -55,30 +55,20 @@ GROUP BY
     e.EMP_REGIME, e.SA_NO, NVL(fj.FJ_CODE,'X'),
     dp.ID_PERIODICITE, tef.TEF_CODE;
 
-CREATE INDEX DTM.IDX_TMP_DECL_EMIS ON DTM.TMP_DECL_EMIS
-    (ID_TEMPS, DR_NO, EMP_REGIME, SA_NO, FJ_CODE, ID_PERIODICITE, TEF_CODE);
+CREATE INDEX DTM.IDX_TMP_EMIS ON DTM.TMP_EMIS
+    (ID_TEMPS_SUIVANT, DR_NO, EMP_REGIME, SA_NO, FJ_CODE, ID_PERIODICITE, TEF_CODE);
 
 UPDATE DTM.DTM_DECLARATION d
 SET (d.NB_EMP_EMIS, d.NB_TR_EMIS) = (
     SELECT t.NB_EMP_PREV, t.NB_TR_PREV
-    FROM DTM.TMP_DECL_EMIS t
-    WHERE  t.ID_TEMPS        = d.ID_TEMPS
-      AND (t.DR_NO           = d.DR_NO          OR (t.DR_NO IS NULL          AND d.DR_NO IS NULL))
-      AND (t.EMP_REGIME      = d.EMP_REGIME     OR (t.EMP_REGIME IS NULL     AND d.EMP_REGIME IS NULL))
-      AND (t.SA_NO           = d.SA_NO          OR (t.SA_NO IS NULL          AND d.SA_NO IS NULL))
-      AND  t.FJ_CODE         = d.FJ_CODE
-      AND (t.ID_PERIODICITE  = d.ID_PERIODICITE OR (t.ID_PERIODICITE IS NULL AND d.ID_PERIODICITE IS NULL))
-      AND (t.TEF_CODE        = d.TEF_CODE       OR (t.TEF_CODE IS NULL       AND d.TEF_CODE IS NULL))
-)
-WHERE EXISTS (
-    SELECT 1 FROM DTM.TMP_DECL_EMIS t
-    WHERE  t.ID_TEMPS        = d.ID_TEMPS
-      AND (t.DR_NO           = d.DR_NO          OR (t.DR_NO IS NULL          AND d.DR_NO IS NULL))
-      AND (t.EMP_REGIME      = d.EMP_REGIME     OR (t.EMP_REGIME IS NULL     AND d.EMP_REGIME IS NULL))
-      AND (t.SA_NO           = d.SA_NO          OR (t.SA_NO IS NULL          AND d.SA_NO IS NULL))
-      AND  t.FJ_CODE         = d.FJ_CODE
-      AND (t.ID_PERIODICITE  = d.ID_PERIODICITE OR (t.ID_PERIODICITE IS NULL AND d.ID_PERIODICITE IS NULL))
-      AND (t.TEF_CODE        = d.TEF_CODE       OR (t.TEF_CODE IS NULL       AND d.TEF_CODE IS NULL))
+    FROM DTM.TMP_EMIS t
+    WHERE  t.ID_TEMPS_SUIVANT = d.ID_TEMPS
+      AND (t.DR_NO            = d.DR_NO          OR (t.DR_NO IS NULL          AND d.DR_NO IS NULL))
+      AND (t.EMP_REGIME       = d.EMP_REGIME     OR (t.EMP_REGIME IS NULL     AND d.EMP_REGIME IS NULL))
+      AND (t.SA_NO            = d.SA_NO          OR (t.SA_NO IS NULL          AND d.SA_NO IS NULL))
+      AND  t.FJ_CODE          = d.FJ_CODE
+      AND (t.ID_PERIODICITE   = d.ID_PERIODICITE OR (t.ID_PERIODICITE IS NULL AND d.ID_PERIODICITE IS NULL))
+      AND (t.TEF_CODE         = d.TEF_CODE       OR (t.TEF_CODE IS NULL       AND d.TEF_CODE IS NULL))
 );
 
-DROP TABLE DTM.TMP_DECL_EMIS PURGE
+DROP TABLE DTM.TMP_EMIS PURGE
