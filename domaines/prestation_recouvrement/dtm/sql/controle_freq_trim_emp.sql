@@ -9,10 +9,13 @@ SELECT
     EXTRACT(YEAR FROM TO_DATE(fc.CTL_DATE, 'DD/MM/YY'))       AS AN_ID,
     TO_CHAR(TO_DATE(fc.CTL_DATE, 'DD/MM/YY'), 'Q')            AS TRIMESTRE,
     fc.CTL_TYPE,
+    fc.CTL_NATURE,  
+    dn.CTL_NATURE_LIBELLE,               
     COUNT(fc.EMP_ID)                                           AS NB_CONTROLES,
     :1                                                         AS CLICHE
 FROM   DWH.FAIT_CONTROLE   fc
 JOIN   DWH.FAIT_EMPLOYEUR  fe ON fc.EMP_ID = fe.EMP_ID
+JOIN  DTM.DIM_NATURE_CONTROLE  dn ON dn.CTL_NATURE = fc.CTL_NATURE
 WHERE  fc.CLICHE   = :1
   AND  fe.CLICHE   = :1
   AND  fe.EMP_ETAT = 'A'
@@ -22,4 +25,6 @@ GROUP BY
     EXTRACT(YEAR FROM TO_DATE(fc.CTL_DATE, 'DD/MM/YY')),
     TO_CHAR(TO_DATE(fc.CTL_DATE, 'DD/MM/YY'), 'Q'),
     fc.CTL_TYPE,
+    fc.CTL_NATURE,
+    dn.CTL_NATURE_LIBELLE,
     :1
