@@ -167,4 +167,14 @@ DTM_CONFIG = [
             {"file": "dossier.sql", "label": "DOSSIER"},
         ],
     },
+    # ------------------------------------------------------------------
+    # Indicateurs CIPRES
+    # ------------------------------------------------------------------
+    {
+        "name": "indicateurs_prestations",
+        "target": "DTM.DTM_INDICATEURS_PRESTATIONS",
+        "sql_files": [
+            {"file": "indicateurs_prestations.sql", "label": "IND_PRESTATIONS"},
+        ],
+    },
 ]

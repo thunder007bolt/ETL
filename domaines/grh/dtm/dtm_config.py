@@ -42,4 +42,14 @@ DTM_CONFIG = [
             {"file": "grh_effectif.sql", "label": "GRH_EFFECTIF"},
         ],
     },
+    # ------------------------------------------------------------------
+    # Indicateurs CIPRES
+    # ------------------------------------------------------------------
+    {
+        "name": "indicateurs_finances_grh",
+        "target": "DTM.DTM_INDICATEURS_FINANCES_GRH",
+        "sql_files": [
+            {"file": "indicateurs_finances_grh.sql", "label": "IND_FINANCES_GRH"},
+        ],
+    },
 ]
