@@ -444,6 +444,121 @@ class BaseLoader(ABC):
         return archived
 
     # ------------------------------------------------------------------
+    # ARCHIVE ODS par cliché — multi-cliché DTM
+    # ------------------------------------------------------------------
+    def _archive_cliche_to_ods(self, table: str, ods_schema: str, cliche: str) -> int:
+        """
+        Archive les lignes du cliché courant DTM → ODS, puis DELETE WHERE CLICHE.
+
+        Contrairement à _archive_to_ods_and_truncate (qui archive TOUT et TRUNCATE),
+        cette méthode n'opère que sur le cliché fourni, laissant les autres clichés
+        intacts dans la table DTM.
+
+        1. DELETE ODS WHERE CLICHE = :cliche  (idempotence)
+        2. Archive DTM WHERE CLICHE = :cliche → ODS  par chunks ROWID
+        3. DELETE DTM WHERE CLICHE = :cliche  (via _delete_cliche, chunké)
+        """
+        with self.conn.cursor() as cursor:
+            table_schema, table_name = table.split(".", 1) if "." in table else (None, table)
+
+            # Étape 0 : idempotence ODS
+            deleted = 0
+            while True:
+                cursor.execute(
+                    f"DELETE FROM {ods_schema}.{table_name}"
+                    f" WHERE CLICHE = :cliche AND ROWNUM <= :batch",
+                    {"cliche": cliche, "batch": self._ARCHIVE_BATCH},
+                )
+                n = cursor.rowcount
+                deleted += n
+                self.conn.commit()
+                if n == 0:
+                    break
+            if deleted:
+                logger.warning(
+                    f"[ODS] {ods_schema}.{table_name} — {deleted} lignes partielles "
+                    f"(CLICHE={cliche}) nettoyées avant réarchivage"
+                )
+
+            # Étape 1 : colonnes communes DWH/ODS
+            if table_schema:
+                cursor.execute(
+                    """
+                    SELECT c.column_name
+                    FROM   all_tab_columns c
+                    JOIN   all_tab_columns  o
+                           ON  o.owner       = :ods
+                           AND o.table_name  = c.table_name
+                           AND o.column_name = c.column_name
+                    WHERE  c.owner = :owner AND c.table_name = :tbl
+                    ORDER BY c.column_id
+                    """,
+                    {"ods": ods_schema.upper(), "owner": table_schema.upper(), "tbl": table_name.upper()},
+                )
+            else:
+                cursor.execute(
+                    """
+                    SELECT c.column_name
+                    FROM   user_tab_columns c
+                    JOIN   all_tab_columns  o
+                           ON  o.owner       = :ods
+                           AND o.table_name  = c.table_name
+                           AND o.column_name = c.column_name
+                    WHERE  c.table_name = :tbl
+                    ORDER BY c.column_id
+                    """,
+                    {"ods": ods_schema.upper(), "tbl": table_name.upper()},
+                )
+
+            common_cols = ", ".join(row[0] for row in cursor.fetchall())
+            if not common_cols:
+                raise RuntimeError(
+                    f"Aucune colonne commune entre {table} (DWH) et "
+                    f"{ods_schema}.{table_name} (ODS) — vérifier la structure des tables."
+                )
+
+            # Étape 2 : chunks ROWID filtrés sur CLICHE = :cliche uniquement
+            cursor.execute(
+                """
+                SELECT MIN(RID), MAX(RID)
+                FROM (
+                    SELECT RID,
+                           CEIL(ROWNUM / :batch) AS chunk_num
+                    FROM (
+                        SELECT ROWID AS RID
+                        FROM   """ + table + """
+                        WHERE  CLICHE = :cliche
+                        ORDER BY ROWID
+                    )
+                )
+                GROUP BY chunk_num
+                ORDER BY MIN(RID)
+                """,
+                {"batch": self._ARCHIVE_BATCH, "cliche": cliche},
+            )
+            chunks = cursor.fetchall()
+            logger.info(f"[ODS] {table} — {len(chunks)} chunks ROWID à archiver (CLICHE={cliche})")
+
+            # Étape 3 : archive chunk par chunk
+            archived = 0
+            for min_rid, max_rid in chunks:
+                cursor.execute(
+                    f"INSERT /*+ APPEND */ INTO {ods_schema}.{table_name} ({common_cols})"
+                    f" SELECT {common_cols} FROM {table}"
+                    f" WHERE ROWID BETWEEN :1 AND :2 AND CLICHE = :3",
+                    [min_rid, max_rid, cliche],
+                )
+                archived += cursor.rowcount
+                self.conn.commit()
+                logger.debug(f"[ODS] {table} archivé {archived} lignes (CLICHE={cliche})")
+
+            logger.info(f"[ODS] {table} → {ods_schema}.{table_name} : {archived} lignes archivées (CLICHE={cliche})")
+
+        # Étape 4 : DELETE DML chunké (préserve les autres clichés)
+        self._delete_cliche(table, cliche)
+        return archived
+
+    # ------------------------------------------------------------------
     # GESTION DES INDEX (BULK LOAD)
     # ------------------------------------------------------------------
     def _disable_indexes(self, table: str):

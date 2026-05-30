@@ -1,9 +1,9 @@
 """
-Pipeline DTM — alimente les tables d'agrégats DTM.
+Pipeline DTM — alimente les tables d'agrégats DTM (multi-cliché).
 
-Stratégie : ARCHIVE ODS + TRUNCATE + INSERT (identique aux tables de faits).
-  1. Archive DTM.TABLE → ODS.TABLE par chunks ROWID (commit par chunk).
-  2. TRUNCATE DTM.TABLE (DDL, 0 undo, instantané).
+Stratégie : DELETE cliché + INSERT — plusieurs clichés coexistent dans la table.
+  1. Si ODS_SCHEMA : archive DTM WHERE CLICHE = :cliche → ODS par chunks ROWID.
+  2. DELETE DTM WHERE CLICHE = :cliche (chunké, UNDO maîtrisé).
   3. INSERT /*+ APPEND */ les nouvelles données (streaming fetchmany).
 
 CLICHE format : MMYYYY  (ex. '032026')  — uniforme FAIT + DTM.
@@ -94,10 +94,10 @@ class DtmPipeline:
         target = cfg["target"]
 
         try:
-            # --- Archivage ODS + TRUNCATE (identique aux faits) ---
+            # --- Archive cliché ODS + DELETE cliché (multi-cliché DTM) ---
             ods = settings.ODS_SCHEMA
             if ods:
-                loader.archive_and_truncate(target, ods, cliche)
+                loader.archive_and_replace_cliche(target, ods, cliche)
             else:
                 loader.delete_cliche(target, cliche)
 
@@ -195,9 +195,9 @@ class _DtmLoader(BaseLoader):
     def load(self, df) -> int:
         raise NotImplementedError
 
-    def archive_and_truncate(self, table: str, ods_schema: str, cliche: str) -> int:
-        """Archive DTM.TABLE → ODS.TABLE puis TRUNCATE DTM.TABLE."""
-        return self._archive_to_ods_and_truncate(table, ods_schema, cliche)
+    def archive_and_replace_cliche(self, table: str, ods_schema: str, cliche: str) -> int:
+        """Archive le cliché DTM.TABLE → ODS.TABLE puis DELETE WHERE CLICHE."""
+        return self._archive_cliche_to_ods(table, ods_schema, cliche)
 
     def delete_cliche(self, table: str, cliche: str) -> None:
         """Repli si ODS_SCHEMA non configuré : DELETE WHERE CLICHE = :cliche."""

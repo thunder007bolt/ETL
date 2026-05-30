@@ -26,6 +26,7 @@ DTM_CONFIG = [
         "sql_files": [
             {"file": "employeur.sql", "label": "EMPLOYEUR"},
         ],
+        "heavy": True,
     },
     # ------------------------------------------------------------------
     # Domaine Recouvrement
