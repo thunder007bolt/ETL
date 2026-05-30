@@ -36,15 +36,28 @@ def _cast_oracle_types(df: pd.DataFrame, description) -> pd.DataFrame:
 
 class FactsPipeline:
 
-    def run(self, batch_date: datetime = None) -> None:
+    def run(
+        self,
+        batch_date: datetime = None,
+        exclude_heavy: bool = False,
+        table_filter: str = None,
+    ) -> None:
         batch_date  = batch_date or datetime.now()
         src_conn    = get_source_connection()
         dw_conn     = get_dw_connection()
         rows_loaded = 0
 
+        configs = FACT_CONFIG
+        if exclude_heavy:
+            configs = [c for c in configs if not c.get("heavy", False)]
+        if table_filter:
+            configs = [c for c in configs if c["target"] == table_filter]
+            if not configs:
+                raise ValueError(f"Table inconnue dans FACT_CONFIG : {table_filter!r}")
+
         try:
             loader = _GenericFactLoader(dw_conn)
-            for cfg in FACT_CONFIG:
+            for cfg in configs:
                 rows_loaded += self._load_one(src_conn, loader, cfg)
 
             logger.info(f"Pipeline GRH FACTS terminé — {rows_loaded} lignes chargées")
