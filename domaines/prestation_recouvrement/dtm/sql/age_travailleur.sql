@@ -1,6 +1,6 @@
 -- DTM_AGE_TRAVAILLEUR — Répartition des travailleurs actifs par âge (snapshot CLICHE)
 -- Source : DWH.FAIT_TRAVAILLEUR + dernier emploi actif + DWH.FAIT_EMPLOYEUR
--- Grain  : DR_NO x TR_SEXE x TR_ETAT x EMP_REGIME x FJ_CODE x AGE
+-- Grain  : DR_NO x SP_NO x SA_NO x TR_SEXE x TR_ETAT x EMP_REGIME x FJ_CODE x AGE
 -- Age    : différence d'années (année du cliché - année de naissance), sans arrondi mensuel
 -- Filtre : travailleurs actifs uniquement (TR_ACTIVE = 'O')
 -- Exclus : DATE_CHARGEMENT (DEFAULT SYSDATE cible)
@@ -19,6 +19,8 @@ WITH contrat_actif AS (
 base AS (
     SELECT
         tr.DR_NO,
+        tr.SP_NO,
+        emp.SA_NO,
         tr.TR_SEXE,
         CASE tr.TR_SEXE
             WHEN 1 THEN 'Masculin'
@@ -41,6 +43,8 @@ base AS (
 )
 SELECT
     DR_NO,
+    SP_NO,
+    SA_NO,
     TR_SEXE,
     LIBELLE_SEXE,
     TR_ETAT,
@@ -52,6 +56,8 @@ SELECT
 FROM base
 GROUP BY
     DR_NO,
+    SP_NO,
+    SA_NO,
     TR_SEXE,
     LIBELLE_SEXE,
     TR_ETAT,
