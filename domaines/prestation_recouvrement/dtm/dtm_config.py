@@ -106,6 +106,13 @@ DTM_CONFIG = [
         ],
     },
     {
+        "name": "effectif_travailleur",
+        "target": "DTM.DTM_EFFECTIF_TRAVAILLEUR",
+        "sql_files": [
+            {"file": "effectif_travailleur.sql", "label": "EFFECTIF_TRAVAILLEUR"},
+        ],
+    },
+    {
         "name": "immatriculation_emp",
         "target": "DTM.DTM_IMM_EMPLOYEUR",
         "sql_files": [
