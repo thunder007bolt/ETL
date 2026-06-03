@@ -106,10 +106,10 @@ DTM_CONFIG = [
         ],
     },
     {
-        "name": "effectif_travailleur",
-        "target": "DTM.DTM_EFFECTIF_TRAVAILLEUR",
+        "name": "age_travailleur",
+        "target": "DTM.DTM_AGE_TRAVAILLEUR",
         "sql_files": [
-            {"file": "effectif_travailleur.sql", "label": "EFFECTIF_TRAVAILLEUR"},
+            {"file": "age_travailleur.sql", "label": "AGE_TRAVAILLEUR"},
         ],
     },
     {
