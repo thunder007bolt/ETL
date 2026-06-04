@@ -47,7 +47,7 @@ GROUP BY
     c.CTL_NATURE,
     c.CTL_STATUT,
     e.EMP_REGIME,
-    e.EMP_FJ_CODE AS FJ_CODE,
+    e.EMP_FJ_CODE,
     e.SP_NO,
     e.SA_NO,
     tef.TEF_CODE,
