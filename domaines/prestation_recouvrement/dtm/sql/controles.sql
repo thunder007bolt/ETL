@@ -6,12 +6,14 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    NVL(c.DR_NO, 0)                                                 AS DR_NO,
-    NVL(c.CTL_TYPE,   'NA')                                         AS CTL_TYPE,
-    NVL(c.CTL_NATURE, 'X')                                          AS CTL_NATURE,
-    NVL(c.CTL_STATUT, 'X')                                          AS CTL_STATUT,
-    NVL(e.EMP_REGIME,  'X')                                         AS EMP_REGIME,
-    NVL(e.SA_NO,        0)                                          AS SA_NO,
+    c.DR_NO,
+    c.CTL_TYPE,
+    c.CTL_NATURE,
+    c.CTL_STATUT,
+    e.EMP_REGIME,
+    e.EMP_FJ_CODE AS FJ_CODE,
+    e.SP_NO,
+    e.SA_NO,
     tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(c.CTL_ID)                                                 AS NB_CONTROLES,
@@ -40,11 +42,13 @@ LEFT JOIN DTM.DIM_TEMPS                  t   ON  t.ID_TEMPS =
 WHERE c.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
-    NVL(c.DR_NO, 0),
-    NVL(c.CTL_TYPE,   'NA'),
-    NVL(c.CTL_NATURE, 'X'),
-    NVL(c.CTL_STATUT, 'X'),
-    NVL(e.EMP_REGIME,  'X'),
-    NVL(e.SA_NO,        0),
+    c.DR_NO,
+    c.CTL_TYPE,
+    c.CTL_NATURE,
+    c.CTL_STATUT,
+    e.EMP_REGIME,
+    e.EMP_FJ_CODE AS FJ_CODE,
+    e.SP_NO,
+    e.SA_NO,
     tef.TEF_CODE,
     c.CLICHE

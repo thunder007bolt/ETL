@@ -60,8 +60,8 @@ SELECT
     ic.QUAL_CODE,
     ic.SEXE,
     CASE ic.SEXE
-        WHEN '1' THEN 'Masculin'
-        WHEN '2' THEN 'Féminin'
+        WHEN 'M' THEN 'Masculin'
+        WHEN 'F' THEN 'Féminin'
         ELSE NULL
     END                                                   AS LIBELLE_SEXE,
     COUNT(DISTINCT ic.PERS_ID)                            AS NB_STAGIAIRES,

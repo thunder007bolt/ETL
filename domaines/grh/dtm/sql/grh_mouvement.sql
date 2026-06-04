@@ -60,8 +60,8 @@ SELECT
     mc.QUAL_CODE,
     mc.SEXE,
     CASE mc.SEXE
-        WHEN '1' THEN 'Masculin'
-        WHEN '2' THEN 'Féminin'
+        WHEN 'M' THEN 'Masculin'
+        WHEN 'F' THEN 'Féminin'
         ELSE NULL
     END                        AS LIBELLE_SEXE,
     COUNT(mc.MVT_ID)           AS NB_MOUVEMENTS,

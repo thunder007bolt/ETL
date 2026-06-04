@@ -117,8 +117,8 @@ base AS (
         END                                             AS TYPE_PREST,
 
         -- Géographie — depuis EFFET (DR_NO/SP_NO) et DOSSIER (LP_NO)
-        efp.DR_NO,
-        efp.SP_NO,
+        NVL(efp.DR_NO, 99)                              AS DR_NO,
+        NVL(efp.SP_NO, 9999)                            AS SP_NO,
         dos.LP_NO,
 
         -- Bénéficiaire
@@ -210,7 +210,7 @@ SELECT
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Féminin'
-        ELSE NULL
+        ELSE 'NON RENSEIGNE'
     END                                                 AS LIBELLE_SEXE,
     b.TAG_CODE,
 
@@ -252,7 +252,7 @@ GROUP BY
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Féminin'
-        ELSE NULL
+        ELSE 'NON RENSEIGNE'
     END,  
     b.CODE_PRESTATION,
     b.TYPE_PREST,
