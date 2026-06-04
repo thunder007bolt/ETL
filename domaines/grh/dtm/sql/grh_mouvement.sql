@@ -62,7 +62,7 @@ SELECT
     CASE mc.SEXE
         WHEN 'M' THEN 'Masculin'
         WHEN 'F' THEN 'Féminin'
-        ELSE NULL
+        ELSE 'NON RENSEIGNE'
     END                        AS LIBELLE_SEXE,
     COUNT(mc.MVT_ID)           AS NB_MOUVEMENTS,
     COUNT(DISTINCT mc.PERS_ID) AS NB_AGENTS,

@@ -62,7 +62,7 @@ SELECT
     CASE ic.SEXE
         WHEN 'M' THEN 'Masculin'
         WHEN 'F' THEN 'Féminin'
-        ELSE NULL
+        ELSE 'NON RENSEIGNE'
     END                                                   AS LIBELLE_SEXE,
     COUNT(DISTINCT ic.PERS_ID)                            AS NB_STAGIAIRES,
     COUNT(ic.INS_ID)                                      AS NB_INSCRIPTIONS,
