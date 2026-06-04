@@ -6,14 +6,13 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    c.DR_NO,
+    NVL(c.DR_NO, 99)                                            AS DR_NO,
     c.CTL_TYPE,
     c.CTL_NATURE,
     c.CTL_STATUT,
     e.EMP_REGIME,
     e.EMP_FORME_JURIDIQUE AS FJ_CODE,
-    e.SP_NO,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                            AS SA_NO,
     tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
     COUNT(c.CTL_ID)                                                 AS NB_CONTROLES,
@@ -42,13 +41,12 @@ LEFT JOIN DTM.DIM_TEMPS                  t   ON  t.ID_TEMPS =
 WHERE c.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
-    c.DR_NO,
+    NVL(c.DR_NO, 99),
     c.CTL_TYPE,
     c.CTL_NATURE,
     c.CTL_STATUT,
     e.EMP_REGIME,
     e.EMP_FORME_JURIDIQUE,
-    e.SP_NO,
-    e.SA_NO,
+    NVL(e.SA_NO, 99),
     tef.TEF_CODE,
     c.CLICHE
