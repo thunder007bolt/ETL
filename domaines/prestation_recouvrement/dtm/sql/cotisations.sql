@@ -17,7 +17,7 @@ SELECT
     dp.ID_PERIODICITE,
     e.EMP_ETAT,
     tef.TEF_CODE,
-    e.EMP_FORME_JURIDIQUE,
+    e.EMP_FORME_JURIDIQUE AS FJ_CODE,
 
     -- Ligne consolidée toutes branches : les montants PF/AT/AV restent séparés
     -- dans les colonnes dédiées ci-dessous.
