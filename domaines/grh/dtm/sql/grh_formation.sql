@@ -41,7 +41,13 @@ INS_COMPLET AS (
         fb.ID_TEMPS,
         fb.CAT_FORM_CODE,
         ib.QUAL_CODE,
-        p.SEXE,
+        CASE
+            WHEN UPPER(TRIM(TO_CHAR(p.SEXE))) IN ('M', 'MASCULIN', 'H', 'HOMME', '1')
+            THEN 'M'
+            WHEN UPPER(TRIM(TO_CHAR(p.SEXE))) IN ('F', 'FEMININ', 'FÉMININ', 'FEMME', '2')
+            THEN 'F'
+            ELSE NULL
+        END                                                   AS SEXE,
         ib.PERS_ID,
         ib.INS_ID,
         ib.DUREE,
