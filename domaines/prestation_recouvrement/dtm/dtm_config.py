@@ -35,11 +35,11 @@ DTM_CONFIG = [
         "name": "cotisations",
         "target": "DTM.DTM_COTISATIONS",
         "sql_files": [
-            # {"file": "cotisations_pf.sql", "label": "PF"},
-            {"file": "cotisations_at.sql", "label": "AT"},
-            {"file": "cotisations_av.sql", "label": "AV"},
+            # Intégration consolidée depuis FAIT_APPEL. Les anciens SQL branche
+            # par branche restent disponibles dans sql/cotisations_pf|at|av.sql.
+            {"file": "cotisations.sql", "label": "COTISATIONS"},
         ],
-        "heavy": True,  
+        "heavy": True,
     },
     {
         "name": "recouvrement",
