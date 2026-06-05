@@ -8,11 +8,14 @@ CREATE TABLE DTM.TMP_TR_RECUS AS
 SELECT
     TO_NUMBER(TO_CHAR(TRUNC(
         TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'),'MM'),'YYYYMMDD'))  AS ID_TEMPS,
-    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
-    END                                                               AS DR_NO,
+    NVL(
+        CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
+        END,
+        99
+    )                                                                 AS DR_NO,
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                                  AS SA_NO,
     NVL(fj.FJ_CODE, 'X')                                             AS FJ_CODE,
     dp.ID_PERIODICITE,
     tef.TEF_CODE,
@@ -31,9 +34,9 @@ WHERE td.CLICHE          = :1
 GROUP BY
     TO_NUMBER(TO_CHAR(TRUNC(
         TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'),'MM'),'YYYYMMDD')),
-    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END,
-    e.EMP_REGIME, e.SA_NO, NVL(fj.FJ_CODE,'X'),
+    NVL(CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END, 99),
+    e.EMP_REGIME, NVL(e.SA_NO, 99), NVL(fj.FJ_CODE,'X'),
     dp.ID_PERIODICITE, tef.TEF_CODE;
 
 CREATE INDEX DTM.IDX_TMP_TR_RECUS ON DTM.TMP_TR_RECUS

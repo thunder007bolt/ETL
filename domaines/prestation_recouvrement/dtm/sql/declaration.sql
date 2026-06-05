@@ -26,12 +26,15 @@ sal AS (
 )
 SELECT
     TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE,'MM'),'YYYYMMDD'))        AS ID_TEMPS,
-    CASE WHEN dn.DR_NO IS NOT NULL THEN dn.DR_NO
-         WHEN e.DR_NO  IS NOT NULL THEN e.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
-    END                                                           AS DR_NO,
+    NVL(
+        CASE WHEN dn.DR_NO IS NOT NULL THEN dn.DR_NO
+             WHEN e.DR_NO  IS NOT NULL THEN e.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
+        END,
+        99
+    )                                                             AS DR_NO,
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                              AS SA_NO,
     NVL(fj.FJ_CODE, 'X')                                         AS FJ_CODE,
     dp.ID_PERIODICITE,
     tef.TEF_CODE,
@@ -82,9 +85,9 @@ WHERE dn.CLICHE   = :1
   AND dn.DN_DATE <= DATE '2099-12-31'
 GROUP BY
     TO_NUMBER(TO_CHAR(TRUNC(dn.DN_DATE,'MM'),'YYYYMMDD')),
-    CASE WHEN dn.DR_NO IS NOT NULL THEN dn.DR_NO
-         WHEN e.DR_NO  IS NOT NULL THEN e.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END,
-    e.EMP_REGIME, e.SA_NO, NVL(fj.FJ_CODE,'X'),
+    NVL(CASE WHEN dn.DR_NO IS NOT NULL THEN dn.DR_NO
+             WHEN e.DR_NO  IS NOT NULL THEN e.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END, 99),
+    e.EMP_REGIME, NVL(e.SA_NO, 99), NVL(fj.FJ_CODE,'X'),
     dp.ID_PERIODICITE, tef.TEF_CODE,
     :1

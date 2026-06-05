@@ -26,12 +26,12 @@ WITH tx_agg AS (
 )
 SELECT
     t.ID_TEMPS,
-    0                                                            AS LP_NO,
-    e.SP_NO,
-    e.DR_NO,
+    9998                                                         AS LP_NO,
+    NVL(e.SP_NO, 9999)                                        AS SP_NO,
+    NVL(e.DR_NO, 99)                                          AS DR_NO,
     'PF'                                                         AS CODE_BRANCHE_COTISATION,
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                         AS SA_NO,
     dp.ID_PERIODICITE,
     tef.TEF_CODE,
     COUNT(DISTINCT pc.EMP_ID)                                   AS NB_EMPLOYEURS,
@@ -62,10 +62,10 @@ LEFT JOIN  DTM.DIM_TRANCHE_EFFECTIF      tef ON  e.EMP_NO_TR_DECLAR BETWEEN tef.
 WHERE pc.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
-    e.SP_NO,
-    e.DR_NO,
+    NVL(e.SP_NO, 9999),
+    NVL(e.DR_NO, 99),
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99),
     dp.ID_PERIODICITE,
     tef.TEF_CODE,
     pc.CLICHE

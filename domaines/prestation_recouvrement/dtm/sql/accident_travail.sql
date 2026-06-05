@@ -30,8 +30,8 @@ base AS (
         CASE WHEN pe.PE_TAUX_INCAPACITE > 100 THEN NULL
              ELSE pe.PE_TAUX_INCAPACITE
         END                                                                 AS TAUX_IPP,
-        sin.LP_NO,
-        sin.DR_NO,
+        NVL(sin.LP_NO, 9998)                                       AS LP_NO,
+        NVL(sin.DR_NO, 99)                                            AS DR_NO,
         sin.IND_SEXE,
         sin.IND_DATE_NAISSANCE,
         sin.DOS_CODE,
@@ -84,14 +84,14 @@ SELECT
     END                                                             AS LIBELLE_TIPP,
     -- ── GÉOGRAPHIE ─────────────────────────────────────────────────
     b.DR_NO,
-    0                                                               AS SP_NO,
+    9999                                                            AS SP_NO,
     b.LP_NO,
     -- ── DÉMOGRAPHIE ────────────────────────────────────────────────
-    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE ELSE 1 END      AS SEXE,
+    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE END      AS SEXE,
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        'Masculin'
+        ELSE        'NON RENSEIGNE'
     END                                                             AS LIBELLE_SEXE,
     tag.TAG_CODE                                                    AS TAG_CODE,
     -- ── MESURES VOLUMES ────────────────────────────────────────────
@@ -127,9 +127,9 @@ GROUP BY
     b.FLAG_IPP,
     CASE b.FLAG_IPP WHEN 1 THEN 'Avec IPP' ELSE 'Sans IPP' END,
     b.DR_NO,
-    0,
+    9999,
     b.LP_NO,
-    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE ELSE 1 END,
-    CASE b.IND_SEXE WHEN 1 THEN 'Masculin' WHEN 2 THEN 'Feminin' ELSE 'Masculin' END,
+    CASE WHEN b.IND_SEXE IN (1, 2) THEN b.IND_SEXE END,
+    CASE b.IND_SEXE WHEN 1 THEN 'Masculin' WHEN 2 THEN 'Feminin' ELSE 'NON RENSEIGNE' END,
     tag.TAG_CODE,
     b.CLICHE

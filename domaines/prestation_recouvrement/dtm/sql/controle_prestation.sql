@@ -24,9 +24,9 @@ base AS (
         dc.TDOS_CODE,
         dc.TPE_CODE                                          AS CODE_PRESTATION,
 
-        d.DR_NO,
-        d.SP_NO,
-        d.LP_NO,
+        NVL(d.DR_NO, 99)                              AS DR_NO,
+        NVL(d.SP_NO, 9999)                            AS SP_NO,
+        NVL(d.LP_NO, 9998)                            AS LP_NO,
 
         -- Dossier payé : au moins une prestation ESP liquidée
         CASE WHEN EXISTS (

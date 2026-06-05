@@ -118,9 +118,9 @@ base AS (
         dos.DOS_STATUT,
 
         -- Géographie
-        dos.DR_NO,
-        dos.SP_NO,
-        dos.LP_NO,
+        NVL(dos.DR_NO, 99)                              AS DR_NO,
+        NVL(dos.SP_NO, 9999)                            AS SP_NO,
+        NVL(dos.LP_NO, 9998)                            AS LP_NO,
 
         -- Démographie
         ind.IND_SEXE,
@@ -235,7 +235,7 @@ SELECT
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END                                                      AS LIBELLE_SEXE,
     b.TAG_CODE,
 
@@ -302,7 +302,7 @@ GROUP BY
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END,
     b.TAG_CODE,
     :1

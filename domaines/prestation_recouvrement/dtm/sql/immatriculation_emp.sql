@@ -10,10 +10,10 @@ WITH
 flux_imm AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')) AS ID_TEMPS,
-        NVL(e.DR_NO, sp.DR_NO)                    AS DR_NO,
-        e.SP_NO,
+        NVL(NVL(e.DR_NO, sp.DR_NO), 99)           AS DR_NO,
+        NVL(e.SP_NO, 9999)                        AS SP_NO,
         e.EMP_REGIME,
-        e.SA_NO,
+        NVL(e.SA_NO, 99)                          AS SA_NO,
         e.EMP_FORME_JURIDIQUE,
         dp.ID_PERIODICITE,
         e.EMP_ETAT,
@@ -35,10 +35,10 @@ flux_imm AS (
       AND e.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(e.EMP_DATE_IMM,'MM'),'YYYYMMDD')),
-        NVL(e.DR_NO, sp.DR_NO),
-        e.SP_NO,
+        NVL(NVL(e.DR_NO, sp.DR_NO), 99),
+        NVL(e.SP_NO, 9999),
         e.EMP_REGIME,
-        e.SA_NO,
+        NVL(e.SA_NO, 99),
         e.EMP_FORME_JURIDIQUE,
         dp.ID_PERIODICITE,
         e.EMP_ETAT,
@@ -49,10 +49,10 @@ flux_imm AS (
 flux_rad AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')) AS ID_TEMPS,
-        NVL(di.DR_NO, sp.DR_NO)                   AS DR_NO,
-        e.SP_NO,
+        NVL(NVL(di.DR_NO, sp.DR_NO), 99)          AS DR_NO,
+        NVL(e.SP_NO, 9999)                        AS SP_NO,
         e.EMP_REGIME,
-        e.SA_NO,
+        NVL(e.SA_NO, 99)                          AS SA_NO,
         e.EMP_FORME_JURIDIQUE,
         dp.ID_PERIODICITE,
         tef.TEF_CODE,
@@ -72,10 +72,10 @@ flux_rad AS (
       AND di.DI_DATE_RECEPTION IS NOT NULL
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(di.DI_DATE_RECEPTION,'MM'),'YYYYMMDD')),
-        NVL(di.DR_NO, sp.DR_NO),
-        e.SP_NO,
+        NVL(NVL(di.DR_NO, sp.DR_NO), 99),
+        NVL(e.SP_NO, 9999),
         e.EMP_REGIME,
-        e.SA_NO,
+        NVL(e.SA_NO, 99),
         e.EMP_FORME_JURIDIQUE,
         dp.ID_PERIODICITE,
         tef.TEF_CODE

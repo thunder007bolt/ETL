@@ -44,9 +44,9 @@ base AS (
         END                                                  AS AJ_STATUT,
 
         d.TDOS_CODE,
-        d.DR_NO,
-        d.SP_NO,
-        d.LP_NO,
+        NVL(d.DR_NO, 99)                              AS DR_NO,
+        NVL(d.SP_NO, 9999)                            AS SP_NO,
+        NVL(d.LP_NO, 9998)                            AS LP_NO,
 
         ind.IND_SEXE,
         ind.IND_DATE_NAISSANCE,
@@ -91,7 +91,7 @@ SELECT
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END                                                      AS LIBELLE_SEXE,
     b.TAG_CODE,
 
@@ -138,7 +138,7 @@ GROUP BY
     CASE b.IND_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END,
     b.TAG_CODE,
     :1

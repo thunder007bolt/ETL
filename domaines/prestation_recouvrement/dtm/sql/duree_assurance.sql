@@ -65,7 +65,7 @@ SELECT
     CASE d.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END                                                  AS TR_SEXE_LIBELLE,
     COUNT(*)                                             AS NB_COTISANTS,
     :1                                                   AS CLICHE
@@ -82,7 +82,7 @@ GROUP BY
     CASE d.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END,
     tda.TDA_CODE,
     :1

@@ -119,7 +119,7 @@ base AS (
         -- Géographie — depuis EFFET (DR_NO/SP_NO) et DOSSIER (LP_NO)
         NVL(efp.DR_NO, 99)                              AS DR_NO,
         NVL(efp.SP_NO, 9999)                            AS SP_NO,
-        dos.LP_NO,
+        NVL(dos.LP_NO, 9998)                            AS LP_NO,
 
         -- Bénéficiaire
         efp.IND_ID_BENEF,

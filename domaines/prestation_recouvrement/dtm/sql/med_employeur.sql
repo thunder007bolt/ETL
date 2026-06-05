@@ -12,7 +12,7 @@ med_agg AS (
     SELECT
         m.EMP_ID,
         EXTRACT(YEAR FROM m.MED_DATE)                               AS ANNEE_MED,
-        NVL(m.DR_NO, 0)                                             AS DR_NO,
+        NVL(m.DR_NO, 99)                                             AS DR_NO,
         COUNT(CASE WHEN NVL(m.MED_STATUT, 'X') <> 'A' THEN 1 END)  AS NB_MED_EMISES,
         COUNT(CASE WHEN m.MED_STATUT = 'N' THEN 1 END)              AS NB_MED_EN_COURS,
         COUNT(CASE WHEN m.MED_STATUT = 'V' THEN 1 END)              AS NB_MED_REGLEES,
@@ -38,7 +38,7 @@ med_agg AS (
     FROM DWH.FAIT_MISE_EN_DEMEURE m
     WHERE m.CLICHE = :1
       AND m.MED_DATE IS NOT NULL
-    GROUP BY m.EMP_ID, EXTRACT(YEAR FROM m.MED_DATE), NVL(m.DR_NO, 0)
+    GROUP BY m.EMP_ID, EXTRACT(YEAR FROM m.MED_DATE), NVL(m.DR_NO, 99)
 ),
 -- ── CTE 2 : impayés cotisation sur périodes couvertes par MED ──
 cot_agg AS (
@@ -90,7 +90,7 @@ SELECT
     ma.ANNEE_MED,
     ma.DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
-    NVL(e.SA_NO,       0)                                           AS SA_NO,
+    NVL(e.SA_NO,       99)                                           AS SA_NO,
     tef.TEF_CODE                                         AS TEF_CODE,
     -- ── LIBELLÉS ─────────────────────────────────────────────────
     dr.DR_DESC                                                      AS LIBELLE_DR,

@@ -6,9 +6,9 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    tx.LP_NO,
-    tx.SP_NO,
-    tx.DR_NO,
+    NVL(tx.LP_NO, 9998)                                            AS LP_NO,
+    NVL(tx.SP_NO, 9999)                                            AS SP_NO,
+    NVL(tx.DR_NO, 99)                                              AS DR_NO,
     tx.TXRE_TYPE,
     tx.TXRE_MODE_PAIEMENT,
     tx.TXRE_NATURE,
@@ -46,9 +46,9 @@ LEFT JOIN DTM.DIM_TEMPS                      t   ON  t.ID_TEMPS =
 WHERE tx.CLICHE = :1
 GROUP BY
     t.ID_TEMPS,
-    tx.LP_NO,
-    tx.SP_NO,
-    tx.DR_NO,
+    NVL(tx.LP_NO, 9998),
+    NVL(tx.SP_NO, 9999),
+    NVL(tx.DR_NO, 99),
     tx.TXRE_TYPE,
     tx.TXRE_MODE_PAIEMENT,
     tx.TXRE_NATURE,

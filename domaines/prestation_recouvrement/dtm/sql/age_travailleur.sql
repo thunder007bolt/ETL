@@ -18,14 +18,14 @@ WITH contrat_actif AS (
 ),
 base AS (
     SELECT
-        tr.DR_NO,
-        tr.SP_NO,
-        emp.SA_NO,
+        NVL(tr.DR_NO, 99)       AS DR_NO,
+        NVL(tr.SP_NO, 9999)     AS SP_NO,
+        NVL(emp.SA_NO, 99)      AS SA_NO,
         tr.TR_SEXE,
         CASE tr.TR_SEXE
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        NULL
+            ELSE        'NON RENSEIGNE'
         END                                                                    AS LIBELLE_SEXE,
         tr.TR_ETAT,
         emp.EMP_REGIME,

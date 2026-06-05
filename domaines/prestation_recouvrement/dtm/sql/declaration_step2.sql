@@ -18,11 +18,14 @@ SELECT
         WHEN CEIL(EXTRACT(MONTH FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))/3) = 4
              THEN TO_NUMBER(TO_CHAR(EXTRACT(YEAR FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))+1)||'0101')
     END                                                          AS ID_TEMPS_SUIVANT,
-    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
-    END                                                          AS DR_NO,
+    NVL(
+        CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO
+        END,
+        99
+    )                                                            AS DR_NO,
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                             AS SA_NO,
     NVL(fj.FJ_CODE, 'X')                                        AS FJ_CODE,
     dp.ID_PERIODICITE,
     tef.TEF_CODE,
@@ -50,9 +53,9 @@ GROUP BY
         WHEN CEIL(EXTRACT(MONTH FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))/3) = 4
              THEN TO_NUMBER(TO_CHAR(EXTRACT(YEAR FROM TO_DATE(TO_CHAR(td.PER_ID_AU),'YYYYMM'))+1)||'0101')
     END,
-    CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
-         WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END,
-    e.EMP_REGIME, e.SA_NO, NVL(fj.FJ_CODE,'X'),
+    NVL(CASE WHEN td.DR_NO IS NOT NULL THEN td.DR_NO
+             WHEN sp.DR_NO IS NOT NULL THEN sp.DR_NO END, 99),
+    e.EMP_REGIME, NVL(e.SA_NO, 99), NVL(fj.FJ_CODE,'X'),
     dp.ID_PERIODICITE, tef.TEF_CODE;
 
 CREATE INDEX DTM.IDX_TMP_EMIS ON DTM.TMP_EMIS

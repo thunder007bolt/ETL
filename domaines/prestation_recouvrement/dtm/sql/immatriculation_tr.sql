@@ -5,13 +5,13 @@
 WITH flux_tr AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM, 'MM'), 'YYYYMMDD')) AS ID_TEMPS,
-        NVL(tr.DR_NO, sp.DR_NO)                   AS DR_NO,
-        tr.SP_NO,
+        NVL(NVL(tr.DR_NO, sp.DR_NO), 99)          AS DR_NO,
+        NVL(tr.SP_NO, 9999)                       AS SP_NO,
         tr.TR_SEXE,
         CASE tr.TR_SEXE
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        NULL
+            ELSE        'NON RENSEIGNE'
         END                                       AS LIBELLE_SEXE,
         tag.TAG_CODE,
         tr.TR_ETAT,
@@ -25,13 +25,13 @@ WITH flux_tr AS (
       AND tr.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM, 'MM'), 'YYYYMMDD')),
-        NVL(tr.DR_NO, sp.DR_NO),
-        tr.SP_NO,
+        NVL(NVL(tr.DR_NO, sp.DR_NO), 99),
+        NVL(tr.SP_NO, 9999),
         tr.TR_SEXE,
         CASE tr.TR_SEXE
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        NULL
+            ELSE        'NON RENSEIGNE'
         END,
         tag.TAG_CODE,
         tr.TR_ETAT

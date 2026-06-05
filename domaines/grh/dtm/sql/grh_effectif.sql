@@ -56,7 +56,7 @@ SELECT
     CASE b.SEXE
         WHEN 'M' THEN 'Masculin'
         WHEN 'F' THEN 'Féminin'
-        ELSE NULL
+        ELSE 'NON RENSEIGNE'
     END                                                   AS LIBELLE_SEXE,
     b.CODE_DOMAINE,
     b.UA_NATURE,
@@ -84,7 +84,7 @@ GROUP BY
     ta.TRANCHE_AGE_CODE,
     tan.TRANCHE_ANC_CODE,
     b.SEXE,
-    CASE b.SEXE WHEN 'M' THEN 'Masculin' WHEN 'F' THEN 'Féminin' ELSE NULL END,
+    CASE b.SEXE WHEN 'M' THEN 'Masculin' WHEN 'F' THEN 'Féminin' ELSE 'NON RENSEIGNE' END,
     b.CODE_DOMAINE,
     b.UA_NATURE,
     b.LIEU_ID,

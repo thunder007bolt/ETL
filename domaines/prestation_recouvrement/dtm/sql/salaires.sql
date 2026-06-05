@@ -10,15 +10,15 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    dn.SP_NO,
-    sp.DR_NO,
+    NVL(dn.SP_NO, 9999)                                         AS SP_NO,
+    NVL(sp.DR_NO, 99)                                           AS DR_NO,
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99)                                            AS SA_NO,
     tr.TR_SEXE,
     CASE tr.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END                                                             AS LIBELLE_SEXE,
     tag.TAG_CODE,
     tef.TEF_CODE,
@@ -60,15 +60,15 @@ WHERE s.CLICHE = :1
   AND dn.PER_ID IS NOT NULL
 GROUP BY
     t.ID_TEMPS,
-    dn.SP_NO,
-    sp.DR_NO,
+    NVL(dn.SP_NO, 9999),
+    NVL(sp.DR_NO, 99),
     e.EMP_REGIME,
-    e.SA_NO,
+    NVL(e.SA_NO, 99),
     tr.TR_SEXE,
     CASE tr.TR_SEXE
         WHEN 1 THEN 'Masculin'
         WHEN 2 THEN 'Feminin'
-        ELSE        NULL
+        ELSE        'NON RENSEIGNE'
     END,
     tag.TAG_CODE,
     tef.TEF_CODE,

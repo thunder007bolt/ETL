@@ -74,11 +74,11 @@ snapshot_actu_contrat_actif AS (
 flux_mutations AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD'))          AS ID_TEMPS,
-        sp.DR_NO,
-        e.SP_NO,
+        NVL(sp.DR_NO, 99)                                            AS DR_NO,
+        NVL(e.SP_NO, 9999)                                           AS SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
-        e.SA_NO,
+        NVL(e.SA_NO, 99)                                             AS SA_NO,
         e.EMP_FORME_JURIDIQUE                                              AS EMP_FJ_CODE,
         e.EMP_REGIME,
         COUNT(DISTINCT CASE WHEN em.EM_MOTIF_SORTIE = 'RETRAITE'     THEN em.TR_ID END) AS NB_RET,
@@ -102,11 +102,11 @@ flux_mutations AS (
       AND em.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(em.EM_DATE_FIN,'MM'),'YYYYMMDD')),
-        sp.DR_NO,
-        e.SP_NO,
+        NVL(sp.DR_NO, 99),
+        NVL(e.SP_NO, 9999),
         tr.TR_SEXE,
         tar.TAG_CODE,
-        e.SA_NO,
+        NVL(e.SA_NO, 99),
         e.EMP_FORME_JURIDIQUE,
         e.EMP_REGIME
 ),
@@ -115,14 +115,14 @@ flux_mutations AS (
 flux_imm AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD'))          AS ID_TEMPS,
-        sp.DR_NO,
-        tr.SP_NO,
+        NVL(sp.DR_NO, 99)                                            AS DR_NO,
+        NVL(tr.SP_NO, 9999)                                         AS SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
         fj.FJ_CODE                                                  AS EMP_FJ_CODE,
         fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
         fj.SECT_CODE,
-        emp.SA_NO,
+        NVL(emp.SA_NO, 99)                                         AS SA_NO,
         emp.EMP_REGIME,
         COUNT(DISTINCT snap.TR_ID)                                  AS NB_IMM,
         COUNT(DISTINCT CASE WHEN tr.TR_ETAT = 'A' THEN snap.TR_ID END) AS NB_ACTIFS
@@ -138,9 +138,9 @@ flux_imm AS (
       AND tr.CLICHE = :1
     GROUP BY
         TO_NUMBER(TO_CHAR(TRUNC(tr.TR_DATE_IMM,'MM'),'YYYYMMDD')),
-        sp.DR_NO,
-        tr.SP_NO,
-        emp.SA_NO,
+        NVL(sp.DR_NO, 99),
+        NVL(tr.SP_NO, 9999),
+        NVL(emp.SA_NO, 99),
         emp.EMP_REGIME,
         tr.TR_SEXE,
         tar.TAG_CODE,
@@ -153,14 +153,14 @@ flux_imm AS (
 flux_debut AS (
     SELECT
         TO_NUMBER(TO_CHAR(TO_DATE('0101' || SUBSTR(:1, 3, 4), 'DDMMYYYY'), 'YYYYMMDD')) AS ID_TEMPS,
-        sp.DR_NO,
-        tr.SP_NO,
+        NVL(sp.DR_NO, 99)                                            AS DR_NO,
+        NVL(tr.SP_NO, 9999)                                         AS SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
         fj.FJ_CODE                                                  AS EMP_FJ_CODE,
         fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
         fj.SECT_CODE,
-        emp.SA_NO,
+        NVL(emp.SA_NO, 99)                                         AS SA_NO,
         emp.EMP_REGIME,
         COUNT(DISTINCT snap.TR_ID)                                  AS NB_DEBUT
     FROM snapshot_debut_contrat_actif snap
@@ -172,9 +172,9 @@ flux_debut AS (
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
     WHERE tr.CLICHE = :1
     GROUP BY
-        sp.DR_NO,
-        tr.SP_NO,
-        emp.SA_NO,
+        NVL(sp.DR_NO, 99),
+        NVL(tr.SP_NO, 9999),
+        NVL(emp.SA_NO, 99),
         emp.EMP_REGIME,
         tr.TR_SEXE,
         tar.TAG_CODE,
@@ -187,14 +187,14 @@ flux_debut AS (
 flux_fin AS (
     SELECT
         TO_NUMBER(TO_CHAR(TRUNC(TO_DATE(:1, 'MMYYYY'), 'MM'), 'YYYYMMDD'))             AS ID_TEMPS,
-        sp.DR_NO,
-        tr.SP_NO,
+        NVL(sp.DR_NO, 99)                                            AS DR_NO,
+        NVL(tr.SP_NO, 9999)                                         AS SP_NO,
         tr.TR_SEXE,
         tar.TAG_CODE,
         fj.FJ_CODE                                                  AS EMP_FJ_CODE,
         fj.FJ_CODE_SUP                                              AS EMP_FJ_CODE_SUP,
         fj.SECT_CODE,
-        emp.SA_NO,
+        NVL(emp.SA_NO, 99)                                         AS SA_NO,
         emp.EMP_REGIME,
         COUNT(DISTINCT snap.TR_ID)                                  AS NB_FIN
     FROM snapshot_actu_contrat_actif snap
@@ -206,9 +206,9 @@ flux_fin AS (
            ON FLOOR(MONTHS_BETWEEN(SYSDATE, tr.TR_DATE_NAISSANCE)/12) BETWEEN tar.INF AND tar.SUP
     WHERE tr.CLICHE = :1
     GROUP BY
-        sp.DR_NO,
-        tr.SP_NO,
-        emp.SA_NO,
+        NVL(sp.DR_NO, 99),
+        NVL(tr.SP_NO, 9999),
+        NVL(emp.SA_NO, 99),
         emp.EMP_REGIME,
         tr.TR_SEXE,
         tar.TAG_CODE,
@@ -229,7 +229,7 @@ base AS (
         CASE COALESCE(i.TR_SEXE, m.TR_SEXE)
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        'Inconnu'
+            ELSE        'NON RENSEIGNE'
         END                                                              AS TR_SEXE_LIBELLE,
         COALESCE(i.TAG_CODE,    m.TAG_CODE)                              AS TAG_CODE,
         COALESCE(i.EMP_FJ_CODE, m.EMP_FJ_CODE)                          AS EMP_FJ_CODE,
@@ -272,7 +272,7 @@ base AS (
         CASE d.TR_SEXE
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        'Inconnu'
+            ELSE        'NON RENSEIGNE'
         END                                                              AS TR_SEXE_LIBELLE,
         d.TAG_CODE,
         d.EMP_FJ_CODE,
@@ -306,7 +306,7 @@ base AS (
         CASE f.TR_SEXE
             WHEN 1 THEN 'Masculin'
             WHEN 2 THEN 'Feminin'
-            ELSE        'Inconnu'
+            ELSE        'NON RENSEIGNE'
         END                                                              AS TR_SEXE_LIBELLE,
         f.TAG_CODE,
         f.EMP_FJ_CODE,

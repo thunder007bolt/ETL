@@ -7,9 +7,9 @@
 SELECT
     -- ── GRAIN ──────────────────────────────────────────────────────
     t.ID_TEMPS,
-    NVL(m.DR_NO,       0)                                           AS DR_NO,
+    NVL(m.DR_NO,       99)                                           AS DR_NO,
     NVL(e.EMP_REGIME, 'X')                                          AS EMP_REGIME,
-    NVL(e.SA_NO,       0)                                           AS SA_NO,
+    NVL(e.SA_NO,       99)                                           AS SA_NO,
     NVL(m.MED_STATUT, 'X')                                          AS MED_STATUT,
     tef.TEF_CODE                                                    AS TEF_CODE,
     -- ── MESURES VOLUMÉTRIE ─────────────────────────────────────────
@@ -52,9 +52,9 @@ WHERE m.CLICHE = :1
   AND m.MED_DATE IS NOT NULL
 GROUP BY
     t.ID_TEMPS,
-    NVL(m.DR_NO,       0),
+    NVL(m.DR_NO,       99),
     NVL(e.EMP_REGIME, 'X'),
-    NVL(e.SA_NO,       0),
+    NVL(e.SA_NO,       99),
     NVL(m.MED_STATUT, 'X'),
     tef.TEF_CODE,
     m.CLICHE
