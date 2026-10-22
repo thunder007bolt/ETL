@@ -1,32 +1,28 @@
 -- DTM_INDICATEURS_FINANCES_GRH — Taux d'encadrement par exercice (autres ratios en attente)
--- :1 = CLICHE (MMYYYY) — étiquette uniquement les lignes insérées (pas de filtre source)
+-- :1 = CLICHE (MMYYYY) — filtre DTM_GRH_EFFECTIF sur le cliché chargé et étiquette les lignes insérées
+--
+-- Règles :
+--   - lit DTM_GRH_EFFECTIF du même cliché, qui doit être chargé avant cette table
+--     (ordre de dtm_config.py) ;
+--   - taux d'encadrement : cadres supérieurs (HC, 05, 06) / ensemble des agents présents ;
+--   - taux financiers vides en attendant une source comptable.
 WITH
 ANNEES AS (
     SELECT DISTINCT TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4)) AS annee
     FROM   DTM.DTM_GRH_EFFECTIF
-    WHERE  TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4)) IN (
+    WHERE  CLICHE = :1
+      AND  TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4)) IN (
                SELECT AN_ID FROM DTM.DIM_ANNEE
            )
 ),
-EFFECTIF_RANKED AS (
-    SELECT
-        TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4))               AS annee,
-        QUAL_CODE,
-        NB_AGENTS,
-        RANK() OVER (
-            PARTITION BY TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4))
-            ORDER     BY CLICHE DESC
-        )                                                          AS rk
-    FROM   DTM.DTM_GRH_EFFECTIF
-),
 EFFECTIF AS (
     SELECT
-        annee,
+        TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4))                             AS annee,
         SUM(CASE WHEN QUAL_CODE IN ('HC','05','06') THEN NB_AGENTS ELSE 0 END) AS nb_cadres,
         SUM(NB_AGENTS)                                                         AS nb_total
-    FROM   EFFECTIF_RANKED
-    WHERE  rk = 1
-    GROUP  BY annee
+    FROM   DTM.DTM_GRH_EFFECTIF
+    WHERE  CLICHE = :1
+    GROUP  BY TO_NUMBER(SUBSTR(TO_CHAR(ID_TEMPS), 1, 4))
 )
 SELECT
     a.annee                                                       AS AN_ID,
