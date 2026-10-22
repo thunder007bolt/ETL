@@ -1,0 +1,61 @@
+Tableaux
+    - Immatriculations des assujetis
+        - Criteres qui determine la categorie d'un employeur
+        - Comment determiner le nombre de salarié d'un employeur
+        - Pour classer un employeur dans « moins de 20 salariés » ou « plus de 20 salariés », on compte les salariés 
+            ☐ de l’année en cours seulement
+            ☐ de toutes les années, depuis l’immatriculation de l’employeur jusqu’à aujourd’hui
+            Exemple : un employeur a déclaré 12 salariés en 2025 et en avait déclaré 15 autres les années d’avant. Dans quelle catégorie est-il ?
+        
+        - Pourquoi la separation metier entre secteur prive, public , gens de maison et Assure volontaire, Travailleurs independants
+        - critère d'un employeur immatriculé
+        - C'est quoi un employeur actif ? c'est quoi les critères ?
+        - formule de calcul d'effectifs debut periode, fin période mouvement employeurs
+        - "" mouvement travailleurs
+        - un travailleur peut t'il avoir plusieurs emploi simultannées 
+            si oui comment determine t'on la categorie employeur 
+        - Comment determiner la date d'immatriculation d'un travailleur ? 
+        - identifier les branches d'activités
+        - criteres masse salariale plafonné, non plafonné
+
+
+    - Recouvrement des cotisations sociales
+        - c'est quoi une declaration nomminative trimestrielle
+            Elle se fait uniquement de facon trimestrielle ? 
+            explication des statuts emises recues et saisies
+        - c'est quoi un travailleur cotisant
+        - c'est quoi une durree d'assurance ? 
+        - c'est quoi un controle , expliquer les differents types de controle
+        - c'est quoi un appel mensuel d'appels mensuel/trim de cotisation
+        - c'est quoi une cotisation encaissé, appelé ? 
+        - regle paieement à l'echeance, paiement apres echeance, reste sans suite
+            une transaction faite veux dire automatiquement qu'une cotisation a été effectué ou un paiement a été effectué ? 
+        - c'est quoi la date decheance d'un appel ? 
+        - signification R,D,T,S qui correspondent aux types de transaction_declaration
+        - signification des initials PF, AV, AT
+        - est ce qu'un employeur peut effectuer une deplaration avant l'appel ? oubien l'appel precede la declaration et comment l'appel est initié ou declenché
+        - une cotisation peut elle etre encaissé sans pour autant etre appelé ? 
+        - AP MASSE est ce un montant mensuel ou trimestriel ? 
+        - liste exhaustif des branches de cotisations
+        - nature d'une cotisation
+        - montant creance
+        - cotisations recouvré
+        ...
+
+    - Prestation sociales
+        - criteres dossier rejeté, liquidés, en instance, rejeté
+
+
+    - Gestion administratives
+        table travailleur : grh_personne
+        quel champ identifie la categorie d'une personne ? 
+            s'agit t'il de qual_code ? 
+            est ce que "agent d'execution" correspond à "employee au niveau du tableau" ? 
+        
+    - Gestion financière et comptable
+
+    - Action Sanitaire et sociale
+
+L'Objectif :
+    c'est de fiabiliser les requetes et les regles de calculs.
+    Comprendre le metier.
