@@ -29,8 +29,12 @@ Rapport de synthèse : [Analyse des mouvements du personnel](https://claude.ai/a
 | 10 | [lot10_test_requetes_dtm_corrigees.sql](lot10_test_requetes_dtm_corrigees.sql) | 22/10/2026 | Test des requêtes DTM corrigées avant chargement (Q70–Q74) | Exécuté : formation conforme ; effectif et ratio vides (lot 11) ; Q74 à refaire après chargement |
 | 11 | [lot11_diagnostic_lot10.sql](lot11_diagnostic_lot10.sql) | 22/10/2026 | Clichés présents dans les faits du DWH, étapes de l'effectif, budget des formations (Q75–Q79) | Exécuté : le DWH contient bien 102026 ; BUDGET est une année, pas un montant |
 | 12 | [lot12_test_requetes_dtm_cliche_en_clair.sql](lot12_test_requetes_dtm_cliche_en_clair.sql) | 22/10/2026 | Nouveau test de l'effectif, du ratio et de la formation avec le cliché écrit en clair ; comportement de SQL Developer avec :1 (Q80–Q84) | Exécuté : effectif (885 agents en 2025), ratio (41,7 %) et formation conformes ; les résultats vides du lot 10 venaient de la valeur saisie |
+| 13 | [lot13_temporaires_et_fonction_publique.sql](lot13_temporaires_et_fonction_publique.sql) | 24/10/2026 | Agents temporaires et agents de la fonction publique : codes, effectifs, contrats, engagements par année (Q85–Q89) | Exécuté : 846 temporaires dont 6 actifs, renouvellements fréquents ; fonction publique entrée par détachement ou affectation |
+| 14 | [lot14_types_agents.sql](lot14_types_agents.sql) | 25/10/2026 | Requête de présentation : nombre d'agents par type (CNSS permanent, CNSS temporaire, fonction publique, affecté), en activité et au total (Q90) | À exécuter |
+| 15 | [lot15_test_type_agent.sql](lot15_test_type_agent.sql) | 25/10/2026 | Test de l'axe type d'agent ajouté à l'effectif et à la formation : totaux inchangés, détail par type (Q91–Q94) | À exécuter, Q94 après chargement |
+| 16 | [lot16_domaines_activite.sql](lot16_domaines_activite.sql) | 26/10/2026 | Domaines d'activité : libellés des codes et lien avec la situation et l'unité (Q95–Q96) | À exécuter |
 
-## Requêtes DTM corrigées (22/10/2026, commit e822039 sur la branche fix/grh-requetes-dtm)
+## Requêtes DTM corrigées (22/10/2026, commit 1b44a0c sur la branche fix/grh-requetes-dtm)
 
 Quatre requêtes de `domaines/grh/dtm/sql` ont été corrigées, avec les mêmes colonnes en sortie pour ne rien casser dans OBIEE. L'en-tête de chaque fichier ne décrit que ses règles. Le détail des corrections, avec les références E1 à E18, est dans le rapport et dans le tableau ci-dessous. Les règles de gestion restent à faire viser par la DRH avant la mise en production.
 
