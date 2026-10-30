@@ -1,0 +1,52 @@
+CPN_CODE	CPN_DESCRIPTION	TDOS_CATEGORIE	TPN_CODE	TPN_DESCRIPTION	CODE_BRANCHE
+ANALYSE	Frais d'analyse	A	ANALYSE	Frais d'analyse	A
+ANALYSE	Frais d'analyse	A	EXAMENS	Frais d'examens médicaux	A
+APPARAILLAGE	Frais d'apparaillage et fourniture de fabrication	A	APPAREILLAGE	Frais d'appareillage et fourniture de fabrication	A
+APPARAILLAGE	Frais d'apparaillage et fourniture de fabrication	A	FOURNIT_REPAR	Frais de fournitures et réparations	A
+CHIRURGIE	Frais de chirurgie	A	CHIRURGIE	Frais de chirurgie	A
+CONSTAT	Frais de constat	A	CONSTAT	Frais de constat	A
+DENTAIRE	Frais dentaires	A	DENTAIRE	Frais dentaire	A
+DIVERS	Frais divers	A	FRAIS_DIVERS	Frais pour dépenses diverses
+ENQUETE	Frais d'enquete	A	DEPL_ENQ	Frais de déplacement pour enquête AT	A
+ENQUETE	Frais d'enquete	A	ENQUETE_AT	Frais d'enquete accident de travail ou MP	A
+EXPERTISE	Frais d'expertise	A	DEPLACEMENT	Frais de deplacement	A
+EXPERTISE	Frais d'expertise	A	EXPERTISE	Frais d'expertise	A
+EXPERTISE	Frais d'expertise	A	EXPERTISE_MED	Expertise médical	A
+EXPERTISE	Frais d'expertise	A	HONORAIRE	Frais honoraires	A
+EXPERTISE	Frais d'expertise	A	TECH	technique	A
+FACTURATION	Frais de facturation	A	TVA	Retenue TVA	A
+FM	Frais de maternite	M	ACCOUCHE	Frais d'accouchement	M
+FM	Frais de maternite	M	CONSULT	Frais médicaux	M
+FM	Frais de maternite	M	EXAMENS_LABO	Frais d'examens médicaux ou de labo	M
+FM	Frais de maternite	M	HOSPITALIS	Frais d'hospitalisation	M
+FM	Frais de maternite	M	KITOPERAT	Frais Kit opératoire (césarienne)	M
+FM	Frais de maternite	M	PHARMACIE	Frais pharmaceutiques	M
+FM	Frais de maternite	M	RADIO_MAT	Frais de radio	M
+FUNERAIRE	Frais funeraires	A	FUNERAIRE	Frais funeraires	A
+HOPITAL	Frais d'hospitalisation	A	HOPITAL	Frais d'hospitalisation	A
+HOPITAL	Frais d'hospitalisation	A	SOINS	Frais pour soins médicaux	A
+LABORATOIRE	Frais de laboratoire	A	CREATINE KIN	Creatine kinase (kc)	A
+LABORATOIRE	Frais de laboratoire	A	SODIUM UR	Sodium urinaire	A
+MEDICINE	Medecine interne	A	CERTIFICAT	Certificat medical	A
+MEDICINE	Medecine interne	A	CONSULTATION	Frais de consultation	A
+MEDICINE	Medecine interne	A	ELECTROENCEPH	Electroencephalogramme	A
+PHARMACIE	Frais pharmaceutiques	A	PHARMACIE_AT	Frais pharmaceutiques	A
+PROTHESE	Frais de prothese	A	PROTHESE	Frais de prothese	A
+RADIOLOGIE	Frais de radiologie	A	CRANE AMX	Crane maxilaire defile	A
+RADIOLOGIE	Frais de radiologie	A	CRANE FACE	Crane face	A
+RADIOLOGIE	Frais de radiologie	A	CRANE FACE F/P	Crane F/P	A
+RADIOLOGIE	Frais de radiologie	A	DORSAL F/P	Dorsal F/P	A
+RADIOLOGIE	Frais de radiologie	A	RADIO	Radio	A
+READAPTATION	Frais de readaptation fonctionnelle	A	TRAITEMENT	Frais de traitement	A
+RECLASSEMENT	Frais de reclassement	A	RECLASSEMENT	Frais de reclassement	A
+REEDUCATION	Frais de reeducation	A	APPARAILLAGE	Frais d'appareillage	A
+REEDUCATION	Frais de reeducation	A	EXAMEN PSYCHO	Frais d'examens psychotechniques	A
+REEDUCATION	Frais de reeducation	A	JOURNEE	Prix de la journee selon tarif	A
+REEDUCATION	Frais de reeducation	A	REEDUCATION	Frais de reeducation	A
+REEDUCATION	Frais de reeducation	A	VOYAGEMENT	Frais de voyage	A
+SCANNER	Frais de scanner	A	SCANNER	Frais de scanner	A
+SEJOUR	Frais de sejour	A	SEJOUR	Frais de sejour	A
+TRANSPORT	Frais de transport	A	EVACUATION	Frais d'évacuation	A
+TRANSPORT	Frais de transport	A	FRAISVISA	Frais pour le visa	A
+TRANSPORT	Frais de transport	A	TRANSPORT	Frais de transport de la victime	A
+VERRES	Frais de verres correcteurs	A	VERRES_CORECT	Frais de verres correcteurs	A
