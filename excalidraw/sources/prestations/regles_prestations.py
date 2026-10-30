@@ -4,7 +4,7 @@ Les règles du domaine Prestations (T25 à T57) trouvées dans les données, ave
 
 Une feuille pour s'approprier tout le travail fait du 26 au 30/10/2026 : ce que chaque lot de
 requêtes a cherché, ce que la base nous a appris, les règles de calcul proposées, ce qui est faux
-dans les requêtes DTM actuelles, les questions encore ouvertes, et l'index des 58 requêtes. Chaque
+dans les requêtes DTM actuelles, les questions encore ouvertes, et l'index des 73 requêtes. Chaque
 carte renvoie aux requêtes qui la prouvent (P01 à P58), rangées dans analyses/prestations.
 
 Sources : analyses/prestations (README, TODO, lots 1, 2, 3 A et 3 B, requêtes proposées),
@@ -66,6 +66,9 @@ KEY_POINTS = [
     "disparaissent.",
     "La base est une copie figée au 02/02/2026. Beaucoup de statuts et de codes n'ont pas de "
     "libellé : nous les avons déduits des données, la DSI doit les confirmer (partie 5).",
+    "Le 30/10, les règles R1 à R7 ont été confrontées à l'annuaire statistique de la CNSS 2024 : "
+    "R1 à R5 et A1 confirmées, R6 corrigée (pension en cours au 31/12, payée ou non), R7 revue "
+    "(pension saisie). Détail : analyses/comparaison_annuaire_cnss_2024.",
     "Les cartes jaunes sont nos choix : elles attendent l'avis de la direction des prestations. "
     "La fiche T25 (dossier « tableaux cipres ») sert à le recueillir, tableau par tableau.",
 ]
@@ -85,14 +88,20 @@ LOTS = [
     ("Lot 3 B", "30/10/2026", "lot3b_controles_t25.sql", "P48 à P58",
      "Répondre dans les données aux cinq questions de la fiche T25.",
      "Réversion dans le dossier du défunt ; stock en instance faussé ; T25 par demande."),
+    ("Lot 4", "30/10/2026", "lot4_controles_t26_t27.sql", "P59 à P73",
+     "Savoir ce qu'est une demande en AT/MP et en PF, et d'où part la durée, pour T26 et T27.",
+     "IJ puis rente : deux demandes ; 46 % de déclarations AT/MP sans suite ; IJ notifiées 7 "
+     "mois après l'arrêt ; un enfant ajouté par an et par dossier PF ; maternité = une grossesse."),
 ]
 
 PRODUCED = [
-    ("Requêtes proposées", "t25_requete_proposee.sql : T25, par demande (revue le 30/10)\n"
+    ("Requêtes proposées", "t25, t26 et t27_requete_proposee.sql : T25 à T27,\n"
+                           "par demande (30/10)\n"
                            "dtm_dossier_requete_proposee.sql : DTM_DOSSIER (à aligner)\n"
                            "t25_q4_deux_cas.sql : Q4 sous ses deux réponses\n"
                            "Aucune n'est encore exécutée."),
-    ("Schémas Excalidraw", "fiche T25 (tableaux cipres) : règles, SQL, questions\n"
+    ("Schémas Excalidraw", "fiches T25, T26 et T27 (tableaux cipres) : règles,\n"
+                           "SQL, questions\n"
                            "tables_prestations : tables, liens, codes\n"
                            "vie_dossier et modele_conceptuel_dossier :\n"
                            "parcours d'un dossier, mis à jour le 30/10"),
@@ -100,7 +109,7 @@ PRODUCED = [
                           "Règles de calcul des tableaux des prestations\n"
                           "Guide du métier · artefact Tables des prestations"),
     ("Suivi", "analyses/prestations/README.md : index des lots, constats, règles\n"
-              "analyses/prestations/TODO.md : les 12 tâches et leur état\n"
+              "analyses/prestations/TODO.md : les tâches et l'ordre d'attaque\n"
               "resultats/ : les listes longues en TSV"),
 ]
 
@@ -200,10 +209,61 @@ FACTS = [
                "regroupant.",
          preuve="toutes les bornes CIPRES sont des multiples de 5",
          p=["P14", "P42"], tableaux="T32 à T49", etat="prouve"),
+    dict(n="B18", titre="Un dossier AT/MP vit plusieurs liquidations",
+         regle="Les IJ sont liquidées d'abord, la rente ou l'allocation d'incapacité des années "
+               "après, dans le même dossier, chacune avec sa notification.",
+         preuve="191 dossiers « IJ + allocation » sur 231 et 77 « IJ + rente » sur 90 ont "
+                "plusieurs dates de notification ; 1,9 IJ par dossier",
+         p=["P59", "P61"], tableaux="T26", etat="prouve"),
+    dict(n="B19", titre="Beaucoup de déclarations AT/MP sans suite",
+         regle="Un dossier AT/MP sur deux ne donne jamais rien : ni IJ, ni soins, ni rente. Il "
+               "n'est presque jamais fermé ni rejeté.",
+         preuve="4 158 dossiers sur 9 106 ouverts de 2019 à 2025 ; 35 à 53 % chaque année de "
+                "2019 à 2024 ; 0 à 7 rejets par an",
+         p=["P59", "P68"], tableaux="T26", etat="prouve"),
+    dict(n="B20", titre="Les soins AT/MP : un flux hors guichet",
+         regle="Les soins se remboursent en 8 à 10 fois par dossier, sans passer par le guichet ; "
+               "plus de la moitié des dossiers soignés n'ont rien d'autre. Les dates d'approbation "
+               "des vieux remboursements ont été remplies en bloc en 2024.",
+         preuve="650 à 960 dossiers par an ; en 2024, 973 vieux dossiers saisis depuis 2005 ; "
+                "aucune facture ni ordonnance reçue au guichet",
+         p=["P63", "P70", "P73"], tableaux="T26", etat="prouve"),
+    dict(n="B21", titre="Un enfant ajouté ne passe pas au guichet",
+         regle="Chaque année, environ 9 000 dossiers d'allocataires reçoivent un enfant de plus, "
+               "notifié 5 ans après la première notification en médiane, sans réception.",
+         preuve="2025 : 8 246 dossiers à leur première notification, 8 124 renotifiés ; 6 "
+                "réceptions ANCIEN de PF",
+         p=["P64", "P65"], tableaux="T27, T41", etat="prouve"),
+    dict(n="B22", titre="Un dossier de maternité = une grossesse",
+         regle="Une mère a un dossier par grossesse, déposé 3 semaines avant l'accouchement. Il "
+               "porte l'IJ et l'allocation prénatale, notifiées ensemble.",
+         preuve="99,4 % des dossiers ont les deux ; notification 16 j après la réception en "
+                "2025 ; 9 mères seulement ont deux dossiers dans l'année",
+         p=["P65", "P67"], tableaux="T27, T54, T55", etat="prouve"),
+    dict(n="B23", titre="L'allocation prénatale est notifiée",
+         regle="Elle passe aujourd'hui par le dossier de maternité (code MAP), avec réception et "
+               "notification. L'atelier de Kaya 2017 disait le contraire, pour l'ancien code "
+               "FAP, presque éteint.",
+         preuve="MAP : 4 245 notifiées en 2025, 15 j après la demande ; FAP : 33",
+         p=["P66"], tableaux="T27, T55", etat="prouve"),
+    dict(n="B24", titre="Les IJ AT/MP attendent 7 mois",
+         regle="L'arrêt de travail dure un mois, mais l'IJ est notifiée environ 7 mois après sa "
+               "fin. La base ne dit pas pourquoi : la reprise du travail n'est jamais saisie, le "
+               "certificat de guérison presque jamais.",
+         preuve="IJ de 2025 : arrêt de 27 j en médiane, notifiée 211 j après la fin de l'arrêt et "
+                "183 j après la déclaration ; certificat de guérison saisi pour 14 IJ sur 226",
+         p=["P62", "P69"], tableaux="T26", etat="prouve"),
+    dict(n="B25", titre="Les demandes ANCIEN des AT/MP",
+         regle="Une réception ANCIEN sur un dossier AT/MP est une demande de rente ou "
+               "d'allocation, ou de rente de survivant. Les autres portent des pièces de maintien "
+               "des droits (certificat de vie, de scolarité).",
+         preuve="1 097 réceptions de 2019 à 2025 : 70 % suivies d'une rente ou d'une allocation "
+                "dans l'année, 9 % d'une rente de survivant, 18 % de rien",
+         p=["P60", "P70", "P71"], tableaux="T26", etat="prouve"),
 ]
 
 RULE_GROUPS = [
-    ("3.1 Les dossiers (T25 à T27) : établies pour T25, à étendre à T26 et T27", [
+    ("3.1 Les dossiers (T25 à T27) : D1 à D8 établies pour T25, D9 à D14 propres à T26 et T27", [
         dict(n="D1", titre="Les dossiers concernés",
              regle="Les dossiers de la branche, y compris ceux de coordination payés par une "
                    "autre caisse, que la CNSS reçoit et instruit. Sans les dossiers transférés à "
@@ -260,6 +320,51 @@ RULE_GROUPS = [
              preuve="une moyenne des moyennes des lignes serait fausse ; l'atelier de Kaya cite "
                     "le taux sans formule",
              p=[], tableaux="T25 à T27", etat="propose"),
+        dict(n="D9", titre="AT/MP : les dépôts",
+             regle="La déclaration (NOUVEAU) est le dépôt de la première demande du dossier. Une "
+                   "réception ANCIEN avec un certificat de consolidation est le dépôt de la rente "
+                   "ou de l'allocation ; avec un certificat de décès, celui des rentes de "
+                   "survivants, comme la réversion de T25.",
+             preuve="après une consolidation, 91 % des réceptions sont suivies d'une rente ou "
+                    "d'une allocation ; durée médiane 2025 depuis cette réception : 13 à 35 j",
+             p=["P60", "P62", "P71"], tableaux="T26", etat="propose",
+             note="Kaya 2017 part du certificat de consolidation (64 à 107 j) : question T26"),
+        dict(n="D10", titre="AT/MP : les IJ et l'allocation d'incapacité",
+             regle="Une IJ est déposée avec la déclaration et liquidée à sa première notification ; "
+                   "sa durée part de la déclaration et se publie telle quelle. L'allocation "
+                   "d'incapacité suit la règle D4.",
+             preuve="IJ de 2025 : 183 j en médiane, dont un mois d'arrêt ; allocation : date de "
+                    "notification pour toutes depuis 2019, signée le même jour",
+             p=["P61", "P62", "P69", "P72"], tableaux="T26", etat="propose",
+             note="qu'attend une IJ pendant 7 mois ? question T26"),
+        dict(n="D11", titre="AT/MP : les soins",
+             regle="Les soins vont en « autres prestations de la branche ». Un dossier y compte "
+                   "une fois, liquidé à la saisie de son premier remboursement (pas à son "
+                   "approbation, remplie en bloc en 2024 pour les vieux dossiers).",
+             preuve="650 à 960 dossiers par an, 3 à 5 mois après la déclaration ; saisie et "
+                    "approbation à moins de 10 j d'écart dans le flux normal",
+             p=["P59", "P63", "P73"], tableaux="T26", etat="propose",
+             note="les soins entrent-ils dans T26 ? question T26"),
+        dict(n="D12", titre="AT/MP : les déclarations sans suite",
+             regle="Une déclaration qui n'a donné ni IJ, ni soins, ni rente est-elle une demande "
+                   "en instance ? Avec la règle D6, plus de 4 000 le resteraient pour toujours.",
+             preuve="35 à 53 % des dossiers ouverts chaque année ; jamais fermés",
+             p=["P59", "P68"], tableaux="T26", etat="ouvert",
+             note="question T26 à la direction des prestations"),
+        dict(n="D13", titre="PF : l'enfant ajouté",
+             regle="Un enfant ajouté au dossier d'un allocataire est-il une demande de plus ? Si "
+                   "oui, il est déposé à la date de demande de sa prestation (pas de réception) "
+                   "et liquidé à sa notification.",
+             preuve="2025 : 8 246 liquidés sans les enfants ajoutés, environ 16 400 avec ; 11 j "
+                    "entre demande et notification",
+             p=["P64", "P65"], tableaux="T27", etat="ouvert",
+             note="question T27 à la direction des prestations"),
+        dict(n="D14", titre="Maternité : une grossesse, deux lignes",
+             regle="Le dossier d'une grossesse compte une demande en IJ de maternité et une en "
+                   "allocations prénatales, déposées et liquidées ensemble (règle D2).",
+             preuve="99,4 % des dossiers portent les deux ; 4 211 en 2025",
+             p=["P66", "P67"], tableaux="T27", etat="propose",
+             note="ou la grossesse ne compte-t-elle qu'une fois ? question T27"),
     ]),
     ("3.2 Les paiements et les montants (T31, T50 à T56)", [
         dict(n="R3", titre="Ce qu'est un paiement",
@@ -268,30 +373,36 @@ RULE_GROUPS = [
              preuve="61,35 Md payés en 2025 ; le net à payer répété sur chaque débours gonfle le "
                     "DTM 3,8 fois (222,9 Md pour 58,5 Md)",
              p=["P07", "P08", "P20", "P21", "P36"], tableaux="T31, T32 à T56", etat="prouve",
-             note="sens des statuts D et P à confirmer par la DSI"),
+             note="confirmée par l'annuaire CNSS 2024 : montants à 0,7–2,5 % près"),
         dict(n="R4", titre="Le mois d'un paiement",
              regle="Le mois de DEB_DATE_EFFET : le mois payé, pas la date du paiement.",
              preuve="débours préparés environ 3 semaines avant l'échéance ; 9 % sont des rappels "
-                    "saisis 2 mois ou plus après",
-             p=["P20"], tableaux="T31, T50 à T56", etat="propose"),
+                    "saisis 2 mois ou plus après ; les montants de l'année ainsi calculés retombent "
+                    "sur l'annuaire CNSS 2024",
+             p=["P20"], tableaux="T31, T50 à T56", etat="prouve"),
     ]),
     ("3.3 Les personnes et les pensionnés (T32 à T49)", [
         dict(n="R5", titre="La personne comptée",
              regle="L'ayant droit de la prestation. Pour les allocations familiales, "
                    "l'allocataire, c'est-à-dire la personne payée.",
-             preuve="orphelins : la personne payée est toujours le tuteur, que le DTM compte à tort",
-             p=["P16"], tableaux="T32 à T49", etat="propose"),
+             preuve="orphelins : la personne payée est toujours le tuteur, que le DTM compte à tort ; "
+                    "l'annuaire CNSS 2024 compte bien l'orphelin (0 à 24 ans)",
+             p=["P16"], tableaux="T32 à T49", etat="propose",
+             note="orphelins confirmés ; allocataires pas encore testés"),
         dict(n="R6", titre="Le pensionné au 31 décembre",
-             regle="Pension active au 31/12 (effet avant, ni radiée ni suspendue) et payée au 4e "
-                   "trimestre. Une personne comptée une fois.",
-             preuve="vieillesse : 32 974 pensions actives, 29 643 payées ; orphelins : 8 447 "
-                    "actives sans aucun paiement",
-             p=["P24", "P25", "P26"], tableaux="T32 à T41", etat="propose"),
+             regle="Pension en cours au 31/12 (effet avant, ni radiée ni suspendue), ayant droit en "
+                   "vie, payée ou non. Orphelins de moins de 25 ans. Une personne comptée une fois.",
+             preuve="corrigée le 30/10 : c'est la définition de l'annuaire CNSS 2024 (vieillesse "
+                    "+1,5 % en 2024) ; exiger un paiement au 4e trimestre en retirait 8 %",
+             p=["P24", "P25", "P26"], tableaux="T32 à T41", etat="propose",
+             note="limite d'âge des orphelins à confirmer"),
         dict(n="R7", titre="Le nouveau pensionné",
-             regle="Pension notifiée dans l'exercice. Une personne comptée une fois.",
-             preuve="notification, saisie, calcul initial et premier paiement donnent le même "
-                    "nombre ; un tiers des pensions ont un effet antérieur à l'année",
-             p=["P27", "P28"], tableaux="T42 à T49", etat="propose"),
+             regle="Pension saisie dans l'exercice, comme l'annuaire CNSS 2024. Une personne "
+                   "comptée une fois.",
+             preuve="revue le 30/10 : 4 090 pensions saisies en 2024 pour 4 037 nouveaux "
+                    "pensionnés publiés ; la notification, proposée avant, en donne 3 888",
+             p=["P27", "P28"], tableaux="T42 à T49", etat="propose",
+             note="saisie ou notification : à confirmer avec la direction des prestations"),
         dict(n="R8", titre="L'âge",
              regle="Année de l'exercice moins année de naissance ; tranches de 5 ans regroupées "
                    "selon la grille de chaque tableau.",
@@ -306,17 +417,20 @@ RULE_GROUPS = [
              regle="Bonification ou majoration pour enfant, contribution aux charges du ménage : "
                    "elles s'ajoutent à une pension. Elles ne font pas un pensionné de plus et "
                    "suivent la ligne de la pension.",
-             preuve="bonification pour enfant (RBEC) : 68 836 prestations",
-             p=["P34"], tableaux="T25, T32 à T49", etat="propose"),
+             preuve="bonification pour enfant (RBEC) : 68 836 prestations ; l'annuaire CNSS 2024 "
+                    "ne compte que les 7 types de pension, les accessoires dans le seul montant",
+             p=["P34"], tableaux="T25, T32 à T49", etat="prouve"),
     ]),
     ("3.4 Les branches et les lignes CIPRES (tous les tableaux)", [
         dict(n="R1", titre="Les branches",
              regle="V → PVID ; A → AT/MP ; F et M → prestations familiales.",
-             preuve="M = maternité : aucune prestation en nature en M",
+             preuve="M = maternité : aucune prestation en nature en M ; la branche des pensions "
+                    "retombe sur l'annuaire CNSS 2024 à 1,3 % près",
              p=["P02", "P05", "P31"], tableaux="tous", etat="prouve"),
         dict(n="R2", titre="La ligne CIPRES",
              regle="D'après le code de la prestation, selon la correspondance ci-dessous.",
-             preuve="libellés sûrs des 28 codes ; retraite anticipée et accessoires à viser",
+             preuve="libellés sûrs des 28 codes ; pour les pensions, une ligne par code, comme "
+                    "l'annuaire CNSS 2024 ; retraite anticipée et accessoires à viser",
              p=["P04", "P34"], tableaux="tous", etat="propose"),
     ]),
     ("3.5 Les indus (T31) et les contrôles (T28 à T30)", [
@@ -391,14 +505,18 @@ HYPOTHESES = [
 
 QUESTIONS_METIER = [
     "Fiche T25, Q1 à Q5 : coordination, date du dépôt, vieilles demandes, réversion, refus",
-    "Pensionné au 31/12 : pension active, ou payée en décembre ? (R6 · P25)",
-    "Nouveau pensionné : date de notification ? (R7 · P27)",
+    "Fiche T26, Q1 à Q4 : déclaration sans suite, soins, départ de la durée d'une rente, "
+    "attente des IJ (D9 à D12)",
+    "Fiche T27, Q1 à Q4 : enfant ajouté, grossesse sur deux lignes, demandes sans suite, refus "
+    "(D13, D14)",
+    "Pensionné au 31/12 : la pension en cours, payée ou non, comme l'annuaire CNSS ? (R6 · P25)",
+    "Nouveau pensionné : saisie de la pension, comme l'annuaire CNSS, ou notification ? (R7 · P27)",
+    "Orphelins : la limite est-elle 25 ans ? Radier ceux de 25 ans et plus ? (R6 · P25)",
     "Orphelins : compter l'orphelin et non le tuteur payé ? (R5 · P16)",
     "Retraite anticipée et accessoires : dans quelle ligne ? (R2, A1 · P34)",
     "T57 « décédés » : bénéficiaires décédés, ou assurés décédés ? (atelier de Kaya)",
     "Indus : le remboursement de trop perçu, les avances, les mois gratuits ? (I1 · P11)",
     "Un paiement compte-t-il au mois payé ou à la date du paiement ? (R4 · P20)",
-    "8 447 pensions d'orphelin actives sans paiement : radier ? (P25)",
     "69 pensionnés payés de 100 ans ou plus, 215 actifs décédés : contrôle d'existence ? (P26)",
 ]
 QUESTIONS_DSI = [
@@ -480,6 +598,23 @@ INDEX = [
         ("P56", "Motifs de rejet (Q5) → refus codés, une quinzaine par an"),
         ("P57", "Dossiers fermés sans notification (Q5) → pensions radiées"),
         ("P58", "Suite des demandes ANCIEN (Q3, Q4) → 94 % : pension de survivant"),
+    ]),
+    ("Lot 4 · 30/10/2026", "lot4_controles_t26_t27.sql", [
+        ("P59", "Profil des dossiers AT/MP → 46 % sans suite, 31 % soins seuls"),
+        ("P60", "Réceptions AT/MP → consolidation et décès arrivent en ANCIEN"),
+        ("P61", "Notifications AT/MP → IJ notifiées ; AAI une fois sur deux"),
+        ("P62", "Départ de la durée → réception ANCIEN : 13 à 35 j"),
+        ("P63", "Soins AT/MP → flux de remboursements ; pic de 2024"),
+        ("P64", "Notifications PF → 9 000 enfants ajoutés par an"),
+        ("P65", "Réceptions PF et maternité → l'enfant ajouté sans réception"),
+        ("P66", "Codes PF et maternité → la prénatale est notifiée"),
+        ("P67", "Dossiers de maternité → une grossesse, deux lignes"),
+        ("P68", "Refus et sans suite → rejets rares ; AT/MP sans suite"),
+        ("P69", "Départ de la durée des IJ → arrêt d'un mois, IJ 7 mois après"),
+        ("P70", "Pièces ANCIEN AT/MP → certificats médicaux et de vie, pas de facture"),
+        ("P71", "Suite des ANCIEN AT/MP → 70 % rente ou allocation, 9 % survivant"),
+        ("P72", "Allocation d'incapacité → notifiée depuis 2019"),
+        ("P73", "Pic des soins de 2024 → approbations remplies en bloc"),
     ]),
 ]
 
@@ -606,9 +741,9 @@ def key_points(d, y):
 
 
 def journey(d, y):
-    """Partie 1 : les quatre lots, puis ce qu'ils ont produit."""
+    """Partie 1 : les lots, puis ce qu'ils ont produit."""
     gap = 60
-    w = (INNER - 3 * gap) / 4
+    w = (INNER - (len(LOTS) - 1) * gap) / len(LOTS)
     texts = [wrap(purpose, 18, w - 36) for *_, purpose, _ in LOTS]
     finds = [wrap("Trouvé : " + found, 16, w - 36) for *_, found in LOTS]
     h = 150 + max(height_of(t, 18) for t in texts) + 16 + max(height_of(t, 16) for t in finds) + 20
@@ -714,7 +849,7 @@ def questions(d, y):
 
 def index(d, y):
     gap = 24
-    w = (INNER - 3 * gap) / 4
+    w = (INNER - (len(INDEX) - 1) * gap) / len(INDEX)
     blocks = []
     for title, path, entries in INDEX:
         lines = [(ref, wrap(text, 16, w - 36 - 64)) for ref, text in entries]
@@ -751,13 +886,13 @@ def build():
     d = Diagram(seed=58)
     d.text(0, 0, "Prestations (T25 à T57) : les règles trouvées dans les données, et leurs preuves",
            48)
-    d.text(0, 66, "Tout ce que l'équipe BI a établi du 26 au 30/10/2026 : 4 lots, 58 requêtes, les "
+    d.text(0, 66, "Tout ce que l'équipe BI a établi du 26 au 30/10/2026 : 5 lots, 73 requêtes, les "
                   "règles qui en sortent et ce qui reste à trancher · état au 30/10/2026", 22,
            C["doux"])
     y = banner(d, 120) + 30
     y = key_points(d, y) + 40
 
-    y = section(d, y, "1. Le chemin parcouru : quatre lots de requêtes",
+    y = section(d, y, "1. Le chemin parcouru : cinq lots de requêtes",
                 "Chaque lot répond aux questions laissées par le précédent. Les requêtes sont en "
                 "lecture seule et ne sortent que des comptages, jamais de données nominatives.",
                 lambda top: journey(d, top))
@@ -779,7 +914,9 @@ def build():
 
     y = section(d, y, "3. Les règles de calcul proposées",
                 "Les règles R1 à R12 viennent des lots 1 et 2 ; les règles D1 à D8 viennent de la "
-                "fiche T25 et du lot 3 B et remplacent R10 à R12 pour les dossiers.", rules)
+                "fiche T25 et du lot 3 B et remplacent R10 à R12 pour les dossiers ; D9 à D14 "
+                "viennent du lot 4 (T26 et T27). R1 à R7 ont été confrontées le 30/10 à "
+                "l'annuaire statistique de la CNSS 2024.", rules)
 
     y = section(d, y, "4. Les requêtes DTM actuelles : les 14 hypothèses d'erreur vérifiées",
                 "Avant les règles, nous avons relu le code des requêtes DTM du domaine et listé 14 "
@@ -790,7 +927,7 @@ def build():
                 "Entre parenthèses : la règle concernée et la requête qui a soulevé la question.",
                 lambda top: questions(d, top))
 
-    section(d, y, "6. L'index des 58 requêtes : ce que chacune a montré",
+    section(d, y, "6. L'index des 73 requêtes : ce que chacune a montré",
             "Pour lire une requête : ouvrir son fichier dans analyses/prestations et chercher "
             "« -- Pnn — ». Les listes longues sont dans analyses/prestations/resultats.",
             lambda top: index(d, top))

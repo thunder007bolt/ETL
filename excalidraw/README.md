@@ -87,12 +87,32 @@ python3 excalidraw/sources/prestations/domaine_prestations.py
 
 Le script refuse d'écraser un schéma qui existe déjà, car il a peut-être été retouché dans la visionneuse. Il refuse aussi d'en recréer un à l'ancienne place d'un schéma déplacé dans la visionneuse, et donne la nouvelle : relancer avec `--output <nouveau chemin> --force`, et mettre à jour `OUTPUT` dans le script. Avec `--force`, il l'écrase ; les retouches ne sont plus dans le fichier, mais restent dans l'historique, d'où on peut les restaurer. Une fois un schéma retouché à la main, c'est le fichier `.excalidraw` qui fait foi, pas le script.
 
+## Fiches de maîtrise
+
+`schemas/maitrise/` rassemble des fiches de révision pour s'approprier tout le travail et pouvoir le défendre. Commencer par `00 commencer ici`.
+
+- **Organisation.** Un sous-dossier par domaine de l'Annuaire CIPRES, numéroté comme lui (`1 immatriculation`, `2 recouvrement`, `3 prestations`, `4 gestion administrative`, `5 gestion financière`), plus `0 projet` pour ce qui est commun.
+- **Même plan pour chaque domaine** : 01 le domaine en bref, 02 le vocabulaire, 03 les données, 04 la démarche, 05 les découvertes, 06–07 les règles, 08 les erreurs des DTM, 09 les questions ouvertes, 10 où on en est, 11 se préparer aux questions.
+- **Forme d'une fiche.** Une suite de parties, chacune une grille de blocs séparés : un bloc par idée, avec sa couleur, sa pastille (R6, B12, P25…) et son état.
+- **Générer.** Le contenu est dans `sources/maitrise/` : `fiches.py` (le générateur), un module par domaine (`projet.py`, `prestations.py`), `generer.py` (le lancement).
+
+  ```bash
+  python3 excalidraw/sources/maitrise/generer.py --force --seulement "3 prestations"
+  ```
+
+- **Ajouter un domaine** : écrire son module sur le modèle de `prestations.py` et l'ajouter à `DOMAINES` dans `generer.py`.
+
+État au 30/10/2026 : le sommaire, `0 projet` (3 fiches) et `3 prestations` (11 fiches) ; les autres domaines restent à faire.
+
 ## Schémas
 
 | Schéma | Domaine | État au |
 | --- | --- | --- |
-| [regles_prestations](schemas/prestations/regles_prestations.excalidraw) — toutes les règles du domaine trouvées dans les données, avec leurs preuves : l'essentiel en bref, les 4 lots de requêtes, ce que la base nous a appris (B1–B17), les règles de calcul (D1–D8, R1–R9, A1, I1, C1) et la correspondance code → ligne CIPRES, les 14 hypothèses sur les DTM, les questions ouvertes, l'index des 58 requêtes P01–P58 avec leur fichier | Prestations | 30/10/2026 |
+| [regles_prestations](schemas/prestations/regles_prestations.excalidraw) — toutes les règles du domaine trouvées dans les données, avec leurs preuves : l'essentiel en bref, les 5 lots de requêtes, ce que la base nous a appris (B1–B25), les règles de calcul (D1–D14 pour les dossiers T25 à T27, R1–R9, A1, I1, C1 ; R1 à R7 confrontées à l'annuaire de la CNSS 2024, R6 corrigée et R7 revue le 30/10) et la correspondance code → ligne CIPRES, les 14 hypothèses sur les DTM, les questions ouvertes, l'index des 73 requêtes P01–P73 avec leur fichier | Prestations | 30/10/2026 |
 | [T25_dossiers_de_pension](<schemas/prestations/tableaux cipres/T25_dossiers_de_pension.excalidraw>) — fiche de validation de T25 pour le métier : maquette avec le numéro de règle de chaque colonne, six dossiers fictifs sur un calendrier (dont une réversion), les lignes, dix règles avec leurs sources et les chiffres du lot 3 B, leur SQL à droite et des cases de réponse, cinq questions. Gabarit des fiches suivantes : `sources/prestations/fiche_cipres.py` | Prestations | 30/10/2026 |
+| [T26_dossiers_at_mp](<schemas/prestations/tableaux cipres/T26_dossiers_at_mp.excalidraw>) — fiche de validation de T26 (accidents du travail et maladies professionnelles), même gabarit que T25 : maquette, premiers chiffres de 2025, six dossiers fictifs (IJ, soins, rente après consolidation, rente de survivant, déclaration sans suite), cinq lignes, dix règles avec leur SQL, quatre questions (déclarations sans suite, soins, départ de la durée d'une rente, attente des IJ) | Prestations | 30/10/2026 |
+| [T27_dossiers_pf](<schemas/prestations/tableaux cipres/T27_dossiers_pf.excalidraw>) — fiche de validation de T27 (prestations familiales et maternité), même gabarit : six dossiers fictifs (nouvel allocataire, enfant ajouté, grossesse, refus, réception sans dossier), quatre lignes, dix règles avec leur SQL, quatre questions (enfant ajouté, grossesse sur deux lignes, demandes sans suite, refus) | Prestations | 30/10/2026 |
+| [pensions_2024](<schemas/annuaire cnss/pensions_2024.excalidraw>) — dossier « annuaire cnss », qui regroupe les analyses sur l'annuaire statistique de la CNSS. Les pensions de 2024 : notre base face aux chiffres publiés (tableau 18 comparé case par case, contrôles des tableaux 19 à 23, ce que la comparaison dit de nos règles, écarts et suite). Requêtes dans `analyses/comparaison_annuaire_cnss_2024` | Annuaire CNSS | 30/10/2026 |
 | [domaine_prestations](schemas/prestations/domaine_prestations.excalidraw) — le domaine Prestations expliqué simplement (branches, bénéficiaires, vie d'un dossier, tableaux T25–T57, chiffres 2025) | Prestations | 29/10/2026 |
 | [prestation_esp](schemas/prestations/prestation_esp.excalidraw) — la table PRESTATION_ESP expliquée simplement : espèces et nature, place entre dossier et débours, deux exemples, colonnes, vie d'un droit, règles R5 à R7 | Prestations | 29/10/2026 |
 | [tables_prestations](schemas/prestations/tables_prestations.excalidraw) — les tables du domaine : base source et colonnes de liaison, toutes les listes de codes lues dans la base (lot 3 : prestations en espèces et en nature, débours, effets, modes, étapes, ajustements, pièces, statuts…), géographie (directions, services, 350 lieux de paiement), tables DTM et tableaux qu'elles alimentent | Prestations | 29/10/2026 |

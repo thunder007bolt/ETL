@@ -1,0 +1,35 @@
+TYPE_PENSION	DIRECTION	ACTIVES_EN_VIE	PAYEES_2024	PAYEES_T4_2024	PUBLIE_ANNUAIRE_CNSS
+1 retraite vieillesse	DRB	7638	7368	7192	7538
+1 retraite vieillesse	DRD	818	780	762	817
+1 retraite vieillesse	DRF	1007	908	885	968
+1 retraite vieillesse	DRN	1366	1264	1225	1340
+1 retraite vieillesse	DRO	20352	18417	18094	20067
+2 veuves	DRB	6974	6965	6764	7591
+2 veuves	DRD	552	542	518	625
+2 veuves	DRF	909	855	804	884
+2 veuves	DRN	1457	1424	1403	1455
+2 veuves	DRO	10480	10102	9947	10883
+3 veufs	DRB	57	59	55	56
+3 veufs	DRD	11	8	8	11
+3 veufs	DRF	8	6	5	6
+3 veufs	DRN	16	15	15	16
+3 veufs	DRO	264	239	237	240
+4 orphelins	DRB	5334	1874	1667	3025
+4 orphelins	DRD	196	127	116	173
+4 orphelins	DRF	375	249	229	364
+4 orphelins	DRN	675	304	276	487
+4 orphelins	DRO	7189	3673	3396	5429
+5 invalidité	DRB	31	29	29	29
+5 invalidité	DRD	1	1	1	1
+5 invalidité	DRF	7	5	5	6
+5 invalidité	DRN	5	5	5	5
+5 invalidité	DRO	81	82	81	78
+6 anticipée	DRB	27	24	24	24
+6 anticipée	DRF	1	1	1	1
+6 anticipée	DRN	2	2	2	1
+6 anticipée	DRO	57	56	55	52
+7 ascendants	DRB	8	5	5	8
+7 ascendants	DRD	1	1	1	1
+7 ascendants	DRF	1	1	1	1
+7 ascendants	DRN	1	1	1	1
+7 ascendants	DRO	48	39	36	48

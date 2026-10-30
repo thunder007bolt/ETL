@@ -35,6 +35,8 @@ OUTCOMES = {
     "15a45": (C["jaune"], C["jaune_bord"], "liquidé en 15 à 45 jours"),
     "plus45": (C["rouge_moyen"], C["rouge"], "liquidé en plus de 45 jours"),
     "rejet": (C["gris"], C["gris_bord"], "rejeté"),
+    # montré dans la légende seulement si un dossier l'utilise
+    "instance": (C["bleu_moyen"], C["bleu"], "toujours sans décision"),
 }
 MONTHS = ["janv.", "févr.", "mars", "avr.", "mai", "juin", "juil.", "août", "sept.", "oct.", "nov.",
           "déc."]
@@ -306,7 +308,10 @@ def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_
         d.text(rx, ry + 8, wrap(row["resultat"], 18, result_w), 18)
 
     lx = x
+    used = {row["sortie"] for row in rows}
     for key, (bg, stroke, label) in OUTCOMES.items():
+        if key == "instance" and key not in used:
+            continue
         d.box(lx, bottom + 16, 40, 22, bg=bg, stroke=stroke)
         d.text(lx + 50, bottom + 16, label, 16)
         lx += 50 + text_size(label, 16)[0] + 40

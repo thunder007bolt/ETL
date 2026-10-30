@@ -27,6 +27,7 @@ Vue d'ensemble pour s'approprier le travail : le schéma Excalidraw [regles_pres
 | 2 | [lot2_statuts_stocks_nouveaux.sql](lot2_statuts_stocks_nouveaux.sql) | 26/10/2026 | Sens des statuts des débours et paiements sans effet (P20–P23) ; pensionnés au 31/12 et esquisse de T32 (P24–P26) ; nouveaux pensionnés (P27–P28) ; mois cotisés (P29–P30). Sur USER_DWH | Exécuté le 26/10/2026 |
 | 3 | [lot3_listes_de_codes.sql](lot3_listes_de_codes.sql) | 29/10/2026 | Partie A : toutes les listes de codes du domaine, avec leurs libellés (P31–P47). La partie B (points à vérifier, indus, allocataires) suivra à partir de P48. Sur USER_DWH | Partie A exécutée le 29/10/2026 ; listes longues (P35, P44, P46, P47) dans [resultats/](resultats/) |
 | 3 B | [lot3b_controles_t25.sql](lot3b_controles_t25.sql) | 30/10/2026 | Partie B pour T25 : une requête ou plus par question de la fiche T25 (Q1 coordination P48, Q2 date du dépôt P49, Q3 stock en instance P50 et P58, Q4 pension de la veuve P51–P54 et P58, Q5 refus P55–P57). Sur USER_DWH, sans DEBOURS | Exécuté le 30/10/2026 (P52 relancée après un ORA-00972) ; P57 dans [resultats/](resultats/) |
+| 4 | [lot4_controles_t26_t27.sql](lot4_controles_t26_t27.sql) | 30/10/2026 | Contrôles pour T26 et T27, sur le modèle du lot 3 B. T26 : ce que porte un dossier AT/MP (P59), réceptions et pièces (P60), prestations notifiées (P61), date de départ de la durée, dont le certificat de consolidation (P62), frais médicaux (P63). T27 : enfant ajouté et notifications suivantes (P64), réceptions et pièces PF et maternité (P65), allocations prénatales (P66), dossiers de maternité (P67). Les deux : refus et dossiers sans suite (P68). Partie B : départ de la durée des IJ (P69), réceptions ANCIEN AT/MP (P70, P71), date de l'allocation d'incapacité (P72), pic des soins de 2024 (P73). Sur USER_DWH ; DEBOURS lu par P59, P63, P68, P71 à P73 | Exécuté le 30/10/2026 : partie A (P59–P68), puis partie B (P69–P73) ajoutée après ses résultats |
 
 ## Requêtes proposées (à valider)
 
@@ -34,6 +35,8 @@ Vue d'ensemble pour s'approprier le travail : le schéma Excalidraw [regles_pres
 | --- | --- | --- | --- |
 | T25 | [t25_requete_proposee.sql](t25_requete_proposee.sql) | 27/10/2026, revue le 30/10/2026 | Traduit les règles 1 à 10 de la fiche Excalidraw « T25 dossiers de pension ». Revue après le lot 3 B : compte des demandes (dossier × ligne), rattache les réceptions ANCIEN à la réversion, garde COOR_AC, n'exclut que CNSS_AC, sort du stock les dossiers fermés jamais notifiés et les réceptions d'avant 2016 sans dossier (paramètre `debut_stock`). Pas encore exécutée |
 | T25, question Q4 | [t25_q4_deux_cas.sql](t25_q4_deux_cas.sql) | 30/10/2026 | La même requête simplifiée sous les deux réponses possibles à Q4 : cas A, un dossier par ligne (nouveau dossier pour la veuve) ; cas B, une demande par dossier et par ligne (pension de la veuve dans le dossier du défunt). Le lot 3 B donne raison au cas B, repris dans la requête T25. Pas encore exécutée |
+| T26 | [t26_requete_proposee.sql](t26_requete_proposee.sql) | 30/10/2026 | Traduit les règles 1 à 10 de la fiche Excalidraw « T26 dossiers AT/MP », sur le modèle de T25 et d'après le lot 4 : une demande par dossier et par ligne ; IJ et soins déposés par la déclaration, rente, allocation et rente de survivant par leur demande au guichet (sinon le certificat pour la rente) ; soins liquidés à la première saisie d'un remboursement ; stock limité à 24 mois sans suite (paramètre `sans_suite_mois`). Pas encore exécutée |
+| T27 | [t27_requete_proposee.sql](t27_requete_proposee.sql) | 30/10/2026 | Traduit les règles 1 à 10 de la fiche Excalidraw « T27 dossiers PF » : dossiers F et M ; une grossesse compte sur la ligne des IJ et sur celle des allocations prénatales ; un enfant ajouté est une demande si `enfant_ajoute` = 1, déposée à la date de demande de son allocation ; stock limité à 24 mois sans suite. Pas encore exécutée |
 | T25–T27 (DTM_DOSSIER) | [dtm_dossier_requete_proposee.sql](dtm_dossier_requete_proposee.sql) et [dtm_dossier_ddl_propose.sql](dtm_dossier_ddl_propose.sql) | 29/10/2026 | Remplacerait `dossier.sql` V5 : mêmes colonnes plus SOMME_DELAIS_JOURS ; chaque événement (dépôt, liquidation, rejet) compté à son mois ; NB_INSTANCE = stock en fin de mois. Mêmes règles que T25, étendues à AT/MP et PF. Pas encore exécutée ; accord de Jules requis (sens de colonnes changé) ; 7 points à vérifier en fin de fichier |
 
 ## Tableaux CIPRES et requêtes
@@ -95,19 +98,50 @@ Le détail, hypothèse par hypothèse, est dans [reference_cipres_T25_T57.md](re
 - **Liquidés de 2025.** Avec la première notification (règle 3), 3 901 dossiers de pension sont liquidés en 2025, et non environ 4 800 : P09 prenait la dernière notification. 3 901 + 902 renotifiés ≈ 4 783. DOS_DATE_NOTIFICATION est vide pour tous les dossiers de pension (P54).
 - **Q5, refus.** Les refus ne sont notés que dans le module des rejets, avec un motif codé : prescription, pas de bénéficiaire, pièce non conforme, autre (P56). Mais il sert peu : 146 rejets de pension depuis 2017. RD_STATUT ne note pas les refus (R : 47 réceptions anciennes, P55). Un dossier fermé sans notification n'est pas un refus : ce sont surtout des pensions d'avant 2018, radiées, dont la notification n'a pas été saisie, environ 8 000 (P57).
 
+### Lot 4 (T26 et T27)
+
+**T26, accidents du travail et maladies professionnelles**
+
+- **Une demande par ligne, comme en T25.** Un dossier AT/MP porte souvent plusieurs prestations liquidées à des dates différentes : les IJ d'abord, la rente ou l'allocation d'incapacité des années après (191 dossiers « IJ + allocation » sur 231 et 77 « IJ + rente » sur 90 ont plusieurs dates de notification, P59). Toutes les prestations en espèces ont une date de demande, et les IJ ont une date de notification dans 97 % des cas (P61).
+- **Les dépôts.** La déclaration (réception NOUVEAU) ouvre le dossier. La rente, l'allocation et les rentes de survivants arrivent par une réception ANCIEN sur ce dossier, avec un certificat de consolidation (233) ou de décès (53) (P60), comme la réversion en T25. 70 % des réceptions ANCIEN sont suivies dans l'année d'une rente ou d'une allocation, 9 % d'une rente de survivant ; celles qui ne sont suivies de rien portent surtout des pièces de maintien des droits (certificat de vie, de scolarité) (P70, P71). Depuis cette réception, la durée médiane est de 13 à 35 jours en 2025 ; depuis la déclaration, de 444 à 986 jours (P62). Le certificat pour la rente, d'où part la durée selon l'atelier de Kaya 2017, est rempli pour 65 % des rentes et 85 % des allocations (64 à 107 jours).
+- **Les IJ attendent environ 7 mois.** Une IJ est demandée avec la déclaration : elle n'a pas de dépôt à elle. L'arrêt de travail dure 27 jours en médiane, mais l'IJ est notifiée 183 jours après la déclaration et 211 jours après la fin de l'arrêt. La date de reprise du travail n'est jamais saisie, le certificat de guérison ou de reprise presque jamais (14 IJ sur 226) : rien dans la base n'explique cette attente (P62, P69). On garde la déclaration comme dépôt, et la question va à la CNSS.
+- **L'allocation d'incapacité est notifiée.** Les allocations sans date de notification de P61 sont d'avant 2019 ; depuis, toutes en ont une, signée le même jour (P72). C'est l'allocation des petits taux d'incapacité, 43 à 76 par an.
+- **Les soins.** Un flux de remboursements (8 à 10 par dossier), qui ne passe pas par le guichet (aucune facture ni ordonnance reçue, P70) ; plus de la moitié des dossiers soignés n'ont rien d'autre. 650 à 960 dossiers par an ont leur premier remboursement (P63). Le pic de 2024 (1 477) n'est pas une activité de 2024 : 973 vieux dossiers, dont les remboursements sont saisis depuis 2005, ont reçu en bloc leur date d'approbation en 2024 (P73). On date donc un dossier de soins par la saisie de son premier remboursement, à moins de 10 jours de l'approbation dans le flux normal.
+- **Les déclarations sans suite.** 4 158 dossiers sur 9 106 ouverts de 2019 à 2025 ne donnent rien : ni IJ, ni soins, ni rente (35 à 53 % chaque année de 2019 à 2024). Ils ne sont presque jamais fermés ni rejetés : avec la règle du stock de T25, ils resteraient tous en instance (P59, P68).
+
+**T27, prestations familiales et maternité**
+
+- **L'enfant ajouté.** Chaque année, environ 9 000 dossiers d'allocataires reçoivent un enfant de plus, notifié en médiane 5 ans après la première notification, sans passer par le guichet (6 réceptions ANCIEN en 2025). En 2025 : 8 246 dossiers à leur première notification, 8 124 renotifiés (P64, P65). Compter par dossier × ligne ne voit pas ces ajouts.
+- **La maternité.** Un dossier par grossesse, déposé environ 3 semaines avant l'accouchement ; il porte l'IJ et l'allocation prénatale dans 99,4 % des cas, notifiées ensemble 16 jours après la réception en 2025 (P65, P67).
+- **L'allocation prénatale est notifiée.** L'atelier de Kaya 2017 disait qu'elle n'avait ni réception ni notification. C'est vrai de l'ancien code FAP (33 en 2025), plus de la MAP de la branche maternité, notifiée 15 jours après la demande (P66).
+- **Refus et stock.** Le module des rejets sert aussi peu qu'en T25 ; en PF et en maternité, presque tous les dossiers ouverts donnent une prestation : les règles D6 et D7 de T25 s'appliquent (P68).
+
+**Ce que T26 et T27 reprennent de T25, et ce qui change** (cartes D9 à D14 du schéma [regles_prestations](../../excalidraw/schemas/prestations/regles_prestations.excalidraw))
+
+| Règle de T25 | T26 | T27 |
+| --- | --- | --- |
+| D2 : une demande = un dossier × une ligne | Oui : IJ, puis rente ou allocation | Oui ; une grossesse fait deux demandes (IJ, prénatale) : à confirmer (D14) |
+| D3 : une réception = un dépôt | Déclaration → première demande ; consolidation ou décès (ANCIEN) → rente, allocation ou survivants (D9) | Nouvel allocataire, grossesse ; l'enfant ajouté n'a pas de réception (D13) |
+| D4 : liquidé à la première notification | IJ, rentes, survivants, allocation (notifiée depuis 2019) ; soins : saisie du premier remboursement (D11) | Toutes les lignes |
+| D5 : durée depuis le dépôt | Rentes et survivants : depuis la réception ANCIEN, ou le certificat (Kaya) ; IJ : depuis la déclaration, environ 6 mois (D10) | Telle quelle (11 à 16 jours) |
+| D6 : stock en instance | Les déclarations sans suite : question (D12) | Telle quelle |
+| D7 : rejets | Telle quelle | Telle quelle |
+
 ## Règles proposées après les lots 1 et 2
 
 À faire valider par la direction des prestations avant d'écrire les nouvelles requêtes.
 
+Mise à jour du 30/10/2026 après la comparaison avec l'annuaire statistique de la CNSS 2024 (dossier [comparaison_annuaire_cnss_2024](../comparaison_annuaire_cnss_2024/README.md)) : R1 à R5 confirmées par les chiffres publiés, R6 corrigée, R7 revue. Les règles des dossiers (R10 à R12, D1 à D14), des indus et des contrôles n'y sont pas testées.
+
 | N° | Sujet | Règle proposée | Tableaux |
 | --- | --- | --- | --- |
-| R1 | Branches | V → PVID ; A → AT/MP ; F et M → PF | Tous |
-| R2 | Ligne CIPRES | D'après le code de prestation (correspondance ci-dessous) | Tous |
-| R3 | Paiement | Débours de paiement au statut D ou P ; montant = DEB_MONTANT, jamais le net à payer de l'effet | T31, T32–T56 |
-| R4 | Mois d'un paiement | Mois de DEB_DATE_EFFET (mois payé) | T31, T50–T56 |
-| R5 | Personne comptée | L'ayant droit de la prestation (IND_ID_PREST) ; pour les allocations familiales, l'allocataire (la personne payée) | T32–T49 |
-| R6 | Pensionné au 31/12 | Prestation active au 31/12 (effet avant, ni radiée ni suspendue) et payée au 4e trimestre ; une personne comptée une fois par tableau | T32–T41 |
-| R7 | Nouveau pensionné | Prestation notifiée dans l'exercice ; une personne comptée une fois | T42–T49 |
+| R1 | Branches | V → PVID ; A → AT/MP ; F et M → PF. Confirmée par l'annuaire CNSS 2024 | Tous |
+| R2 | Ligne CIPRES | D'après le code de prestation (correspondance ci-dessous). Confirmée pour les pensions par l'annuaire CNSS 2024 (une ligne par code) | Tous |
+| R3 | Paiement | Débours de paiement au statut D ou P ; montant = DEB_MONTANT, jamais le net à payer de l'effet. Confirmée par l'annuaire CNSS 2024 : montants à 0,7–2,5 % près, branche des pensions à 1,3 % | T31, T32–T56 |
+| R4 | Mois d'un paiement | Mois de DEB_DATE_EFFET (mois payé). Les montants annuels ainsi calculés retombent sur l'annuaire CNSS 2024 | T31, T50–T56 |
+| R5 | Personne comptée | L'ayant droit de la prestation (IND_ID_PREST) ; pour les allocations familiales, l'allocataire (la personne payée). Confirmée pour les orphelins : l'annuaire CNSS 2024 les compte par leur âge, de 0 à 24 ans | T32–T49 |
+| R6 | Pensionné au 31/12 | Prestation en cours au 31/12 (effet avant, ni radiée ni suspendue sauf réactivation) dont l'ayant droit est en vie, payée ou non ; pour les orphelins, moins de 25 ans (année moins année de naissance) ; une personne comptée une fois par tableau. Corrigée le 30/10/2026 : c'est la définition de l'annuaire CNSS 2024 (+1,5 % en 2024) ; exiger un paiement au 4e trimestre donnait 8 % de pensionnés de vieillesse de moins. Limite d'âge des orphelins à confirmer | T32–T41 |
+| R7 | Nouveau pensionné | Prestation saisie dans l'exercice (PE_DATE_INSERT) ; une personne comptée une fois. Revue le 30/10/2026 : l'annuaire CNSS 2024 compte ainsi (4 090 pour 4 037 publiés) ; la notification, proposée avant, en donnait 3 888. À confirmer avec la direction des prestations | T42–T49 |
 | R8 | Âge | Année de l'exercice moins année de naissance ; tranches de 5 ans regroupées selon la grille de chaque tableau | T32–T49 |
 | R9 | Services passés | Mois cotisés de la dernière prestation de la personne ; valeurs au-dessus de 600 écartées | T42, T50 |
 | R10 | Dossier déposé | Réception du dossier dans l'exercice | T25–T27 |
@@ -158,15 +192,17 @@ Le détail, hypothèse par hypothèse, est dans [reference_cipres_T25_T57.md](re
 
 **À la direction des prestations**
 
+- T26 : une déclaration d'accident sans arrêt ni soin est-elle un dossier à liquider (en instance tant qu'il n'a rien donné) ? Les soins entrent-ils dans T26, liquidés au premier remboursement ? La durée d'une rente part-elle de la réception de la demande ou du certificat de consolidation (atelier de Kaya 2017) ? Qu'attend une IJ pendant les 7 mois qui suivent la fin de l'arrêt de travail ?
+- T27 : un enfant ajouté au dossier d'un allocataire est-il un dossier déposé et liquidé ? Une grossesse compte-t-elle sur les deux lignes (IJ de maternité et allocations prénatales), ou une seule fois ?
 - Un dossier déposé est-il une réception ? Un dossier liquidé, un dossier notifié ? Un dossier en instance, une réception sans notification ?
 - Un dossier compte-t-il l'année de son dépôt ou l'année de sa liquidation ?
 - Les dossiers de coordination payés par une autre caisse et les dossiers transférés entrent-ils dans les tableaux de la CNSS ?
 - La correspondance des codes ci-dessus est-elle juste (retraite anticipée, accessoires de pension) ?
-- Qui est un pensionné au 31 décembre : une pension active non suspendue, ou une pension payée en décembre ? Qui est un nouveau pensionné : date d'effet de la pension ou premier paiement ?
-- Pour les orphelins, compte-t-on l'orphelin (et non le tuteur payé) ?
+- Qui est un pensionné au 31 décembre ? L'annuaire de la CNSS 2024 compte la pension en cours ce jour-là, titulaire en vie, payée ou non (règle R6 revue) : la retient-on aussi pour les tableaux CIPRES ? Un nouveau pensionné est-il compté à la saisie de sa pension, comme dans l'annuaire, ou à sa notification (règle R7) ?
+- Pour les orphelins, compte-t-on l'orphelin (et non le tuteur payé) ? L'annuaire de la CNSS 2024 le fait (orphelins de 0 à 24 ans).
 - T57 « décédés par branche » : s'agit-il des bénéficiaires décédés (fin de droit) ou des assurés décédés qui ouvrent un droit aux survivants ?
 - Indus : un remboursement de trop perçu (REM-TP) est-il un indu ? Les avances (AV) et les mois de pension gratuits (MPG) en sont-ils exclus ?
 - Une prestation est-elle payée quand l'effet est décaissé, ou dès qu'elle est validée ? Les montants de l'année se comptent-ils au mois payé ou à la date du paiement ?
-- 8 447 pensions d'orphelin sont actives mais sans aucun paiement au 4e trimestre 2025 : faut-il les radier (limite d'âge) ?
+- 8 447 pensions d'orphelin sont actives mais sans aucun paiement au 4e trimestre 2025 : ce sont sans doute des orphelins de 25 ans et plus, que l'annuaire de la CNSS ne compte pas. La limite est-elle 25 ans ? Faut-il les radier ?
 - 69 pensionnés de vieillesse payés ont 100 ans ou plus, et 215 pensionnés actifs sont décédés : un contrôle d'existence est-il prévu ?
 - Une allocation de vieillesse peut-elle correspondre à 489 mois cotisés (40 ans) ?
