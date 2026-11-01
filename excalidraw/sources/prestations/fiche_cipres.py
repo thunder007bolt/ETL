@@ -261,10 +261,13 @@ def cards_grid(d, x, y, w, per_row, cards, gap=20):
     return y - gap
 
 
-def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_h=104):
+def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_h=104,
+             outcomes=None, axis_label="Dans le calendrier : de la réception à la décision"):
     """Dossiers fictifs placés sur un calendrier, de la réception à la décision, avec ce que
     chacun donne dans le tableau. rows : [{nom, detail, debut, fin, sortie, dates, resultat}],
-    sortie étant une clé de OUTCOMES. Renvoie le bas, légende comprise."""
+    sortie étant une clé de outcomes (OUTCOMES par défaut : la durée de liquidation). Renvoie le
+    bas, légende comprise."""
+    outcomes = outcomes or OUTCOMES
     ax = x + label_w + 20
     aw = w - label_w - result_w - 60
     rx = ax + aw + 40
@@ -274,7 +277,7 @@ def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_
         return ax + (day - start).days * aw / span
 
     d.text(x, y, "Le dossier", 20, C["doux"])
-    d.text(ax, y, "Dans le calendrier : de la réception à la décision", 20, C["doux"])
+    d.text(ax, y, axis_label, 20, C["doux"])
     d.text(rx, y, "Ce qu'il donne dans le tableau", 20, C["doux"])
     top = y + 40
     axis_y = top + 56
@@ -301,7 +304,7 @@ def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_
         d.text(x, ry + 8, row["nom"], 20)
         d.text(x, ry + 38, wrap(row["detail"], 16, label_w), 16, C["doux"])
         bx, ex = px(row["debut"]), px(row["fin"])
-        bg, stroke, _ = OUTCOMES[row["sortie"]]
+        bg, stroke, _ = outcomes[row["sortie"]]
         d.box(bx, ry + 36, max(ex - bx, 6), 26, bg=bg, stroke=stroke)
         tw = text_size(row["dates"], 16)[0]
         d.text(min(bx, rx - 30 - tw), ry + 8, row["dates"], 16)
@@ -309,7 +312,7 @@ def timeline(d, x, y, w, start, end, year, rows, label_w=300, result_w=520, row_
 
     lx = x
     used = {row["sortie"] for row in rows}
-    for key, (bg, stroke, label) in OUTCOMES.items():
+    for key, (bg, stroke, label) in outcomes.items():
         if key == "instance" and key not in used:
             continue
         d.box(lx, bottom + 16, 40, 22, bg=bg, stroke=stroke)

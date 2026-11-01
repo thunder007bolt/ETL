@@ -7,7 +7,9 @@ Les documents et les explications du projet sont faits sous forme de schémas Ex
 | Chemin | Rôle |
 | --- | --- |
 | `schemas/<dossier>/…/*.excalidraw` | Les schémas, rangés par dossier et sous-dossier : `prestations`, `grh`, `recouvrement`, `projet`… |
-| `viewer/` | La visionneuse : liste des schémas, édition, enregistrement |
+| `viewer/` | La visionneuse : liste des schémas, édition, enregistrement (source : `app.js`) |
+| `viewer/vendor/` | Excalidraw, React et les polices, servis par le projet : la visionneuse marche sans Internet. Construit par `viewer/build/`, suivi par git |
+| `viewer/build/` | La construction de `vendor/` (`package.json`, `construire.mjs`) ; ses `node_modules` restent hors de git |
 | `server.py` | Petit serveur local de la visionneuse (Python seul, aucune dépendance) |
 | `lib/excalidraw_builder.py` | Bibliothèque pour générer un schéma en Python |
 | `lib/historique.py` | Historique des versions, partagé par la visionneuse et le builder |
@@ -28,7 +30,13 @@ Les documents et les explications du projet sont faits sous forme de schémas Ex
 
 L'adresse d'un schéma précis est `http://localhost:8765/#prestations/domaine_prestations.excalidraw`.
 
-La bibliothèque Excalidraw est chargée depuis esm.sh : il faut Internet au premier chargement, ensuite le navigateur la garde en cache.
+La visionneuse marche sans Internet : Excalidraw, React et les polices sont dans `viewer/vendor/`, servis par `server.py`. Seule la police Xiaolai (chinois, japonais, 12 Mo) n'y est pas copiée.
+
+Après une modification de `viewer/app.js`, reconstruire `vendor/` (il faut Internet la première fois, pour `npm install`) :
+
+```bash
+cd excalidraw/viewer/build && npm install && npm run build
+```
 
 ## Utiliser la visionneuse
 
@@ -87,6 +95,16 @@ python3 excalidraw/sources/prestations/domaine_prestations.py
 
 Le script refuse d'écraser un schéma qui existe déjà, car il a peut-être été retouché dans la visionneuse. Il refuse aussi d'en recréer un à l'ancienne place d'un schéma déplacé dans la visionneuse, et donne la nouvelle : relancer avec `--output <nouveau chemin> --force`, et mettre à jour `OUTPUT` dans le script. Avec `--force`, il l'écrase ; les retouches ne sont plus dans le fichier, mais restent dans l'historique, d'où on peut les restaurer. Une fois un schéma retouché à la main, c'est le fichier `.excalidraw` qui fait foi, pas le script.
 
+## Journal de bord
+
+`schemas/journal/` est la mémoire du travail : `00 tableau de bord` (où on en est, qui doit agir, la suite), `01 frise` (chaque jour, semaine par semaine), `02 decisions` (ce qui a été décidé, pourquoi, et ce qui a été remplacé), `03 ou trouver quoi` (analyses, requêtes, schémas, documents) et `jours/AAAA-MM-JJ` (une fiche par jour).
+
+Tout vient d'un seul fichier de données, `sources/journal/journal.py`, mis à jour à la fin de chaque étape ; puis :
+
+```bash
+python3 excalidraw/sources/journal/generer.py --force
+```
+
 ## Fiches de maîtrise
 
 `schemas/maitrise/` rassemble des fiches de révision pour s'approprier tout le travail et pouvoir le défendre. Commencer par `00 commencer ici`.
@@ -112,6 +130,11 @@ Le script refuse d'écraser un schéma qui existe déjà, car il a peut-être é
 | [T25_dossiers_de_pension](<schemas/prestations/tableaux cipres/T25_dossiers_de_pension.excalidraw>) — fiche de validation de T25 pour le métier : maquette avec le numéro de règle de chaque colonne, six dossiers fictifs sur un calendrier (dont une réversion), les lignes, dix règles avec leurs sources et les chiffres du lot 3 B, leur SQL à droite et des cases de réponse, cinq questions. Gabarit des fiches suivantes : `sources/prestations/fiche_cipres.py` | Prestations | 30/10/2026 |
 | [T26_dossiers_at_mp](<schemas/prestations/tableaux cipres/T26_dossiers_at_mp.excalidraw>) — fiche de validation de T26 (accidents du travail et maladies professionnelles), même gabarit que T25 : maquette, premiers chiffres de 2025, six dossiers fictifs (IJ, soins, rente après consolidation, rente de survivant, déclaration sans suite), cinq lignes, dix règles avec leur SQL, quatre questions (déclarations sans suite, soins, départ de la durée d'une rente, attente des IJ) | Prestations | 30/10/2026 |
 | [T27_dossiers_pf](<schemas/prestations/tableaux cipres/T27_dossiers_pf.excalidraw>) — fiche de validation de T27 (prestations familiales et maternité), même gabarit : six dossiers fictifs (nouvel allocataire, enfant ajouté, grossesse, refus, réception sans dossier), quatre lignes, dix règles avec leur SQL, quatre questions (enfant ajouté, grossesse sur deux lignes, demandes sans suite, refus) | Prestations | 30/10/2026 |
+| [T32_pensionnes_vieillesse](<schemas/prestations/tableaux cipres/T32_pensionnes_vieillesse.excalidraw>) — fiche pilote de T32 à T41 (bénéficiaires au 31/12 par âge et sexe) : maquette, premiers chiffres de 2024 et répartition par âge publiée par la CNSS, six pensionnés fictifs (compté ou non au 31/12), les tranches d'âge, huit règles avec leur SQL, cinq questions ; mise à jour le 01/11 avec les lots 5 et 6 (répartition par âge de la base face à celle de la CNSS) | Prestations | 31/10/2026 |
+| [T41_allocataires](<schemas/prestations/tableaux cipres/T41_allocataires.excalidraw>) — fiche de T41 (allocataires des prestations familiales au 31/12) : suit la fiche pilote T32, sauf l'allocataire (un dossier), l'enfant payé dans l'année et l'âge de l'allocataire ; allocataires de 2020 à 2024 face à l'annuaire de la CNSS, six allocataires fictifs, huit règles avec leur SQL, cinq questions | Prestations | 01/11/2026 |
+| [T42_nouveaux_retraites](<schemas/prestations/tableaux cipres/T42_nouveaux_retraites.excalidraw>) — fiche pilote de T42 à T49 (nouveaux pensionnés et crédirentiers de l'exercice) : maquette avec services passés, nouveaux retraités de 2024 par âge face à l'annuaire de la CNSS, six retraités fictifs (saisie, révision, rappel, coordination), huit règles avec leur SQL, cinq questions | Prestations | 01/11/2026 |
+| [T50_T57_evolution_5_ans](<schemas/prestations/tableaux cipres/T50_T57_evolution_5_ans.excalidraw>) — fiche pilote de T50 à T57 (évolution sur 5 ans, récapitulatifs par branche) : trois maquettes (T50, T56, T57), IJ de maternité de 2020 à 2024 face à l'annuaire de la CNSS, six cas fictifs (liquidation, paiement l'année suivante, décès déclaré tard, accident mortel), huit règles avec leur SQL, cinq questions dont la date des montants | Prestations | 01/11/2026 |
+| [T31_prestations_indues](<schemas/prestations/tableaux cipres/T31_prestations_indues.excalidraw>) — fiche de T31 (prestations indues par branche et par mois) : maquette à 12 colonnes, taux d'indus de 2024 face à la norme de 2 %, six cas fictifs (trop-perçu, rappel, avance, reprise, annulation, décès), huit règles avec leur SQL, cinq questions | Prestations | 01/11/2026 |
 | [pensions_2024](<schemas/annuaire cnss/pensions_2024.excalidraw>) — dossier « annuaire cnss », qui regroupe les analyses sur l'annuaire statistique de la CNSS. Les pensions de 2024 : notre base face aux chiffres publiés (tableau 18 comparé case par case, contrôles des tableaux 19 à 23, ce que la comparaison dit de nos règles, écarts et suite). Requêtes dans `analyses/comparaison_annuaire_cnss_2024` | Annuaire CNSS | 30/10/2026 |
 | [domaine_prestations](schemas/prestations/domaine_prestations.excalidraw) — le domaine Prestations expliqué simplement (branches, bénéficiaires, vie d'un dossier, tableaux T25–T57, chiffres 2025) | Prestations | 29/10/2026 |
 | [prestation_esp](schemas/prestations/prestation_esp.excalidraw) — la table PRESTATION_ESP expliquée simplement : espèces et nature, place entre dossier et débours, deux exemples, colonnes, vie d'un droit, règles R5 à R7 | Prestations | 29/10/2026 |

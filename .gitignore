@@ -5,3 +5,4 @@ instantclient*
 logs
 .claude
 excalidraw/historique
+excalidraw/viewer/build/node_modules

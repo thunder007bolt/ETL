@@ -59,6 +59,9 @@ ETATS = {
     "en partie": (C["rouge_clair"], C["rouge"]),
     "écartée": (C["gris"], C["gris_bord"]),
     "tranchée": (C["vert_moyen"], C["vert"]),
+    # statut d'une décision (journal de bord)
+    "en vigueur": (C["vert_moyen"], C["vert"]),
+    "remplacée": (C["gris"], C["gris_bord"]),
 }
 
 
@@ -89,6 +92,7 @@ class Fiche:
     sous_titre: str
     objectif: str                # ce que tu sauras à la fin de la fiche
     parties: list = field(default_factory=list)
+    titre_objectif: str = "À la fin de cette fiche, tu sauras"
 
 
 # ---------------------------------------------------------------- mise en forme du texte
@@ -238,7 +242,7 @@ def render(fiche):
     h = max(oh, lh)
     g = d.group()
     frame = d.box(MARGIN, y, ow, h, bg=C["jaune_clair"], stroke=C["jaune_bord"], groups=g)
-    d.text(MARGIN + PAD, y + 16, "À la fin de cette fiche, tu sauras", 22, groups=g, inside=frame)
+    d.text(MARGIN + PAD, y + 16, fiche.titre_objectif, 22, groups=g, inside=frame)
     d.text(MARGIN + PAD, y + 60, goal, 20, groups=g, inside=frame)
     legend(d, MARGIN + ow + GAP, y, lw, genres)
     y += h + 80
@@ -248,14 +252,15 @@ def render(fiche):
     return d
 
 
-def generate(fiches, force=False, seulement=None):
-    """Écrit chaque fiche dans schemas/maitrise. Refuse d'écraser une fiche existante sans force
-    (elle a peut-être été annotée dans la visionneuse ; l'état écrasé reste dans l'historique)."""
+def generate(fiches, force=False, seulement=None, dossier=FOLDER):
+    """Écrit chaque fiche dans dossier (schemas/maitrise par défaut). Refuse d'écraser une fiche
+    existante sans force (elle a peut-être été annotée dans la visionneuse ; l'état écrasé reste
+    dans l'historique)."""
     for fiche in fiches:
         if seulement and seulement not in fiche.fichier:
             continue
         d = render(fiche)
-        path = FOLDER / fiche.fichier
+        path = dossier / fiche.fichier
         path.parent.mkdir(parents=True, exist_ok=True)
         try:
             d.save(path, force=force)

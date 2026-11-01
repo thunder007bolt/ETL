@@ -4,21 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Schémas</title>
-<link rel="stylesheet" href="https://esm.sh/@excalidraw/excalidraw@0.18.0/dist/prod/index.css">
+<!-- Tout est servi par le projet, rien par Internet : vendor/ est construit par
+     viewer/build (npm run build) à partir de app.js. -->
+<link rel="stylesheet" href="vendor/excalidraw.css">
 <link rel="stylesheet" href="style.css">
-<script type="importmap">
-{"imports": {
-  "react": "https://esm.sh/react@18.3.1",
-  "react/": "https://esm.sh/react@18.3.1/",
-  "react-dom": "https://esm.sh/react-dom@18.3.1",
-  "react-dom/": "https://esm.sh/react-dom@18.3.1/",
-  "htm": "https://esm.sh/htm@3.1.1",
-  "@excalidraw/excalidraw": "https://esm.sh/@excalidraw/excalidraw@0.18.0?external=react,react-dom"
-}}
-</script>
+<script>window.EXCALIDRAW_ASSET_PATH = "/vendor/";</script>
 </head>
 <body>
 <div id="app"><p class="chargement">Chargement d'Excalidraw…</p></div>
-<script type="module" src="app.js"></script>
+<script type="module" src="vendor/js/app.js"></script>
 </body>
 </html>

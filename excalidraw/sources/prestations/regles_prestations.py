@@ -5,7 +5,7 @@ Les règles du domaine Prestations (T25 à T57) trouvées dans les données, ave
 Une feuille pour s'approprier tout le travail fait du 26 au 30/10/2026 : ce que chaque lot de
 requêtes a cherché, ce que la base nous a appris, les règles de calcul proposées, ce qui est faux
 dans les requêtes DTM actuelles, les questions encore ouvertes, et l'index des 73 requêtes. Chaque
-carte renvoie aux requêtes qui la prouvent (P01 à P58), rangées dans analyses/prestations.
+carte renvoie aux requêtes qui la prouvent (P01 à P106), rangées dans analyses/prestations.
 
 Sources : analyses/prestations (README, TODO, lots 1, 2, 3 A et 3 B, requêtes proposées),
 reference_cipres_T25_T57.md (hypothèses H1 à H14), fiche T25.
@@ -92,6 +92,30 @@ LOTS = [
      "Savoir ce qu'est une demande en AT/MP et en PF, et d'où part la durée, pour T26 et T27.",
      "IJ puis rente : deux demandes ; 46 % de déclarations AT/MP sans suite ; IJ notifiées 7 "
      "mois après l'arrêt ; un enfant ajouté par an et par dossier PF ; maternité = une grossesse."),
+    ("Lot 5", "31/10/2026", "lot5_beneficiaires_31_12.sql", "P74 à P78",
+     "Mesurer T32 à T41 (bénéficiaires au 31/12, âge, sexe, montant) face à l'annuaire de la "
+     "CNSS 2024.",
+     "T32 +0,9 %, T36 exact ; sexe 1 = hommes ; coordination comptée sans montant ; T41 +5 % ; "
+     "veuves et orphelins sous le publié depuis 2023."),
+    ("Lot 6", "31/10/2026", "lot6_ecarts_t32_t41.sql", "P79 à P81",
+     "Expliquer les écarts qui restent : allocataires de T41, dates de naissance par défaut, "
+     "pensions suspendues.",
+     "T41 : seuls les enfants payés dans l'année (+0,7 %) ; 1900 = date par défaut ; les "
+     "suspensions n'expliquent pas les veuves."),
+    ("Lot 7", "01/11/2026", "lot7_nouveaux_beneficiaires.sql", "P82 à P91",
+     "Mesurer T42 à T49 (nouveaux bénéficiaires) face à l'annuaire de la CNSS 2024.",
+     "Première saisie = annuaire à 1 % ; rappel lourd pour les survivants ; services passés "
+     "remplis, part CNSS = total moins l'autre caisse ; IPP toujours rempli."),
+    ("Lot 8", "01/11/2026", "lot8_evolution_5_ans.sql", "P92 à P101",
+     "Mesurer T50 à T57 (évolution sur 5 ans, prestations et décédés par branche) face à "
+     "l'annuaire de la CNSS 2024.",
+     "Liquidées = annuaire à 0,2 % ; saisie du paiement meilleure sur 11 lignes ; "
+     "annuaire arrêté fin mars (R13)."),
+    ("Lot 9", "01/11/2026", "lot9_indus.sql", "P102 à P106",
+     "Préparer T31 : types et statuts d'ajustement, débours AJ, T31 de 2024 et taux "
+     "d'indus.",
+     "Taux d'indus 0,39 % en 2024 ; C = soldé, R = annulé ; débours AJ = avances, "
+     "rappels, rachats."),
 ]
 
 PRODUCED = [
@@ -99,8 +123,9 @@ PRODUCED = [
                            "par demande (30/10)\n"
                            "dtm_dossier_requete_proposee.sql : DTM_DOSSIER (à aligner)\n"
                            "t25_q4_deux_cas.sql : Q4 sous ses deux réponses\n"
+                           "t31, t32_t41, t42_t49, t50_t57_requete_proposee.sql\n"
                            "Aucune n'est encore exécutée."),
-    ("Schémas Excalidraw", "fiches T25, T26 et T27 (tableaux cipres) : règles,\n"
+    ("Schémas Excalidraw", "fiches T25-T27, T31, T32, T41, T42, T50-T57 :\n"
                            "SQL, questions\n"
                            "tables_prestations : tables, liens, codes\n"
                            "vie_dossier et modele_conceptuel_dossier :\n"
@@ -373,46 +398,69 @@ RULE_GROUPS = [
              preuve="61,35 Md payés en 2025 ; le net à payer répété sur chaque débours gonfle le "
                     "DTM 3,8 fois (222,9 Md pour 58,5 Md)",
              p=["P07", "P08", "P20", "P21", "P36"], tableaux="T31, T32 à T56", etat="prouve",
-             note="confirmée par l'annuaire CNSS 2024 : montants à 0,7–2,5 % près"),
+             note="confirmée par l'annuaire CNSS 2024 : montants à 0,7–2,5 % près ; T32 à T41 : "
+                  "le montant des seuls comptés (P75)"),
         dict(n="R4", titre="Le mois d'un paiement",
              regle="Le mois de DEB_DATE_EFFET : le mois payé, pas la date du paiement.",
              preuve="débours préparés environ 3 semaines avant l'échéance ; 9 % sont des rappels "
                     "saisis 2 mois ou plus après ; les montants de l'année ainsi calculés retombent "
                     "sur l'annuaire CNSS 2024",
-             p=["P20"], tableaux="T31, T50 à T56", etat="prouve"),
+             p=["P20", "P92"], tableaux="T31, T50 à T56", etat="prouve",
+             note="à décider : la saisie du paiement fait mieux sur 11 lignes sur 16 (P92, P98)"),
     ]),
     ("3.3 Les personnes et les pensionnés (T32 à T49)", [
         dict(n="R5", titre="La personne comptée",
-             regle="L'ayant droit de la prestation. Pour les allocations familiales, "
-                   "l'allocataire, c'est-à-dire la personne payée.",
-             preuve="orphelins : la personne payée est toujours le tuteur, que le DTM compte à tort ; "
-                    "l'annuaire CNSS 2024 compte bien l'orphelin (0 à 24 ans)",
-             p=["P16"], tableaux="T32 à T49", etat="propose",
-             note="orphelins confirmés ; allocataires pas encore testés"),
+             regle="L'ayant droit de la prestation, une fois par tableau. Allocations "
+                   "familiales : l'enfant ; l'allocataire est le dossier qui a au moins un "
+                   "enfant compté (Kaya 2017).",
+             preuve="l'annuaire CNSS 2024 compte l'orphelin (0 à 24 ans), pas le tuteur payé ; "
+                    "doublons rares dans un tableau (15 au plus) ; T41 : le dossier qui a un "
+                    "enfant payé dans l'année retombe sur l'annuaire (+0,7 % en 2024)",
+             p=["P16", "P74", "P77", "P79"], tableaux="T32 à T49", etat="propose",
+             note="orphelins et allocataires retrouvés dans l'annuaire"),
         dict(n="R6", titre="Le pensionné au 31 décembre",
              regle="Pension en cours au 31/12 (effet avant, ni radiée ni suspendue), ayant droit en "
-                   "vie, payée ou non. Orphelins de moins de 25 ans. Une personne comptée une fois.",
-             preuve="corrigée le 30/10 : c'est la définition de l'annuaire CNSS 2024 (vieillesse "
-                    "+1,5 % en 2024) ; exiger un paiement au 4e trimestre en retirait 8 %",
-             p=["P24", "P25", "P26"], tableaux="T32 à T41", etat="propose",
-             note="limite d'âge des orphelins à confirmer"),
+                   "vie, payée ou non. Orphelins de moins de 25 ans. Une personne comptée une fois. "
+                   "T41 : l'enfant de 21 ans au plus, payé dans l'année.",
+             preuve="la définition de l'annuaire CNSS 2024, confirmée par le lot 5 : T32 +0,9 %, "
+                    "T36 exact, T33 et T37 à T40 à quelques % ; la CNSS compte aussi les pensions "
+                    "de coordination payées par une autre caisse (sans montant)",
+             p=["P24", "P25", "P26", "P74", "P78", "P79", "P81"], tableaux="T32 à T41",
+             etat="propose",
+             note="T41 : seuls les enfants payés dans l'année (P79) ; veuves et orphelins sous le "
+                  "publié depuis 2023, pas à cause des suspensions (P81) : A06, A07"),
         dict(n="R7", titre="Le nouveau pensionné",
-             regle="Pension saisie dans l'exercice, comme l'annuaire CNSS 2024. Une personne "
-                   "comptée une fois.",
-             preuve="revue le 30/10 : 4 090 pensions saisies en 2024 pour 4 037 nouveaux "
-                    "pensionnés publiés ; la notification, proposée avant, en donne 3 888",
-             p=["P27", "P28"], tableaux="T42 à T49", etat="propose",
-             note="saisie ou notification : à confirmer avec la direction des prestations"),
+             regle="La première prestation de la personne dans le tableau, saisie dans "
+                   "l'exercice, comme l'annuaire CNSS 2024. Une révision n'est pas une entrée.",
+             preuve="2 463 nouveaux retraités en 2024 pour 2 489 publiés, veuves +0,7 %, "
+                    "orphelins +0,5 % ; la notification donne 4 à 5 % de moins ; 220 "
+                    "reliquidations en 2025",
+             p=["P27", "P28", "P82"], tableaux="T42 à T49", etat="propose",
+             note="rentes viagères : 39 pour 44 publiées ; compter par accident ne change rien "
+                  "(P91)"),
         dict(n="R8", titre="L'âge",
              regle="Année de l'exercice moins année de naissance ; tranches de 5 ans regroupées "
-                   "selon la grille de chaque tableau.",
-             preuve="naissance fiable ; 21 tranches de 5 ans dans la base",
-             p=["P14", "P15", "P42"], tableaux="T32 à T49", etat="propose"),
+                   "selon la grille de chaque tableau. 120 ans ou plus : âge inconnu.",
+             preuve="les âges de T32 suivent l'annuaire CNSS 2024 à quelques centaines près ; "
+                    "sexe 1 = hommes ; l'année 1900 est une date par défaut (503 bénéficiaires)",
+             p=["P14", "P15", "P42", "P75", "P76", "P80"], tableaux="T32 à T49",
+             etat="propose", note="les très grands âges ont des dates approchées (P80)"),
         dict(n="R9", titre="Les services passés",
              regle="Mois cotisés de la dernière prestation de la personne ; valeurs au-dessus de "
-                   "600 écartées ; total seulement.",
-             preuve="les mois sont recopiés sur chaque prestation : les additionner les gonfle",
-             p=["P29", "P30"], tableaux="T42, T50", etat="propose"),
+                   "600 écartées ; total seulement. Coordination : moins les mois dans l'autre "
+                   "caisse.",
+             preuve="les mois sont recopiés sur chaque prestation : les additionner les gonfle ; "
+                    "toujours remplis pour les nouveaux retraités (P86)",
+             p=["P29", "P30", "P86", "P89", "P90"], tableaux="T42, T50", etat="propose",
+             note="PE_COT_AUTRE = mois dans l'autre caisse, toujours sous le total (P90) : la "
+                  "part CNSS de Kaya 2017"),
+        dict(n="R13", titre="La date du calcul",
+             regle="L'exercice N se calcule sur le cliché de fin mars N+1, quand la CNSS arrête "
+                   "son annuaire.",
+             preuve="les décès de retraités de 2024 connus fin mars 2025 retombent mois par mois "
+                    "sur l'annuaire (444 pour 447) ; la base d'aujourd'hui en compte 619",
+             p=["P97", "P99"], tableaux="T25 à T57", etat="propose",
+             note="explique aussi les veuves et orphelins sous le publié (A06, A07)"),
         dict(n="A1", titre="Les accessoires de pension",
              regle="Bonification ou majoration pour enfant, contribution aux charges du ménage : "
                    "elles s'ajoutent à une pension. Elles ne font pas un pensionné de plus et "
@@ -435,12 +483,15 @@ RULE_GROUPS = [
     ]),
     ("3.5 Les indus (T31) et les contrôles (T28 à T30)", [
         dict(n="I1", titre="Les indus",
-             regle="Trop perçus et moins perçus d'après le type d'ajustement. Un remboursement de "
-                   "trop perçu n'est pas un nouvel indu ; avances, mois gratuits et dons COVID "
-                   "sont écartés ; la branche maternité est incluse.",
-             preuve="le DTM compte le remboursement de trop perçu et oublie la maternité",
-             p=["P11", "P41"], tableaux="T31", etat="propose",
-             note="norme CIPRES : 2 % d'indus au plus"),
+             regle="Trop perçus (TP, TP-CONV) et moins perçus (MP, RC) au mois de leur "
+                   "établissement, sauf le statut R (annulé). Un remboursement de trop perçu "
+                   "n'est pas un nouvel indu ; avances, mois gratuits et dons COVID sont "
+                   "écartés ; la maternité est incluse.",
+             preuve="le DTM compte le remboursement de trop perçu et oublie la maternité ; taux "
+                    "2024 : 0,39 % (229,5 M de trop-perçus pour 58,7 Md payés)",
+             p=["P11", "P41", "P103", "P105"], tableaux="T31", etat="propose",
+             note="norme CIPRES : 2 % d'indus au plus ; Kaya 2017 : les moins perçus ne sont "
+                  "pas des indus ; lot 9"),
         dict(n="C1", titre="Les contrôles a posteriori",
              regle="Un contrôle se lit dans la table des dossiers contrôlés, jamais dans le "
                    "drapeau DEB_VERIFIE. Taux = dossiers contrôlés ÷ dossiers payés.",
@@ -616,6 +667,49 @@ INDEX = [
         ("P72", "Allocation d'incapacité → notifiée depuis 2019"),
         ("P73", "Pic des soins de 2024 → approbations remplies en bloc"),
     ]),
+    ("Lot 5 · 31/10/2026", "lot5_beneficiaires_31_12.sql", [
+        ("P74", "Stock au 31/12, 2020 à 2025 → T32 +0,9 %, T41 +5 %"),
+        ("P75", "Montant et sexe → l'annuaire entre nos deux montants"),
+        ("P76", "Âge et sexe 2024 → âges suivis ; 500 veuves de 120 ans"),
+        ("P77", "Plusieurs pensions → doublons rares dans un tableau"),
+        ("P78", "Coordination → COOR_AC sans paiement CNSS"),
+    ]),
+    ("Lot 6 · 31/10/2026", "lot6_ecarts_t32_t41.sql", [
+        ("P79", "Allocataires de T41 → enfants payés dans l'année : +0,7 %"),
+        ("P80", "Dates de naissance → 1900 = date par défaut"),
+        ("P81", "Suspendues au 31/12 → rares, pas la cause de l'écart"),
+    ]),
+    ("Lot 7 · 01/11/2026", "lot7_nouveaux_beneficiaires.sql", [
+        ("P82", "Entrées 2020 à 2025 → première saisie : annuaire à 1 %"),
+        ("P83", "Nouveaux retraités → âge juste par tranche ; sexe à revoir"),
+        ("P84", "Âge de tous les nouveaux → grilles bonnes"),
+        ("P85", "Montant → rappel : 8 % retraités, ×2 survivants"),
+        ("P86", "Services passés → toujours remplis"),
+        ("P87", "Degré d'IPP de T48 → toujours rempli, de 15 à 100"),
+        ("P88", "Type des colonnes de mois → PE_COT_AUTRE est un nombre"),
+        ("P89", "Mois par catégorie → autre caisse en coordination seulement"),
+        ("P90", "Valeurs de PE_COT_AUTRE → des mois, sous le total"),
+        ("P91", "Rentes viagères par accident → rien ne change"),
+    ]),
+    ("Lot 8 · 01/11/2026", "lot8_evolution_5_ans.sql", [
+        ("P92", "T50 à T55 → liquidées = annuaire ; montant à la saisie"),
+        ("P93", "Détail par code → parts de survivants, MAP"),
+        ("P94", "Services passés des allocations → 96 mois"),
+        ("P95", "Montants par branche → AVS +1,3 %, AT/MP −29 %"),
+        ("P96", "Colonnes de décès → pas de date de déclaration"),
+        ("P97", "Décédés par branche → +15 %, déclarés tard"),
+        ("P98", "Montants par date → la saisie meilleure 11 fois sur 16"),
+        ("P99", "Décès connus fin mars 2025 → l'annuaire, mois par mois"),
+        ("P100", "Accidents mortels → indicateur rempli depuis 2024"),
+        ("P101", "Vue des décédés de la DSI → plus large que T57"),
+    ]),
+    ("Lot 9 · 01/11/2026", "lot9_indus.sql", [
+        ("P102", "Ajustements par type → avances 5,4 Md, trop-perçus 0,23"),
+        ("P103", "Statuts → A en cours, C soldé, R annulé"),
+        ("P104", "Débours AJ → avances, rappels, rachats de rente"),
+        ("P105", "T31 de 2024 → taux d'indus 0,39 %"),
+        ("P106", "Trop-perçus après décès → 7 seulement"),
+    ]),
 ]
 
 
@@ -742,28 +836,33 @@ def key_points(d, y):
 
 def journey(d, y):
     """Partie 1 : les lots, puis ce qu'ils ont produit."""
-    gap = 60
-    w = (INNER - (len(LOTS) - 1) * gap) / len(LOTS)
+    # les lots, de gauche à droite, quatre par rangée
+    gap, per_row = 60, 4
+    w = (INNER - (per_row - 1) * gap) / per_row
     texts = [wrap(purpose, 18, w - 36) for *_, purpose, _ in LOTS]
     finds = [wrap("Trouvé : " + found, 16, w - 36) for *_, found in LOTS]
     h = 150 + max(height_of(t, 18) for t in texts) + 16 + max(height_of(t, 16) for t in finds) + 20
     boxes = []
     for i, ((name, day, path, refs, _, _), text, found) in enumerate(zip(LOTS, texts, finds)):
-        x = 25 + i * (w + gap)
+        x = 25 + (i % per_row) * (w + gap)
+        top = y + (i // per_row) * (h + gap)
         g = d.group()
-        frame = d.box(x, y, w, h, bg=C["bleu_clair"], stroke=C["bleu"], stroke_width=3, groups=g)
-        d.text(x + 18, y + 14, f"{name} · {day}", 24, C["bleu"], groups=g, inside=frame)
-        d.text(x + 18, y + 54, path, 16, groups=g, inside=frame, mono=True)
-        d.text(x + 18, y + 84, refs, 20, groups=g, inside=frame)
-        d.text(x + 18, y + 122, text, 18, groups=g, inside=frame)
-        d.text(x + 18, y + 138 + height_of(text, 18), found, 16, C["doux"], groups=g, inside=frame)
+        frame = d.box(x, top, w, h, bg=C["bleu_clair"], stroke=C["bleu"], stroke_width=3, groups=g)
+        d.text(x + 18, top + 14, f"{name} · {day}", 24, C["bleu"], groups=g, inside=frame)
+        d.text(x + 18, top + 54, path, 16, groups=g, inside=frame, mono=True)
+        d.text(x + 18, top + 84, refs, 20, groups=g, inside=frame)
+        d.text(x + 18, top + 122, text, 18, groups=g, inside=frame)
+        d.text(x + 18, top + 138 + height_of(text, 18), found, 16, C["doux"], groups=g,
+               inside=frame)
         boxes.append(frame)
-    for a, b in zip(boxes, boxes[1:]):
-        d.arrow(a["x"] + a["width"] + 6, y + h / 2, b["x"] - 6, y + h / 2, start=a, end=b,
-                color=C["bleu"])
-    d.text(25, y + h + 24, "Tous les fichiers sont dans analyses/prestations. Ce que ces lots ont "
-                           "produit :", 20, C["doux"])
-    y += h + 70
+    for i, (a, b) in enumerate(zip(boxes, boxes[1:])):
+        if (i + 1) % per_row:
+            d.arrow(a["x"] + a["width"] + 6, a["y"] + h / 2, b["x"] - 6, b["y"] + h / 2,
+                    start=a, end=b, color=C["bleu"])
+    y += ((len(LOTS) - 1) // per_row + 1) * (h + gap) - gap
+    d.text(25, y + 24, "Tous les fichiers sont dans analyses/prestations. Ce que ces lots ont "
+                       "produit :", 20, C["doux"])
+    y += 70
     w2 = (INNER - 3 * 24) / 4
     bodies = [wrap(body, 16, w2 - 36) for _, body in PRODUCED]
     h2 = 60 + max(height_of(t, 16) for t in bodies) + 20
@@ -848,26 +947,31 @@ def questions(d, y):
 
 
 def index(d, y):
-    gap = 24
-    w = (INNER - (len(INDEX) - 1) * gap) / len(INDEX)
+    """Les requêtes de chaque lot, quatre lots par rangée ; renvoie le bas."""
+    gap, per_row = 24, 4
+    w = (INNER - (per_row - 1) * gap) / per_row
     blocks = []
     for title, path, entries in INDEX:
-        lines = [(ref, wrap(text, 16, w - 36 - 64)) for ref, text in entries]
+        lines = [(ref, wrap(text, 16, w - 36 - 74)) for ref, text in entries]
         blocks.append((title, path, lines))
-    h = 100 + max(sum(max(30, height_of(t, 16)) + 10 for _, t in lines)
-                  for _, _, lines in blocks) + 10
-    for i, (title, path, lines) in enumerate(blocks):
-        x = 25 + i * (w + gap)
-        g = d.group()
-        frame = d.box(x, y, w, h, bg=C["blanc"], stroke=C["bleu"], groups=g)
-        d.text(x + 18, y + 14, title, 22, C["bleu"], groups=g, inside=frame)
-        d.text(x + 18, y + 52, path, 16, groups=g, inside=frame, mono=True)
-        ty = y + 96
-        for ref, text in lines:
-            d.box(x + 18, ty, 54, 30, ref, 16, bg=C["gris"], stroke=C["gris_bord"], groups=g)
-            d.text(x + 18 + 64, ty + 5, text, 16, groups=g, inside=frame)
-            ty += max(30, height_of(text, 16)) + 10
-    return y + h
+    for start in range(0, len(blocks), per_row):
+        row = blocks[start:start + per_row]
+        h = 100 + max(sum(max(30, height_of(t, 16)) + 10 for _, t in lines)
+                      for _, _, lines in row) + 10
+        for i, (title, path, lines) in enumerate(row):
+            x = 25 + i * (w + gap)
+            g = d.group()
+            frame = d.box(x, y, w, h, bg=C["blanc"], stroke=C["bleu"], groups=g)
+            d.text(x + 18, y + 14, title, 22, C["bleu"], groups=g, inside=frame)
+            d.text(x + 18, y + 52, path, 16, groups=g, inside=frame, mono=True)
+            ty = y + 96
+            for ref, text in lines:
+                d.box(x + 18, ty, 64, 30, ref, 16, bg=C["gris"], stroke=C["gris_bord"],
+                      groups=g)
+                d.text(x + 18 + 74, ty + 5, text, 16, groups=g, inside=frame)
+                ty += max(30, height_of(text, 16)) + 10
+        y += h + gap
+    return y - gap
 
 
 def section(d, y, title, subtitle, build_part):
