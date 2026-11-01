@@ -292,7 +292,18 @@ JOURS = [
           "L'annuaire de la CNSS est arrêté fin mars : règle R13.",
           "La fiche pilote de T50 à T57 ; la date des montants ne bloque plus rien.",
           "T31 (indus) : lot 9 exécuté, taux d'indus 0,39 % en 2024, norme 2 %.",
-          "La fiche T31."],
+          "La fiche T31.",
+          "GRH : la méthode des prestations ; l'annuaire de la CNSS publie T58 à T65.",
+          "GRH, lot 17 : 742 permanents pour 758 ; âge et ancienneté retrouvés ; lot 18.",
+          "GRH, Q99 : 104 recrutements en 2024 comme l'annuaire ; les 84 de 2019 retrouvés.",
+          "GRH, lot 18 : la catégorie de la CNSS est celle de la situation ; lot 19.",
+          "GRH, lot 19 : T58 et T65 retrouvés ; 46 contractuels = engagés de l'année.",
+          "GRH : retraites à la date de la décision 02 ; lot 20 pour les autres mouvements.",
+          "GRH : disponibilités (07) et remises (18) retrouvées ; règles G1 à G11 écrites.",
+          "GRH : le schéma des règles (regles_grh) en Excalidraw.",
+          "GRH : trois requêtes proposées (effectif, T60, T62), avec leurs réglages.",
+          "GRH : le dossier « tableaux cipres » et les fiches T58, T60, T62.",
+          "Réunion du 02/11 : un doc des points à valider par domaine."],
          chantiers=[
              Chantier("Les résultats du lot 6 (T32 à T41)", "Prestations",
                       demande="Tu as collé les résultats de P79 à P81.",
@@ -450,6 +461,176 @@ JOURS = [
                       fichiers="sources/prestations/t31_indus.py ; fiche "
                                "T31_prestations_indues.",
                       etat="fait"),
+             Chantier("Le domaine GRH, comme les prestations", "GRH",
+                      demande="Faire aussi pour la GRH tout le travail fait pour les "
+                              "prestations.",
+                      fait="Plan (analyses/grh/TODO.md) : contrôle par l'annuaire, règles, "
+                           "requêtes, fiches de validation par famille, schéma des règles, "
+                           "fiches de maîtrise. Lot 17 (Q97 à Q102) : les tableaux 119 à 124 "
+                           "de l'annuaire reconstitués depuis la base.",
+                      trouve="L'annuaire de la CNSS 2024 publie le personnel permanent au "
+                             "31/12/2024 sous la forme de T58, T60, T61, T62 et T65 : 758 "
+                             "permanents (+46 contractuels), 104 recrutements, 480 formés, 49 % "
+                             "de cadres.",
+                      decide="Reconstituer d'abord ces tableaux (lot 17), puis écrire les "
+                             "règles, les requêtes et les fiches.",
+                      fichiers="analyses/grh/TODO.md ; "
+                               "lot17_comparaison_annuaire_cnss_2024.sql.",
+                      etat="fait"),
+             Chantier("Les résultats du lot 17 GRH", "GRH",
+                      demande="Tu as collé les résultats de Q97 à Q102 (Q99 en erreur).",
+                      fait="Résultats et constats dans les en-têtes ; Q99 (T60) réécrite "
+                           "après l'erreur ORA-00904 ; lot 18 (Q103 à Q108) pour expliquer "
+                           "les écarts ; README et TODO de la GRH.",
+                      trouve="742 permanents pour 758 publiés. Âge et ancienneté en années "
+                             "pleines : retrouvés à quelques unités près. La catégorie ne "
+                             "retombe pas (209 cadres moyens pour 311, 113 cadres supérieurs "
+                             "pour 62). De 2020 à 2023, il manque 92 à 99 permanents par an : "
+                             "sans doute les 84 engagés de 2019 radiés sans date. 7 "
+                             "temporaires pour 46 contractuels ; 410 formés pour 480.",
+                      decide="Garder le périmètre (agent CNSS permanent) et les règles d'âge "
+                             "et d'ancienneté ; chercher le champ de catégorie de la CNSS et "
+                             "tester la date d'état des fiches (DATE_ETAT_EMPLOYE) pour dater "
+                             "les départs.",
+                      fichiers="analyses/grh/lot17_comparaison_annuaire_cnss_2024.sql ; "
+                               "lot18_ecarts_annuaire_cnss_2024.sql.",
+                      etat="fait"),
+             Chantier("Q99 relancée : les mouvements (T60)", "GRH",
+                      demande="Tu as collé le résultat de Q99.",
+                      fait="Résultat et constat dans l'en-tête de Q99 ; Q109 ajoutée au lot "
+                           "18 (sorties par code, disponibilités et remises en activité).",
+                      trouve="104 recrutements en 2024, comme l'annuaire ; retraites à 4 "
+                             "près, démissions exactes. En 2019, 84 recrutés jamais présents "
+                             "en fin d'année : ce sont les 84 « autres » de l'annuaire (entrés "
+                             "en 2019, sortis en 2024). Sans eux, 8 à 16 agents d'écart par "
+                             "an. Aucun décès daté depuis 2010 : lire la décision 34.",
+                      decide="Garder pour T60 : recrutement = embauche dans l'année ; "
+                             "retraite = 02 ; démission = 36 ; licenciement = 54 ; décès à "
+                             "lire dans la 34 (à confirmer par Q109).",
+                      fichiers="analyses/grh/lot17_comparaison_annuaire_cnss_2024.sql (Q99) ; "
+                               "lot18_ecarts_annuaire_cnss_2024.sql (Q109).",
+                      etat="en cours"),
+             Chantier("Les résultats du lot 18 GRH", "GRH",
+                      demande="Tu as collé les résultats de Q103 à Q108.",
+                      fait="Résultats et constats dans les en-têtes ; lot 19 (Q110 à Q115) "
+                           "pour refaire T58, T62 et T65 avec la catégorie de la CNSS.",
+                      trouve="La CNSS classe par la catégorie de la situation (grille de "
+                             "salaire) : 01-02 employés, 03 maîtrise, 04-05 cadres moyens, 06 "
+                             "cadres supérieurs ; 173, 207, 304, 58 pour 177, 208, 311, 62 ; "
+                             "48,8 % de cadres pour 49 %. Les 84 de 2019 forment un seul lot, "
+                             "sans date de départ. La date d'état ne date pas les départs.",
+                      decide="Catégorie CIPRES = GRH_SITUATION.CATEGORIE ; la catégorie 05 "
+                             "en cadres moyens comme l'annuaire 2024 (Kaya 2017 : cadres "
+                             "supérieurs), question à la DRH réglée par un paramètre.",
+                      fichiers="analyses/grh/lot18_ecarts_annuaire_cnss_2024.sql ; "
+                               "lot19_categorie_cnss.sql.",
+                      etat="fait"),
+             Chantier("Les résultats du lot 19 GRH", "GRH",
+                      demande="Tu as collé les résultats de Q110 (en erreur) à Q115.",
+                      fait="Résultats et constats dans les en-têtes ; Q110 réécrite sans la "
+                           "vue des catégories ; Q116 ajoutée (retraites mois par mois).",
+                      trouve="T58 : chaque case catégorie et sexe à 4 agents près. T65 : à "
+                             "0,3 point près de 2020 à 2024, avec les 84 de 2019. Les 46 "
+                             "contractuels = 44 engagés (50) en 2024 + 2 fin 2023. T62 ne "
+                             "retombe pas (409 agents, 524 inscriptions pour 480). 9 "
+                             "retraites en décembre 2024 : peut-être comptées présentes.",
+                      decide="Contractuels = temporaires engagés (50) dans les 12 derniers "
+                             "mois, sans sortie ; T62 en agents distincts, question à la "
+                             "DRH ; écart de 1 % sur l'effectif accepté.",
+                      fichiers="analyses/grh/lot19_categorie_cnss.sql.",
+                      etat="fait"),
+             Chantier("Q109, Q110, Q116 relancées : les mouvements (T60)", "GRH",
+                      demande="Tu as collé Q109, Q110 et Q116.",
+                      fait="Résultats et constats dans les lots 18 et 19 ; lot 20 (Q117) "
+                           "pour les décisions de position et les statuts de fin de carrière.",
+                      trouve="Les catégories 01 à 06 n'ont pas de libellé d'employé ou de "
+                             "cadre : le regroupement vient de l'annuaire. Une retraite de "
+                             "décembre n'est pas comptée l'année suivante. Disponibilités et "
+                             "remises en activité absentes des statuts de situation ; décès "
+                             "par la liquidation (34), décalés d'environ 8 mois.",
+                      decide="Retraite à la date de la décision 02 ; écart de 2 % sur "
+                             "l'effectif 2024 accepté ; chercher décès, disponibilités, "
+                             "remises et la sortie des 84 dans les décisions 07, 18, 37 et "
+                             "les statuts X, Y.",
+                      fichiers="analyses/grh/lot18 (Q109) ; lot19 (Q110, Q116) ; "
+                               "lot20_mouvements_t60.sql.",
+                      etat="fait"),
+             Chantier("Q117 et les règles GRH", "GRH",
+                      demande="Tu as collé le résultat de Q117.",
+                      fait="Résultat et constat dans le lot 20 ; règles G1 à G11 au README "
+                           "de la GRH, avec leurs preuves ; 7 questions à la DRH (QG1 à QG7).",
+                      trouve="Disponibilités = décision 07 (18 pour 21 sur 2020-2024) ; "
+                             "remises en activité = décision 18 (22 pour 19). Statuts R, X, Y "
+                             "presque jamais saisis ; 10 des 84 de 2019 radiés dès 2019.",
+                      decide="Règles G1 à G11 proposées : périmètre, présence, catégorie, "
+                             "âge, ancienneté, encadrement, contractuels, entrées, sorties, "
+                             "formés, années passées. Chaque question a un réglage.",
+                      fichiers="analyses/grh/lot20_mouvements_t60.sql ; analyses/grh/README.md.",
+                      etat="fait"),
+             Chantier("Le schéma des règles GRH", "GRH",
+                      demande="Tu as tout ? Intégrer les choses dans Excalidraw.",
+                      fait="Schéma regles_grh : l'essentiel, les lots 1 à 20, l'annuaire de la "
+                           "CNSS 2024 face à la base ligne par ligne, les règles G1 à G11, les "
+                           "questions QG1 à QG7 et la suite, l'index Q97 à Q117.",
+                      trouve="Tous les résultats des lots 17 à 20 sont reportés : rien ne "
+                             "manque pour écrire les requêtes.",
+                      decide="Le schéma se régénère à chaque nouvelle règle, comme celui des "
+                             "prestations.",
+                      fichiers="excalidraw/sources/grh/regles_grh.py ; schemas/grh/"
+                               "regles_grh.excalidraw.",
+                      etat="fait"),
+             Chantier("Les requêtes GRH proposées", "GRH",
+                      demande="Oui, les requêtes.",
+                      fait="Trois requêtes dans analyses/grh, sur les faits du DWH : "
+                           "t58_t65_effectif (T58 permanents et contractuels, T59, T61, T65 "
+                           "sur cinq ans), t60 (mouvement sur cinq ans, par différence d'une "
+                           "fin d'année à l'autre), t62 (formés par catégorie, avec ou sans "
+                           "promotion). Contrôle attendu sur 2024 dans chaque en-tête.",
+                      trouve="Les questions de la DRH tiennent dans trois réglages : "
+                             "categorie_05, duree_contrat, disponibilite.",
+                      decide="Requêtes proposées d'abord, comme pour les prestations ; les "
+                             "requêtes DTM ne changent qu'après le visa de la DRH, sans "
+                             "changer leurs colonnes.",
+                      fichiers="analyses/grh/t58_t65_effectif_requete_proposee.sql ; "
+                               "t60_requete_proposee.sql ; t62_requete_proposee.sql.",
+                      etat="fait"),
+             Chantier("Les fiches de validation de la GRH", "GRH",
+                      demande="Dans Excalidraw, pas de dossier « tableaux » pour la GRH comme "
+                              "pour les prestations.",
+                      fait="Dossier grh/tableaux cipres : fiche pilote T58 (T58, T59, T61, "
+                           "T65 ; neuf règles), T60 (huit règles), T62 (huit règles), sur le "
+                           "gabarit des prestations : maquette, chiffres de l'annuaire de la "
+                           "CNSS face à la base, six agents fictifs, règles avec leur SQL, "
+                           "cinq questions à la DRH.",
+                      trouve="Le gabarit des prestations sert tel quel ; seule la légende des "
+                             "sources change (base GRH, copie du 18/02/2026).",
+                      decide="T63 et T64 sans fiche tant que la paie et la comptabilité "
+                             "manquent.",
+                      fichiers="excalidraw/sources/grh (fiche_grh, t58_effectif, t60_mouvement, "
+                               "t62_formation) ; schemas/grh/tableaux cipres.",
+                      etat="fait"),
+             Chantier("Les points à valider, pour la réunion du 02/11", "Projet",
+                      demande="Un doc concis par domaine, qui regroupe les règles et les "
+                              "questions à valider, écrit comme par une personne ; puis en "
+                              "Word, comme fait par toi, et en Excalidraw.",
+                      fait="analyses/prestations/points_a_valider.md (40 points) et "
+                           "analyses/grh/points_a_valider.md (27 points) : d'abord les 5 "
+                           "points à trancher, puis les règles appliquées, les questions par "
+                           "tableau et celles pour la DSI. Versions Word (points_a_valider.docx, "
+                           "à côté des .md) et Excalidraw (schemas/prestations et schemas/grh), "
+                           "faites à partir des .md. Complétés ensuite pour être exhaustifs : 52 "
+                           "points (prestations) et 43 (GRH, avec le questionnaire CIPRES et le "
+                           "doc T60), et la liste de tous les tableaux, T25 à T65, avec leurs "
+                           "codes et leurs points.",
+                      trouve="Les questions étaient réparties entre les README, les fiches, "
+                             "le journal et deux anciens docs GRH ; T28 à T30, T63 et T64 "
+                             "n'avaient pas encore de questions à eux.",
+                      decide="Rien n'est changé dans les règles, README et TODO : les "
+                             "réponses de la réunion y seront reportées ensuite.",
+                      fichiers="analyses/<domaine>/points_a_valider.md et .docx ; "
+                               "schemas/<domaine>/points_a_valider ; "
+                               "sources/points_a_valider.py.",
+                      etat="fait"),
          ],
          reste=["Toi : poser au point du 02/11 la question de la date des montants (R4) ; "
                 "A06 et A07 ; les requêtes proposées.",
@@ -604,6 +785,18 @@ DECISIONS = [
              "T41 s'écarte de R6 (payée ou non), qui reste vraie pour les pensions ; requête "
              "commune modifiée.",
              statut="proposé"),
+    Decision("2026-11-01", "GRH : la catégorie est celle de la grille de salaire",
+             "La catégorie CIPRES d'un agent (T58, T62, T65) se lit dans la catégorie de sa "
+             "situation (GRH_SITUATION.CATEGORIE) : 01 et 02 employés, 03 agents de "
+             "maîtrise, 04 et 05 cadres moyens, 06 cadres supérieurs. Plus le niveau de la "
+             "qualification.",
+             "C'est le seul champ qui retombe sur l'annuaire de la CNSS 2024 : 173, 207, 304 "
+             "et 58 pour 177, 208, 311 et 62 ; 48,8 % de cadres pour 49 % (lot 18, Q103).",
+             "Proposition BI, à confirmer par la DRH (Kaya 2017 rangeait 05 en cadres "
+             "supérieurs)",
+             "Les requêtes grh_effectif, grh_ratio et grh_formation changent de champ ; la "
+             "catégorie 05 devient un paramètre.",
+             statut="proposé"),
 ]
 
 # =============================================================================================
@@ -623,8 +816,12 @@ ETAT = [
      "Restent T28 à T30 (DSI). R4 posée au point du 02/11."),
     ("GRH (T58 à T65)", "en cours",
      "Quatre requêtes DTM corrigées et testées (885 agents en 2025) ; questionnaire CIPRES "
-     "pour la DRH.",
-     "Le visa de la DRH ; les fiches de maîtrise du domaine."),
+     "pour la DRH. Plan sur le modèle des prestations ; lot 17 exécuté : 742 permanents "
+     "pour 758 publiés ; âge, ancienneté, recrutements et retraites retrouvés ; lot 18 : "
+     "la catégorie de la CNSS trouvée ; lots 19 et 20 : T58, T65 et T60 retrouvés, "
+     "contractuels expliqués.",
+     "Règles G1 à G11, schéma regles_grh, fiches T58, T60, T62 ; trois requêtes proposées "
+     "à exécuter ; visa de la DRH."),
     ("Immatriculation et recouvrement (T1 à T24)", "à faire",
      "Les vues simples sont spécifiées pour la DSI (20/10).",
      "Pas encore d'analyse."),
@@ -638,15 +835,16 @@ ETAT = [
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Au point du 02/11 : la date des montants (R4). A06 et A07 ; les requêtes "
-            "proposées sur le cliché 092026 ; relancer A04 ; commiter le travail du 31/10 et "
-            "du 01/11."),
+    ("Toi", "Au point du 02/11 : la date des montants (R4). Exécuter les trois requêtes "
+            "GRH proposées (102026, 2024) ; faire viser G1 à G11 et poser QG1 à QG7 ; A06 et A07 ; les requêtes proposées sur le cliché 092026 ; relancer "
+            "A04 ; commiter le travail du 31/10 et du 01/11."),
     ("La direction des prestations", "Répondre aux questions des fiches T25 à T27 (13), "
                                      "T31, T32, T41, T42 et T50-T57 (5 chacune) ; confirmer "
                                      "R6, "
                                      "R7, la limite de 25 ans des orphelins, le montant, la "
                                      "coordination et la règle de T41 (enfants payés)."),
-    ("La DRH", "Viser les requêtes DTM de la GRH ; répondre au questionnaire CIPRES."),
+    ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G11 ; répondre à "
+               "QG1 à QG7 et au questionnaire CIPRES."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet, où sont saisis les "
                "contrôles a posteriori."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
@@ -654,6 +852,9 @@ EN_ATTENTE = [
 
 # la suite, dans l'ordre
 SUITE = [
+    ("Les requêtes GRH", "Reporter l'exécution des trois requêtes proposées ; ajuster les "
+                         "fiches T58, T60, T62 si les chiffres bougent ; puis les fiches de "
+                         "maîtrise « 4 gestion administrative »."),
     ("Les fiches de maîtrise", "Mettre à jour le dossier 3 prestations avec les lots 5 à 9 et "
                                "les règles R13, T41, T50-T57, T31."),
     ("Les contrôles (T28 à T30)", "Bloqués : la table des contrôles n'est plus alimentée "
@@ -678,7 +879,8 @@ LIVRABLES = [
     ("Les analyses (requêtes et constats)", [
         ("Prestations", "analyses/prestations", "lots 1 à 9 (P01 à P106), README (constats, "
                                                 "règles, questions), TODO, resultats/"),
-        ("GRH", "analyses/grh", "lots 1 à 16 (Q01 à Q96), README, référence T58 à T65"),
+        ("GRH", "analyses/grh", "lots 1 à 20 (Q01 à Q117), règles G1 à G11, requêtes "
+                                "proposées (effectif, T60, T62), README, TODO"),
         ("Annuaire de la CNSS 2024", "analyses/comparaison_annuaire_cnss_2024",
          "requêtes A01 à A08, tableau 18 reconstitué, déductions"),
     ]),
@@ -704,6 +906,8 @@ LIVRABLES = [
                                                "dossier, les fiches de validation T25 à T27, "
                                                "T31, T32, T41, T42 et T50-T57"),
         ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024"),
+        ("GRH", "schemas/grh", "regles_grh (règles G1 à G11) ; tableaux cipres : fiches T58, "
+                               "T60, T62"),
     ]),
     ("Les documents et artefacts (claude.ai)", [
         ("Roadmap métier", "claude.ai/artifact/419Uwt2pL2sbqKjiUBHTbu",
