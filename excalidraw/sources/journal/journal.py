@@ -664,6 +664,43 @@ JOURS = [
                 "Commiter le travail du 31/10 et du 01/11.",
                 "Ensuite : T28 à T30 dès la réponse de la DSI ; les fiches de maîtrise à "
                 "mettre à jour ; la décision R4 n'arrête rien (réglage date_montant)."]),
+    Jour("2026-11-02", "La fiche de lecture, terme par terme",
+         ["Fiche de lecture des prestations, à lire à côté de l'Annuaire CIPRES.",
+          "Exemple sur T25 : onze termes, chacun compris, situé dans la base, vérifiable.",
+          "Forme validée : tous les tableaux, T25 à T57, et la fiche de la GRH, T58 à T65."],
+         chantiers=[
+             Chantier("La fiche de lecture des tableaux CIPRES", "Projet",
+                      demande="Un fichier par domaine, à lire à côté de l'Annuaire CIPRES : pour "
+                              "chaque tableau et chaque terme (liquidé, déposé…), ma "
+                              "compréhension et la question « tu valides ? », et à côté d'où je "
+                              "prends les données et la requête. Un exemple d'abord, sur une "
+                              "seule page.",
+                      fait="Schéma prestations/fiche_de_lecture : comment lire, les tables de la "
+                           "base, puis T25 en onze termes (dossier PVID, lignes, déposés, "
+                           "liquidés, durée, trois colonnes, en instance, rejetés, durée moyenne "
+                           "et norme, Total, taux de dossiers restant à traiter). Chaque terme : "
+                           "ce que dit l'Annuaire avec la page, ce que j'en ai compris, un "
+                           "exemple, la question, les cases de réponse ; où je le prends dans la "
+                           "base ; la requête pour vérifier (celle de la fiche T25, renumérotée "
+                           "par terme).",
+                      trouve="Forme validée (« oui ça me convient ») : faite ensuite pour tous "
+                             "les tableaux. Prestations : T25, T26, T27, T28 à T30, T31, T32 à "
+                             "T40, T41, T42 à T49, T50 à T57 (79 termes). GRH : T58, T59, T61 "
+                             "et T65 ensemble, T60, T62, T63 et T64 (31 termes). T28 à T30, T63 "
+                             "et T64 n'ont pas encore toutes leurs données : leurs termes "
+                             "posent la question et disent où chercher.",
+                      decide="Une section par famille de tableaux calculés de la même façon ; "
+                             "la requête est donnée pour le premier, on change les codes pour "
+                             "les autres.",
+                      fichiers="sources/fiche_de_lecture.py ; "
+                               "sources/prestations/lecture_prestations.py ; "
+                               "sources/grh/lecture_grh.py ; schemas/prestations/"
+                               "fiche_de_lecture et schemas/grh/fiche_de_lecture.",
+                      etat="fait"),
+         ],
+         reste=["Toi : présenter les deux fiches de lecture à côté de l'Annuaire CIPRES, et "
+                "noter les réponses dans les cases.",
+                "Ensuite : reporter les réponses dans les règles (README, schémas des règles)."]),
 ]
 
 # =============================================================================================
@@ -830,7 +867,7 @@ DECISIONS = [
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-01"
+MISE_A_JOUR = "2026-11-02"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
