@@ -162,65 +162,124 @@ RULES = [
          chiffre="En 2024 : environ 1,2 M FCFA par retraité et par an."),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t32_t41_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 2 construit la liste
+# pensions_2024, que les règles 3 à 8 réutilisent.
 SQL = {
-    "1": """-- T32 : pension de vieillesse et
--- retraite anticipée
-SELECT 'T32' AS tableau, 'RPV' AS code
-FROM DUAL
-UNION ALL SELECT 'T32', 'RPRA' FROM DUAL""",
-    "2": """-- fin = le 31/12 de l'exercice
-WHERE pe.PE_DATE_EFFET <= fin
-  AND (pe.PE_DATE_RADIATION IS NULL
-       OR pe.PE_DATE_RADIATION > fin)
-  AND (   pe.PE_DATE_SUSPENSION IS NULL
-       OR pe.PE_DATE_SUSPENSION > fin
-       OR pe.PE_DATE_REACTIVATION
-            BETWEEN pe.PE_DATE_SUSPENSION
-                AND fin)
+    "1": """-- les deux codes de pension (TPE_CODE)
+SELECT TPE_CODE, COUNT(*)
+FROM   USER_DWH.PRESTATION_ESP
+WHERE  TPE_CODE IN ('RPV', 'RPRA')
+GROUP  BY TPE_CODE
+-- RPV  : pension de vieillesse
+-- RPRA : pension de retraite anticipée
+-- libellés : USER_DWH.TYPE_PRESTATION_ESP""",
+    "2": """-- la liste des pensions en cours au
+-- 31/12/2024, réutilisée ensuite
+WITH pensions_2024 AS (
+  SELECT p.PE_ID, p.TPE_CODE, p.IND_ID_PREST,
+         i.IND_SEXE, i.IND_DATE_NAISSANCE
+  FROM   USER_DWH.PRESTATION_ESP p
+  JOIN   USER_DWH.INDIVIDU i
+         ON i.IND_ID = p.IND_ID_PREST
+  WHERE  p.TPE_CODE IN ('RPV', 'RPRA')
+  -- effet avant le 31/12, pas radiée
+  AND    p.PE_DATE_EFFET <= DATE '2024-12-31'
+  AND   (p.PE_DATE_RADIATION IS NULL
+         OR p.PE_DATE_RADIATION
+              > DATE '2024-12-31')
+  -- pas suspendue, ou réactivée avant
+  AND   (p.PE_DATE_SUSPENSION IS NULL
+         OR p.PE_DATE_SUSPENSION
+              > DATE '2024-12-31'
+         OR p.PE_DATE_REACTIVATION
+              BETWEEN p.PE_DATE_SUSPENSION
+                  AND DATE '2024-12-31')
   -- titulaire en vie au 31/12
-  AND (i.IND_DATE_DECES IS NULL
-       OR i.IND_DATE_DECES > fin)""",
-    "3": """-- une personne par tableau, avec le
--- montant de toutes ses pensions du tableau
-SELECT tableau,
-       IND_ID_PREST     AS personne,
-       SUM(montant)     AS montant
-FROM   en_cours
-GROUP BY tableau, IND_ID_PREST""",
-    "4": """annee - EXTRACT(YEAR FROM
-                i.IND_DATE_NAISSANCE) AS age""",
-    "5": """-- T32 : bas = 55, haut = 100
-CASE WHEN age IS NULL OR age < 0
-       OR age >= 120  THEN 'Âge inconnu'
-     WHEN age < bas   THEN 'Moins de 55 ans'
-     WHEN age >= haut THEN '100 ans et plus'
-     ELSE FLOOR(age / 5) * 5 || ' – '
-          || (FLOOR(age / 5) * 5 + 4) || ' ans'
-END AS libelle""",
-    "6": """SUM(CASE WHEN sexe = '1'
-         THEN 1 ELSE 0 END) AS eff_h,
-SUM(CASE WHEN sexe = '2'
-         THEN 1 ELSE 0 END) AS eff_f""",
-    "7": """-- payé dans l'exercice, au mois payé
-WHERE deb.DEB_TYPE = 'PM'
-  AND deb.DEB_STATUT IN ('D', 'P')
-  AND deb.DEB_DATE_EFFET >= debut
-  AND deb.DEB_DATE_EFFET <  fin + 1""",
-    "8": """-- ligne TOTAL, et la moyenne
-SELECT tableau, 1000, 'TOTAL', COUNT(*),
-       SUM(montant)
-FROM tranche GROUP BY tableau
--- …
-ROUND(mnt_t / NULLIF(eff_t, 0))
-                       AS MONTANT_MOYEN""",
+  AND   (i.IND_DATE_DECES IS NULL
+         OR i.IND_DATE_DECES
+              > DATE '2024-12-31'))
+SELECT TPE_CODE, COUNT(*)
+FROM   pensions_2024
+GROUP  BY TPE_CODE
+-- 2024 : RPV 31 180, RPRA 87""",
+    "3": """-- à coller sous la règle 2, à la place
+-- de sa dernière requête
+SELECT COUNT(*)                     AS pensions,
+       COUNT(DISTINCT IND_ID_PREST) AS personnes
+FROM   pensions_2024
+-- 2024 : 31 093 pensionnés (l'annuaire :
+-- 30 808, à moins de 1 % près)""",
+    "4": """-- l'année 2024 moins l'année de naissance
+SELECT 2024 - EXTRACT(YEAR FROM
+         IND_DATE_NAISSANCE) AS age,
+       COUNT(DISTINCT IND_ID_PREST)
+FROM   pensions_2024
+GROUP  BY 2024 - EXTRACT(YEAR FROM
+            IND_DATE_NAISSANCE)
+ORDER  BY 1
+-- 120 ans ou plus, ou vide : âge inconnu""",
+    "5": """SELECT tranche, COUNT(DISTINCT IND_ID_PREST)
+FROM  (SELECT IND_ID_PREST,
+         CASE WHEN age IS NULL OR age < 0
+                OR age >= 120 THEN 'Âge inconnu'
+              WHEN age < 55   THEN 'Moins de 55'
+              WHEN age >= 100 THEN '100 et plus'
+              ELSE TO_CHAR(FLOOR(age / 5) * 5)
+         END AS tranche
+       FROM  (SELECT IND_ID_PREST,
+                     2024 - EXTRACT(YEAR FROM
+                       IND_DATE_NAISSANCE) AS age
+              FROM   pensions_2024))
+GROUP  BY tranche
+ORDER  BY tranche
+-- 55 = 55-59 ans, 60 = 60-64 ans, …""",
+    "6": """SELECT IND_SEXE, COUNT(DISTINCT IND_ID_PREST)
+FROM   pensions_2024
+GROUP  BY IND_SEXE
+-- 1 hommes, 2 femmes
+-- 2024 : 24 814 hommes, 6 279 femmes""",
+    "7": """-- payé en 2024, au mois payé, pour les
+-- pensions comptées
+SELECT SUM(deb.DEB_MONTANT)
+FROM   USER_DWH.DEBOURS deb
+WHERE  deb.PE_ID IN
+       (SELECT PE_ID FROM pensions_2024)
+AND    deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+AND    deb.DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    deb.DEB_DATE_EFFET <  DATE '2025-01-01'
+-- D payé par effet, P payé sans effet
+-- 2024 : 37,67 Md""",
+    "8": """-- le Total et la pension moyenne ; par
+-- tranche : ajouter la tranche de la
+-- règle 5 et un GROUP BY
+SELECT COUNT(DISTINCT e.IND_ID_PREST)
+         AS effectif,
+       SUM(deb.DEB_MONTANT) AS montant,
+       ROUND(SUM(deb.DEB_MONTANT)
+         / COUNT(DISTINCT e.IND_ID_PREST))
+         AS pension_moyenne
+FROM   pensions_2024 e
+LEFT   JOIN USER_DWH.DEBOURS deb
+       ON  deb.PE_ID = e.PE_ID
+       AND deb.DEB_TYPE = 'PM'
+       AND deb.DEB_STATUT IN ('D', 'P')
+       AND deb.DEB_DATE_EFFET
+             >= DATE '2024-01-01'
+       AND deb.DEB_DATE_EFFET
+             <  DATE '2025-01-01'
+-- 2024 : environ 1,2 M FCFA par retraité
+-- et par an""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête commune à T32-T41 (analyses/prestations/"
-            "t32_t41_requete_proposee.sql). Elle lit les copies de l'entrepôt (DWH.FAIT_…) du "
-            "cliché du mois, pour l'exercice choisi ; chaque tableau a ses codes (perimetre) et "
-            "sa grille d'âge (grille).")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2024, à copier dans SQL Developer. La règle 2 "
+            "construit la liste des pensions en cours au 31/12/2024 (pensions_2024) ; pour les "
+            "règles 3 à 8, on colle leur requête sous celle de la règle 2, à la place de sa "
+            "dernière requête. Le commentaire en fin de requête donne le chiffre à retrouver. La "
+            "requête complète, sur les copies de l'entrepôt, est dans "
+            "analyses/prestations/t32_t41_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="Le pensionné au 31 décembre",

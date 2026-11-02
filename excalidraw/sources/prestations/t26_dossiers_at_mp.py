@@ -189,92 +189,204 @@ RULES = [
                   ("Proposition BI", "la formule, la même qu'en T25")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t26_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2025, avec en commentaire le chiffre à retrouver. La règle 3 construit la liste
+# demandes, la règle 4 leurs durées (durees) ; les règles 5, 8 et 9 les réutilisent.
 SQL = {
     "1": """-- tous les dossiers AT/MP (type A) ; la
--- déclaration est la réception qui a
--- ouvert le dossier
-FROM      DWH.FAIT_DOSSIER d
-LEFT JOIN DWH.FAIT_RECEPTION_DOSSIER r
-       ON r.RD_ID = d.RD_ID
-WHERE d.TDOS_CODE = 'A'""",
-    "2": """-- IJ (3) et soins (5) : la déclaration ;
--- rente, survivants, allocation : leur
--- demande au guichet (ancien), sinon le
--- certificat pour la rente, sinon la
--- déclaration
-CASE WHEN dm.rang IN (3, 5)
-     THEN d.date_declaration
-     ELSE COALESCE(a.date_reception,
-                   d.date_cm_rente,
-                   d.date_declaration)
-END AS date_depot""",
-    "3": """-- 1re notification de chaque ligne
-SELECT pe.DOS_CODE, rang,
-       TRUNC(MIN(pe.PE_DATE_NOTIFICATION))
-FROM   DWH.FAIT_PRESTATION_ESP pe
-GROUP BY pe.DOS_CODE, rang
-UNION ALL
--- soins : 1re saisie d'un remboursement
-SELECT deb.DOS_CODE, 5,
-       TRUNC(MIN(deb.DEB_DATE_INSERT))
-FROM   DWH.FAIT_DEBOURS deb
-WHERE  deb.TPN_CODE IS NOT NULL
-GROUP BY deb.DOS_CODE""",
-    "4": """-- jours entre le dépôt (sinon la date de
--- demande) et la liquidation ; négatif = 0
-GREATEST(dm.date_liquidation
-         - NVL(dp.date_depot, dm.date_demande),
-         0) AS duree""",
-    "5": """SUM(CASE WHEN duree <= 14
-         THEN 1 ELSE 0 END)  AS nb_moins_15,
-SUM(CASE WHEN duree BETWEEN 15 AND 45
-         THEN 1 ELSE 0 END)  AS nb_15_45,
-SUM(CASE WHEN duree > 45
-         THEN 1 ELSE 0 END)  AS nb_plus_45""",
-    "6": """-- fin_N = TO_DATE(N || '1231', 'YYYYMMDD')
-WHERE dp.date_depot <= fin_N
-  AND (dp.date_liquidation IS NULL
-       OR dp.date_liquidation > fin_N)
-  -- pas un dossier fermé jamais liquidé
-  AND NOT (NVL(dp.DOS_STATUT, '-') = 'F'
-           AND dp.date_liquidation IS NULL)
-  -- au plus 24 mois sans suite
-  AND dp.date_depot >= ADD_MONTHS(fin_N, -24)
-  AND NOT EXISTS (SELECT 1 FROM rej x
-        WHERE x.DOS_CODE = dp.DOS_CODE
-          AND x.date_rejet <= fin_N)""",
-    "7": """-- compté l'année du rejet ; ligne de la
--- 1re demande liquidée, sinon rang 6
-SELECT EXTRACT(YEAR FROM dr.DOSRE_DATE_REJET),
-       NVL(dm.rang, 6) AS rang
-FROM      DWH.FAIT_DOSSIER_REJETE dr
-LEFT JOIN demande_rg dm
-       ON dm.DOS_CODE = dr.DOS_CODE
-      AND dm.ordre = 1
-WHERE dr.TDOS_CODE = 'A'""",
-    "8": """-- sur les demandes liquidées de l'année
-ROUND(AVG(duree), 1)  AS DUREE_MOYENNE_J,
-MEDIAN(duree)         AS DUREE_MEDIANE_J""",
-    "9": """-- rang 7 : le Total, recalculé sur toutes
--- les demandes de l'année, rang 6 compris
-SELECT annee, 7 AS rang,
-       COUNT(*)             AS nb_liquides,
-       ROUND(AVG(duree), 1) AS duree_moy
-FROM   liq
-GROUP BY annee""",
-    "10": """-- en instance au 31/12/N
--- / (en instance au 31/12/N-1 + déposés en N)
-ROUND(NVL(it.nb, 0)
-      / NULLIF(NVL(i0.nb, 0) + NVL(dp.nb, 0), 0), 4)
-                            AS TAUX_RESTANT_A_TRAITER""",
+-- déclaration d'accident ou de maladie est
+-- la réception qui a ouvert le dossier
+SELECT COUNT(*)       AS dossiers,
+       COUNT(RD_ID)   AS avec_declaration
+FROM   USER_DWH.DOSSIER
+WHERE  TDOS_CODE = 'A'""",
+    "2": """-- les demandes reçues au guichet en 2025
+SELECT RD_TYPE_RECEPTION, COUNT(*)
+FROM   USER_DWH.RECEPTION_DOSSIER
+WHERE  TDOS_CODE = 'A'
+AND    RD_DATE_RECEPTION >= DATE '2025-01-01'
+AND    RD_DATE_RECEPTION <  DATE '2026-01-01'
+GROUP  BY RD_TYPE_RECEPTION
+-- NOUVEAU : la déclaration, dépôt des IJ
+--           et des soins
+-- ANCIEN  : la demande d'une rente, d'une
+--           allocation, d'une rente de
+--           survivant, sur le dossier
+-- 2025 : 1 481 = 1 345 NOUVEAU + 136 ANCIEN""",
+    "3": """-- demandes : une par dossier et par ligne
+-- du tableau, réutilisée ensuite
+WITH prest AS (
+  SELECT pe.DOS_CODE, pe.PE_DATE_DEMANDE,
+         pe.PE_DATE_NOTIFICATION AS date_liq,
+         CASE WHEN pe.TPE_CODE = 'ARI' THEN 1
+              WHEN pe.TPE_CODE IN ('ARSV','ARSF',
+                     'ARSE','ARSA')    THEN 2
+              WHEN pe.TPE_CODE = 'AIJ' THEN 3
+              WHEN pe.TPE_CODE = 'AAI' THEN 4
+              ELSE 5 END AS ligne
+  FROM   USER_DWH.PRESTATION_ESP pe
+  JOIN   USER_DWH.DOSSIER d
+         ON d.DOS_CODE = pe.DOS_CODE
+  WHERE  d.TDOS_CODE = 'A'
+  -- les soins (ligne 5) : liquidés au
+  -- premier remboursement saisi
+  UNION ALL
+  SELECT deb.DOS_CODE, NULL,
+         deb.DEB_DATE_INSERT, 5
+  FROM   USER_DWH.DEBOURS deb
+  JOIN   USER_DWH.DOSSIER d
+         ON d.DOS_CODE = deb.DOS_CODE
+  WHERE  d.TDOS_CODE = 'A'
+  AND    deb.TPN_CODE IS NOT NULL),
+demandes AS (
+  -- liquidée à sa première notification
+  SELECT DOS_CODE, ligne,
+         MIN(PE_DATE_DEMANDE) AS date_demande,
+         MIN(date_liq)        AS date_liquidation
+  FROM   prest
+  GROUP  BY DOS_CODE, ligne)
+SELECT ligne, COUNT(*)
+FROM   demandes
+WHERE  date_liquidation >= DATE '2025-01-01'
+AND    date_liquidation <  DATE '2026-01-01'
+GROUP  BY ligne
+ORDER  BY ligne
+-- 2025 : rentes 43, survivants 13, IJ 226,
+-- allocations 61 (343 hors soins) ;
+-- soins, ligne 5 : environ 650 dossiers""",
+    "4": """-- à ajouter à la suite du WITH de la
+-- règle 3 : le dépôt et la durée
+depots AS (
+  SELECT dm.ligne, dm.date_liquidation,
+         -- la déclaration
+         (SELECT r.RD_DATE_RECEPTION
+          FROM   USER_DWH.DOSSIER d
+          JOIN   USER_DWH.RECEPTION_DOSSIER r
+                 ON r.RD_ID = d.RD_ID
+          WHERE  d.DOS_CODE = dm.DOS_CODE)
+                             AS date_declaration,
+         -- la demande au guichet d'une rente
+         (SELECT MAX(r.RD_DATE_RECEPTION)
+          FROM   USER_DWH.RECEPTION_DOSSIER r
+          WHERE  r.DOS_CODE = dm.DOS_CODE
+          AND    r.RD_TYPE_RECEPTION = 'ANCIEN'
+          AND    r.RD_DATE_RECEPTION
+                   <= dm.date_liquidation)
+                             AS date_guichet,
+         -- le certificat pour la rente
+         (SELECT d.DOS_DATE_REC_CM_RENTE
+          FROM   USER_DWH.DOSSIER d
+          WHERE  d.DOS_CODE = dm.DOS_CODE)
+                             AS date_certificat
+  FROM   demandes dm
+  WHERE  dm.date_liquidation >= DATE '2025-01-01'
+  AND    dm.date_liquidation <  DATE '2026-01-01'),
+durees AS (
+  -- IJ et soins (3, 5) : la déclaration ;
+  -- rentes et allocation : le guichet, sinon
+  -- le certificat, sinon la déclaration
+  SELECT ligne,
+         GREATEST(TRUNC(date_liquidation)
+           - TRUNC(CASE WHEN ligne IN (3, 5)
+                        THEN date_declaration
+                        ELSE COALESCE(date_guichet,
+                               date_certificat,
+                               date_declaration)
+                   END), 0) AS jours
+  FROM   depots)
+SELECT ligne, MEDIAN(jours)
+FROM   durees
+GROUP  BY ligne
+-- 2025 : rentes 14 j, survivants 35, IJ 251,
+-- allocations 13, soins environ 155""",
+    "5": """-- à coller sous le WITH des règles 3 et 4
+SELECT ligne,
+       SUM(CASE WHEN jours < 15
+                THEN 1 ELSE 0 END) AS moins_15,
+       SUM(CASE WHEN jours BETWEEN 15 AND 45
+                THEN 1 ELSE 0 END) AS de_15_a_45,
+       SUM(CASE WHEN jours > 45
+                THEN 1 ELSE 0 END) AS plus_45
+FROM   durees
+GROUP  BY ligne
+-- 2025 : plus de 45 jours pour au moins
+-- 85 % des IJ, 30 % des rentes""",
+    "6": """-- demandes AT/MP ni liquidées ni rejetées
+-- au 31/12/2025
+SELECT COUNT(*)
+FROM   USER_DWH.RECEPTION_DOSSIER r
+LEFT   JOIN USER_DWH.DOSSIER d
+       ON (d.RD_ID = r.RD_ID          -- NOUVEAU
+           OR d.DOS_CODE = r.DOS_CODE) -- ANCIEN
+WHERE  r.TDOS_CODE = 'A'
+AND    r.RD_DATE_RECEPTION < DATE '2026-01-01'
+-- sans suite après 24 mois : sorti du stock
+AND    r.RD_DATE_RECEPTION >= DATE '2024-01-01'
+AND    NOT EXISTS (     -- aucune notification
+         SELECT 1
+         FROM   USER_DWH.PRESTATION_ESP p
+         WHERE  p.DOS_CODE = d.DOS_CODE
+         AND    p.PE_DATE_NOTIFICATION
+                  >= TRUNC(r.RD_DATE_RECEPTION)
+         AND    p.PE_DATE_NOTIFICATION
+                  < DATE '2026-01-01')
+AND    NOT EXISTS (     -- aucun soin remboursé
+         SELECT 1
+         FROM   USER_DWH.DEBOURS b
+         WHERE  b.DOS_CODE = d.DOS_CODE
+         AND    b.TPN_CODE IS NOT NULL
+         AND    b.DEB_DATE_INSERT
+                  < DATE '2026-01-01')
+AND    NOT EXISTS (     -- aucun rejet
+         SELECT 1
+         FROM   USER_DWH.DOSSIER_REJETE x
+         WHERE  x.RD_ID = r.RD_ID
+         AND    x.DOSRE_DATE_REJET
+                  < DATE '2026-01-01')
+-- sans les dossiers fermés jamais liquidés
+AND    NVL(d.DOS_STATUT, '-') <> 'F'""",
+    "7": """SELECT COUNT(*)
+FROM   USER_DWH.DOSSIER_REJETE
+WHERE  TDOS_CODE = 'A'
+AND    DOSRE_DATE_REJET >= DATE '2025-01-01'
+AND    DOSRE_DATE_REJET <  DATE '2026-01-01'
+-- 2025 : 1 (0 à 7 par an)""",
+    "8": """-- à coller sous le WITH des règles 3 et 4
+SELECT ligne,
+       ROUND(AVG(jours)) AS duree_moyenne,
+       MEDIAN(jours)     AS duree_mediane
+FROM   durees
+GROUP  BY ligne
+-- la norme : moins de 45 jours""",
+    "9": """-- le Total : toutes les demandes
+-- ensemble, la moyenne recalculée ; une
+-- déclaration qui donne des IJ et des soins
+-- compte deux fois
+SELECT COUNT(*)          AS liquides,
+       ROUND(AVG(jours)) AS duree_moyenne,
+       MEDIAN(jours)     AS duree_mediane
+FROM   durees
+-- les déclarations sans prestation
+-- s'ajoutent aux déposés et aux en instance""",
+    "10": """-- en instance au 31/12/2025, divisé par
+-- (en instance au 31/12/2024 + déposés)
+-- en instance : la règle 6, une fois avec
+-- 2026-01-01, une fois avec 2025-01-01 ;
+-- déposés : la règle 2 (1 481 en 2025)
+SELECT ROUND(100 * :instance_fin_2025
+         / (:instance_fin_2024 + 1481), 1)
+         AS taux_restant_pct
+FROM   DUAL""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête proposée (analyses/prestations/t26_requete_proposee.sql). Elle "
-            "suit celle de T25 : elle compte des demandes (un dossier × une ligne), depot donne à "
-            "chacune son dépôt, liq calcule la durée ; le rang 6 veut dire « pas encore de "
-            "ligne », le 7 le Total. N est l'année de l'exercice.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2025, à copier dans SQL Developer. La règle 3 "
+            "construit la liste des demandes (une par dossier et par ligne du tableau, avec sa "
+            "première notification ; les soins au premier remboursement) ; la règle 4 y ajoute "
+            "leur dépôt et leur durée (durees). Pour les règles 5, 8 et 9, on colle leur requête "
+            "sous ce WITH, à la place de sa dernière requête. Le commentaire en fin de requête "
+            "donne le chiffre à retrouver. La requête complète, sur les copies de l'entrepôt, "
+            "est dans analyses/prestations/t26_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="Les déclarations sans suite",

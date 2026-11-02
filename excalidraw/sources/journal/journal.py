@@ -303,7 +303,8 @@ JOURS = [
           "GRH : le schéma des règles (regles_grh) en Excalidraw.",
           "GRH : trois requêtes proposées (effectif, T60, T62), avec leurs réglages.",
           "GRH : le dossier « tableaux cipres » et les fiches T58, T60, T62.",
-          "Réunion du 02/11 : un doc des points à valider par domaine."],
+          "Réunion du 02/11 : un doc des points à valider par domaine.",
+          "Fiches CIPRES : des requêtes courtes sur les vraies tables, à la place des extraits."],
          chantiers=[
              Chantier("Les résultats du lot 6 (T32 à T41)", "Prestations",
                       demande="Tu as collé les résultats de P79 à P81.",
@@ -621,7 +622,11 @@ JOURS = [
                            "faites à partir des .md. Complétés ensuite pour être exhaustifs : 52 "
                            "points (prestations) et 43 (GRH, avec le questionnaire CIPRES et le "
                            "doc T60), et la liste de tous les tableaux, T25 à T65, avec leurs "
-                           "codes et leurs points.",
+                           "codes et leurs points. Puis réécrits pour qu'un lecteur qui n'a "
+                           "jamais ouvert la base comprenne et refasse chaque point : une "
+                           "rubrique « Pour lire ce document » (tables et codes), et pour "
+                           "chaque point « C'est quoi », « Dans la base », le chiffre, une "
+                           "seule question et la réponse (68 points prestations, 44 GRH).",
                       trouve="Les questions étaient réparties entre les README, les fiches, "
                              "le journal et deux anciens docs GRH ; T28 à T30, T63 et T64 "
                              "n'avaient pas encore de questions à eux.",
@@ -630,6 +635,28 @@ JOURS = [
                       fichiers="analyses/<domaine>/points_a_valider.md et .docx ; "
                                "schemas/<domaine>/points_a_valider ; "
                                "sources/points_a_valider.py.",
+                      etat="fait"),
+             Chantier("Les requêtes des fiches CIPRES, en clair", "Projet",
+                      demande="Dans les fiches « tableaux cipres », des requêtes pas claires "
+                              "(« si.rn ») : mettre une requête condensée, avec les vraies "
+                              "tables et les vrais champs ; un test sur T58, puis « applique "
+                              "partout ».",
+                      fait="À droite de chaque règle, une requête courte sur les tables de "
+                           "l'application (USER_GRH ou USER_DWH), pour 2024 (2025 pour T25 à "
+                           "T27), à coller dans SQL Developer, avec le chiffre à retrouver en "
+                           "commentaire. Une règle construit la liste réutilisée par les "
+                           "suivantes (permanents_2024, demandes, pensions_2024…). Fait sur "
+                           "les 13 fiches : T58, T60, T62 ; T25, T26, T27, T31, T32, T41, T42, "
+                           "T50 à T57. Contrôles : lignes de 52 caractères au plus, aucun texte "
+                           "qui déborde, polices vérifiées dans la visionneuse.",
+                      trouve="Le test de T58 a été validé tel quel ; les requêtes complètes, sur "
+                             "les copies de l'entrepôt, restent les références (citées sous "
+                             "chaque fiche).",
+                      decide="Les requêtes des fiches servent à vérifier un chiffre à la main ; "
+                             "elles ne remplacent pas les requêtes proposées.",
+                      fichiers="excalidraw/sources/grh (t58, t60, t62) ; "
+                               "excalidraw/sources/prestations (t25 à t50) ; "
+                               "schemas/<domaine>/tableaux cipres.",
                       etat="fait"),
          ],
          reste=["Toi : poser au point du 02/11 la question de la date des montants (R4) ; "

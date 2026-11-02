@@ -145,62 +145,158 @@ RULES = [
          sources=[("Annuaire", "p. 51 : « au cours des 5 dernières années »")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/grh/t60_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_GRH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 1 construit les listes
+# permanents_2023 et permanents_2024 (règle 2 de T58 aux deux dates) ; la règle 5, sorties_2024.
 SQL = {
-    "1": """-- effectif au 31/12 de chaque année
-effectifs AS (
-  SELECT annee, COUNT(*) AS nb
-  FROM presents GROUP BY annee)
--- début = fin de l'année d'avant
-LEFT JOIN effectifs d
-       ON d.annee = a.annee - 1""",
-    "2": """-- entrée : présent fin N,
--- absent fin N-1
-FROM presents cur
-LEFT JOIN presents av_present
-  ON av_present.PERS_ID = cur.PERS_ID
- AND av_present.annee = cur.annee - 1
-WHERE av_present.PERS_ID IS NULL""",
-    "3": """CASE
-  -- embauché après le 31/12 N-1
-  WHEN cur.date_entree >
-       ADD_MONTHS(cur.fin, -12)
-  THEN 'RECRUTEMENT'""",
-    "4": """  WHEN disponibilite = 'HORS_EFFECTIF'
-   AND av.en_disponibilite = 1
-  THEN 'REMISE'
-  ELSE 'AUTRE'
-END AS motif""",
-    "5": """-- 1re sortie, datée dans l'année
-WHEN av.dt_sortie > av.fin
- AND av.dt_sortie <=
-     ADD_MONTHS(av.fin, 12)
-THEN CASE
-  WHEN av.motif = '02'
-       THEN 'RETRAITE'""",
-    "6": """  -- 'DECES' : date de décès ;
-  -- 34 : liquidation des droits
-  WHEN av.motif IN ('DECES', '34')
-       THEN 'DECES'""",
-    "7": """  WHEN av.motif = '36' THEN 'DEMISSION'
-  WHEN av.motif = '54' THEN 'LICENCIEMENT'
-  ELSE 'FIN_CONTRAT'  -- 35, 52
-END
--- sans sortie datée dans l'année
-WHEN disponibilite = 'HORS_EFFECTIF'
- AND cur.en_disponibilite = 1
-THEN 'DISPONIBILITE'
-ELSE 'AUTRE'""",
-    "8": """-- toujours zéro
-NVL(d.nb, 0) + NVL(ne.total, 0)
-  - NVL(ns.total, 0) - NVL(f.nb, 0)
-  AS CONTROLE""",
+    "1": """-- les permanents présents au 31/12/2023
+-- et au 31/12/2024 : la règle 2 de T58,
+-- aux deux dates, réutilisée ensuite
+WITH fins AS (
+  SELECT DATE '2023-12-31' AS fin FROM DUAL
+  UNION ALL
+  SELECT DATE '2024-12-31' FROM DUAL),
+permanents AS (
+  SELECT EXTRACT(YEAR FROM f.fin) AS annee,
+         p.PERS_ID, p.DATE_EMBAUCHE,
+         p.DATE_PRISE_SERVICE
+  FROM   fins f
+  CROSS  JOIN USER_GRH.GRH_PERSONNE p
+  JOIN   USER_GRH.GRH_SITUATION s
+         ON s.PERS_ID = p.PERS_ID
+  WHERE  p.QUALITE = 'A'
+  AND    s.NATURE_EMPLOIE = 'PERMANENT'
+  AND    s.DATE_DEBUT = (
+           SELECT MAX(x.DATE_DEBUT)
+           FROM   USER_GRH.GRH_SITUATION x
+           WHERE  x.PERS_ID = p.PERS_ID
+           AND    x.DATE_DEBUT <= f.fin)
+  AND    NVL(p.DATE_EMBAUCHE,
+             p.DATE_PRISE_SERVICE) <= f.fin
+  AND   (p.ETAT_EMPLOYE = 'ACTIF'
+         OR (SELECT MIN(d.DATE_VIGUEUR)
+             FROM   USER_GRH.GRH_DECISION d
+             WHERE  d.PERS_ID = p.PERS_ID
+             AND    d.CDEC_CODE IN
+                    ('02','34','35','36','52','54'))
+            > f.fin)),
+permanents_2023 AS (
+  SELECT * FROM permanents WHERE annee = 2023),
+permanents_2024 AS (
+  SELECT * FROM permanents WHERE annee = 2024)
+SELECT annee, COUNT(*)
+FROM   permanents
+GROUP  BY annee
+-- 2023 (début de 2024) : 672 ; 2024 : 742
+-- (l'annuaire : 767 et 758 ; l'écart du
+-- début vient des 84 engagés de 2019)""",
+    "2": """-- entrée : dans la liste de fin, pas
+-- dans celle du début ; sortie : l'inverse
+SELECT
+  (SELECT COUNT(*) FROM permanents_2024
+   WHERE  PERS_ID NOT IN
+          (SELECT PERS_ID
+           FROM   permanents_2023)) AS entrees,
+  (SELECT COUNT(*) FROM permanents_2023
+   WHERE  PERS_ID NOT IN
+          (SELECT PERS_ID
+           FROM   permanents_2024)) AS sorties
+FROM   DUAL
+-- 2024 : entrées − sorties = 742 − 672 = 70""",
+    "3": """-- une entrée embauchée en 2024 (à défaut
+-- d'embauche, la prise de service)
+SELECT COUNT(*)
+FROM   permanents_2024
+WHERE  PERS_ID NOT IN
+       (SELECT PERS_ID FROM permanents_2023)
+AND    NVL(DATE_EMBAUCHE, DATE_PRISE_SERVICE)
+         >= DATE '2024-01-01'
+-- 2024 : 104, comme l'annuaire""",
+    "4": """-- les entrées sans embauche en 2024
+SELECT COUNT(*)
+FROM   permanents_2024
+WHERE  PERS_ID NOT IN
+       (SELECT PERS_ID FROM permanents_2023)
+AND    NVL(DATE_EMBAUCHE, DATE_PRISE_SERVICE)
+         < DATE '2024-01-01'
+-- à part : les remises en activité (18)
+SELECT COUNT(DISTINCT PERS_ID)
+FROM   USER_GRH.GRH_DECISION
+WHERE  CDEC_CODE = '18'
+AND    DATE_VIGUEUR BETWEEN DATE '2024-01-01'
+                        AND DATE '2024-12-31'
+-- 2024 : 4 décisions 18 (6 remises publiées)""",
+    "5": """-- sorties_2024 : la première décision de
+-- départ des présents du 31/12/2023,
+-- quand elle tombe en 2024 ; à ajouter
+-- à la suite du WITH de la règle 1
+sorties_2024 AS (
+  SELECT d.PERS_ID, d.CDEC_CODE
+  FROM   permanents_2023 p
+  JOIN   USER_GRH.GRH_DECISION d
+         ON d.PERS_ID = p.PERS_ID
+  WHERE  d.CDEC_CODE IN
+         ('02','34','35','36','52','54')
+  AND    d.DATE_VIGUEUR = (
+           SELECT MIN(x.DATE_VIGUEUR)
+           FROM   USER_GRH.GRH_DECISION x
+           WHERE  x.PERS_ID = d.PERS_ID
+           AND    x.CDEC_CODE IN
+                  ('02','34','35','36','52','54'))
+  AND    d.DATE_VIGUEUR
+         BETWEEN DATE '2024-01-01'
+             AND DATE '2024-12-31')
+SELECT COUNT(*) FROM sorties_2024
+WHERE  CDEC_CODE = '02'  -- retraite
+-- 2024 : 25 (l'annuaire : 23)""",
+    "6": """-- même liste sorties_2024 (règle 5) ;
+-- 34 : liquidation des droits après décès
+SELECT COUNT(*) FROM sorties_2024
+WHERE  CDEC_CODE = '34'
+-- 2024 : 5 (l'annuaire : 3 décès)
+-- GRH_PERSONNE.DATE_DECES est vide pour
+-- tous les décès depuis 2010""",
+    "7": """-- même liste sorties_2024 (règle 5)
+SELECT CDEC_CODE, COUNT(*)
+FROM   sorties_2024
+WHERE  CDEC_CODE IN ('35','36','52','54')
+GROUP  BY CDEC_CODE
+-- 36 démission, 54 licenciement,
+-- 35 et 52 fin de contrat
+-- 2024 : 36 = 2 ; 54 = 1 (comme l'annuaire)
+-- à part : les mises en disponibilité (07)
+SELECT COUNT(DISTINCT PERS_ID)
+FROM   USER_GRH.GRH_DECISION
+WHERE  CDEC_CODE = '07'
+AND    DATE_VIGUEUR BETWEEN DATE '2024-01-01'
+                        AND DATE '2024-12-31'
+-- 2024 : 5 (l'annuaire : 7)""",
+    "8": """-- début + entrées − sorties − fin
+SELECT (SELECT COUNT(*) FROM permanents_2023)
+     + (SELECT COUNT(*) FROM permanents_2024
+        WHERE  PERS_ID NOT IN
+               (SELECT PERS_ID
+                FROM   permanents_2023))
+     - (SELECT COUNT(*) FROM permanents_2023
+        WHERE  PERS_ID NOT IN
+               (SELECT PERS_ID
+                FROM   permanents_2024))
+     - (SELECT COUNT(*) FROM permanents_2024)
+       AS controle
+FROM   DUAL
+-- toujours 0 ; les cinq exercices : refaire
+-- avec 2019 et 2020, … , 2023 et 2024""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête de T60 (analyses/grh/t60_requete_proposee.sql). Elle lit les "
-            "copies de l'entrepôt (DWH.FAIT_GRH_…) du cliché choisi, et sort les cinq exercices "
-            "qui finissent à l'année choisie. Le réglage disponibilite répond à la question Q2.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_GRH), pour l'année 2024, à copier dans SQL Developer. La règle 1 "
+            "construit les permanents présents au 31/12/2023 et au 31/12/2024 (la règle 2 de la "
+            "fiche T58, aux deux dates) : les listes permanents_2023 et permanents_2024. La "
+            "règle 5 y ajoute la liste sorties_2024, que les règles 6 et 7 réutilisent. Pour les "
+            "autres règles, on colle leur requête sous ce WITH, à la place de sa dernière "
+            "requête. Le commentaire en fin de requête donne le chiffre à retrouver. La "
+            "requête complète, sur les copies de l'entrepôt, est dans "
+            "analyses/grh/t60_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="La date d'un décès",

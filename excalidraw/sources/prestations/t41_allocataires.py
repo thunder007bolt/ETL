@@ -151,62 +151,138 @@ RULES = [
          chiffre="En 2024 : environ 78 400 FCFA par allocataire et par an, 28 300 par enfant."),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t32_t41_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 2 construit la liste
+# enfants_2024, la règle 3 allocataires_2024 ; les règles 4 à 8 les réutilisent.
 SQL = {
-    "1": """-- T41 : allocations familiales
-SELECT 'T41' AS tableau, 'FAF' AS code
-FROM DUAL""",
-    "2": """-- en cours au 31/12, enfant en vie
--- (comme T32), de 21 ans au plus
-AND (pm.tableau <> 'T41'
-     OR annee - EXTRACT(YEAR FROM
-          i.IND_DATE_NAISSANCE) <= 21)
--- et payé dans l'exercice : jointure
--- sur paie, pas de LEFT JOIN
-JOIN paie pa ON pa.PE_ID = ec.PE_ID""",
-    "3": """-- un allocataire par dossier :
--- le titulaire du dossier
-SELECT 'T41', d.IND_ID,
-       SUM(pa.montant)
-FROM   en_cours ec
-JOIN   DWH.FAIT_DOSSIER d
-       ON d.DOS_CODE = ec.DOS_CODE
-JOIN   paie pa ON pa.PE_ID = ec.PE_ID
-GROUP BY ec.DOS_CODE, d.IND_ID""",
-    "4": """-- l'âge du titulaire du dossier
-annee - EXTRACT(YEAR FROM
-          i.IND_DATE_NAISSANCE) AS age""",
-    "5": """-- T41 : bas = 20, haut = 80
-CASE WHEN age IS NULL OR age < 0
-       OR age >= 120  THEN 'Âge inconnu'
-     WHEN age < bas   THEN 'Moins de 20 ans'
-     WHEN age >= haut THEN '80 ans et plus'
-     ELSE FLOOR(age / 5) * 5 || ' – '
-          || (FLOOR(age / 5) * 5 + 4) || ' ans'
-END AS libelle""",
-    "6": """SUM(CASE WHEN sexe = '1'
-         THEN 1 ELSE 0 END) AS eff_h,
-SUM(CASE WHEN sexe = '2'
-         THEN 1 ELSE 0 END) AS eff_f""",
-    "7": """-- payé dans l'exercice, au mois payé
-WHERE deb.DEB_TYPE = 'PM'
-  AND deb.DEB_STATUT IN ('D', 'P')
-  AND deb.DEB_DATE_EFFET >= debut
-  AND deb.DEB_DATE_EFFET <  fin + 1""",
-    "8": """-- ligne TOTAL, et la moyenne
-SELECT tableau, 1000, 'TOTAL', COUNT(*),
-       SUM(montant)
-FROM tranche GROUP BY tableau
--- …
-ROUND(mnt_t / NULLIF(eff_t, 0))
-                       AS MONTANT_MOYEN""",
+    "1": """-- les allocations familiales (TPE_CODE)
+SELECT TPE_CODE, COUNT(*)
+FROM   USER_DWH.PRESTATION_ESP
+WHERE  TPE_CODE = 'FAF'
+GROUP  BY TPE_CODE
+-- les prénatales (FAP, MAP) vont dans T55,
+-- la maternité (MIJ) dans T54""",
+    "2": """-- la liste des enfants comptés en 2024,
+-- réutilisée ensuite
+WITH enfants_2024 AS (
+  SELECT p.PE_ID, p.DOS_CODE, p.IND_ID_PREST
+  FROM   USER_DWH.PRESTATION_ESP p
+  JOIN   USER_DWH.INDIVIDU i
+         ON i.IND_ID = p.IND_ID_PREST
+  WHERE  p.TPE_CODE = 'FAF'
+  -- en cours au 31/12, comme dans T32
+  AND    p.PE_DATE_EFFET <= DATE '2024-12-31'
+  AND   (p.PE_DATE_RADIATION IS NULL
+         OR p.PE_DATE_RADIATION
+              > DATE '2024-12-31')
+  AND   (p.PE_DATE_SUSPENSION IS NULL
+         OR p.PE_DATE_SUSPENSION
+              > DATE '2024-12-31'
+         OR p.PE_DATE_REACTIVATION
+              BETWEEN p.PE_DATE_SUSPENSION
+                  AND DATE '2024-12-31')
+  -- enfant en vie, de 21 ans au plus
+  AND   (i.IND_DATE_DECES IS NULL
+         OR i.IND_DATE_DECES
+              > DATE '2024-12-31')
+  AND    2024 - EXTRACT(YEAR FROM
+           i.IND_DATE_NAISSANCE) <= 21
+  -- et payé dans l'année
+  AND    p.PE_ID IN (
+           SELECT deb.PE_ID
+           FROM   USER_DWH.DEBOURS deb
+           WHERE  deb.DEB_TYPE = 'PM'
+           AND    deb.DEB_STATUT IN ('D', 'P')
+           AND    deb.DEB_DATE_EFFET
+                    >= DATE '2024-01-01'
+           AND    deb.DEB_DATE_EFFET
+                    <  DATE '2025-01-01'))
+SELECT COUNT(DISTINCT IND_ID_PREST)
+FROM   enfants_2024
+-- 2024 : 271 577 enfants (l'annuaire :
+-- 268 481)""",
+    "3": """-- un allocataire par dossier : son
+-- titulaire (DOSSIER.IND_ID) ; à ajouter
+-- à la suite du WITH de la règle 2
+allocataires_2024 AS (
+  SELECT e.DOS_CODE, t.IND_SEXE,
+         2024 - EXTRACT(YEAR FROM
+           t.IND_DATE_NAISSANCE) AS age,
+         COUNT(*)                AS enfants
+  FROM   enfants_2024 e
+  JOIN   USER_DWH.DOSSIER d
+         ON d.DOS_CODE = e.DOS_CODE
+  JOIN   USER_DWH.INDIVIDU t
+         ON t.IND_ID = d.IND_ID
+  GROUP  BY e.DOS_CODE, t.IND_SEXE,
+            t.IND_DATE_NAISSANCE)
+SELECT COUNT(*) AS allocataires,
+       SUM(enfants)
+FROM   allocataires_2024
+-- 2024 : 98 048 allocataires, 2,8 enfants
+-- chacun (l'annuaire : 97 378)""",
+    "4": """-- l'âge du titulaire : 2024 moins son
+-- année de naissance
+SELECT age, COUNT(*)
+FROM   allocataires_2024
+GROUP  BY age
+ORDER  BY age
+-- 120 ans ou plus, ou vide : âge inconnu""",
+    "5": """SELECT tranche, COUNT(*)
+FROM  (SELECT CASE
+                WHEN age IS NULL OR age < 0
+                  OR age >= 120 THEN 'Âge inconnu'
+                WHEN age < 20  THEN 'Moins de 20'
+                WHEN age >= 80 THEN '80 et plus'
+                ELSE TO_CHAR(FLOOR(age / 5) * 5)
+              END AS tranche
+       FROM   allocataires_2024)
+GROUP  BY tranche
+ORDER  BY tranche
+-- 20 = 20-24 ans, 25 = 25-29 ans, …""",
+    "6": """SELECT IND_SEXE, COUNT(*)
+FROM   allocataires_2024
+GROUP  BY IND_SEXE
+-- 1 hommes, 2 femmes""",
+    "7": """-- payé en 2024, au mois payé, pour les
+-- enfants comptés
+SELECT SUM(deb.DEB_MONTANT)
+FROM   USER_DWH.DEBOURS deb
+WHERE  deb.PE_ID IN
+       (SELECT PE_ID FROM enfants_2024)
+AND    deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+AND    deb.DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    deb.DEB_DATE_EFFET <  DATE '2025-01-01'
+-- 2024 : 7,69 Md""",
+    "8": """-- l'allocation moyenne : le montant de la
+-- règle 7 divisé par l'effectif
+SELECT ROUND(SUM(deb.DEB_MONTANT)
+         / (SELECT COUNT(*)
+            FROM   allocataires_2024))
+         AS par_allocataire,
+       ROUND(SUM(deb.DEB_MONTANT)
+         / (SELECT COUNT(DISTINCT IND_ID_PREST)
+            FROM   enfants_2024))
+         AS par_enfant
+FROM   USER_DWH.DEBOURS deb
+WHERE  deb.PE_ID IN
+       (SELECT PE_ID FROM enfants_2024)
+AND    deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+AND    deb.DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    deb.DEB_DATE_EFFET <  DATE '2025-01-01'
+-- 2024 : environ 78 400 FCFA par
+-- allocataire et par an, 28 300 par enfant""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête commune à T32-T41 (analyses/prestations/"
-            "t32_t41_requete_proposee.sql). Elle lit les copies de l'entrepôt (DWH.FAIT_…) du "
-            "cliché du mois, pour l'exercice choisi ; T41 y a son code (perimetre), sa grille "
-            "d'âge (grille) et son propre calcul de l'allocataire (beneficiaire).")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2024, à copier dans SQL Developer. La règle 2 "
+            "construit la liste des enfants comptés (enfants_2024), la règle 3 celle des "
+            "allocataires (allocataires_2024) ; pour les règles 4 à 8, on colle leur requête sous "
+            "ce WITH, à la place de sa dernière requête. Le commentaire en fin de requête donne "
+            "le chiffre à retrouver. La requête complète, sur les copies de l'entrepôt, est dans "
+            "analyses/prestations/t32_t41_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="L'enfant compté",

@@ -2,9 +2,11 @@
 Les points à valider de chaque domaine, en schéma : la version Excalidraw de
 analyses/<domaine>/points_a_valider.md (qui existe aussi en Word, points_a_valider.docx).
 
-Le fichier .md est la seule source : chaque point devient une carte avec son numéro, son texte,
-les cases D'accord / Pas d'accord / À discuter et la place pour la réponse. Les points à
-trancher en priorité ont un cadre orange.
+Le fichier .md est la seule source. Chaque point devient une carte : son numéro et son titre, ses
+lignes « C'est quoi », « Dans la base », « Chiffre », la question en bleu, les cases D'accord /
+Pas d'accord / À discuter et la place pour la réponse. Les points à trancher en priorité ont un
+cadre orange. La rubrique « Pour lire ce document » devient un encadré, et la liste finale une
+carte par tableau CIPRES.
 
 Usage :
     python3 excalidraw/sources/points_a_valider.py [--force]
@@ -35,8 +37,9 @@ CONSIGNE = ("Dans chaque carte : coche D'accord, Pas d'accord ou À discuter, et
 
 
 def lire(md):
-    """Titre, paragraphes d'introduction et sections du fichier .md. Une section est une liste
-    de groupes (sous-titre ou None, points) ; un point est {n, texte, reponse}."""
+    """Titre, paragraphes d'introduction et sections du fichier .md. Une section a des groupes
+    (sous-titre ou None, points) et parfois une liste à puces ; un point est {n, titre,
+    details : [(libellé, texte)]}."""
     titre, intro, sections = None, [], []
     for ligne in md.read_text(encoding="utf-8").splitlines():
         ligne = ligne.rstrip()
@@ -45,15 +48,19 @@ def lire(md):
         if ligne.startswith("# "):
             titre = ligne[2:]
         elif ligne.startswith("## "):
-            sections.append({"titre": ligne[3:], "groupes": [[None, []]]})
-        elif ligne.strip().startswith("Réponse :"):
-            sections[-1]["groupes"][-1][1][-1]["reponse"] = True
+            sections.append({"titre": ligne[3:], "groupes": [[None, []]], "liste": [],
+                             "prioritaire": ligne[3:].startswith("À trancher")})
+        elif ligne[0] == " ":
+            if ligne.strip().startswith("Réponse :"):
+                continue
+            m = re.match(r"^([^:]{1,40}) : (.*)$", ligne.strip())
+            point = sections[-1]["groupes"][-1][1][-1]
+            point["details"].append((m.group(1), m.group(2)) if m else (None, ligne.strip()))
         elif re.match(r"\d+\. ", ligne):
             n, texte = ligne.split(". ", 1)
-            sections[-1]["groupes"][-1][1].append({"n": n, "texte": texte, "reponse": False})
+            sections[-1]["groupes"][-1][1].append({"n": n, "titre": texte, "details": []})
         elif ligne.startswith("- "):
-            # la liste des tableaux, un par un
-            sections[-1].setdefault("liste", []).append(ligne[2:])
+            sections[-1]["liste"].append(ligne[2:])
         elif sections:
             sections[-1]["groupes"].append([ligne, []])
         else:
@@ -61,39 +68,47 @@ def lire(md):
     return titre, intro, sections
 
 
-def _carte(w, point):
-    """Le texte coupé d'une carte, la position de ses cases et de sa réponse, et sa hauteur."""
-    texte = wrap(point["texte"], 18, w - 28 - badge_width(point["n"]) - 14)
-    cases = 14 + max(BADGE_H, height_of(texte, 18) + 6) + 14
-    reponse = cases + 30 + 12
-    return texte, cases, reponse, reponse + 20 + (110 if point["reponse"] else 50)
+def _carte(w, point, prioritaire):
+    """Le titre et les lignes coupés d'une carte, leurs positions, et la hauteur de la carte."""
+    titre = wrap(point["titre"], 20, w - 28 - badge_width(point["n"]) - 14)
+    y = 12 + max(BADGE_H, height_of(titre, 20) + 8) + 10
+    lignes = []
+    for label, texte in point["details"]:
+        corps = wrap(f"{label} : {texte}" if label else texte, 16, w - 28)
+        lignes.append((y, corps, label == "Question"))
+        y += height_of(corps, 16) + 8
+    cases = y + 6
+    reponse = cases + 30 + 10
+    return titre, lignes, cases, reponse, reponse + 20 + (70 if prioritaire else 40)
 
 
-def carte(d, x, y, w, h, point):
-    texte, cases, reponse, _ = _carte(w, point)
+def carte(d, x, y, w, h, point, prioritaire):
+    titre, lignes, cases, reponse, _ = _carte(w, point, prioritaire)
     g = d.group()
-    bord = C["orange"] if point["reponse"] else C["gris_bord"]
-    cadre = d.box(x, y, w, h, bg=C["blanc"], stroke=bord, groups=g)
+    cadre = d.box(x, y, w, h, bg=C["blanc"], stroke=C["orange"] if prioritaire else C["gris_bord"],
+                  groups=g)
     badge(d, x + 14, y + 12, point["n"], groups=g)
-    d.text(x + 14 + badge_width(point["n"]) + 14, y + 16, texte, 18, groups=g, inside=cadre)
+    d.text(x + 14 + badge_width(point["n"]) + 14, y + 18, titre, 20, groups=g, inside=cadre)
+    for ly, corps, question in lignes:
+        d.text(x + 14, y + ly, corps, 16, C["bleu"] if question else C["encre"], groups=g,
+               inside=cadre)
     ax = x + 14
     for label in ANSWERS:
         d.box(ax, y + cases + 2, 22, 22, bg=C["blanc"], stroke=C["encre"], groups=g)
         d.text(ax + 30, y + cases + 2, label, 16, groups=g, inside=cadre)
         ax += 30 + text_size(label, 16)[0] + 26
-    d.text(x + 14, y + reponse, "Réponse :" if point["reponse"] else "Remarque :", 16, C["doux"],
-           groups=g, inside=cadre)
+    d.text(x + 14, y + reponse, "Réponse :", 16, C["doux"], groups=g, inside=cadre)
 
 
-def cartes(d, y, points, par_ligne=3, gap=24):
+def cartes(d, y, points, prioritaire, par_ligne=3, gap=24):
     """Les cartes par lignes de par_ligne, chaque ligne à la hauteur de sa plus haute carte ;
     renvoie le bas."""
     w = (INNER - (par_ligne - 1) * gap) / par_ligne
     for debut in range(0, len(points), par_ligne):
         ligne = points[debut:debut + par_ligne]
-        h = max(_carte(w, p)[3] for p in ligne)
+        h = max(_carte(w, p, prioritaire)[4] for p in ligne)
         for i, p in enumerate(ligne):
-            carte(d, 25 + i * (w + gap), y, w, h, p)
+            carte(d, 25 + i * (w + gap), y, w, h, p, prioritaire)
         y += h + gap
     return y - gap
 
@@ -120,6 +135,19 @@ def tableaux(d, y, lignes, par_ligne=3, gap=20):
     return y - gap
 
 
+def lexique(d, y, lignes):
+    """La rubrique « Pour lire ce document » : un encadré, une puce par table ; renvoie le bas."""
+    corps = [wrap("• " + ligne, 18, INNER - 60) for ligne in lignes]
+    h = 24 + sum(height_of(c, 18) + 12 for c in corps) + 12
+    g = d.group()
+    cadre = d.box(25, y, INNER, h, bg=C["blanc"], stroke=C["gris_bord"], groups=g)
+    ty = y + 24
+    for c in corps:
+        d.text(45, ty, c, 18, groups=g, inside=cadre)
+        ty += height_of(c, 18) + 12
+    return y + h
+
+
 def build(md):
     titre, intro, sections = lire(md)
     d = Diagram(seed=11)
@@ -142,9 +170,12 @@ def build(md):
             if sous_titre:
                 d.text(25, top, sous_titre, 24, C["bleu"])
                 top += 44
-            top = cartes(d, top, points) + 30
-        if s.get("liste"):
-            top = tableaux(d, top, s["liste"]) + 30
+            top = cartes(d, top, points, s["prioritaire"]) + 30
+        if s["liste"]:
+            if all(re.match(r"T\d\d, ", ligne) for ligne in s["liste"]):
+                top = tableaux(d, top, s["liste"]) + 30
+            else:
+                top = lexique(d, top, s["liste"]) + 30
         sec["height"] = top - y
         y = top + 40
     return d

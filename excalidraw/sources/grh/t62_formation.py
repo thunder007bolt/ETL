@@ -115,54 +115,111 @@ RULES = [
                            "(lot 8)")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/grh/t62_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_GRH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 4 construit la liste
+# formes_2024, que les règles 5 à 8 réutilisent.
 SQL = {
-    "1": """formes AS (
-  SELECT PERS_ID,
-         MAX(promotion) AS promotion,
-         COUNT(*)       AS nb_inscriptions
-  FROM inscriptions
-  GROUP BY PERS_ID)""",
-    "2": """-- debut, fin : 01/01 et 31/12
-WHERE f.DATE_DEBUT >= debut
-  AND f.DATE_DEBUT <  fin + 1""",
-    "3": """FROM USER_GRH.GRH_INSCRIPTION i
-JOIN DTM.DIM_GRH_FORMATION f
-  ON f.FORM_NO = i.FORM_NO
--- aucun filtre sur le statut""",
-    "4": """-- si : dernière situation au 31/12
-WHERE si.NATURE_EMPLOIE = 'PERMANENT'
-  AND TO_CHAR(p.QUALITE) = 'A'""",
-    "5": """CASE
-  WHEN cat IN ('01', '02') THEN 1
-  WHEN cat = '03' THEN 2
-  WHEN cat = '04' THEN 3
-  WHEN cat = '05' THEN  -- réglage
-    CASE categorie_05
-      WHEN 'SUPERIEUR' THEN 4 ELSE 3 END
-  WHEN cat = '06' THEN 4
-  ELSE 5
-END AS rang""",
-    "6": """SUM(CASE WHEN SEXE = 'M'
-         THEN 1 ELSE 0 END) AS hommes,
-SUM(CASE WHEN SEXE = 'F'
-         THEN 1 ELSE 0 END) AS femmes""",
-    "7": """CASE WHEN i.CLA_APRES IS NOT NULL
-      AND i.CLA_AVANT IS NOT NULL
-      AND TO_CHAR(i.CLA_APRES)
-          <> TO_CHAR(i.CLA_AVANT)
-     THEN 1 ELSE 0 END AS promotion""",
-    "8": """-- ligne TOTAL
-SELECT 9, SUM(avec_promotion_h), …,
-       SUM(total), SUM(inscriptions)
-FROM comptes""",
+    "1": """-- agents distincts inscrits à une
+-- formation commencée en 2024
+SELECT COUNT(DISTINCT i.PERS_ID) AS formes,
+       COUNT(*)                  AS inscriptions
+FROM   USER_GRH.GRH_INSCRIPTION i
+JOIN   USER_GRH.GRH_FORMATION f
+       ON f.FORM_NO = i.FORM_NO
+WHERE  f.DATE_DEBUT BETWEEN DATE '2024-01-01'
+                        AND DATE '2024-12-31'
+-- 2024 : 410 agents, 525 inscriptions
+-- (l'annuaire : 480 formés)""",
+    "2": """-- une formation compte l'année de sa
+-- date de début, même si elle finit
+-- l'année d'après
+SELECT EXTRACT(YEAR FROM DATE_DEBUT) AS annee,
+       COUNT(*)                      AS formations,
+       SUM(CASE WHEN EXTRACT(YEAR FROM DATE_FIN)
+                   > EXTRACT(YEAR FROM DATE_DEBUT)
+                THEN 1 ELSE 0 END)   AS a_cheval
+FROM   USER_GRH.GRH_FORMATION
+GROUP  BY EXTRACT(YEAR FROM DATE_DEBUT)
+ORDER  BY 1
+-- a_cheval : presque toujours 0""",
+    "3": """-- aucun filtre sur GRH_FORMATION.STATUT :
+-- toutes les formations sont au statut N
+SELECT STATUT, CATEGORIE, COUNT(*)
+FROM   USER_GRH.GRH_FORMATION
+GROUP  BY STATUT, CATEGORIE
+-- CATEGORIE : PERF perfectionnement,
+-- DIPLO formation diplômante, CONF
+-- conférence ou séminaire""",
+    "4": """-- la liste des inscriptions de 2024 des
+-- permanents, réutilisée ensuite
+WITH formes_2024 AS (
+  SELECT i.PERS_ID, p.SEXE, s.CATEGORIE,
+         i.CLA_AVANT, i.CLA_APRES,
+         f.CATEGORIE AS finalite
+  FROM   USER_GRH.GRH_INSCRIPTION i
+  JOIN   USER_GRH.GRH_FORMATION f
+         ON f.FORM_NO = i.FORM_NO
+  JOIN   USER_GRH.GRH_PERSONNE p
+         ON p.PERS_ID = i.PERS_ID
+  JOIN   USER_GRH.GRH_SITUATION s
+         ON s.PERS_ID = p.PERS_ID
+  WHERE  f.DATE_DEBUT
+         BETWEEN DATE '2024-01-01'
+             AND DATE '2024-12-31'
+  -- agent CNSS, permanent au 31/12/2024,
+  -- même s'il est parti depuis
+  AND    p.QUALITE = 'A'
+  AND    s.NATURE_EMPLOIE = 'PERMANENT'
+  AND    s.DATE_DEBUT = (
+           SELECT MAX(x.DATE_DEBUT)
+           FROM   USER_GRH.GRH_SITUATION x
+           WHERE  x.PERS_ID = p.PERS_ID
+           AND    x.DATE_DEBUT
+                  <= DATE '2024-12-31'))
+SELECT COUNT(DISTINCT PERS_ID) FROM formes_2024
+-- 2024 : 409 (un des 410 formés n'est pas
+-- permanent)""",
+    "5": """-- à coller sous la règle 4, à la place
+-- de sa dernière ligne
+SELECT CATEGORIE, COUNT(DISTINCT PERS_ID)
+FROM   formes_2024
+GROUP  BY CATEGORIE
+ORDER  BY CATEGORIE
+-- 2024 : 01 + 02 employés       81
+--        03      maîtrise       96
+--        04 + 05 cadres moyens 181
+--        06      cadres sup.    51
+-- (l'annuaire : 132, 142, 118, 88)""",
+    "6": """SELECT SEXE, COUNT(DISTINCT PERS_ID)
+FROM   formes_2024
+GROUP  BY SEXE
+-- M hommes, F femmes""",
+    "7": """-- avec promotion : le classement a changé
+-- sur une inscription de l'année ; vide
+-- d'un côté : pas compté
+SELECT COUNT(DISTINCT PERS_ID)
+FROM   formes_2024
+WHERE  CLA_APRES <> CLA_AVANT
+-- 2024 : 2 (l'annuaire : 6 promotions) ;
+-- les autres formés sont sans promotion""",
+    "8": """SELECT COUNT(DISTINCT PERS_ID) AS total,
+       COUNT(*)                AS inscriptions,
+       COUNT(DISTINCT CASE WHEN finalite = 'PERF'
+             THEN PERS_ID END) AS perfectionnement,
+       COUNT(DISTINCT CASE WHEN finalite = 'DIPLO'
+             THEN PERS_ID END) AS diplomante
+FROM   formes_2024
+-- 2024 : 409 formés, 524 inscriptions, dont
+-- 521 en perfectionnement, 2 diplômantes""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête de T62 (analyses/grh/t62_requete_proposee.sql). Elle lit les "
-            "formations de l'entrepôt (DTM.DIM_GRH_FORMATION) et les inscriptions dans la base "
-            "de l'application, comme la requête DTM actuelle ; les agents viennent des copies de "
-            "l'entrepôt (DWH.FAIT_GRH_…) du cliché choisi.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_GRH), pour l'année 2024, à copier dans SQL Developer. La règle 4 "
+            "construit la liste des inscriptions de 2024 des agents permanents (formes_2024) ; "
+            "pour les règles 5 à 8, on colle leur requête sous celle de la règle 4, à la place "
+            "de sa dernière ligne. Le commentaire en fin de requête donne le chiffre à retrouver. "
+            "La requête complète, sur les copies de l'entrepôt, est dans "
+            "analyses/grh/t62_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="D'où viennent les 480 formés ?",

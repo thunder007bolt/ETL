@@ -154,61 +154,128 @@ RULES = [
          chiffre="En 2024 : 270 mois en médiane, 22 ans et demi, pour les dossiers ordinaires."),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t42_t49_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 2 construit la liste
+# nouveaux_2024, que les règles 3 à 8 réutilisent.
 SQL = {
-    "1": """-- T42 : pension de vieillesse et
--- retraite anticipée
-SELECT 'T42' AS tableau, 'RPV' AS code
-FROM DUAL
-UNION ALL SELECT 'T42', 'RPRA' FROM DUAL""",
-    "2": """-- la première pension de la personne
-SELECT tableau, IND_ID_PREST,
-       MIN(PE_DATE_INSERT) AS premiere_saisie
-FROM   pe
-GROUP BY tableau, IND_ID_PREST
--- … saisie dans l'exercice
-WHERE premiere_saisie >= debut
-  AND premiere_saisie <  fin + 1""",
-    "3": """-- une personne par tableau, sans
--- regarder le 31/12 ; la dernière
--- pension saisie dans l'année en tête
-ROW_NUMBER() OVER (
-  PARTITION BY tableau, IND_ID_PREST
-  ORDER BY PE_DATE_INSERT DESC) AS rang""",
-    "4": """annee - EXTRACT(YEAR FROM
-                i.IND_DATE_NAISSANCE) AS age""",
-    "5": """-- T42 : bas = 50, haut = 100
-CASE WHEN age IS NULL OR age < 0
-       OR age >= 120  THEN 'Âge inconnu'
-     WHEN age < bas   THEN 'Moins de 50 ans'
-     WHEN age >= haut THEN '100 ans et plus'
-     ELSE FLOOR(age / 5) * 5 || ' – '
-          || (FLOOR(age / 5) * 5 + 4) || ' ans'
-END AS libelle""",
-    "6": """SUM(CASE WHEN sexe = '1'
-         THEN 1 ELSE 0 END) AS eff_h,
-SUM(CASE WHEN sexe = '2'
-         THEN 1 ELSE 0 END) AS eff_f""",
-    "7": """-- payé pour les mois de l'exercice
-WHERE deb.DEB_TYPE = 'PM'
-  AND deb.DEB_STATUT IN ('D', 'P')
-  AND deb.DEB_DATE_EFFET >= debut
-  AND deb.DEB_DATE_EFFET <  fin + 1""",
-    "8": """-- la part CNSS des mois cotisés
-CASE WHEN rang = 1
-      AND mois BETWEEN 1 AND 600
-     THEN GREATEST(mois
-          - NVL(mois_autre_caisse, 0), 0)
-END AS mois
--- additionnés par tranche et par sexe
-SUM(CASE WHEN sexe = '1' THEN mois END)""",
+    "1": """-- les mêmes codes que T32 (TPE_CODE)
+SELECT TPE_CODE, COUNT(*)
+FROM   USER_DWH.PRESTATION_ESP
+WHERE  TPE_CODE IN ('RPV', 'RPRA')
+GROUP  BY TPE_CODE
+-- RPV  : pension de vieillesse
+-- RPRA : pension de retraite anticipée""",
+    "2": """-- la liste des nouveaux retraités de
+-- 2024 : leur première pension est saisie
+-- en 2024 ; réutilisée ensuite
+WITH nouveaux_2024 AS (
+  SELECT IND_ID_PREST,
+         MIN(PE_DATE_INSERT) AS premiere_saisie
+  FROM   USER_DWH.PRESTATION_ESP
+  WHERE  TPE_CODE IN ('RPV', 'RPRA')
+  GROUP  BY IND_ID_PREST
+  HAVING MIN(PE_DATE_INSERT)
+           >= DATE '2024-01-01'
+  AND    MIN(PE_DATE_INSERT)
+           <  DATE '2025-01-01')
+SELECT COUNT(*) FROM nouveaux_2024
+-- 2024 : 2 463 (l'annuaire : 2 489)
+-- de 2020 à 2025 : 1 891, 1 965, 2 127,
+-- 2 333, 2 463, 2 725""",
+    "3": """-- la règle 2 regroupe par personne : une
+-- seule fois, même si la pension s'arrête
+-- avant le 31/12 ; une révision n'entre
+-- pas, car la première saisie est plus
+-- ancienne. Les révisions de 2024 :
+SELECT COUNT(*)
+FROM   USER_DWH.PRESTATION_ESP
+WHERE  TPE_CODE IN ('RPV', 'RPRA')
+AND    PE_DATE_INSERT >= DATE '2024-01-01'
+AND    PE_DATE_INSERT <  DATE '2025-01-01'
+AND    IND_ID_PREST NOT IN
+       (SELECT IND_ID_PREST FROM nouveaux_2024)
+-- 18 à 47 par an jusqu'en 2024""",
+    "4": """-- l'année 2024 moins l'année de naissance
+SELECT 2024 - EXTRACT(YEAR FROM
+         i.IND_DATE_NAISSANCE) AS age,
+       COUNT(*)
+FROM   nouveaux_2024 n
+JOIN   USER_DWH.INDIVIDU i
+       ON i.IND_ID = n.IND_ID_PREST
+GROUP  BY 2024 - EXTRACT(YEAR FROM
+            i.IND_DATE_NAISSANCE)
+ORDER  BY 1
+-- 120 ans ou plus, ou vide : âge inconnu""",
+    "5": """SELECT tranche, COUNT(*)
+FROM  (SELECT CASE
+                WHEN age IS NULL OR age < 0
+                  OR age >= 120 THEN 'Âge inconnu'
+                WHEN age < 50   THEN 'Moins de 50'
+                WHEN age >= 100 THEN '100 et plus'
+                ELSE TO_CHAR(FLOOR(age / 5) * 5)
+              END AS tranche
+       FROM  (SELECT 2024 - EXTRACT(YEAR FROM
+                       i.IND_DATE_NAISSANCE) AS age
+              FROM   nouveaux_2024 n
+              JOIN   USER_DWH.INDIVIDU i
+                     ON i.IND_ID = n.IND_ID_PREST))
+GROUP  BY tranche
+ORDER  BY tranche
+-- 2024 : 55-59 ans 1 450 (l'annuaire :
+-- 1 429), 60-64 ans 941 (956)""",
+    "6": """SELECT i.IND_SEXE, COUNT(*)
+FROM   nouveaux_2024 n
+JOIN   USER_DWH.INDIVIDU i
+       ON i.IND_ID = n.IND_ID_PREST
+GROUP  BY i.IND_SEXE
+-- 1 hommes, 2 femmes ; 2024 : le sexe ne
+-- retombe pas sur l'annuaire (641 femmes
+-- pour 527 publiées)""",
+    "7": """-- payé pour les mois de 2024 aux
+-- nouveaux retraités
+SELECT SUM(deb.DEB_MONTANT)
+FROM   USER_DWH.DEBOURS deb
+JOIN   USER_DWH.PRESTATION_ESP p
+       ON p.PE_ID = deb.PE_ID
+WHERE  p.TPE_CODE IN ('RPV', 'RPRA')
+AND    p.IND_ID_PREST IN
+       (SELECT IND_ID_PREST FROM nouveaux_2024)
+AND    deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+AND    deb.DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    deb.DEB_DATE_EFFET <  DATE '2025-01-01'
+-- 2024 : 2,86 Md ; le rappel des mois
+-- d'avant : DEB_DATE_EFFET < 2024, à part""",
+    "8": """-- les mois cotisés de la dernière pension
+-- saisie ; en coordination, moins les
+-- mois dans l'autre caisse (PE_COT_AUTRE)
+SELECT SUM(GREATEST(p.PE_MOIS_COTISATION
+             - NVL(p.PE_COT_AUTRE, 0), 0))
+         AS services_passes_mois
+FROM   USER_DWH.PRESTATION_ESP p
+JOIN   nouveaux_2024 n
+       ON n.IND_ID_PREST = p.IND_ID_PREST
+WHERE  p.TPE_CODE IN ('RPV', 'RPRA')
+AND    p.PE_MOIS_COTISATION BETWEEN 1 AND 600
+AND    p.PE_DATE_INSERT = (
+         SELECT MAX(x.PE_DATE_INSERT)
+         FROM   USER_DWH.PRESTATION_ESP x
+         WHERE  x.IND_ID_PREST = p.IND_ID_PREST
+         AND    x.TPE_CODE IN ('RPV', 'RPRA')
+         AND    x.PE_DATE_INSERT
+                  < DATE '2025-01-01')
+-- par tranche et par sexe : GROUP BY ;
+-- 2024 : 270 mois en médiane (22 ans et
+-- demi) pour les dossiers ordinaires""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête commune à T42-T49 (analyses/prestations/"
-            "t42_t49_requete_proposee.sql). Elle lit les copies de l'entrepôt (DWH.FAIT_…) du "
-            "cliché du mois, pour l'exercice choisi ; chaque tableau a ses codes (perimetre) et "
-            "sa grille d'âge (grille).")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2024, à copier dans SQL Developer. La règle 2 "
+            "construit la liste des nouveaux retraités de 2024 (nouveaux_2024) ; pour les règles "
+            "3 à 8, on colle leur requête sous celle de la règle 2, à la place de sa dernière "
+            "requête. Le commentaire en fin de requête donne le chiffre à retrouver. La requête "
+            "complète, sur les copies de l'entrepôt, est dans "
+            "analyses/prestations/t42_t49_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="L'entrée : saisie ou notification",

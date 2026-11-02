@@ -150,66 +150,169 @@ RULES = [
                   ("Proposition BI", "nouvelle règle R13 ; voir la question Q2")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t50_t57_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# les années 2020 à 2024, avec en commentaire le chiffre à retrouver. La règle 2 construit la
+# liste liquides, que les règles 3 et 5 réutilisent.
 SQL = {
-    "1": """SELECT 'T50' AS tableau, 'RAV' AS code
-FROM DUAL
-UNION ALL SELECT 'T51', 'RASC' FROM DUAL
-UNION ALL SELECT 'T51', 'RASO' FROM DUAL
--- … T52 AIJ, T53 AAI, T54 MIJ,
--- T55 FAP et MAP""",
-    "2": """-- l'année de la première notification
-EXTRACT(YEAR FROM p.PE_DATE_NOTIFICATION)
-                  AS annee_liquidation
--- … dans les 5 années
-WHERE annee_liquidation IN
-      (SELECT annee FROM annees)""",
-    "3": """ROW_NUMBER() OVER (
-  PARTITION BY tableau, annee_liquidation,
-               IND_ID_PREST
-  ORDER BY PE_DATE_NOTIFICATION DESC)
-                  AS rang
--- une personne par tableau et par année
-WHERE rang = 1""",
-    "4": """-- date_montant : 'MOIS' ou 'SAISIE'
-EXTRACT(YEAR FROM
-  CASE pr.date_montant
-       WHEN 'SAISIE' THEN deb.DEB_DATE_INSERT
-       ELSE deb.DEB_DATE_EFFET END) AS annee
--- débours de paiement D ou P
-WHERE deb.DEB_TYPE = 'PM'
-  AND deb.DEB_STATUT IN ('D', 'P')""",
-    "5": """AVG(CASE WHEN mois BETWEEN 1 AND 600
-         THEN GREATEST(mois
-              - NVL(mois_autre_caisse, 0), 0)
-    END)          AS services_moyens""",
-    "6": """CASE deb.CODE_BRANCHE
-     WHEN 'V' THEN 'AVS'
-     WHEN 'A' THEN 'AT/MP'
-     WHEN 'F' THEN 'PF'
-     WHEN 'M' THEN 'PF'
-     ELSE          'AUTRES'
-END AS branche
--- paiements et remboursements
-WHERE deb.DEB_TYPE IN ('PM', 'RB')""",
-    "7": """-- pension directe en cours au décès
-p.TPE_CODE IN ('RPV', 'RPRA', 'RPI')
-AND p.PE_DATE_EFFET <= de.date_deces
--- sinistré : mort dans l'année
-ds.DOS_DATE_ACCIDENT <= de.date_deces
-AND de.date_deces
-    < ds.DOS_DATE_ACCIDENT + 366""",
-    "8": """-- les années N-4 à N
-SELECT pr.annee_n - 5 + LEVEL AS annee
-FROM parametres pr
+    "1": """-- le tableau de chaque code (TPE_CODE)
+SELECT TPE_CODE,
+       CASE WHEN TPE_CODE = 'RAV' THEN 'T50'
+            WHEN TPE_CODE IN ('RAS','RASC',
+                   'RASO','RASA') THEN 'T51'
+            WHEN TPE_CODE = 'AIJ' THEN 'T52'
+            WHEN TPE_CODE = 'AAI' THEN 'T53'
+            WHEN TPE_CODE = 'MIJ' THEN 'T54'
+            ELSE 'T55' END AS tableau,
+       COUNT(*)
+FROM   USER_DWH.PRESTATION_ESP
+WHERE  TPE_CODE IN ('RAV', 'RAS', 'RASC',
+         'RASO', 'RASA', 'AIJ', 'AAI',
+         'MIJ', 'MAP', 'FAP')
+GROUP  BY TPE_CODE
+-- T55 : FAP et MAP (prénatales)""",
+    "2": """-- la liste des prestations liquidées
+-- (première notification) de 2020 à 2024,
+-- réutilisée ensuite
+WITH liquides AS (
+  SELECT CASE
+           WHEN p.TPE_CODE = 'RAV' THEN 'T50'
+           WHEN p.TPE_CODE IN ('RAS','RASC',
+                  'RASO','RASA') THEN 'T51'
+           WHEN p.TPE_CODE = 'AIJ' THEN 'T52'
+           WHEN p.TPE_CODE = 'AAI' THEN 'T53'
+           WHEN p.TPE_CODE = 'MIJ' THEN 'T54'
+           ELSE 'T55' END AS tableau,
+         EXTRACT(YEAR FROM
+           p.PE_DATE_NOTIFICATION) AS annee,
+         p.PE_ID, p.IND_ID_PREST,
+         p.PE_MOIS_COTISATION, p.PE_COT_AUTRE
+  FROM   USER_DWH.PRESTATION_ESP p
+  WHERE  p.TPE_CODE IN ('RAV', 'RAS', 'RASC',
+           'RASO', 'RASA', 'AIJ', 'AAI',
+           'MIJ', 'MAP', 'FAP')
+  AND    p.PE_DATE_NOTIFICATION
+           >= DATE '2020-01-01'
+  AND    p.PE_DATE_NOTIFICATION
+           <  DATE '2025-01-01')
+SELECT tableau, annee,
+       COUNT(DISTINCT IND_ID_PREST)
+FROM   liquides
+GROUP  BY tableau, annee
+ORDER  BY tableau, annee
+-- 2024 : T50 831 (l'annuaire : 833) ;
+-- T54 3 890 (3 893), à moins de 1 % de
+-- 2020 à 2024 sauf 2022""",
+    "3": """-- une personne par tableau et par année,
+-- avec son sexe ; T54 et T55 : les
+-- femmes seulement
+SELECT l.tableau, l.annee, i.IND_SEXE,
+       COUNT(DISTINCT l.IND_ID_PREST)
+FROM   liquides l
+JOIN   USER_DWH.INDIVIDU i
+       ON i.IND_ID = l.IND_ID_PREST
+WHERE  l.tableau NOT IN ('T54', 'T55')
+OR     i.IND_SEXE = '2'
+GROUP  BY l.tableau, l.annee, i.IND_SEXE
+-- 1 hommes, 2 femmes""",
+    "4": """-- payé dans l'année, toutes les
+-- prestations du tableau, par code
+SELECT p.TPE_CODE,
+       EXTRACT(YEAR FROM deb.DEB_DATE_INSERT)
+         AS annee,
+       SUM(deb.DEB_MONTANT)
+FROM   USER_DWH.DEBOURS deb
+JOIN   USER_DWH.PRESTATION_ESP p
+       ON p.PE_ID = deb.PE_ID
+WHERE  p.TPE_CODE IN ('RAV', 'RAS', 'RASC',
+         'RASO', 'RASA', 'AIJ', 'AAI',
+         'MIJ', 'MAP', 'FAP')
+AND    deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+-- au versement (DEB_DATE_INSERT) ; au mois
+-- payé : DEB_DATE_EFFET (date_montant)
+AND    deb.DEB_DATE_INSERT >= DATE '2020-01-01'
+AND    deb.DEB_DATE_INSERT <  DATE '2025-01-01'
+GROUP  BY p.TPE_CODE,
+          EXTRACT(YEAR FROM deb.DEB_DATE_INSERT)
+-- 2024, RAV : 497,8 M (l'annuaire :
+-- 497,7 M)""",
+    "5": """-- T50 : la moyenne des mois cotisés à la
+-- CNSS, par sexe (en coordination, moins
+-- les mois dans l'autre caisse)
+SELECT l.annee, i.IND_SEXE,
+       ROUND(AVG(GREATEST(l.PE_MOIS_COTISATION
+             - NVL(l.PE_COT_AUTRE, 0), 0)))
+         AS services_moyens
+FROM   liquides l
+JOIN   USER_DWH.INDIVIDU i
+       ON i.IND_ID = l.IND_ID_PREST
+WHERE  l.tableau = 'T50'
+AND    l.PE_MOIS_COTISATION BETWEEN 1 AND 600
+GROUP  BY l.annee, i.IND_SEXE
+-- 2024 : 96 mois en moyenne""",
+    "6": """-- T56 : paiements (PM) et remboursements
+-- (RB) de 2024 par branche, sans les
+-- ajustements
+SELECT DECODE(CODE_BRANCHE, 'V', 'AVS',
+         'A', 'AT/MP', 'F', 'PF', 'M', 'PF',
+         'AUTRES') AS branche,
+       SUM(DEB_MONTANT)
+FROM   USER_DWH.DEBOURS
+WHERE  DEB_TYPE IN ('PM', 'RB')
+AND    DEB_STATUT IN ('D', 'P')
+AND    DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    DEB_DATE_EFFET <  DATE '2025-01-01'
+GROUP  BY DECODE(CODE_BRANCHE, 'V', 'AVS',
+            'A', 'AT/MP', 'F', 'PF',
+            'M', 'PF', 'AUTRES')
+-- 2024, au mois payé : AVS 47,24 Md
+-- (l'annuaire : 46,63), PF 10,75 (11,18),
+-- AT/MP 0,76 (1,07)""",
+    "7": """-- T57, AVS : titulaires d'une pension
+-- directe en cours, morts en 2024
+SELECT COUNT(DISTINCT i.IND_ID)
+FROM   USER_DWH.INDIVIDU i
+JOIN   USER_DWH.PRESTATION_ESP p
+       ON p.IND_ID_PREST = i.IND_ID
+WHERE  p.TPE_CODE IN ('RPV', 'RPRA', 'RPI')
+AND    p.PE_DATE_EFFET <= i.IND_DATE_DECES
+AND    i.IND_DATE_DECES >= DATE '2024-01-01'
+AND    i.IND_DATE_DECES <  DATE '2025-01-01'
+-- retraités : 619 aujourd'hui, 444 sur le
+-- cliché de fin mars 2025 (447 publiés)
+-- AT/MP, sinistrés : victime du dossier A
+-- morte dans l'année de son accident
+SELECT COUNT(DISTINCT i.IND_ID)
+FROM   USER_DWH.DOSSIER d
+JOIN   USER_DWH.INDIVIDU i
+       ON i.IND_ID = d.IND_ID
+WHERE  d.TDOS_CODE = 'A'
+AND    i.IND_DATE_DECES >= d.DOS_DATE_ACCIDENT
+AND    i.IND_DATE_DECES
+         < d.DOS_DATE_ACCIDENT + 366
+AND    i.IND_DATE_DECES >= DATE '2024-01-01'
+AND    i.IND_DATE_DECES <  DATE '2025-01-01'
+-- 8 à 23 par an ; PF : les allocataires
+-- (titulaires des dossiers F) morts en 2024""",
+    "8": """-- les années N-4 à N, chacune avec les
+-- mêmes règles ; ici 2020 à 2024
+SELECT 2019 + LEVEL AS annee
+FROM   DUAL
 CONNECT BY LEVEL <= 5
--- :1 = le cliché de fin mars N+1""",
+-- l'annuaire est arrêté fin mars N+1 : sur
+-- la base d'aujourd'hui, les décès et les
+-- radiations saisis après font bouger les
+-- chiffres (la requête complète lit le
+-- cliché de fin mars N+1)""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête commune à T50-T57 (analyses/prestations/"
-            "t50_t57_requete_proposee.sql), en trois parties : T50 à T55, T56, T57. Elle lit les "
-            "copies de l'entrepôt (DWH.FAIT_…) du cliché choisi ; l'année N est un paramètre.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour les années 2020 à 2024, à copier dans SQL Developer. La "
+            "règle 2 construit la liste des prestations liquidées de chaque année (liquides) ; "
+            "pour les règles 3 et 5, on colle leur requête sous celle de la règle 2, à la place "
+            "de sa dernière requête. Les autres se lancent seules. Le commentaire en fin de "
+            "requête donne le chiffre à retrouver. La requête complète, sur les copies de "
+            "l'entrepôt, est dans analyses/prestations/t50_t57_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="L'année d'un paiement",

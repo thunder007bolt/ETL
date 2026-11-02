@@ -147,48 +147,136 @@ RULES = [
          chiffre="En 2024 : PVID 0,47 %, AT/MP 0,47 %, PF 0,05 %."),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t31_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. Chaque requête se lance seule.
 SQL = {
-    "1": """CASE d.TDOS_CODE WHEN 'V' THEN 'PVID'
-                  WHEN 'A' THEN 'AT/MP'
-                  ELSE          'PF' END
-                         AS branche
--- … sur les dossiers V, A, F et M
-AND d.TDOS_CODE IN ('V', 'A', 'F', 'M')""",
-    "2": """-- date_montant : 'MOIS' ou 'SAISIE'
-WHERE deb.DEB_TYPE = 'PM'
-  AND deb.DEB_STATUT IN ('D', 'P')
-  AND CASE pr.date_montant
-        WHEN 'SAISIE' THEN deb.DEB_DATE_INSERT
-        ELSE deb.DEB_DATE_EFFET END
-      >= pr.debut""",
-    "3": """CASE WHEN aj.TAJ_CODE IN ('TP',
-                            'TP-CONV')
-     THEN aj.AJ_MONTANT ELSE 0 END
-                       AS trop_percu""",
-    "4": """CASE WHEN aj.TAJ_CODE IN ('MP', 'RC')
-     THEN aj.AJ_MONTANT ELSE 0 END
-                       AS moins_percu""",
-    "5": """-- seuls ces quatre types entrent
-WHERE aj.TAJ_CODE IN ('TP', 'TP-CONV',
-                      'MP', 'RC')""",
-    "6": """-- tous les statuts, sauf annulé
-AND aj.AJ_STATUT <> 'R'""",
-    "7": """EXTRACT(MONTH FROM
-        aj.AJ_DATE_ETABLISSEMENT) AS mois
--- … établis dans l'exercice
-AND aj.AJ_DATE_ETABLISSEMENT >= pr.debut
-AND aj.AJ_DATE_ETABLISSEMENT <  pr.fin + 1""",
-    "8": """-- taux du mois, et ligne TOTAL
-ROUND(100 * tp_total
-      / NULLIF(payees_total, 0), 3)
-                  AS TAUX_INDUS_PCT""",
+    "1": """-- la branche vient du type de dossier
+SELECT TDOS_CODE, COUNT(*)
+FROM   USER_DWH.DOSSIER
+WHERE  TDOS_CODE IN ('V', 'A', 'F', 'M')
+GROUP  BY TDOS_CODE
+-- V : PVID (pensions) ; A : AT/MP ;
+-- F et M : PF (la maternité comprise)""",
+    "2": """-- les payées de 2024 par branche : les
+-- débours de paiement (PM) au statut D
+-- (payé par effet) ou P (payé sans effet)
+SELECT d.TDOS_CODE, SUM(deb.DEB_MONTANT)
+FROM   USER_DWH.DEBOURS deb
+JOIN   USER_DWH.DOSSIER d
+       ON d.DOS_CODE = deb.DOS_CODE
+WHERE  deb.DEB_TYPE = 'PM'
+AND    deb.DEB_STATUT IN ('D', 'P')
+-- au mois payé ; au mois du versement :
+-- DEB_DATE_INSERT (réglage date_montant)
+AND    deb.DEB_DATE_EFFET >= DATE '2024-01-01'
+AND    deb.DEB_DATE_EFFET <  DATE '2025-01-01'
+GROUP  BY d.TDOS_CODE
+-- 2024 : 58,7 Md en tout""",
+    "3": """SELECT d.TDOS_CODE, COUNT(*),
+       SUM(aj.AJ_MONTANT) AS trop_percu
+FROM   USER_DWH.AJUSTEMENT aj
+JOIN   USER_DWH.DOSSIER d
+       ON d.DOS_CODE = aj.DOS_CODE
+-- trop-perçu, trop-perçu sur convention
+WHERE  aj.TAJ_CODE IN ('TP', 'TP-CONV')
+AND    aj.AJ_STATUT <> 'R'
+AND    aj.AJ_DATE_ETABLISSEMENT
+         >= DATE '2024-01-01'
+AND    aj.AJ_DATE_ETABLISSEMENT
+         <  DATE '2025-01-01'
+GROUP  BY d.TDOS_CODE
+-- 2024 : 684 trop-perçus, 229,5 M""",
+    "4": """SELECT d.TDOS_CODE, COUNT(*),
+       SUM(aj.AJ_MONTANT) AS moins_percu
+FROM   USER_DWH.AJUSTEMENT aj
+JOIN   USER_DWH.DOSSIER d
+       ON d.DOS_CODE = aj.DOS_CODE
+-- moins-perçu ou rappel, rappel sur
+-- convention : montrés, pas des indus
+WHERE  aj.TAJ_CODE IN ('MP', 'RC')
+AND    aj.AJ_STATUT <> 'R'
+AND    aj.AJ_DATE_ETABLISSEMENT
+         >= DATE '2024-01-01'
+AND    aj.AJ_DATE_ETABLISSEMENT
+         <  DATE '2025-01-01'
+GROUP  BY d.TDOS_CODE
+-- 2024 : 414 M""",
+    "5": """-- tous les types d'ajustement de 2024 ;
+-- seuls TP, TP-CONV, MP et RC entrent
+SELECT TAJ_CODE, COUNT(*), SUM(AJ_MONTANT)
+FROM   USER_DWH.AJUSTEMENT
+WHERE  AJ_DATE_ETABLISSEMENT
+         >= DATE '2024-01-01'
+AND    AJ_DATE_ETABLISSEMENT
+         <  DATE '2025-01-01'
+GROUP  BY TAJ_CODE
+-- hors T31 : REM-TP remboursement d'un
+-- trop-perçu, AV avance, MPG mois de
+-- pension gratuits, …
+-- libellés : USER_DWH.TYPE_AJUSTEMENT""",
+    "6": """SELECT AJ_STATUT, COUNT(*)
+FROM   USER_DWH.AJUSTEMENT
+WHERE  TAJ_CODE IN ('TP', 'TP-CONV',
+                    'MP', 'RC')
+GROUP  BY AJ_STATUT
+-- C soldé, A en cours : gardés
+-- R annulé : écarté (AJ_STATUT <> 'R')""",
+    "7": """-- un trop-perçu compte le mois où il est
+-- établi, pas celui où il est repris
+SELECT EXTRACT(MONTH FROM
+         AJ_DATE_ETABLISSEMENT) AS mois,
+       SUM(AJ_MONTANT)          AS trop_percu
+FROM   USER_DWH.AJUSTEMENT
+WHERE  TAJ_CODE IN ('TP', 'TP-CONV')
+AND    AJ_STATUT <> 'R'
+AND    AJ_DATE_ETABLISSEMENT
+         >= DATE '2024-01-01'
+AND    AJ_DATE_ETABLISSEMENT
+         <  DATE '2025-01-01'
+GROUP  BY EXTRACT(MONTH FROM
+            AJ_DATE_ETABLISSEMENT)
+ORDER  BY 1""",
+    "8": """-- trop-perçus (règle 3) / payées
+-- (règle 2), par branche, en %
+SELECT branche,
+       ROUND(100 * SUM(tp) / SUM(paye), 2)
+         AS taux_indus_pct
+FROM  (SELECT DECODE(d.TDOS_CODE, 'V', 'PVID',
+                'A', 'AT/MP', 'F', 'PF',
+                'M', 'PF') AS branche,
+              aj.AJ_MONTANT AS tp, 0 AS paye
+       FROM   USER_DWH.AJUSTEMENT aj
+       JOIN   USER_DWH.DOSSIER d
+              ON d.DOS_CODE = aj.DOS_CODE
+       WHERE  aj.TAJ_CODE IN ('TP', 'TP-CONV')
+       AND    aj.AJ_STATUT <> 'R'
+       AND    EXTRACT(YEAR FROM
+                aj.AJ_DATE_ETABLISSEMENT) = 2024
+       UNION ALL
+       SELECT DECODE(d.TDOS_CODE, 'V', 'PVID',
+                'A', 'AT/MP', 'F', 'PF',
+                'M', 'PF'),
+              0, deb.DEB_MONTANT
+       FROM   USER_DWH.DEBOURS deb
+       JOIN   USER_DWH.DOSSIER d
+              ON d.DOS_CODE = deb.DOS_CODE
+       WHERE  deb.DEB_TYPE = 'PM'
+       AND    deb.DEB_STATUT IN ('D', 'P')
+       AND    EXTRACT(YEAR FROM
+                deb.DEB_DATE_EFFET) = 2024)
+WHERE  branche IS NOT NULL
+GROUP  BY branche
+-- 2024 : PVID 0,47 %, AT/MP 0,47 %,
+-- PF 0,05 % ; en tout 0,39 %""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête T31 (analyses/prestations/t31_requete_proposee.sql). Elle lit "
-            "les copies de l'entrepôt (DWH.FAIT_AJUSTEMENT, FAIT_DOSSIER, FAIT_DEBOURS) du "
-            "cliché choisi, pour l'exercice choisi.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2024, à copier dans SQL Developer ; chacune se "
+            "lance seule. Les payées viennent des débours (DEBOURS), les trop-perçus et les "
+            "moins-perçus des ajustements (AJUSTEMENT), la branche du type de dossier (DOSSIER). "
+            "Le commentaire en fin de requête donne le chiffre à retrouver. La requête "
+            "complète, sur les copies de l'entrepôt, est dans "
+            "analyses/prestations/t31_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="Les moins-perçus",

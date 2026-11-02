@@ -163,82 +163,159 @@ RULES = [
                               "Q112)")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/grh/t58_t65_effectif_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_GRH), pour
+# l'année 2024, avec en commentaire le chiffre à retrouver. La règle 2 construit la liste
+# permanents_2024, que les règles 3, 4, 5, 7, 8 et 9 réutilisent.
 SQL = {
-    "1": """-- agent CNSS, dernière situation
--- commencée au 31/12
-WHERE si.rn = 1
-  AND TO_CHAR(p.QUALITE) = 'A'
--- … de nature permanente
-WHEN a.NATURE_EMPLOIE = 'PERMANENT'
- AND …  THEN 'Permanents'""",
-    "2": """-- fin = le 31/12 de l'exercice
-AND a.date_entree <= a.fin
-AND (a.ETAT_EMPLOYE = 'ACTIF'
-     OR a.dt_sortie > a.fin)
--- dt_sortie : 1re décision 02, 34,
--- 35, 36, 52 ou 54 non annulée
--- par une 40, sinon le décès""",
-    "3": """CASE
-  WHEN cat IN ('01', '02')
-       THEN 'EMPLOYES'
-  WHEN cat = '03' THEN 'MAITRISE'
-  WHEN cat = '04' THEN 'CADRES_MOYENS'
-  -- réglage categorie_05
-  WHEN cat = '05' THEN
-    CASE categorie_05
-      WHEN 'SUPERIEUR' THEN 'CADRES_SUP'
-      ELSE 'CADRES_MOYENS' END
-  WHEN cat = '06' THEN 'CADRES_SUP'
-  ELSE 'SANS'
-END""",
-    "4": """age = FLOOR((fin - DATE_NAISS)
-            / 365.25)
-CASE WHEN age < 20  THEN 0
-     WHEN age >= 60 THEN 60
-     ELSE FLOOR(age / 5) * 5
-END AS rang_age""",
-    "5": """SUM(CASE WHEN SEXE = 'M'
-         THEN 1 ELSE 0 END) AS hommes,
-SUM(CASE WHEN SEXE = 'F'
-         THEN 1 ELSE 0 END) AS femmes""",
-    "6": """WHEN a.NATURE_EMPLOIE = 'TEMPORAIRE'
- AND a.date_entree <= a.fin
- -- dernier engagement (50) récent :
- -- réglage duree_contrat (18 mois)
- AND po.dt_engagement >
-     ADD_MONTHS(a.fin, -duree_contrat)
- -- aucune sortie depuis
- AND sc.PERS_ID IS NULL
-THEN 'Contractuels'""",
-    "7": """anc = FLOOR((fin - date_entree)
-            / 365.25)
-CASE WHEN anc < 1   THEN 0
-     WHEN anc < 5   THEN 1
-     WHEN anc >= 40 THEN 40
-     ELSE FLOOR(anc / 5) * 5
-END AS rang_anciennete""",
-    "8": """CASE CODE_DOMAINE_ACT
-  WHEN 'IMM'  THEN 1  -- immatriculation
-  WHEN 'REC'  THEN 2  -- recouvrement
-  WHEN 'CONT' THEN 3  -- contentieux
-  WHEN 'PRS'  THEN 4  -- prestations
-  WHEN 'PREV' THEN 5  -- prévention
-  WHEN 'ACT'  THEN 6  -- action sanitaire
-  ELSE             7  -- autres domaines
-END AS rang_domaine""",
-    "9": """-- cadres = moyens + supérieurs
-ROUND(100 * cadres
-      / NULLIF(total, 0), 1)
-  AS TAUX_ENCADREMENT_PCT
--- une ligne par exercice, sur cinq""",
+    "1": """-- qui est permanent au 31/12/2024 :
+-- agent de la CNSS (QUALITE = 'A') dont
+-- la dernière situation est PERMANENT
+SELECT p.PERS_ID
+FROM   USER_GRH.GRH_PERSONNE p
+JOIN   USER_GRH.GRH_SITUATION s
+       ON s.PERS_ID = p.PERS_ID
+WHERE  p.QUALITE = 'A'
+AND    s.NATURE_EMPLOIE = 'PERMANENT'
+-- sa dernière situation, commencée
+-- au plus tard le 31/12/2024
+AND    s.DATE_DEBUT = (
+         SELECT MAX(x.DATE_DEBUT)
+         FROM   USER_GRH.GRH_SITUATION x
+         WHERE  x.PERS_ID = p.PERS_ID
+         AND    x.DATE_DEBUT <= DATE '2024-12-31')""",
+    "2": """-- la liste des permanents présents
+-- au 31/12/2024, réutilisée ensuite
+WITH permanents_2024 AS (
+  SELECT p.PERS_ID, p.SEXE, p.DATE_NAISS,
+         p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE,
+         s.CATEGORIE, s.CODE_DOMAINE_ACT
+  FROM   USER_GRH.GRH_PERSONNE p
+  JOIN   USER_GRH.GRH_SITUATION s
+         ON s.PERS_ID = p.PERS_ID
+  -- règle 1 : agent CNSS, permanent
+  WHERE  p.QUALITE = 'A'
+  AND    s.NATURE_EMPLOIE = 'PERMANENT'
+  AND    s.DATE_DEBUT = (
+           SELECT MAX(x.DATE_DEBUT)
+           FROM   USER_GRH.GRH_SITUATION x
+           WHERE  x.PERS_ID = p.PERS_ID
+           AND    x.DATE_DEBUT <= DATE '2024-12-31')
+  -- entré au plus tard le 31/12/2024
+  AND    NVL(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)
+           <= DATE '2024-12-31'
+  -- pas parti : fiche active, ou premier
+  -- départ (02, 34, 35, 36, 52, 54) après
+  AND   (p.ETAT_EMPLOYE = 'ACTIF'
+         OR (SELECT MIN(d.DATE_VIGUEUR)
+             FROM   USER_GRH.GRH_DECISION d
+             WHERE  d.PERS_ID = p.PERS_ID
+             AND    d.CDEC_CODE IN
+                    ('02','34','35','36','52','54'))
+            > DATE '2024-12-31'))
+SELECT COUNT(*) FROM permanents_2024
+-- 2024 : environ 742 (la requête complète
+-- écarte aussi les décisions annulées par
+-- une 40 et lit les décisions collectives)""",
+    "3": """-- à coller sous la règle 2, à la place
+-- de sa dernière ligne
+SELECT CATEGORIE, COUNT(*)
+FROM   permanents_2024
+GROUP  BY CATEGORIE
+ORDER  BY CATEGORIE
+-- 2024 : 01 + 02 employés      173
+--        03      maîtrise      207
+--        04 + 05 cadres moyens 304
+--        06      cadres sup.    58
+-- 05 : selon la réponse à la question Q1""",
+    "4": """-- âge en années pleines au 31/12/2024,
+-- par tranche de 5 ans (20 = 20 à 24 ans)
+SELECT tranche, COUNT(*)
+FROM  (SELECT FLOOR(FLOOR((DATE '2024-12-31'
+                - DATE_NAISS) / 365.25) / 5) * 5
+                AS tranche
+       FROM   permanents_2024)
+GROUP  BY tranche
+ORDER  BY tranche
+-- 2024, de 20-24 à 55-59 ans : 12, 28, 70,
+-- 115, 139, 155, 151, 72 ; personne de moins
+-- de 20 ans ni de 60 ans et plus""",
+    "5": """SELECT SEXE, COUNT(*)
+FROM   permanents_2024
+GROUP  BY SEXE
+-- 2024 : M (hommes) 400, F (femmes) 342""",
+    "6": """-- les contractuels au 31/12/2024
+SELECT COUNT(*)
+FROM   USER_GRH.GRH_PERSONNE p
+JOIN   USER_GRH.GRH_SITUATION s
+       ON s.PERS_ID = p.PERS_ID
+WHERE  p.QUALITE = 'A'
+AND    s.NATURE_EMPLOIE = 'TEMPORAIRE'
+AND    s.DATE_DEBUT = (  -- dernière situation
+         SELECT MAX(x.DATE_DEBUT)
+         FROM   USER_GRH.GRH_SITUATION x
+         WHERE  x.PERS_ID = p.PERS_ID
+         AND    x.DATE_DEBUT <= DATE '2024-12-31')
+-- dernier engagement (50) après le
+-- 30/06/2023 : moins de 18 mois
+AND   (SELECT MAX(e.DATE_VIGUEUR)
+       FROM   USER_GRH.GRH_DECISION e
+       WHERE  e.PERS_ID = p.PERS_ID
+       AND    e.CDEC_CODE = '50'
+       AND    e.DATE_VIGUEUR <= DATE '2024-12-31')
+      > DATE '2023-06-30'
+-- et aucun départ après cet engagement
+AND    NOT EXISTS (
+  SELECT 1
+  FROM   USER_GRH.GRH_DECISION f
+  WHERE  f.PERS_ID = p.PERS_ID
+  AND    f.CDEC_CODE IN
+         ('02','34','35','36','52','54')
+  AND    f.DATE_VIGUEUR <= DATE '2024-12-31'
+  AND    f.DATE_VIGUEUR > (
+           SELECT MAX(e.DATE_VIGUEUR)
+           FROM   USER_GRH.GRH_DECISION e
+           WHERE  e.PERS_ID = f.PERS_ID
+           AND    e.CDEC_CODE = '50'))
+-- 2024 : environ 46, comme l'annuaire""",
+    "7": """-- ancienneté en années pleines au
+-- 31/12/2024, depuis l'embauche (à
+-- défaut, depuis la prise de service)
+SELECT anciennete, COUNT(*)
+FROM  (SELECT FLOOR((DATE '2024-12-31'
+                - NVL(DATE_EMBAUCHE,
+                      DATE_PRISE_SERVICE))
+                / 365.25) AS anciennete
+       FROM   permanents_2024)
+GROUP  BY anciennete
+ORDER  BY anciennete
+-- puis regrouper : moins de 1, 1-4, 5-9…
+-- 2024 : moins d'un an 101, 10-14 ans 224""",
+    "8": """SELECT CODE_DOMAINE_ACT, COUNT(*)
+FROM   permanents_2024
+GROUP  BY CODE_DOMAINE_ACT
+-- IMM immatriculation, REC recouvrement,
+-- CONT contentieux, PRS prestations,
+-- PREV prévention des risques,
+-- ACT action sanitaire et sociale ;
+-- PIL, CPT, AUT : autres domaines
+-- libellés : USER_GRH.GRH_DOMAINE_ACTIVITE""",
+    "9": """SELECT ROUND(100 * SUM(CASE
+         WHEN CATEGORIE IN ('04','05','06')
+         THEN 1 ELSE 0 END) / COUNT(*), 1)
+         AS taux_encadrement
+FROM   permanents_2024
+-- 2024 : 48,8 % (l'annuaire : 49,2 %)
+-- pour une autre année : refaire la
+-- règle 2 avec le 31/12 de cette année""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête commune à T58, T59, T61 et T65 (analyses/grh/"
-            "t58_t65_effectif_requete_proposee.sql). Elle lit les copies de l'entrepôt "
-            "(DWH.FAIT_GRH_…) du cliché choisi, pour l'exercice choisi. Les questions en attente "
-            "y sont des réglages : categorie_05, duree_contrat, disponibilite.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_GRH), pour l'année 2024, à copier dans SQL Developer. La règle 2 "
+            "construit la liste des permanents présents au 31/12/2024 (permanents_2024) ; pour "
+            "les règles 3, 4, 5, 7, 8 et 9, on colle leur requête sous celle de la règle 2, à la "
+            "place de sa dernière ligne. Le commentaire en fin de requête donne le chiffre à "
+            "retrouver. La requête complète, sur les copies de l'entrepôt, est dans "
+            "analyses/grh/t58_t65_effectif_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="La 5e catégorie",

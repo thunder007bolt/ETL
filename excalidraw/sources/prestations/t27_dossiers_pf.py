@@ -183,93 +183,179 @@ RULES = [
                   ("Proposition BI", "la formule, la même qu'en T25")]),
 ]
 
-# Traduction en SQL de chaque règle : extraits de analyses/prestations/t27_requete_proposee.sql
+# Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_DWH), pour
+# l'année 2025, avec en commentaire le chiffre à retrouver. La règle 3 construit la liste
+# demandes, la règle 4 leurs durées (durees) ; les règles 5, 8 et 9 les réutilisent.
 SQL = {
-    "1": """-- prestations familiales (F) et
--- maternité (M)
-FROM      DWH.FAIT_DOSSIER d
-LEFT JOIN DWH.FAIT_RECEPTION_DOSSIER r
-       ON r.RD_ID = d.RD_ID
-WHERE d.TDOS_CODE IN ('F', 'M')""",
-    "2": """-- la réception qui ouvre le dossier
--- dépose chacune de ses demandes (une
--- grossesse : IJ et prénatale) ; un
--- enfant ajouté est déposé à la date
--- de sa demande
-CASE WHEN dm.ajout = 0
-     THEN d.date_reception
-     ELSE dm.date_demande
-END AS date_depot""",
-    "3": """-- 1re notification de chaque ligne
-SELECT DOS_CODE, rang, 0 AS ajout,
-       MIN(date_notif) AS date_liquidation
-FROM   prest
-GROUP BY DOS_CODE, rang
-UNION ALL
--- enfant ajouté (enfant_ajoute = 1) :
--- chaque notification d'allocations
--- familiales après la 1re du dossier
-SELECT p.DOS_CODE, 1, 1, p.date_notif
+    "1": """-- F : prestations familiales, un dossier
+-- par allocataire ; M : maternité, un
+-- dossier par grossesse
+SELECT TDOS_CODE, COUNT(*)
+FROM   USER_DWH.DOSSIER
+WHERE  TDOS_CODE IN ('F', 'M')
+GROUP  BY TDOS_CODE""",
+    "2": """-- les demandes reçues au guichet en 2025
+SELECT TDOS_CODE, COUNT(*)
+FROM   USER_DWH.RECEPTION_DOSSIER
+WHERE  TDOS_CODE IN ('F', 'M')
+AND    RD_DATE_RECEPTION >= DATE '2025-01-01'
+AND    RD_DATE_RECEPTION <  DATE '2026-01-01'
+GROUP  BY TDOS_CODE
+-- 2025 : 14 306 = 9 968 F + 4 338 M
+-- un enfant ajouté ne passe pas au guichet :
+-- il est déposé à sa PE_DATE_DEMANDE""",
+    "3": """-- demandes : une par dossier et par ligne
+-- du tableau, réutilisée ensuite
+WITH prest AS (
+  SELECT pe.DOS_CODE, pe.PE_DATE_DEMANDE,
+         pe.PE_DATE_NOTIFICATION,
+         CASE WHEN pe.TPE_CODE = 'FAF' THEN 1
+              WHEN pe.TPE_CODE = 'MIJ' THEN 2
+              WHEN pe.TPE_CODE IN ('MAP','FAP')
+                                       THEN 3
+              ELSE 4 END AS ligne
+  FROM   USER_DWH.PRESTATION_ESP pe
+  JOIN   USER_DWH.DOSSIER d
+         ON d.DOS_CODE = pe.DOS_CODE
+  WHERE  d.TDOS_CODE IN ('F', 'M')),
+demandes AS (
+  -- liquidée à sa première notification
+  SELECT DOS_CODE, ligne,
+         MIN(PE_DATE_DEMANDE)   AS date_demande,
+         MIN(PE_DATE_NOTIFICATION)
+                                AS date_liquidation
+  FROM   prest
+  GROUP  BY DOS_CODE, ligne)
+SELECT ligne, COUNT(*)
+FROM   demandes
+WHERE  date_liquidation >= DATE '2025-01-01'
+AND    date_liquidation <  DATE '2026-01-01'
+GROUP  BY ligne
+ORDER  BY ligne
+-- 2025 : allocataires 8 246, IJ de
+-- maternité 4 273, prénatales 4 245
+-- enfant ajouté, sous le même WITH :
+-- chaque autre date de notification FAF
+SELECT COUNT(DISTINCT p.DOS_CODE)
 FROM   prest p
-JOIN   initiale i ON i.DOS_CODE = p.DOS_CODE
-                 AND i.rang = 1
-WHERE  p.rang = 1
-  AND  p.date_notif > i.date_liquidation""",
-    "4": """-- jours entre le dépôt (sinon la date de
--- demande) et la liquidation ; négatif = 0
-GREATEST(dp.date_liquidation
-         - NVL(dp.date_depot, dm.date_demande),
-         0) AS duree""",
-    "5": """SUM(CASE WHEN duree <= 14
-         THEN 1 ELSE 0 END)  AS nb_moins_15,
-SUM(CASE WHEN duree BETWEEN 15 AND 45
-         THEN 1 ELSE 0 END)  AS nb_15_45,
-SUM(CASE WHEN duree > 45
-         THEN 1 ELSE 0 END)  AS nb_plus_45""",
-    "6": """-- fin_N = TO_DATE(N || '1231', 'YYYYMMDD')
-WHERE dp.date_depot <= fin_N
-  AND (dp.date_liquidation IS NULL
-       OR dp.date_liquidation > fin_N)
-  -- pas un dossier fermé jamais notifié
-  AND NOT (NVL(dp.DOS_STATUT, '-') = 'F'
-           AND dp.date_liquidation IS NULL)
-  -- au plus 24 mois sans suite
-  AND dp.date_depot >= ADD_MONTHS(fin_N, -24)
-  AND NOT EXISTS (SELECT 1 FROM rej x
-        WHERE x.DOS_CODE = dp.DOS_CODE
-          AND x.date_rejet <= fin_N)""",
-    "7": """-- compté l'année du rejet ; ligne de la
--- demande initiale du dossier, sinon 5
-SELECT EXTRACT(YEAR FROM dr.DOSRE_DATE_REJET),
-       NVL((SELECT MIN(i.rang)
-            FROM   initiale i
-            WHERE  i.DOS_CODE = dr.DOS_CODE),
-           5) AS rang
-FROM   DWH.FAIT_DOSSIER_REJETE dr
-WHERE  dr.TDOS_CODE IN ('F', 'M')""",
-    "8": """-- sur les demandes liquidées de l'année
-ROUND(AVG(duree), 1)  AS DUREE_MOYENNE_J,
-MEDIAN(duree)         AS DUREE_MEDIANE_J""",
-    "9": """-- rang 6 : le Total, recalculé sur toutes
--- les demandes de l'année, rang 5 compris
-SELECT annee, 6 AS rang,
-       COUNT(*)             AS nb_liquides,
-       ROUND(AVG(duree), 1) AS duree_moy
-FROM   liq
-GROUP BY annee""",
-    "10": """-- en instance au 31/12/N
--- / (en instance au 31/12/N-1 + déposés en N)
-ROUND(NVL(it.nb, 0)
-      / NULLIF(NVL(i0.nb, 0) + NVL(dp.nb, 0), 0), 4)
-                            AS TAUX_RESTANT_A_TRAITER""",
+JOIN   demandes dm
+       ON  dm.DOS_CODE = p.DOS_CODE
+       AND dm.ligne = 1
+WHERE  p.ligne = 1
+AND    p.PE_DATE_NOTIFICATION
+         > dm.date_liquidation
+AND    p.PE_DATE_NOTIFICATION
+         >= DATE '2025-01-01'
+AND    p.PE_DATE_NOTIFICATION
+         <  DATE '2026-01-01'
+-- 2025 : environ 8 100 dossiers""",
+    "4": """-- à ajouter à la suite du WITH de la
+-- règle 3 : dépôt = la réception qui a
+-- ouvert le dossier, sinon la date de
+-- demande ; une durée négative compte 0
+durees AS (
+  SELECT dm.ligne,
+         GREATEST(TRUNC(dm.date_liquidation)
+           - TRUNC(NVL(
+               (SELECT r.RD_DATE_RECEPTION
+                FROM   USER_DWH.DOSSIER d
+                JOIN   USER_DWH.RECEPTION_DOSSIER r
+                       ON r.RD_ID = d.RD_ID
+                WHERE  d.DOS_CODE = dm.DOS_CODE),
+               dm.date_demande)), 0) AS jours
+  FROM   demandes dm
+  WHERE  dm.date_liquidation >= DATE '2025-01-01'
+  AND    dm.date_liquidation <  DATE '2026-01-01')
+SELECT ligne, MEDIAN(jours)
+FROM   durees
+GROUP  BY ligne
+-- 2025 : allocataires 13,5 j, maternité 17
+-- enfant ajouté : de sa PE_DATE_DEMANDE à
+-- sa notification, environ 11 j""",
+    "5": """-- à coller sous le WITH des règles 3 et 4
+SELECT ligne,
+       SUM(CASE WHEN jours < 15
+                THEN 1 ELSE 0 END) AS moins_15,
+       SUM(CASE WHEN jours BETWEEN 15 AND 45
+                THEN 1 ELSE 0 END) AS de_15_a_45,
+       SUM(CASE WHEN jours > 45
+                THEN 1 ELSE 0 END) AS plus_45
+FROM   durees
+GROUP  BY ligne
+-- dossiers ouverts en 2025 : allocataires
+-- 57 %, 24 %, 19 % ; maternité 44 %,
+-- 44 %, 12 %""",
+    "6": """-- demandes PF ni liquidées ni rejetées
+-- au 31/12/2025
+SELECT COUNT(*)
+FROM   USER_DWH.RECEPTION_DOSSIER r
+LEFT   JOIN USER_DWH.DOSSIER d
+       ON (d.RD_ID = r.RD_ID          -- NOUVEAU
+           OR d.DOS_CODE = r.DOS_CODE) -- ANCIEN
+WHERE  r.TDOS_CODE IN ('F', 'M')
+AND    r.RD_DATE_RECEPTION < DATE '2026-01-01'
+-- sans suite après 24 mois : sorti du stock
+AND    r.RD_DATE_RECEPTION >= DATE '2024-01-01'
+AND    NOT EXISTS (     -- aucune notification
+         SELECT 1
+         FROM   USER_DWH.PRESTATION_ESP p
+         WHERE  p.DOS_CODE = d.DOS_CODE
+         AND    p.PE_DATE_NOTIFICATION
+                  >= TRUNC(r.RD_DATE_RECEPTION)
+         AND    p.PE_DATE_NOTIFICATION
+                  < DATE '2026-01-01')
+AND    NOT EXISTS (     -- aucun rejet
+         SELECT 1
+         FROM   USER_DWH.DOSSIER_REJETE x
+         WHERE  x.RD_ID = r.RD_ID
+         AND    x.DOSRE_DATE_REJET
+                  < DATE '2026-01-01')
+-- sans les dossiers fermés jamais notifiés
+AND    NVL(d.DOS_STATUT, '-') <> 'F'
+-- 2025 : 483 réceptions PF sans dossier
+-- ni rejet""",
+    "7": """SELECT TDOS_CODE, COUNT(*)
+FROM   USER_DWH.DOSSIER_REJETE
+WHERE  TDOS_CODE IN ('F', 'M')
+AND    DOSRE_DATE_REJET >= DATE '2025-01-01'
+AND    DOSRE_DATE_REJET <  DATE '2026-01-01'
+GROUP  BY TDOS_CODE
+-- 2025 : 21""",
+    "8": """-- à coller sous le WITH des règles 3 et 4
+SELECT ligne,
+       ROUND(AVG(jours)) AS duree_moyenne,
+       MEDIAN(jours)     AS duree_mediane
+FROM   durees
+GROUP  BY ligne
+-- la norme : moins de 45 jours""",
+    "9": """-- le Total : toutes les demandes
+-- ensemble, la moyenne recalculée ; une
+-- grossesse compte deux fois (lignes 2 et
+-- 3), un allocataire une fois, plus une
+-- fois par enfant ajouté (règle 3)
+SELECT COUNT(*)          AS liquides,
+       ROUND(AVG(jours)) AS duree_moyenne,
+       MEDIAN(jours)     AS duree_mediane
+FROM   durees""",
+    "10": """-- en instance au 31/12/2025, divisé par
+-- (en instance au 31/12/2024 + déposés)
+-- en instance : la règle 6, une fois avec
+-- 2026-01-01, une fois avec 2025-01-01 ;
+-- déposés : la règle 2 (14 306 en 2025)
+SELECT ROUND(100 * :instance_fin_2025
+         / (:instance_fin_2024 + 14306), 1)
+         AS taux_restant_pct
+FROM   DUAL""",
 }
 
-SQL_NOTE = ("À droite de chaque règle, sa traduction en SQL, pour la DSI et l'équipe BI : un "
-            "extrait de la requête proposée (analyses/prestations/t27_requete_proposee.sql). Elle "
-            "suit celle de T25 : elle compte des demandes (un dossier × une ligne, plus les "
-            "enfants ajoutés si enfant_ajoute = 1), depot donne à chacune son dépôt, liq calcule "
-            "la durée ; le rang 5 veut dire « pas encore de ligne », le 6 le Total. N est l'année "
-            "de l'exercice.")
+SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
+            "(schéma USER_DWH), pour l'année 2025, à copier dans SQL Developer. La règle 3 "
+            "construit la liste des demandes (une par dossier et par ligne du tableau, avec sa "
+            "première notification) ; la règle 4 y ajoute leur durée (durees). Pour les règles "
+            "5, 8 et 9, on colle leur requête sous ce WITH, à la place de sa dernière requête. "
+            "Le commentaire en fin de requête donne le chiffre à retrouver. La requête "
+            "complète, sur les copies de l'entrepôt, est dans "
+            "analyses/prestations/t27_requete_proposee.sql.")
 
 QUESTIONS = [
     dict(n="Q1", titre="L'enfant ajouté",
