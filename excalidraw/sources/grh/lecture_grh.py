@@ -2,7 +2,7 @@
 Contenu de la fiche de lecture de la gestion administrative (T58 à T65), générée par
 sources/fiche_de_lecture.py dans schemas/grh/fiche_de_lecture.excalidraw.
 
-Même modèle que la fiche des prestations : pour chaque tableau, chaque terme de l'Annuaire avec
+Même modèle que la fiche des prestations : pour chaque tableau, chaque terme de l'Annuaire CIPRES avec
 ce que j'en ai compris, la question à valider, où je le prends dans la base et la requête pour
 vérifier. Les requêtes viennent des fiches de validation de la GRH (t58_effectif, t60_mouvement,
 t62_formation). T58, T59, T61 et T65 se lisent sur le même effectif : une seule section.
@@ -22,7 +22,7 @@ TITRE = "Fiche de lecture : la gestion administrative"
 SOUS_TITRE = ("Les tableaux CIPRES T58 à T65, le personnel de la CNSS, terme par terme. À lire à "
               "côté de l'Annuaire statistique CIPRES (version du 11/09/2020).")
 INTRO = [
-    "Pour chaque tableau de l'Annuaire, je reprends chaque terme (effectif, catégorie, "
+    "Pour chaque tableau de l'Annuaire CIPRES, je reprends chaque terme (effectif, catégorie, "
     "recrutement, formé…) et je dis comment je l'ai compris, d'où je le prends dans la base et "
     "comment on refait le chiffre. Le but : que tu me dises si ma lecture est la bonne, terme par "
     "terme.",
@@ -49,12 +49,12 @@ TABLES = [
     "grand livre est dans le schéma STG_GL.",
 ]
 SUITE = [
-    "Dans l'ordre de l'Annuaire : T58, T59, T61 et T65 (l'effectif au 31 décembre, par "
+    "Dans l'ordre de l'Annuaire CIPRES : T58, T59, T61 et T65 (l'effectif au 31 décembre, par "
     "catégorie, âge, sexe, domaine, ancienneté, et le taux d'encadrement), T60 (le mouvement du "
     "personnel), T62 (les formés), T63 et T64 (les ratios de frais de personnel et de "
     "formation, qui attendent la comptabilité).",
-    "Les chiffres sont ceux de 2024, pour les comparer à l'annuaire de la CNSS de 2024, qui "
-    "publie T58, T60, T61, T62 et T65.",
+    "Les chiffres sont ceux de 2024, pour les comparer à l'annuaire CNSS 2024, qui "
+    "publie T58, T60, T61, T62 et T65 (ses tableaux 119 à 124, p. 90 à p. 92).",
 ]
 
 
@@ -99,7 +99,7 @@ T58 = dict(
              base=["Entrée : GRH_PERSONNE.DATE_EMBAUCHE, à défaut DATE_PRISE_SERVICE.",
                    "Départ : GRH_DECISION.CDEC_CODE 02, 34, 35, 36, 52 ou 54, à sa DATE_VIGUEUR ; "
                    "pas s'il est annulé par une décision 40.",
-                   "2024 : 742 permanents (l'annuaire de la CNSS : 758 ; les 16 qui manquent ne "
+                   "2024 : 742 permanents (l'annuaire CNSS 2024 : 758 ; les 16 qui manquent ne "
                    "forment aucun groupe)."],
              sql=sql(t58, "2")),
         dict(terme="Catégorie professionnelle",
@@ -108,21 +108,23 @@ T58 = dict(
                       "p. 62) : chaque caisse garde ses propres catégories (p. 50).",
              compris="La catégorie de la grille de la CNSS, dans la situation de l'agent au 31 "
                      "décembre : 1re et 2e catégories, employés ; 3e, agents de maîtrise ; 4e, "
-                     "5e et 6e, cadres. L'annuaire de la CNSS sépare les cadres moyens (4e et "
-                     "5e) et les cadres supérieurs (6e) ; l'atelier de Kaya mettait la 5e avec "
-                     "les cadres supérieurs.",
+                     "5e et 6e, cadres. L'annuaire CNSS 2024 (tableau 119, p. 90) sépare les "
+                     "cadres moyens et les cadres supérieurs, sans dire quelles catégories : "
+                     "ses chiffres retombent sur la base avec la 4e et la 5e en cadres moyens, "
+                     "la 6e en cadres supérieurs. L'atelier de Kaya mettait la 5e avec les "
+                     "cadres supérieurs.",
              question="La 5e catégorie : cadres moyens ou cadres supérieurs ?",
              base=["GRH_SITUATION.CATEGORIE : 01 à 06 (quelques HC, I à V, 001 à 005 sur de "
                    "vieilles situations).",
                    "2024 : employés 173, maîtrise 207, cadres moyens 304, cadres supérieurs 58 "
-                   "(l'annuaire de la CNSS : 177, 208, 311, 62)."],
+                   "(l'annuaire CNSS 2024, tableau 119 : 177, 208, 311, 62)."],
              sql=sql(t58, "3")),
         dict(terme="Tranche d'âge",
              annuaire="Moins de 20 ans, 20-24… 55-59, 60 ans et plus (p. 50). L'âge est "
                       "« l'année de constatation moins l'année de naissance » (glossaire, p. 62).",
              compris="L'âge au 31 décembre. À cette date, c'est exactement l'année moins "
                      "l'année de naissance, comme le dit le glossaire.",
-             question="Tu valides : l'âge au 31 décembre, rangé dans la grille de l'Annuaire ?",
+             question="Tu valides : l'âge au 31 décembre, rangé dans la grille de l'Annuaire CIPRES ?",
              base=["GRH_PERSONNE.DATE_NAISS.",
                    "2024, de 20-24 à 55-59 ans : 12, 28, 70, 115, 139, 155, 151, 72."],
              sql=sql(t58, "4")),
@@ -133,7 +135,7 @@ T58 = dict(
              base=["GRH_PERSONNE.SEXE : M ou F.", "2024 : 400 hommes, 342 femmes."],
              sql=sql(t58, "5")),
         dict(terme="Les contractuels",
-             annuaire="Pas dans l'Annuaire CIPRES ; l'atelier de Kaya et l'annuaire de la CNSS "
+             annuaire="Pas dans l'Annuaire CIPRES ; l'atelier de Kaya et l'annuaire CNSS 2024 "
                       "comptent les temporaires à part (46 en 2024).",
              compris="Un agent temporaire au 31 décembre, dont le dernier contrat a moins de "
                      "18 mois, sans départ depuis. Une fin de contrat suivie d'un nouveau contrat "
@@ -142,7 +144,7 @@ T58 = dict(
              question="Combien de temps dure un contrat temporaire à la CNSS ?",
              base=["GRH_SITUATION.NATURE_EMPLOIE = 'TEMPORAIRE'.",
                    "GRH_DECISION.CDEC_CODE = '50' : engagement temporaire ; 35 : fin de contrat.",
-                   "2024 : 46, comme l'annuaire de la CNSS (44 engagés en 2024, 2 fin 2023)."],
+                   "2024 : 46, comme l'annuaire CNSS 2024 (44 engagés en 2024, 2 fin 2023)."],
              sql=sql(t58, "6")),
         dict(terme="Ancienneté dans l'organisme (T61)",
              annuaire="Moins d'un an, 1-4 ans… 35-39 ans, 40 ans et plus (p. 51).",
@@ -173,7 +175,7 @@ T58 = dict(
              question="Tu valides : les cadres sont les 4e, 5e et 6e catégories, même si le taux "
                       "dépasse de loin la norme ?",
              base=["La catégorie du terme 3, sur l'effectif du terme 2.",
-                   "2024 : 48,8 % (l'annuaire de la CNSS : 49,2 %)."],
+                   "2024 : 48,8 % (l'annuaire CNSS 2024 : 49,2 %)."],
              sql=sql(t58, "9")),
     ],
 )
@@ -193,7 +195,7 @@ T60 = dict(
                      "du début d'une année est celui du 31 décembre de l'année d'avant.",
              question="Tu valides : l'effectif du 1er janvier = celui du 31 décembre d'avant ?",
              base=["La liste du terme 2 de T58, au 31/12/2023 et au 31/12/2024.",
-                   "2024 : 672 au début, 742 à la fin (l'annuaire de la CNSS : 767 et 758)."],
+                   "2024 : 672 au début, 742 à la fin (l'annuaire CNSS 2024 : 767 et 758)."],
              sql=sql(t60, "1")),
         dict(terme="Entrées et sorties",
              annuaire="Les entrées et les sorties de l'année (p. 51).",
@@ -212,7 +214,7 @@ T60 = dict(
                      "de prise de service vaut en attendant la décision d'engagement.",
              question="Tu valides : un recrutement = une entrée embauchée dans l'année ?",
              base=["GRH_PERSONNE.DATE_EMBAUCHE dans l'année, à défaut DATE_PRISE_SERVICE.",
-                   "2024 : 104, exactement comme l'annuaire de la CNSS."],
+                   "2024 : 104, exactement comme l'annuaire CNSS 2024."],
              sql=sql(t60, "3")),
         dict(terme="Autres entrées",
              annuaire="La colonne « autres » des entrées (p. 51).",
@@ -226,10 +228,10 @@ T60 = dict(
              annuaire="La colonne « retraite » des sorties (p. 51).",
              compris="Une sortie dont la première décision de départ, dans l'année, est "
                      "l'admission à la retraite, à sa date de vigueur. Compter une retraite de "
-                     "décembre l'année suivante ne retombe pas mieux sur l'annuaire.",
+                     "décembre l'année suivante ne retombe pas mieux sur l'annuaire CNSS 2024.",
              question="Tu valides : la retraite compte à la date de vigueur de la décision ?",
              base=["GRH_DECISION.CDEC_CODE = '02', DATE_VIGUEUR.",
-                   "2024 : 25 (l'annuaire de la CNSS : 23) ; à 4 près chaque année."],
+                   "2024 : 25 (l'annuaire CNSS 2024 : 23) ; à 4 près chaque année."],
              sql=sql(t60, "5")),
         dict(terme="Décès",
              annuaire="Décédé : « personne dont la mort a été dûment constatée par un acte » "
@@ -246,12 +248,12 @@ T60 = dict(
         dict(terme="Autres sorties",
              annuaire="La colonne « autres » des sorties (p. 51).",
              compris="Démission, licenciement, fin de contrat, mise en disponibilité, permanent "
-                     "devenu temporaire. L'annuaire de la CNSS compte aussi des détachements, "
+                     "devenu temporaire. L'annuaire CNSS 2024 compte aussi des détachements, "
                      "introuvables dans la base.",
              question="Les détachements : où sont-ils saisis ?",
              base=["GRH_DECISION.CDEC_CODE : 36 démission, 54 licenciement, 35 et 52 fin de "
                    "contrat, 07 mise en disponibilité.",
-                   "2024 : 2 démissions et 1 licenciement, comme l'annuaire ; 5 "
+                   "2024 : 2 démissions et 1 licenciement, comme l'annuaire CNSS 2024 ; 5 "
                    "disponibilités (7 publiées)."],
              sql=sql(t60, "7")),
         dict(terme="Les 5 dernières années",
@@ -281,10 +283,10 @@ T62 = dict(
                      "quel que soit le nombre de ses formations.",
              question="Un agent formé deux fois dans l'année compte-t-il une ou deux fois ?",
              base=["GRH_INSCRIPTION : PERS_ID, FORM_NO.",
-                   "2024 : 410 agents et 525 inscriptions (l'annuaire de la CNSS : 480 formés)."],
+                   "2024 : 410 agents et 525 inscriptions (l'annuaire CNSS 2024 : 480 formés)."],
              sql=sql(t62, "1")),
         dict(terme="L'année d'une formation",
-             annuaire="Rien dans l'Annuaire ; l'atelier de Kaya retient la date de début.",
+             annuaire="Rien dans l'Annuaire CIPRES ; l'atelier de Kaya retient la date de début.",
              compris="L'année où la formation commence. Presque aucune formation ne chevauche "
                      "le 31 décembre.",
              question="Une formation commencée en décembre et finie en janvier compte-t-elle "
@@ -292,7 +294,7 @@ T62 = dict(
              base=["GRH_FORMATION.DATE_DEBUT (et DATE_FIN)."],
              sql=sql(t62, "2")),
         dict(terme="Toutes les formations",
-             annuaire="Rien dans l'Annuaire.",
+             annuaire="Rien dans l'Annuaire CIPRES.",
              compris="Toutes les formations comptent, quel que soit leur statut : toutes sont au "
                      "statut N. La requête actuelle ne gardait que le statut T et ne publiait "
                      "rien.",
@@ -312,11 +314,11 @@ T62 = dict(
         dict(terme="Catégorie professionnelle",
              annuaire="Employés, agents de maîtrise, cadres (p. 51).",
              compris="La catégorie de la situation de l'agent au 31 décembre, comme dans T58. La "
-                     "base donne deux fois plus de cadres moyens formés que l'annuaire de la "
-                     "CNSS : ses chiffres viennent sans doute d'un autre registre.",
-             question="D'où viennent les 480 formés publiés par l'annuaire de la CNSS ?",
+                     "base donne deux fois plus de cadres moyens formés que l'annuaire "
+                     "CNSS 2024 : ses chiffres viennent sans doute d'un autre registre.",
+             question="D'où viennent les 480 formés publiés par l'annuaire CNSS 2024 ?",
              base=["GRH_SITUATION.CATEGORIE (terme 3 de T58).",
-                   "2024 : 81, 96, 181, 51 (l'annuaire de la CNSS : 132, 142, 118, 88)."],
+                   "2024 : 81, 96, 181, 51 (l'annuaire CNSS 2024 : 132, 142, 118, 88)."],
              sql=sql(t62, "5")),
         dict(terme="Le sexe",
              annuaire="Hommes et femmes, en colonnes (p. 51).",

@@ -36,11 +36,15 @@ GAP = 20
 INNER = WIDTH - 50
 COLONNES = ["Ce que j'ai compris, et ta réponse", "Où je le prends dans la base",
             "La requête pour vérifier"]
-CONSIGNE = ("Pour chaque terme : à gauche, ce que dit l'Annuaire et ce que j'en ai compris, puis "
-            "la question ; au milieu, où je le prends dans la base ; à droite, la requête qui "
-            "permet de refaire le chiffre. Coche D'accord, Pas d'accord ou À discuter et note la "
-            "réponse en dessous. Cmd+S pour enregistrer, chaque version est gardée dans "
-            "l'historique.")
+CONSIGNE = ("Pour chaque terme : à gauche, ce que dit l'Annuaire CIPRES (encadré rouge, avec sa page) "
+            "et ce que j'en ai compris, puis la question ; au milieu, où je le prends dans la "
+            "base ; à droite, la requête qui permet de refaire le chiffre. Coche D'accord, Pas "
+            "d'accord ou À discuter et note la réponse en dessous. Cmd+S pour enregistrer, chaque "
+            "version est gardée dans l'historique.")
+SOURCES = ("Deux annuaires, à ne pas confondre. L'Annuaire CIPRES (version du 11/09/2020) dit ce "
+           "que chaque tableau doit contenir : toutes les pages citées viennent de lui. "
+           "L'annuaire CNSS 2024 est l'annuaire statistique de la CNSS (n° 32, année 2024) : je "
+           "ne m'en sers que pour comparer mes chiffres à ceux que la CNSS a publiés.")
 
 
 def renvoi(sql, decalage=None):
@@ -62,6 +66,8 @@ def _gauche(w, n, t):
     ops.append(("text", 14 + badge_width(n) + 12, 22, titre, 22, C["encre"]))
     y = 12 + max(BADGE_H, height_of(titre, 22) + 10) + 12
     if t.get("annuaire"):
+        ops.append(("text", 14, y, "Ce que dit l'Annuaire CIPRES", 16, C["doux"]))
+        y += 24
         texte = wrap(t["annuaire"], 16, inner - 24)
         h = 10 + height_of(texte, 16) + 10
         ops.append(("annuaire", 14, y, texte, h))
@@ -181,7 +187,7 @@ def build(contenu):
     d = Diagram(seed=13)
     d.text(0, 0, contenu.TITRE, 48)
     d.text(0, 66, contenu.SOUS_TITRE, 22, C["doux"])
-    y = encadre(d, 120, "Comment lire cette fiche", contenu.INTRO + [CONSIGNE], C["jaune_clair"],
+    y = encadre(d, 120, "Comment lire cette fiche", contenu.INTRO + [CONSIGNE, SOURCES], C["jaune_clair"],
                 C["jaune_bord"]) + 24
     y = encadre(d, y, contenu.TITRE_TABLES, contenu.TABLES, C["blanc"], C["gris_bord"],
                 puces=True) + 24

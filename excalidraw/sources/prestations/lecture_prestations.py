@@ -2,12 +2,12 @@
 Contenu de la fiche de lecture des prestations sociales (T25 à T57), générée par
 sources/fiche_de_lecture.py dans schemas/prestations/fiche_de_lecture.excalidraw.
 
-Chaque tableau a ses termes, dans l'ordre où on les lit dans l'Annuaire ; chaque terme : ce que
-dit l'Annuaire (avec la page), ce que j'en ai compris, un exemple, la question à valider, où je le
+Chaque tableau a ses termes, dans l'ordre où on les lit dans l'Annuaire CIPRES ; chaque terme : ce que
+dit l'Annuaire CIPRES (avec la page), ce que j'en ai compris, un exemple, la question à valider, où je le
 prends dans la base, et la requête pour vérifier. Les requêtes viennent des fiches de validation
 (sources/prestations/t25_…), renumérotées d'après les termes.
 
-Les tableaux suivent l'ordre de l'Annuaire ; une famille de tableaux qui se calcule de la même
+Les tableaux suivent l'ordre de l'Annuaire CIPRES ; une famille de tableaux qui se calcule de la même
 façon (T32 à T40, T42 à T49, T50 à T57) partage une section.
 """
 
@@ -22,10 +22,10 @@ import t50_t57_evolution as t50
 from fiche_de_lecture import renvoi
 
 TITRE = "Fiche de lecture : les prestations sociales"
-SOUS_TITRE = ("Les tableaux CIPRES T25 à T57, terme par terme. À lire à côté de l'Annuaire "
+SOUS_TITRE = ("Les tableaux CIPRES T25 à T57, terme par terme. À lire à côté de l'Annuaire CIPRES "
               "statistique CIPRES (version du 11/09/2020).")
 INTRO = [
-    "Pour chaque tableau de l'Annuaire, je reprends chaque terme (déposé, liquidé, en instance, "
+    "Pour chaque tableau de l'Annuaire CIPRES, je reprends chaque terme (déposé, liquidé, en instance, "
     "rejeté…) et je dis comment je l'ai compris, d'où je le prends dans la base et comment on "
     "refait le chiffre. Le but : que tu me dises si ma lecture est la bonne, terme par terme.",
 ]
@@ -47,12 +47,12 @@ TABLES = [
     "personne (date de naissance, sexe 1 homme ou 2 femme, date de décès).",
 ]
 SUITE = [
-    "Dans l'ordre de l'Annuaire : T25, T26 et T27 (les dossiers selon la durée de liquidation), "
+    "Dans l'ordre de l'Annuaire CIPRES : T25, T26 et T27 (les dossiers selon la durée de liquidation), "
     "T28 à T30 (les contrôles a posteriori), T31 (les prestations indues), T32 à T40 (pensionnés "
     "et crédirentiers au 31 décembre), T41 (allocataires), T42 à T49 (nouveaux bénéficiaires), "
     "T50 à T57 (évolution sur 5 ans, prestations servies et décédés par branche).",
     "Les chiffres sont ceux de la base au 02/02/2026 : 2025 pour T25 à T30, 2024 pour les "
-    "autres, comme l'annuaire de la CNSS. Les tableaux d'une même famille se calculent de la "
+    "autres, comme l'annuaire CNSS 2024. Les tableaux d'une même famille se calculent de la "
     "même façon : la requête est donnée pour le premier, et on change les codes pour les autres.",
 ]
 
@@ -104,7 +104,7 @@ T25 = dict(
                       "vieillesse est versée en une seule fois (glossaire, p. 62).",
              compris="Chaque prestation a un code, et le code dit la ligne. J'ajoute une ligne "
                      "« pension de retraite anticipée », demandée à l'atelier de Kaya en 2017 "
-                     "mais absente de l'Annuaire. La veuve et les orphelins d'un même décès ne "
+                     "mais absente de l'Annuaire CIPRES. La veuve et les orphelins d'un même décès ne "
                      "font qu'une demande de pension de survivant. Un complément (bonification, "
                      "majoration pour enfant) suit la pension : il ne crée pas de ligne.",
              exemple="un dossier avec une pension de vieillesse et une majoration pour enfant "
@@ -252,7 +252,7 @@ ORDER  BY 2 DESC
                       "le calcul des prestations à payer » (p. 11). L'atelier de Kaya en fait un "
                       "indicateur, le taux des dossiers restant à traiter, sans formule.",
              compris="Le taux : les demandes en instance au 31 décembre, divisées par celles en "
-                     "instance au 1er janvier plus celles déposées dans l'année. Ni l'Annuaire "
+                     "instance au 1er janvier plus celles déposées dans l'année. Ni l'Annuaire CIPRES "
                      "ni l'atelier ne donnent de formule : c'est la mienne.",
              question="Tu valides cette formule du taux ?",
              base=["En instance au 31/12/2025 et au 31/12/2024 : le terme 7, à ces deux dates.",
@@ -650,13 +650,14 @@ T31 = dict(
         dict(terme="Branche",
              annuaire="Trois branches : PVID (pensions), AT/MP, PF (prestations familiales).",
              compris="La branche vient du type de dossier. Je range la maternité avec les "
-                     "prestations familiales, comme partout dans l'Annuaire.",
+                     "prestations familiales, comme partout dans l'Annuaire CIPRES.",
              question="Tu valides : la maternité compte dans la branche PF ?",
              base=["DOSSIER.TDOS_CODE : V PVID, A AT/MP, F et M PF.",
                    "Le DTM laissait la maternité de côté (15 trop-perçus en 2024)."],
              sql=sql(t31, "1")),
         dict(terme="Prestations payées",
-             annuaire="L'atelier de Kaya : « la somme décaissée au profit de l'assuré ».",
+             annuaire="Rien dans l'Annuaire CIPRES ; l'atelier de Kaya : « la somme décaissée au "
+                      "profit de l'assuré ».",
              compris="Les paiements effectués dans le mois, toutes prestations de la branche. "
                      "Je prends le mois payé ; le mois du versement donne le même taux à l'année.",
              question="Tu valides : les payées sont les paiements du mois, au mois payé ?",
@@ -686,7 +687,7 @@ T31 = dict(
              base=["AJUSTEMENT.TAJ_CODE 'MP' ou 'RC'.", "2024 : 414 millions."],
              sql=sql(t31, "4")),
         dict(terme="Ce qui n'est pas un indu",
-             annuaire="Rien dans l'Annuaire ; l'atelier de Kaya ne range dans les indus que les "
+             annuaire="Rien dans l'Annuaire CIPRES ; l'atelier de Kaya ne range dans les indus que les "
                       "trop-perçus.",
              compris="Le remboursement d'un trop-perçu, les avances et leur reprise, les mois "
                      "de pension gratuits, les dons et avances COVID, les rachats de rente : ce "
@@ -696,7 +697,7 @@ T31 = dict(
                    "et les autres types ; libellés dans TYPE_AJUSTEMENT."],
              sql=sql(t31, "5")),
         dict(terme="Le statut d'un ajustement",
-             annuaire="Rien dans l'Annuaire.",
+             annuaire="Rien dans l'Annuaire CIPRES.",
              compris="Je garde tous les ajustements sauf ceux annulés : un trop-perçu en cours "
                      "de reprise ou déjà soldé reste un indu du mois où il a été établi.",
              question="Tu valides : seul le statut « annulé » sort du tableau ?",
@@ -770,7 +771,7 @@ GROUP  BY TPE_CODE"""),
                       "à la fin de l'exercice (p. 13).",
              compris="Une pension en cours le 31 décembre : son effet a commencé, elle n'est ni "
                      "radiée ni suspendue, et son titulaire est en vie. Qu'elle ait été payée en "
-                     "décembre ou non. C'est ce que fait l'annuaire de la CNSS : nos chiffres de "
+                     "décembre ou non. C'est ce que fait l'annuaire CNSS 2024 : nos chiffres de "
                      "2020 à 2024 retombent dessus à moins de 1 % près.",
              exemple="une pension suspendue le 31 octobre 2024 et pas réactivée n'est pas "
                      "comptée au 31/12/2024.",
@@ -804,7 +805,7 @@ GROUP  BY TPE_CODE"""),
                       "propres à chaque tableau (p. 37 à p. 41).",
              compris="T32 : moins de 55 ans, 55-59, 60-64… 95-99, 100 ans et plus. Les autres "
                      "tableaux suivent leur propre grille (terme 1).",
-             question="Tu valides les grilles de l'Annuaire telles quelles ?",
+             question="Tu valides les grilles de l'Annuaire CIPRES telles quelles ?",
              base=["L'âge du terme 4, rangé dans la grille du tableau."],
              sql=sql(t32, "5")),
         dict(terme="Le sexe",
@@ -856,7 +857,7 @@ T41 = dict(
              base=["PRESTATION_ESP.TPE_CODE = 'FAF', une prestation par enfant."],
              sql=sql(t41, "1")),
         dict(terme="L'enfant compté au 31 décembre",
-             annuaire="Rien de plus dans l'Annuaire que « à la fin de l'exercice ».",
+             annuaire="Rien de plus dans l'Annuaire CIPRES que « à la fin de l'exercice ».",
              compris="Une allocation en cours le 31 décembre, comme pour T32, pour un enfant en "
                      "vie de 21 ans au plus, et payée dans l'année. Sans la condition de "
                      "paiement, on compterait 5 % de trop.",
@@ -864,7 +865,7 @@ T41 = dict(
              base=["PRESTATION_ESP : en cours au 31/12 (terme 2 de T32).",
                    "INDIVIDU de l'enfant : IND_DATE_NAISSANCE, IND_DATE_DECES.",
                    "DEBOURS : au moins un paiement dans l'année.",
-                   "2024 : 271 577 enfants (l'annuaire de la CNSS : 268 481)."],
+                   "2024 : 271 577 enfants (l'annuaire CNSS 2024 : 268 481)."],
              sql=sql(t41, "2")),
         dict(terme="Allocataire",
              annuaire="« Personne qui perçoit des prestations familiales du chef de son "
@@ -873,7 +874,7 @@ T41 = dict(
                      "compté, une seule fois, quel que soit le nombre de ses enfants.",
              question="Tu valides : l'allocataire est le titulaire du dossier ?",
              base=["DOSSIER.IND_ID : le titulaire du dossier.",
-                   "2024 : 98 048 allocataires, 2,8 enfants chacun (l'annuaire de la CNSS : "
+                   "2024 : 98 048 allocataires, 2,8 enfants chacun (l'annuaire CNSS 2024 : "
                    "97 378)."],
              sql=sql(t41, "3")),
         dict(terme="L'âge",
@@ -885,8 +886,8 @@ T41 = dict(
              sql=sql(t41, "4")),
         dict(terme="Tranches d'âge",
              annuaire="Moins de 20 ans, 20-24… 75-79, 80 ans et plus (p. 41).",
-             compris="La grille de l'Annuaire telle quelle.",
-             question="Tu valides la grille de l'Annuaire ?",
+             compris="La grille de l'Annuaire CIPRES telle quelle.",
+             question="Tu valides la grille de l'Annuaire CIPRES ?",
              base=["L'âge du terme 4."],
              sql=sql(t41, "5")),
         dict(terme="Le sexe",
@@ -951,12 +952,12 @@ GROUP  BY TPE_CODE"""),
         dict(terme="Nouveau pensionné",
              annuaire="Les nouveaux pensionnés « de l'exercice » (p. 15), sans autre précision.",
              compris="La personne dont la première prestation du tableau est saisie dans "
-                     "l'année. C'est ce qui retombe sur l'annuaire de la CNSS à 1 % près ; la "
+                     "l'année. C'est ce qui retombe sur l'annuaire CNSS 2024 à 1 % près ; la "
                      "date de notification donne 4 à 5 % de moins.",
              question="Tu valides : nouveau = première pension saisie dans l'année ?",
              base=["PRESTATION_ESP.PE_DATE_INSERT, la date de saisie : la plus ancienne de la "
                    "personne pour les codes du tableau.",
-                   "2024 : 2 463 nouveaux retraités (l'annuaire de la CNSS : 2 489) ; veuves "
+                   "2024 : 2 463 nouveaux retraités (l'annuaire CNSS 2024 : 2 489) ; veuves "
                    "+0,7 %, orphelins +0,5 %."],
              sql=sql(t42, "2")),
         dict(terme="La personne comptée",
@@ -971,7 +972,7 @@ GROUP  BY TPE_CODE"""),
         dict(terme="L'âge",
              annuaire="Année de constatation moins année de naissance (glossaire, p. 62).",
              compris="L'année de l'exercice moins l'année de naissance. Par tranche, l'âge "
-                     "retombe sur l'annuaire de la CNSS ; âge par âge, il se décale : la CNSS "
+                     "retombe sur l'annuaire CNSS 2024 ; âge par âge, il se décale : la CNSS "
                      "le calcule peut-être à la date d'effet.",
              question="À quelle date la CNSS calcule-t-elle l'âge d'un nouveau retraité ?",
              base=["INDIVIDU.IND_DATE_NAISSANCE."],
@@ -980,16 +981,16 @@ GROUP  BY TPE_CODE"""),
              annuaire="Des tranches de 5 ans, propres à chaque tableau (p. 42 à p. 45).",
              compris="T42 : moins de 50 ans, 50-54… 95-99, 100 ans et plus ; les autres "
                      "suivent leur grille (terme 1).",
-             question="Tu valides les grilles de l'Annuaire telles quelles ?",
+             question="Tu valides les grilles de l'Annuaire CIPRES telles quelles ?",
              base=["L'âge du terme 4.",
                    "2024 : 55-59 ans 1 450 (1 429 publiés), 60-64 ans 941 (956)."],
              sql=sql(t42, "5")),
         dict(terme="Le sexe",
              annuaire="Hommes et femmes, en colonnes (p. 42).",
              compris="Le sexe de la fiche de la personne. Pour les nouveaux retraités, il ne "
-                     "retombe pas sur l'annuaire de la CNSS : 641 femmes dans la base pour 527 "
+                     "retombe pas sur l'annuaire CNSS 2024 : 641 femmes dans la base pour 527 "
                      "publiées.",
-             question="D'où vient le sexe publié dans l'annuaire de la CNSS ?",
+             question="D'où vient le sexe publié dans l'annuaire CNSS 2024 ?",
              base=["INDIVIDU.IND_SEXE : 1 homme, 2 femme."],
              sql=sql(t42, "6")),
         dict(terme="Le montant",
@@ -1093,7 +1094,7 @@ T50 = dict(
         dict(terme="Le montant de l'année",
              annuaire="Le montant par année (p. 46).",
              compris="Ce qui a été payé dans l'année pour la prestation. La date qui retombe le "
-                     "mieux sur l'annuaire de la CNSS est celle du versement, rappels compris : "
+                     "mieux sur l'annuaire CNSS 2024 est celle du versement, rappels compris : "
                      "497,8 millions d'allocations de vieillesse versées en 2024 pour 497,7 "
                      "publiés, contre +3,9 % au mois payé. Le choix reste ouvert.",
              question="Le montant d'une année : les paiements versés dans l'année, ou les mois "
@@ -1139,8 +1140,8 @@ T50 = dict(
              sql=sql(t50, "7")),
         dict(terme="Les 5 années et la date du calcul",
              annuaire="« Au cours des 5 dernières années » : N-4 à N (p. 46 à p. 48).",
-             compris="Les années N-4 à N, chacune avec les mêmes règles. La CNSS arrête son "
-                     "annuaire fin mars de l'année suivante : je calcule l'année N sur la copie "
+             compris="Les années N-4 à N, chacune avec les mêmes règles. L'annuaire CNSS de "
+                     "l'année N est arrêté fin mars N+1 : je calcule l'année N sur la copie "
                      "de la base de fin mars N+1, sinon les décès et radiations saisis après "
                      "font bouger les chiffres.",
              question="Tu valides : l'année N se calcule sur la base de fin mars N+1 ?",

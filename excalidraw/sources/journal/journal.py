@@ -688,10 +688,15 @@ JOURS = [
                              "T40, T41, T42 à T49, T50 à T57 (79 termes). GRH : T58, T59, T61 "
                              "et T65 ensemble, T60, T62, T63 et T64 (31 termes). T28 à T30, T63 "
                              "et T64 n'ont pas encore toutes leurs données : leurs termes "
-                             "posent la question et disent où chercher.",
+                             "posent la question et disent où chercher. Ta question sur "
+                             "« l'annuaire de la CNSS » : c'était l'annuaire statistique CNSS "
+                             "2024, pas l'Annuaire CIPRES ; les deux fiches le disent "
+                             "maintenant partout.",
                       decide="Une section par famille de tableaux calculés de la même façon ; "
                              "la requête est donnée pour le premier, on change les codes pour "
-                             "les autres.",
+                             "les autres. Deux noms fixes : « Annuaire CIPRES » (les pages "
+                             "citées, l'encadré rouge) et « annuaire CNSS 2024 » (la "
+                             "comparaison des chiffres).",
                       fichiers="sources/fiche_de_lecture.py ; "
                                "sources/prestations/lecture_prestations.py ; "
                                "sources/grh/lecture_grh.py ; schemas/prestations/"
