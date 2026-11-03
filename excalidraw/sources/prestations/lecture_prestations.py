@@ -83,13 +83,16 @@ T25 = dict(
         dict(terme="Dossier de prestations PVID",
              annuaire="PVID : pensions de vieillesse, d'invalidité et de décès (les survivants). "
                       "Le tableau porte sur les dossiers « de l'exercice » (p. 11).",
-             compris="Un dossier de la branche des pensions, ouvert au nom de l'assuré. J'y "
-                     "garde les dossiers de coordination : l'assuré a travaillé dans deux pays, "
-                     "l'autre caisse paie, mais la CNSS reçoit et instruit la demande. Je retire "
-                     "seulement les dossiers transférés à une autre caisse, que la CNSS ne traite "
-                     "plus.",
-             question="Tu valides : les dossiers de coordination comptent, les dossiers "
-                      "transférés non ?",
+             compris="Un dossier de la branche des pensions (vieillesse, invalidité, décès), "
+                     "ouvert au nom de l'assuré. Je garde les dossiers de coordination : l'assuré "
+                     "a travaillé dans deux pays, l'autre caisse paie la pension, mais c'est la "
+                     "CNSS qui reçoit et étudie la demande. Je retire seulement les dossiers "
+                     "transférés à une autre caisse : la CNSS ne les traite plus.",
+             exemple="un assuré a travaillé au Burkina puis au Mali ; il dépose sa demande à la "
+                     "CNSS, qui l'étudie, et la caisse du Mali paie : le dossier compte.",
+             question="Tu valides : un dossier de coordination compte (la CNSS l'étudie, même si "
+                      "une autre caisse paie), un dossier transféré à une autre caisse ne compte "
+                      "pas ?",
              base=["Table DOSSIER, TDOS_CODE = 'V' (branche des pensions).",
                    "DOS_CATEGORIE vide : dossier ordinaire, gardé.",
                    "DOS_CATEGORIE = 'COOR_AC' : coordination payée par une autre caisse, "
@@ -109,8 +112,8 @@ T25 = dict(
                      "majoration pour enfant) suit la pension : il ne crée pas de ligne.",
              exemple="un dossier avec une pension de vieillesse et une majoration pour enfant "
                      "compte une fois, sur la ligne pension de vieillesse.",
-             question="Tu valides ce classement des codes, avec une ligne à part pour la "
-                      "retraite anticipée ?",
+             question="Tu valides : on ajoute une ligne « pension de retraite anticipée », que "
+                      "l'Annuaire CIPRES n'a pas mais que l'atelier de Kaya a demandée ?",
              base=["Table PRESTATION_ESP, champ TPE_CODE (libellés dans TYPE_PRESTATION_ESP).",
                    "Pension de vieillesse : RPV. Retraite anticipée : RPRA. Invalidité : RPI.",
                    "Pension de survivant : RPSV veuve, RPSF veuf, RPSE orphelin, RPA ascendant.",
@@ -131,16 +134,17 @@ ORDER  BY 2 DESC
         dict(terme="Nombre de dossiers déposés",
              annuaire="Les dossiers « déposés » au cours de l'exercice (p. 11) ; la durée de "
                       "liquidation part de la date de dépôt (glossaire, p. 64).",
-             compris="Une demande reçue au guichet entre le 1er janvier et le 31 décembre. "
-                     "C'est soit une nouvelle demande, qui ouvre un dossier, soit une demande de "
-                     "réversion déposée sur le dossier d'un pensionné décédé. Je compte des "
-                     "demandes, pas des dossiers : un dossier peut en recevoir plusieurs au fil "
-                     "des ans.",
+             compris="Une demande reçue au guichet entre le 1er janvier et le 31 décembre. C'est "
+                     "soit une nouvelle demande, qui ouvre un dossier, soit une demande de "
+                     "réversion (la pension de la veuve ou des orphelins d'un pensionné décédé), "
+                     "déposée sur le dossier du défunt. Je compte des demandes, pas des dossiers "
+                     ": un même dossier peut recevoir plusieurs demandes au fil des ans.",
              exemple="un pensionné meurt en 2023 ; sa veuve dépose sa demande le 3 mars 2025 "
                      "sur le dossier de son mari : c'est un dépôt de 2025, sur la ligne pension "
                      "de survivant.",
-             question="Tu valides : déposé = reçu au guichet dans l'année, réversions sur un "
-                      "dossier existant comprises ?",
+             question="Tu valides : quand une veuve dépose sa demande de réversion sur le dossier "
+                      "de son mari décédé, cette demande compte comme un nouveau dossier déposé, "
+                      "l'année où elle est faite ?",
              base=["Table RECEPTION_DOSSIER, une ligne par passage au guichet, TDOS_CODE = 'V'.",
                    "RD_DATE_RECEPTION : la date du dépôt, entre le 01/01 et le 31/12.",
                    "RD_TYPE_RECEPTION = 'NOUVEAU' : ouvre un dossier (4 055 en 2025).",
@@ -201,12 +205,15 @@ ORDER  BY 2 DESC
         dict(terme="Dossiers en instance",
              annuaire="« Le nombre de dossiers restants à traiter en fin d'exercice » (p. 11).",
              compris="Une demande reçue, ni notifiée ni rejetée au 31 décembre, quelle que soit "
-                     "l'année de son dépôt. J'enlève deux choses : les dossiers fermés sans "
-                     "avoir jamais été notifiés, et les vieilles réceptions d'avant 2016 jamais "
-                     "reliées à un dossier. Sans ça, on aurait 23 218 demandes en instance fin "
-                     "2025, cinq fois les dépôts d'une année.",
-             question="Tu valides : une demande qui attend depuis des années sort du stock "
-                      "(reçue avant 2016 sans dossier, ou dossier fermé) ?",
+                     "l'année de son dépôt. J'en retire deux sortes, qui ne seront plus jamais "
+                     "traitées : les dossiers fermés sans avoir jamais été notifiés, et les "
+                     "vieilles réceptions d'avant 2016 jamais reliées à un dossier. Sans ce tri, "
+                     "on aurait 23 218 demandes en instance fin 2025, cinq fois les dépôts d'une "
+                     "année.",
+             exemple="une demande reçue en 2012, jamais reliée à un dossier : sans ce tri, elle "
+                     "serait encore « en instance » fin 2025.",
+             question="Tu valides : une demande abandonnée (dossier fermé sans notification, ou "
+                      "réception d'avant 2016 restée sans dossier) ne compte plus en instance ?",
              base=["RECEPTION_DOSSIER : les réceptions jusqu'au 31/12/2025.",
                    "Aucune notification après la réception : PRESTATION_ESP."
                    "PE_DATE_NOTIFICATION.",
@@ -219,9 +226,10 @@ ORDER  BY 2 DESC
              compris="Un dossier dont le refus a été enregistré dans l'année, avec son motif : "
                      "prescription, pas de bénéficiaire, pièce non conforme, autre. Il n'y en a "
                      "que 14 en 2025 (146 depuis 2017) : d'après l'atelier de Kaya, le module des "
-                     "rejets existe mais sert peu. Un refus non saisi reste donc en instance.",
-             question="Tu valides : tous les refus sont saisis dans le module des rejets ? "
-                      "Sinon, où les trouver ?",
+                     "rejets existe mais sert peu. Un refus qui n'y est pas saisi reste compté en "
+                     "instance.",
+             question="Quand la CNSS refuse une pension, ce refus est-il toujours saisi dans le "
+                      "module des rejets ?",
              base=["Table DOSSIER_REJETE, TDOS_CODE = 'V'.",
                    "DOSRE_DATE_REJET : la date du refus, entre le 01/01 et le 31/12.",
                    "RD_ID : la réception refusée ; DOS_CODE : le dossier, s'il existe."],
@@ -230,31 +238,40 @@ ORDER  BY 2 DESC
              annuaire="Le tableau permet de « déterminer pour chaque type de prestation la "
                       "durée moyenne de liquidation » et de la comparer à la norme CIPRES : "
                       "moins de 45 jours (p. 11).",
-             compris="La moyenne des durées des demandes liquidées dans l'année, ligne par "
-                     "ligne. J'ajoute la médiane, la durée de la demande du milieu, que quelques "
+             compris="La moyenne des durées des demandes liquidées dans l'année, ligne par ligne. "
+                     "J'ajoute la médiane (la durée de la demande du milieu), que quelques "
                      "dossiers très lents ne faussent pas. En 2025 : moyenne 82 jours, médiane 62 "
-                     "jours, au-dessus de la norme.",
-             question="Tu valides la moyenne simple des durées, et l'ajout de la médiane ?",
+                     "jours, au-dessus de la norme CIPRES de 45 jours.",
+             question="Tu valides : la durée moyenne publiée est la moyenne simple des durées (la "
+                      "médiane n'est qu'un repère en plus) ?",
              base=["Les durées du terme 5, pour les demandes liquidées en 2025.",
                    "La norme CIPRES : moins de 45 jours."],
              sql=t25_sql("8")),
         dict(terme="TOTAL",
              annuaire="La ligne TOTAL de la maquette (p. 34).",
-             compris="La somme des lignes : chaque demande compte une fois. Une demande reçue qui "
-                     "n'a encore aucune pension créée n'a pas de ligne : elle compte seulement "
-                     "dans le Total des déposés et des en instance. La durée moyenne du Total "
-                     "est recalculée sur toutes les demandes, pas tirée des moyennes des lignes.",
-             question="Tu valides : les demandes sans ligne comptent dans le Total ?",
+             compris="La somme des lignes : chaque demande compte une fois. Une demande pas "
+                     "encore étudiée n'a pas de ligne, car on ne sait pas encore quelle pension "
+                     "elle donnera : elle compte seulement dans le Total des déposés et des en "
+                     "instance. La durée moyenne du Total est recalculée sur toutes les demandes, "
+                     "pas tirée des moyennes des lignes.",
+             exemple="une demande reçue le 20 décembre 2025, pas encore étudiée au 31 décembre : "
+                     "elle compte dans le Total des déposés et des en instance, sur aucune ligne.",
+             question="Tu valides : une demande pas encore étudiée compte dans le Total, même "
+                      "sans ligne ?",
              base=["Toutes les demandes des termes 3 à 9, sans regarder la ligne."],
              sql=t25_sql("9")),
         dict(terme="Dossiers restants à traiter en fin d'exercice (le taux)",
              annuaire="Le nombre de dossiers restants à traiter en fin d'exercice « rentre dans "
                       "le calcul des prestations à payer » (p. 11). L'atelier de Kaya en fait un "
                       "indicateur, le taux des dossiers restant à traiter, sans formule.",
-             compris="Le taux : les demandes en instance au 31 décembre, divisées par celles en "
-                     "instance au 1er janvier plus celles déposées dans l'année. Ni l'Annuaire CIPRES "
-                     "ni l'atelier ne donnent de formule : c'est la mienne.",
-             question="Tu valides cette formule du taux ?",
+             compris="La part des demandes qui restent à traiter : les demandes en instance au 31 "
+                     "décembre, divisées par toutes celles qu'il y avait à traiter dans l'année "
+                     "(en instance au 1er janvier, plus déposées dans l'année). Ni l'Annuaire "
+                     "CIPRES ni l'atelier de Kaya ne donnent de formule : c'est la mienne.",
+             exemple="100 demandes en instance au 1er janvier, 400 déposées dans l'année, 50 en "
+                     "instance au 31 décembre : 50 / (100 + 400) = 10 %.",
+             question="Tu valides cette formule : en instance au 31/12, divisé par (en instance "
+                      "au 1er janvier + déposées dans l'année) ?",
              base=["En instance au 31/12/2025 et au 31/12/2024 : le terme 7, à ces deux dates.",
                    "Déposés en 2025 : le terme 3 (4 671)."],
              sql=t25_sql("10")),
@@ -266,11 +283,15 @@ def demande_rejet_total_taux(fiche, deposes):
     return [
         dict(terme="Dossiers en instance",
              annuaire="« Le nombre de dossiers restants à traiter en fin d'exercice » (p. 12).",
-             compris="Une demande reçue, ni liquidée ni rejetée au 31 décembre. J'enlève les "
-                     "dossiers fermés sans rien avoir donné, et les demandes toujours sans suite "
-                     "24 mois après leur dépôt : beaucoup ne donnent jamais rien et ne sont jamais "
-                     "fermées, elles resteraient en instance pour toujours.",
-             question="Tu valides : une demande sans suite depuis 24 mois sort du stock ?",
+             compris="Une demande reçue, ni liquidée ni rejetée au 31 décembre. J'en retire deux "
+                     "sortes : les dossiers fermés sans rien avoir donné, et les demandes "
+                     "toujours sans suite 24 mois après leur dépôt. Beaucoup ne donnent jamais "
+                     "rien et ne sont jamais fermées : sans ce tri, elles resteraient en instance "
+                     "pour toujours.",
+             exemple="une demande reçue en mars 2023 qui n'a toujours rien donné en mars 2025 : "
+                     "elle sort du stock à ce moment-là.",
+             question="Tu valides : une demande qui n'a toujours rien donné 24 mois après son "
+                      "dépôt ne compte plus en instance ?",
              base=["RECEPTION_DOSSIER : les réceptions des 24 derniers mois.",
                    "Aucune notification après la réception (PRESTATION_ESP), aucun refus "
                    "(DOSSIER_REJETE).",
@@ -278,38 +299,43 @@ def demande_rejet_total_taux(fiche, deposes):
              sql=sql(fiche, "6", DECALE)),
         dict(terme="Dossiers rejetés",
              annuaire="La colonne « Dossiers rejetés » de la maquette (p. 34).",
-             compris="Un dossier dont le refus a été enregistré dans l'année, dans le module "
-                     "des rejets. Il sert peu (atelier de Kaya) : une demande sans suite n'est "
-                     "ni fermée ni rejetée.",
-             question="Tu valides : tous les refus sont saisis dans le module des rejets ?",
+             compris="Un dossier dont le refus a été enregistré dans l'année, dans le module des "
+                     "rejets. D'après l'atelier de Kaya, ce module sert peu : une demande sans "
+                     "suite n'y est pas, elle n'est ni fermée ni rejetée.",
+             question="Quand la CNSS refuse une demande, ce refus est-il toujours saisi dans le "
+                      "module des rejets ?",
              base=["Table DOSSIER_REJETE : DOSRE_DATE_REJET, la date du refus ; TDOS_CODE, la "
                    "branche."],
              sql=sql(fiche, "7", DECALE)),
         dict(terme="Durée moyenne de liquidation et norme CIPRES",
              annuaire="La durée moyenne par type de prestation, comparée à la norme CIPRES : "
                       "moins de 45 jours (p. 12).",
-             compris="La moyenne des durées des demandes liquidées dans l'année, ligne par "
-                     "ligne, avec la médiane en plus, que quelques dossiers très lents ne "
-                     "faussent pas.",
-             question="Tu valides la moyenne simple, avec la médiane en plus ?",
+             compris="La moyenne des durées des demandes liquidées dans l'année, ligne par ligne. "
+                     "J'ajoute la médiane (la durée de la demande du milieu), que quelques "
+                     "dossiers très lents ne faussent pas. La norme CIPRES est de 45 jours au "
+                     "plus.",
+             question="Tu valides : la durée moyenne publiée est la moyenne simple des durées (la "
+                      "médiane n'est qu'un repère en plus) ?",
              base=["Les durées du terme 5, pour les demandes liquidées dans l'année."],
              sql=sql(fiche, "8", DECALE)),
         dict(terme="TOTAL",
              annuaire="La ligne TOTAL de la maquette (p. 34).",
-             compris="La somme des lignes : chaque demande compte une fois sur sa ligne. Les "
-                     "réceptions qui n'ont encore donné aucune prestation comptent seulement "
-                     "dans le Total des déposés et des en instance. La durée moyenne du Total est "
-                     "recalculée sur toutes les demandes.",
-             question="Tu valides : les réceptions sans prestation comptent dans le Total ?",
+             compris="La somme des lignes : chaque demande compte une fois sur sa ligne. Une "
+                     "demande qui n'a encore donné aucune prestation n'a pas de ligne : elle "
+                     "compte seulement dans le Total des déposés et des en instance. La durée "
+                     "moyenne du Total est recalculée sur toutes les demandes.",
+             question="Tu valides : une demande qui n'a encore rien donné compte dans le Total, "
+                      "même sans ligne ?",
              base=["Toutes les demandes des termes 3 à 9, sans regarder la ligne."],
              sql=sql(fiche, "9", DECALE)),
         dict(terme="Dossiers restants à traiter en fin d'exercice (le taux)",
              annuaire="Le nombre de dossiers restants à traiter en fin d'exercice (p. 12) ; "
                       "l'atelier de Kaya en fait un taux, sans formule.",
-             compris="Les demandes en instance au 31 décembre, divisées par celles en instance "
-                     "au 1er janvier plus celles déposées dans l'année : la même formule que "
-                     "pour T25.",
-             question="Tu valides cette formule ?",
+             compris="Les demandes en instance au 31 décembre, divisées par toutes celles qu'il y "
+                     "avait à traiter dans l'année (en instance au 1er janvier, plus déposées "
+                     "dans l'année) : la même formule que pour T25.",
+             question="Tu valides cette formule : en instance au 31/12, divisé par (en instance "
+                      "au 1er janvier + déposées dans l'année) ?",
              base=["En instance : le terme 7 au 31/12/2025 et au 31/12/2024.",
                    f"Déposés : le terme 3 ({deposes} en 2025)."],
              sql=sql(fiche, "10", DECALE)),
@@ -346,10 +372,11 @@ T26 = dict(
                       "TOTAL (p. 34).",
              compris="La rente viagère est celle de la victime, après la consolidation. Les "
                      "rentes de survivants vont à la veuve, au veuf, aux orphelins et aux "
-                     "ascendants. L'allocation AT/MP est l'allocation d'incapacité, pour les "
-                     "petits taux. Dans « autres prestations », je mets les remboursements de "
-                     "soins : consultations, pharmacie, examens, radios.",
-             question="Tu valides ce classement, avec les soins dans « autres prestations » ?",
+                     "ascendants. L'allocation AT/MP est l'allocation d'incapacité, quand le taux "
+                     "d'incapacité est de moins de 15 %. Dans « autres prestations », je mets les "
+                     "remboursements de soins : consultations, pharmacie, examens, radios.",
+             question="Tu valides : les remboursements de soins (consultations, pharmacie, "
+                      "examens, radios) vont sur la ligne « autres prestations » ?",
              base=["PRESTATION_ESP.TPE_CODE : ARI rente viagère ; ARSV veuve, ARSF veuf, ARSE "
                    "orphelin, ARSA ascendant ; AIJ indemnités journalières ; AAI allocation "
                    "d'incapacité.",
@@ -372,29 +399,39 @@ AND    deb.TPN_CODE IS NOT NULL
 GROUP  BY deb.TPN_CODE"""),
         dict(terme="Nombre de dossiers déposés",
              annuaire="Les dossiers « déposés » au cours de l'exercice (p. 12).",
-             compris="Une demande reçue au guichet dans l'année. La déclaration de l'accident "
-                     "est le dépôt des IJ et des soins. Une rente, une allocation ou une rente de "
-                     "survivant est déposée à part, par sa propre demande sur le dossier qui "
-                     "existe. Une rente sans demande au guichet prend la date du certificat pour "
-                     "la rente, sinon celle de la déclaration.",
-             exemple="accident déclaré en mars 2023 ; la victime demande sa rente au guichet le "
-                     "10 juin 2025 : c'est un dépôt de 2025, sur la ligne rentes viagères.",
-             question="Tu valides : la déclaration vaut dépôt des IJ et des soins, et la rente a "
-                      "son propre dépôt ?",
+             compris="Un accident ne donne pas un seul dépôt, mais un dépôt par demande, compté "
+                     "l'année où la demande est faite. La déclaration de l'accident est le "
+                     "premier dépôt : il vaut pour les IJ et les soins, que personne ne vient "
+                     "demander à part. Plus tard, la victime revient au guichet demander sa rente "
+                     "ou son allocation, ou sa famille une rente de survivant : chacune de ces "
+                     "demandes est un nouveau dépôt, sur le même dossier. S'il n'y a pas de "
+                     "demande au guichet, je prends la date du certificat médical pour la rente, "
+                     "sinon celle de la déclaration.",
+             exemple="accident déclaré en mars 2023 : un dépôt en 2023 (lignes IJ et soins). La "
+                     "victime demande sa rente le 10 juin 2025 : un deuxième dépôt, en 2025 "
+                     "(ligne rentes viagères). Sans ce deuxième dépôt, la ligne des rentes "
+                     "resterait vide et la durée de liquidation de la rente partirait de 2023.",
+             question="Tu valides : quand la victime revient au guichet demander sa rente, des "
+                      "années après l'accident, cette demande compte comme un nouveau dossier "
+                      "déposé, l'année où elle est faite ?",
              base=["RECEPTION_DOSSIER, TDOS_CODE = 'A' ; RD_DATE_RECEPTION, la date du dépôt.",
-                   "NOUVEAU : la déclaration (1 345 en 2025). ANCIEN : une demande sur le "
-                   "dossier, suivie à 70 % d'une rente ou d'une allocation, à 9 % d'une rente "
-                   "de survivant (136 en 2025).",
+                   "NOUVEAU : la déclaration (1 345 en 2025). ANCIEN : une demande sur un "
+                   "dossier qui existe déjà (136 en 2025) ; 70 % sont suivies d'une rente ou "
+                   "d'une allocation, 9 % d'une rente de survivant.",
                    "Certificat pour la rente : DOSSIER.DOS_DATE_REC_CM_RENTE."],
              sql=sql(t26, "2", DECALE)),
         dict(terme="Nombre de dossiers liquidés",
              annuaire="La liquidation va jusqu'à la notification des droits au bénéficiaire "
                       "(glossaire, p. 64).",
-             compris="Une demande dont les droits ont été notifiés dans l'année : la première "
-                     "notification de la demande. Une IJ prolongée donne plusieurs IJ : la "
-                     "demande compte une fois, à la première. Les soins n'ont pas de "
-                     "notification : je les compte liquidés au premier remboursement saisi.",
-             question="Tu valides : les soins sont liquidés au premier remboursement saisi ?",
+             compris="Une demande dont les droits ont été notifiés dans l'année, à la première "
+                     "notification. Si un arrêt est prolongé, la victime reçoit plusieurs IJ : la "
+                     "demande ne compte qu'une fois, à la première. Les soins n'ont pas de "
+                     "décision envoyée : je les compte liquidés le jour où leur premier "
+                     "remboursement est saisi.",
+             exemple="accident déclaré le 3 mars 2025, première facture de pharmacie remboursée "
+                     "et saisie le 2 avril 2025 : les soins sont liquidés en 2025, en 30 jours.",
+             question="Tu valides : les soins sont liquidés le jour où leur premier remboursement "
+                      "est saisi ?",
              base=["PRESTATION_ESP.PE_DATE_NOTIFICATION : la plus petite de la demande (97 % "
                    "des IJ en ont une ; l'allocation d'incapacité depuis 2019).",
                    "Soins : DEBOURS.DEB_DATE_INSERT du premier remboursement du dossier."],
@@ -403,12 +440,14 @@ GROUP  BY deb.TPN_CODE"""),
              annuaire="« Temps entre la date de dépôt d'un dossier de prestation et celle de "
                       "notification des droits au bénéficiaire » (glossaire, p. 64).",
              compris="Les jours entre le dépôt de la demande et sa liquidation. Pour les IJ et "
-                     "les soins, je pars de la déclaration ; pour une rente, de sa demande au "
-                     "guichet. L'atelier de Kaya partait du certificat de consolidation pour les "
-                     "rentes, et du certificat du médecin pour les soins, une date que la base n'a "
-                     "pas.",
-             question="Tu valides : la durée part du dépôt au guichet, comme pour les pensions, "
-                      "et pas du certificat ?",
+                     "les soins, je pars de la déclaration de l'accident. Pour une rente, je pars "
+                     "du jour où la victime la demande au guichet. L'atelier de Kaya partait du "
+                     "certificat de consolidation pour les rentes, et du certificat du médecin "
+                     "pour les soins, une date que la base n'a pas.",
+             exemple="en 2025, une rente est liquidée 14 jours en médiane après sa demande au "
+                     "guichet, 64 jours après le certificat médical pour la rente.",
+             question="Tu valides : la durée d'une rente part de sa demande au guichet, et non du "
+                      "certificat de consolidation ?",
              base=["IJ et soins : RD_DATE_RECEPTION de la déclaration (DOSSIER.RD_ID).",
                    "Rente, allocation : la réception ANCIEN du dossier, sinon "
                    "DOS_DATE_REC_CM_RENTE, sinon la déclaration.",
@@ -417,9 +456,11 @@ GROUP  BY deb.TPN_CODE"""),
              sql=sql(t26, "4", DECALE)),
         dict(terme="Moins de 15 jours, 15 à 45 jours, plus de 45 jours",
              annuaire="Les trois colonnes de la durée de liquidation (p. 12 et p. 34).",
-             compris="0 à 14 jours, 15 à 45 jours, 46 jours et plus, comme pour T25. Les trois "
-                     "colonnes ensemble font les liquidés.",
-             question="Tu valides les mêmes bornes que pour T25 ?",
+             compris="Chaque demande liquidée tombe dans une seule colonne : 0 à 14 jours, 15 à "
+                     "45 jours, 46 jours et plus, comme pour T25. Les trois colonnes ensemble "
+                     "font les liquidés.",
+             question="Tu valides les mêmes colonnes que pour T25 : 15 et 45 jours vont dans « 15 "
+                      "à 45 jours » ?",
              base=["La durée du terme 5, classée en trois.",
                    "2025 : plus de 45 jours pour au moins 85 % des IJ, pour 30 % des rentes."],
              sql=sql(t26, "5", DECALE)),
@@ -452,11 +493,13 @@ T27 = dict(
                       "maternité, allocations prénatales, autres prestations de la branche, puis "
                       "le TOTAL (p. 34).",
              compris="Les allocations familiales sont celles de l'allocataire, pour ses enfants. "
-                     "Les IJ et l'allocation prénatale viennent du dossier de la grossesse. "
-                     "J'ajoute l'ancienne allocation prénatale des PF (33 en 2025). Aucune autre "
+                     "Les IJ de maternité et l'allocation prénatale viennent du dossier de la "
+                     "grossesse. Il reste une ancienne allocation prénatale des PF, payée 33 fois "
+                     "en 2025 : je la mets avec les allocations prénatales. Aucune autre "
                      "prestation n'est payée aujourd'hui : des frais de maternité sont prévus "
                      "dans la base, jamais payés.",
-             question="Tu valides ce classement des codes ?",
+             question="Tu valides : l'ancienne allocation prénatale des PF compte avec les "
+                      "allocations prénatales ?",
              base=["PRESTATION_ESP.TPE_CODE : FAF allocations familiales ; MIJ indemnités "
                    "journalières de maternité ; MAP allocation prénatale de la maternité, FAP "
                    "l'ancienne des PF."],
@@ -472,11 +515,14 @@ GROUP  BY d.TDOS_CODE, pe.TPE_CODE"""),
                       "Kaya : le dépôt, c'est la réception du dossier complet au guichet.",
              compris="Une demande reçue au guichet dans l'année : un nouvel allocataire, ou une "
                      "nouvelle grossesse, qui ouvre son dossier. Une grossesse est déposée une "
-                     "fois sur chacune de ses deux lignes (IJ et prénatale). Un enfant ajouté "
-                     "plus tard ne passe pas au guichet : je le compte déposé à la date de sa "
-                     "demande.",
-             question="Tu valides : un enfant ajouté est une demande de plus, déposée à sa date "
-                      "de demande ?",
+                     "fois sur chacune de ses deux lignes (IJ et prénatale). Un enfant qui "
+                     "s'ajoute plus tard au dossier d'un allocataire (une naissance) ne passe pas "
+                     "au guichet : je le compte comme une demande déposée à la date de sa demande "
+                     "dans la base.",
+             exemple="un allocataire déjà payé pour deux enfants a un troisième enfant en 2025 : "
+                     "son ajout au dossier compte comme une demande déposée en 2025.",
+             question="Tu valides : un enfant ajouté au dossier d'un allocataire compte comme une "
+                      "demande déposée de plus ?",
              base=["RECEPTION_DOSSIER, TDOS_CODE 'F' ou 'M' ; RD_DATE_RECEPTION.",
                    "2025 : 9 968 réceptions PF et 4 338 de maternité ; 6 seulement sur un "
                    "dossier existant (certificats de scolarité ou de vie).",
@@ -512,8 +558,11 @@ GROUP  BY d.TDOS_CODE, pe.TPE_CODE"""),
              sql=sql(t27, "4", DECALE)),
         dict(terme="Moins de 15 jours, 15 à 45 jours, plus de 45 jours",
              annuaire="Les trois colonnes de la durée de liquidation (p. 12 et p. 34).",
-             compris="0 à 14 jours, 15 à 45 jours, 46 jours et plus, comme pour T25.",
-             question="Tu valides les mêmes bornes que pour T25 ?",
+             compris="Chaque demande liquidée tombe dans une seule colonne : 0 à 14 jours, 15 à "
+                     "45 jours, 46 jours et plus, comme pour T25. Les trois colonnes ensemble "
+                     "font les liquidés.",
+             question="Tu valides les mêmes colonnes que pour T25 : 15 et 45 jours vont dans « 15 "
+                      "à 45 jours » ?",
              base=["La durée du terme 5, classée en trois.",
                    "Dossiers ouverts en 2025 : allocataires 57 %, 24 %, 19 % ; maternité 44 %, "
                    "44 %, 12 %."],
@@ -556,13 +605,14 @@ GROUP  BY CODE_BRANCHE"""),
              annuaire="« Ces contrôles portent sur les dossiers déjà liquidés aux fins de "
                       "s'assurer que les droits servis sont conformes aux éléments du dossier » "
                       "(p. 12).",
-             compris="Un dossier déjà payé qu'un agent a revérifié, et dont le contrôle est "
-                     "enregistré. La base a une table des contrôles, mais plus rien n'y est saisi "
-                     "depuis juillet 2025. La case « vérifié » des paiements n'est pas un "
-                     "contrôle a posteriori : c'est une coche de saisie. D'après l'atelier de "
-                     "Kaya, les contrôles sont faits par l'audit interne, dans des rapports.",
-             question="Tu valides : seuls les contrôles de la table des contrôles comptent ? Où "
-                      "sont-ils enregistrés depuis juillet 2025 ?",
+             compris="Un dossier déjà payé qu'un agent a revérifié après coup, et dont le "
+                     "contrôle est enregistré dans la table des contrôles. La case « vérifié » "
+                     "des paiements n'en est pas un : c'est une coche faite à la saisie. D'après "
+                     "l'atelier de Kaya, les contrôles sont faits par l'audit interne, dans des "
+                     "rapports. Plus rien n'est saisi dans la table depuis juillet 2025 : il "
+                     "faudra savoir où ils sont notés depuis.",
+             question="Tu valides : seul un contrôle enregistré dans la table des contrôles "
+                      "compte, pas la case « vérifié » ?",
              base=["Table DOSSIERS_CONTROLES : DOS_CODE, TDOS_CODE, DC_DATE_CONTROLE.",
                    "1 542 contrôles en tout, le dernier le 09/07/2025 ; quelques dates "
                    "fausses (années 202, 203, 2055).",
@@ -619,8 +669,9 @@ GROUP  BY c.TDOS_CODE, pe.TPE_CODE"""),
                       "la norme est de 5 % au moins » (p. 12).",
              compris="Les dossiers contrôlés dans l'année divisés par les dossiers payés dans "
                      "l'année, par branche. En 2025 : 115 contrôles pour 155 206 dossiers payés, "
-                     "0,07 %, très loin de la norme.",
-             question="Tu valides la formule : contrôlés de l'année sur payés de l'année ?",
+                     "soit 0,07 %, très loin de la norme CIPRES (au moins 5 %).",
+             question="Tu valides : le ratio = dossiers contrôlés dans l'année, divisés par "
+                      "dossiers payés dans l'année ?",
              base=["Contrôlés : le terme 2. Payés : le terme 1."],
              sql="""SELECT ROUND(100 * (
          SELECT COUNT(DISTINCT DOS_CODE)
@@ -658,9 +709,10 @@ T31 = dict(
         dict(terme="Prestations payées",
              annuaire="Rien dans l'Annuaire CIPRES ; l'atelier de Kaya : « la somme décaissée au "
                       "profit de l'assuré ».",
-             compris="Les paiements effectués dans le mois, toutes prestations de la branche. "
-                     "Je prends le mois payé ; le mois du versement donne le même taux à l'année.",
-             question="Tu valides : les payées sont les paiements du mois, au mois payé ?",
+             compris="Tous les paiements de la branche, rangés par le mois qu'ils paient : la "
+                     "pension de janvier compte en janvier, même si elle est versée en février. "
+                     "Rangés par date de versement, le taux de l'année ne change pas.",
+             question="Tu valides : un paiement compte dans le mois qu'il paie ?",
              base=["DEBOURS : DEB_TYPE 'PM', DEB_STATUT 'D' (payé par effet) ou 'P' (payé sans "
                    "effet), DEB_MONTANT.",
                    "Mois payé : DEB_DATE_EFFET ; mois du versement : DEB_DATE_INSERT.",
@@ -670,8 +722,9 @@ T31 = dict(
              annuaire="« Paiement de trop, au détriment de l'organisme » (glossaire, p. 66) ; "
                       "une prestation indue est une « prestation irrégulièrement versée » "
                       "(p. 65).",
-             compris="Un ajustement « trop-perçu », ou « trop-perçu sur convention », établi "
-                     "dans le mois. C'est lui, l'indu du tableau.",
+             compris="Quand la CNSS découvre qu'elle a payé trop, elle enregistre un « trop-perçu "
+                     "» : la somme à récupérer. C'est lui, l'indu du tableau. Je compte les "
+                     "trop-perçus (et les trop-perçus sur convention) établis dans le mois.",
              question="Tu valides : l'indu = les trop-perçus établis dans le mois ?",
              base=["Table AJUSTEMENT : TAJ_CODE 'TP' ou 'TP-CONV', AJ_MONTANT, "
                    "AJ_DATE_ETABLISSEMENT.",
@@ -680,8 +733,10 @@ T31 = dict(
         dict(terme="Moins perçu",
              annuaire="« Différence négative entre le montant du droit dû et le montant payé » "
                       "(glossaire, p. 64).",
-             compris="Un ajustement « moins-perçu ou rappel », ou « rappel sur convention ». Il "
-                     "est dans le tableau, mais ce n'est pas un indu : la CNSS a payé trop peu.",
+             compris="À l'inverse, quand la CNSS a payé trop peu, elle enregistre un « "
+                     "moins-perçu » ou un rappel (aussi « rappel sur convention ») : la somme "
+                     "qu'elle doit encore. Je le montre dans le tableau, mais ce n'est pas un "
+                     "indu.",
              question="Tu valides : les moins-perçus sont montrés, mais n'entrent pas dans le "
                       "taux ?",
              base=["AJUSTEMENT.TAJ_CODE 'MP' ou 'RC'.", "2024 : 414 millions."],
@@ -742,10 +797,11 @@ T32 = dict(
                       "viagère (T37), veufs et veuves (T38), orphelins (T39), ascendants (T40). "
                       "Le pensionné ascendant est le père ou la mère d'un assuré décédé "
                       "(glossaire, p. 65).",
-             compris="Chaque tableau a ses codes de prestation et sa grille d'âge. Je mets la "
-                     "retraite anticipée avec la vieillesse. Un orphelin compte jusqu'à 24 ans.",
-             question="Tu valides ce rattachement des codes, et la limite de 25 ans pour les "
-                      "orphelins ?",
+             compris="Chaque tableau a ses codes de prestation et sa grille d'âge (au milieu). Je "
+                     "mets la retraite anticipée avec la vieillesse. Un orphelin n'est compté que "
+                     "jusqu'à 24 ans : il sort l'année de ses 25 ans.",
+             question="Tu valides : un orphelin n'est plus compté à partir de l'année de ses 25 "
+                      "ans ?",
              base=["T32 RPV et RPRA, moins de 55 à 100 ans et plus ; T33 RPI, moins de 25 à 60 "
                    "et plus ; T34 RPSV et RPSF, moins de 15 à 100 et plus ; T35 RPSE, moins de "
                    "5 à 25 et plus ; T36 RPA, moins de 50 à 100 et plus.",
@@ -775,7 +831,9 @@ GROUP  BY TPE_CODE"""),
                      "2020 à 2024 retombent dessus à moins de 1 % près.",
              exemple="une pension suspendue le 31 octobre 2024 et pas réactivée n'est pas "
                      "comptée au 31/12/2024.",
-             question="Tu valides : en cours au 31/12, titulaire en vie, payé ou non ?",
+             question="Tu valides : est compté celui dont la pension est en cours le 31 décembre "
+                      "(ni suspendue, ni radiée, titulaire en vie), même s'il n'a pas été payé en "
+                      "décembre ?",
              base=["PRESTATION_ESP : PE_DATE_EFFET avant le 31/12 ; PE_DATE_RADIATION vide ou "
                    "après ; PE_DATE_SUSPENSION vide, après, ou suivie d'une "
                    "PE_DATE_REACTIVATION.",
@@ -818,9 +876,10 @@ GROUP  BY TPE_CODE"""),
         dict(terme="Le montant",
              annuaire="Le montant des pensions, par tranche et par sexe (p. 37).",
              compris="Ce qui a été payé dans l'année aux pensionnés comptés, pour les mois de "
-                     "l'année. Pas le net à payer d'un état de paiement : le montant de chaque "
-                     "paiement fait. Les pensionnés sortis avant le 31/12 ne sont pas comptés, "
-                     "leur montant non plus.",
+                     "l'année. J'additionne chaque paiement fait, mois par mois, et non le « net "
+                     "à payer » d'un titre de paiement, qui est répété sur chaque mois. Les "
+                     "pensionnés sortis avant le 31/12 ne sont pas comptés, leur montant non "
+                     "plus.",
              question="Tu valides : le montant = ce qui a été payé dans l'année aux personnes "
                       "comptées ?",
              base=["DEBOURS : DEB_TYPE 'PM', DEB_STATUT 'D' ou 'P', DEB_MONTANT, DEB_DATE_EFFET "
@@ -858,9 +917,9 @@ T41 = dict(
              sql=sql(t41, "1")),
         dict(terme="L'enfant compté au 31 décembre",
              annuaire="Rien de plus dans l'Annuaire CIPRES que « à la fin de l'exercice ».",
-             compris="Une allocation en cours le 31 décembre, comme pour T32, pour un enfant en "
-                     "vie de 21 ans au plus, et payée dans l'année. Sans la condition de "
-                     "paiement, on compterait 5 % de trop.",
+             compris="Une allocation en cours le 31 décembre (ni suspendue, ni radiée), pour un "
+                     "enfant en vie de 21 ans au plus, et payée dans l'année. Sans la condition "
+                     "de paiement, on compterait 5 % de trop.",
              question="Tu valides : un enfant compte seulement s'il a été payé dans l'année ?",
              base=["PRESTATION_ESP : en cours au 31/12 (terme 2 de T32).",
                    "INDIVIDU de l'enfant : IND_DATE_NAISSANCE, IND_DATE_DECES.",
@@ -951,10 +1010,14 @@ AND    PE_DATE_INSERT <  DATE '2025-01-01'
 GROUP  BY TPE_CODE"""),
         dict(terme="Nouveau pensionné",
              annuaire="Les nouveaux pensionnés « de l'exercice » (p. 15), sans autre précision.",
-             compris="La personne dont la première prestation du tableau est saisie dans "
-                     "l'année. C'est ce qui retombe sur l'annuaire CNSS 2024 à 1 % près ; la "
-                     "date de notification donne 4 à 5 % de moins.",
-             question="Tu valides : nouveau = première pension saisie dans l'année ?",
+             compris="La personne dont la première pension du tableau est saisie dans la base "
+                     "dans l'année. C'est ce qui retombe sur l'annuaire CNSS 2024 à 1 % près ; "
+                     "avec la date où la décision est envoyée (la notification), on trouve 4 à 5 "
+                     "% de moins.",
+             exemple="une pension saisie le 18 décembre 2024 et notifiée le 10 janvier 2025 : "
+                     "nouveau pensionné de 2024.",
+             question="Tu valides : un nouveau pensionné compte l'année où sa pension est saisie, "
+                      "et non l'année où la décision lui est envoyée ?",
              base=["PRESTATION_ESP.PE_DATE_INSERT, la date de saisie : la plus ancienne de la "
                    "personne pour les codes du tableau.",
                    "2024 : 2 463 nouveaux retraités (l'annuaire CNSS 2024 : 2 489) ; veuves "
@@ -1008,10 +1071,14 @@ GROUP  BY TPE_CODE"""),
         dict(terme="Services passés (T42)",
              annuaire="« Total des périodes d'activités salariées » (glossaire, p. 66). "
                       "L'atelier de Kaya : en mois, et la seule part CNSS pour la coordination.",
-             compris="Les mois cotisés de la dernière pension de la personne, de 1 à 600 mois. "
-                     "En coordination, j'enlève les mois cotisés dans l'autre caisse.",
-             question="Tu valides : PE_COT_AUTRE est le nombre de mois cotisés dans l'autre "
-                      "caisse, compris dans le total ?",
+             compris="Les mois cotisés de la dernière pension de la personne, de 1 à 600 mois. En "
+                     "coordination (l'assuré a aussi travaillé dans un autre pays), je ne garde "
+                     "que les mois cotisés à la CNSS : le total des mois, moins ceux cotisés dans "
+                     "l'autre caisse.",
+             exemple="300 mois en tout, dont 120 dans l'autre caisse : 180 mois de services "
+                     "passés à la CNSS.",
+             question="Tu valides : pour un dossier de coordination, le total des mois cotisés "
+                      "comprend les mois de l'autre caisse, qu'il faut donc enlever ?",
              base=["PRESTATION_ESP.PE_MOIS_COTISATION : les mois cotisés.",
                    "PRESTATION_ESP.PE_COT_AUTRE : les mois dans l'autre caisse, rempli pour les "
                    "pensions de coordination.",
@@ -1061,10 +1128,14 @@ T50 = dict(
              annuaire="T50 allocations de vieillesse, T51 allocations de survivants, T52 IJ des "
                       "AT/MP, T53 allocations d'incapacité, T54 indemnités de maternité, T55 "
                       "allocations prénatales ; T56 prestations servies, T57 décédés (p. 16).",
-             compris="Chaque tableau a ses codes. L'allocation de survivants se liquide par ses "
-                     "parts (conjoint, orphelin, ascendant). Les prénatales sont surtout celles "
-                     "de la maternité.",
-             question="Tu valides ce rattachement des codes ?",
+             compris="Chaque tableau a ses codes (au milieu). Une allocation (de vieillesse, de "
+                     "survivants) est versée quand l'assuré n'a pas assez cotisé pour avoir une "
+                     "pension. L'allocation de survivants est partagée entre le conjoint, les "
+                     "orphelins et les ascendants : chacun a sa part, et je compte chaque part. "
+                     "Les allocations prénatales sont presque toutes celles de la maternité ; j'y "
+                     "ajoute l'ancienne allocation prénatale des PF.",
+             question="Tu valides : l'allocation de survivants se compte par part, une par "
+                      "survivant (conjoint, orphelin, ascendant) ?",
              base=["T50 RAV ; T51 RASC, RASO, RASA (RAS ne sert plus) ; T52 AIJ ; T53 AAI ; "
                    "T54 MIJ ; T55 MAP et FAP.",
                    "2024 : allocation de survivants conjoint 81, orphelin 472, ascendant 18 ; "
@@ -1073,11 +1144,14 @@ T50 = dict(
         dict(terme="Bénéficiaire de l'année",
              annuaire="« Évolution du nombre des bénéficiaires » (p. 16) ; l'atelier de Kaya : "
                       "pour T54 et T55, on compte les liquidées, pas les payées.",
-             compris="La personne dont la prestation est liquidée dans l'année : notifiée pour "
-                     "la première fois, comme pour T25. Je l'applique à T50 à T55. Les payées "
-                     "s'en écartent de 25 %.",
-             question="Tu valides : un bénéficiaire de l'année = une prestation liquidée dans "
-                      "l'année, pour T50 à T55 ?",
+             compris="La personne dont la prestation est liquidée dans l'année, c'est-à-dire "
+                     "notifiée pour la première fois, comme pour T25. Je l'applique à T50 à T55. "
+                     "Compter plutôt les personnes payées dans l'année donnerait des chiffres 25 "
+                     "% différents.",
+             exemple="une allocation de vieillesse demandée en 2023 et notifiée en mars 2024 : "
+                     "bénéficiaire de 2024.",
+             question="Tu valides : un bénéficiaire de l'année est une personne dont la "
+                      "prestation est notifiée pour la première fois dans l'année ?",
              base=["PRESTATION_ESP.PE_DATE_NOTIFICATION dans l'année.",
                    "2024 : allocations de vieillesse 831 (833 publiées) ; IJ de maternité 3 890 "
                    "(3 893), à moins de 1 % de 2020 à 2024 sauf 2022."],
@@ -1093,32 +1167,40 @@ T50 = dict(
              sql=sql(t50, "3")),
         dict(terme="Le montant de l'année",
              annuaire="Le montant par année (p. 46).",
-             compris="Ce qui a été payé dans l'année pour la prestation. La date qui retombe le "
-                     "mieux sur l'annuaire CNSS 2024 est celle du versement, rappels compris : "
-                     "497,8 millions d'allocations de vieillesse versées en 2024 pour 497,7 "
-                     "publiés, contre +3,9 % au mois payé. Le choix reste ouvert.",
-             question="Le montant d'une année : les paiements versés dans l'année, ou les mois "
-                      "de l'année payés ?",
+             compris="Ce qui a été payé dans l'année pour la prestation. Un paiement peut se "
+                     "dater de deux façons : par le mois qu'il paie, ou par le jour où il est "
+                     "versé (avec les rappels des mois d'avant). Le versement retombe le mieux "
+                     "sur l'annuaire CNSS 2024 : 497,8 millions d'allocations de vieillesse "
+                     "versées en 2024 pour 497,7 publiés, contre 3,9 % de plus au mois payé. Le "
+                     "choix reste ouvert.",
+             exemple="une allocation de novembre 2024 versée en janvier 2025 : au mois payé, elle "
+                     "compte en 2024 ; au versement, en 2025.",
+             question="Pour le montant d'une année, la CNSS compte-t-elle les paiements versés "
+                      "dans l'année, ou les mois de l'année payés ?",
              base=["DEBOURS : DEB_TYPE 'PM', DEB_STATUT 'D' ou 'P'.",
                    "Versé dans l'année : DEB_DATE_INSERT ; mois payé : DEB_DATE_EFFET."],
              sql=sql(t50, "4")),
         dict(terme="Nombre moyen de services passés (T50)",
              annuaire="T50 donne aussi le nombre moyen de services passés (p. 46) ; services "
                       "passés : total des périodes d'activité salariée (glossaire, p. 66).",
-             compris="La moyenne des mois cotisés à la CNSS de l'allocation liquidée, par sexe ; "
-                     "en coordination, moins les mois dans l'autre caisse.",
-             question="Tu valides : en mois, et la seule part CNSS ?",
+             compris="La moyenne des mois cotisés pour les allocations de vieillesse liquidées "
+                     "dans l'année, par sexe. En coordination, je ne garde que les mois cotisés à "
+                     "la CNSS, comme pour T42.",
+             question="Tu valides : les services passés se comptent en mois, et seulement ceux "
+                      "cotisés à la CNSS ?",
              base=["PRESTATION_ESP.PE_MOIS_COTISATION et PE_COT_AUTRE.",
                    "2024 : 96 mois en moyenne."],
              sql=sql(t50, "5")),
         dict(terme="Prestations servies par branche (T56)",
              annuaire="« Récapitule toutes les prestations servies par branche » : PF, AT/MP, "
                       "AVS, autres (p. 16).",
-             compris="Les paiements et les remboursements de l'année, par branche. Pas les "
-                     "ajustements, qui sont des corrections. Les soins des AT/MP ne sont pas "
-                     "tous dans les remboursements : l'AT/MP reste 29 % sous le publié.",
-             question="Tu valides : sans les ajustements ? Et les rachats de rente des AT/MP "
-                      "(21,5 millions en 2024), on les ajoute ?",
+             compris="Tous les paiements et remboursements de l'année, par branche. Je laisse de "
+                     "côté les ajustements, qui sont des corrections (trop-perçus, rappels), et "
+                     "les rachats de rente des AT/MP (21,5 millions en 2024). Les soins des AT/MP "
+                     "ne sont pas tous dans les remboursements : l'AT/MP reste 29 % sous le "
+                     "chiffre publié.",
+             question="Tu valides : les prestations servies sont les paiements et remboursements "
+                      "de l'année, sans les ajustements ni les rachats de rente ?",
              base=["DEBOURS : DEB_TYPE 'PM' paiement et 'RB' remboursement ; CODE_BRANCHE V "
                    "AVS, A AT/MP, F et M PF.",
                    "2024, au mois payé : AVS 47,24 milliards (46,63 publiés), PF 10,75 (11,18), "

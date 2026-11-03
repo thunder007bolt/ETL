@@ -158,10 +158,13 @@ T58 = dict(
              annuaire="Immatriculation, recouvrement, contentieux, prestations, prévention des "
                       "risques professionnels, action sanitaire et sociale, autres domaines "
                       "(p. 50).",
-             compris="Le domaine de la situation de l'agent au 31 décembre. Le pilotage, la "
-                     "comptabilité et les autres codes vont dans « autres domaines ».",
-             question="Tu valides : PIL, CPT et AUT dans « autres domaines », et ACT = action "
-                      "sanitaire et sociale ?",
+             compris="Le domaine de la situation de l'agent au 31 décembre. Les codes de la base "
+                     "se rangent sur les lignes de l'Annuaire CIPRES : IMM immatriculation, REC "
+                     "recouvrement, CONT contentieux, PRS prestations, PREV prévention, ACT "
+                     "action sanitaire et sociale. Les autres codes (PIL pilotage, CPT "
+                     "comptabilité, AUT autres) vont dans « autres domaines ».",
+             question="Tu valides : le pilotage et la comptabilité vont dans « autres domaines » "
+                      "?",
              base=["GRH_SITUATION.CODE_DOMAINE_ACT : IMM, REC, CONT, PRS, PREV, ACT ; PIL, "
                    "CPT, AUT.",
                    "Libellés : table GRH_DOMAINE_ACTIVITE."],
@@ -226,10 +229,13 @@ T60 = dict(
              sql=sql(t60, "4")),
         dict(terme="Retraite",
              annuaire="La colonne « retraite » des sorties (p. 51).",
-             compris="Une sortie dont la première décision de départ, dans l'année, est "
-                     "l'admission à la retraite, à sa date de vigueur. Compter une retraite de "
-                     "décembre l'année suivante ne retombe pas mieux sur l'annuaire CNSS 2024.",
-             question="Tu valides : la retraite compte à la date de vigueur de la décision ?",
+             compris="Un agent part à la retraite l'année où prend effet sa décision d'admission "
+                     "à la retraite. S'il a plusieurs décisions de départ, seule la première "
+                     "compte. J'ai aussi essayé de compter les départs de décembre l'année "
+                     "suivante : on s'éloigne davantage de l'annuaire CNSS 2024 (16 d'écart sur "
+                     "5 ans, contre 11).",
+             question="Tu valides : un départ à la retraite compte l'année où la décision prend "
+                      "effet ?",
              base=["GRH_DECISION.CDEC_CODE = '02', DATE_VIGUEUR.",
                    "2024 : 25 (l'annuaire CNSS 2024 : 23) ; à 4 près chaque année."],
              sql=sql(t60, "5")),
@@ -295,10 +301,11 @@ T62 = dict(
              sql=sql(t62, "2")),
         dict(terme="Toutes les formations",
              annuaire="Rien dans l'Annuaire CIPRES.",
-             compris="Toutes les formations comptent, quel que soit leur statut : toutes sont au "
-                     "statut N. La requête actuelle ne gardait que le statut T et ne publiait "
-                     "rien.",
-             question="Tu valides : on ne filtre pas sur le statut de la formation ?",
+             compris="Toutes les formations comptent, quel que soit leur statut. Le statut n'est "
+                     "plus tenu depuis 2015 : toutes les formations de la base sont au statut N. "
+                     "L'ancienne requête ne gardait que le statut T, qu'aucune formation n'a : "
+                     "elle ne trouvait rien.",
+             question="Tu valides : on compte toutes les formations, sans regarder leur statut ?",
              base=["GRH_FORMATION.STATUT : N partout (plus tenu depuis 2015).",
                    "GRH_FORMATION.CATEGORIE : PERF, DIPLO, CONF."],
              sql=sql(t62, "3")),
@@ -329,17 +336,32 @@ T62 = dict(
         dict(terme="Finalité : avec ou sans promotion",
              annuaire="La finalité de la formation : « avec promotion », « sans promotion » "
                       "(p. 51).",
-             compris="Avec promotion : le classement de l'agent a changé après une formation de "
-                     "l'année. Sinon, sans promotion. Le classement n'est rempli que pour les "
-                     "formations diplômantes : 2 changements en 2024, pour 6 promotions publiées.",
-             question="Où est saisi le changement de classement après une formation ?",
-             base=["GRH_INSCRIPTION.CLA_AVANT et CLA_APRES."],
+             compris="Une formation est « avec promotion » quand elle fait monter l'agent de "
+                     "catégorie. Sinon, elle est « sans promotion » (un perfectionnement, un "
+                     "séminaire). La base ne note ce lien que pour quelques formations "
+                     "diplômantes : en 2024, j'en trouve 2, l'annuaire CNSS 2024 en publie 6. Il "
+                     "restera à savoir où la DRH note les 4 autres.",
+             exemple="un agent classé 1C04BB10 (4e catégorie, échelle B, échelon 10) suit une "
+                     "formation diplômante ; son classement après est noté 5B : il passe en 5e "
+                     "catégorie, c'est une promotion.",
+             question="Tu valides : une formation est « avec promotion » quand elle fait monter "
+                      "l'agent de catégorie ?",
+             base=["GRH_INSCRIPTION.CLA_AVANT : le classement de l'agent à l'inscription, "
+                   "toujours rempli. 1C04BB10 = catégorie 04, échelle B, échelon 10 ; 1HC-DG08 = "
+                   "hors catégorie, échelle DG, échelon 8.",
+                   "GRH_INSCRIPTION.CLA_APRES : le classement après la formation, noté 10 fois "
+                   "en 45 ans, toujours pour une formation diplômante ; en 2024, 2 fois (5B).",
+                   "Aucune décision d'avancement (60) ni de reclassement (61) après une "
+                   "formation. 22 agents montent de catégorie dans l'année qui suit un "
+                   "perfectionnement de 2024 : sans doute la carrière, pas la formation ; je ne "
+                   "les compte pas."],
              sql=sql(t62, "7")),
         dict(terme="TOTAL et détail",
              annuaire="La ligne TOTAL (p. 51).",
-             compris="Le Total est la somme des catégories. Je donne en plus les inscriptions, "
-                     "et les formés en perfectionnement et en formation diplômante.",
-             question="Tu valides ce détail en plus du tableau ?",
+             compris="Le Total est la somme des catégories. Sous le tableau, j'ajoute pour "
+                     "information le nombre d'inscriptions, et les formés en perfectionnement et "
+                     "en formation diplômante.",
+             question="Tu valides : j'ajoute ces chiffres sous le tableau, pour information ?",
              base=["GRH_FORMATION.CATEGORIE : PERF perfectionnement, DIPLO diplômante.",
                    "2024 : 409 formés, 524 inscriptions."],
              sql=sql(t62, "8")),
@@ -362,32 +384,43 @@ T63 = dict(
              annuaire="Les charges ou dépenses administratives : « total des dépenses de "
                       "fonctionnement et d'investissement de l'organisme » (glossaire, p. 62).",
              compris="Les charges de fonctionnement de l'année, lues dans la comptabilité de la "
-                     "CNSS. La table du DTM qui devait les porter contient des valeurs de test.",
-             question="Quels comptes font les charges de fonctionnement de la CNSS ?",
-             base=["Pas dans USER_GRH.",
-                   "Le grand livre : schéma STG_GL (1,5 million d'écritures au 27/02/2026)."],
-             sql=ATTENTE.format("""les charges sont
--- dans la comptabilité (schéma STG_GL) :
--- la requête viendra avec la liste des
--- comptes donnée par la direction
--- financière""")),
+                     "CNSS. La grille de la CNSS pour les ratios CIPRES (« Evaluation des Ratios "
+                     "CIPRES 2025 ») prend les comptes 61 à 68 de la gestion administrative. La "
+                     "table du DTM qui devait porter ces charges contient des valeurs de test.",
+             question="Tu valides : les charges de fonctionnement sont les comptes 61 à 68 de la "
+                      "gestion administrative ?",
+             base=["Comptes 61 à 68, gestion « G ou 7 » (la gestion administrative) : grille de "
+                   "la CNSS, feuille « 07_Ratios budgétaires ».",
+                   "Le grand livre : schéma STG_GL (1,5 million d'écritures au 27/02/2026) ; sa "
+                   "structure est lue par le lot 22."],
+             sql=ATTENTE.format("""les comptes 61 à 68
+-- sont dans le grand livre (STG_GL) :
+-- la requête viendra après le lot 22,
+-- qui lit sa structure""")),
         dict(terme="Frais de personnel (T63)",
              annuaire="La colonne « frais de personnel (FP) » (p. 52).",
              compris="Tout ce que coûte le personnel dans l'année : salaires, primes, charges "
                      "sociales. La paie n'est pas dans la copie : je les prendrai dans la "
-                     "comptabilité.",
-             question="Quels comptes font les frais de personnel ?",
+                     "comptabilité. La grille de la CNSS ne donne pas leurs comptes ; je propose "
+                     "les comptes 65, qui comprennent les salaires (651 et 652).",
+             question="Tu valides : les frais de personnel sont les comptes 65 de la gestion "
+                      "administrative ?",
              base=["La paie : les vues de paie de USER_GRH sont invalides.",
-                   "La comptabilité : schéma STG_GL."],
+                   "Proposition BI : comptes 65 du grand livre (schéma STG_GL), gestion « G ou 7 "
+                   "» ; la grille de la CNSS ne les donne pas."],
              sql=ATTENTE.format("""la paie n'est pas
 -- dans la copie de USER_GRH ; les frais
--- viendront des comptes de charges de
--- personnel du grand livre (STG_GL)""")),
+-- viendront des comptes 65 du grand
+-- livre (STG_GL), après le lot 22""")),
         dict(terme="Ratio frais de personnel sur charges de fonctionnement",
              annuaire="« Frais de personnel sur charges de fonctionnement (norme : au plus "
                       "85 %) » (p. 17).",
-             compris="FP divisé par CF, chaque année, sur cinq ans.",
-             question="Tu valides la formule FP / CF, sur les comptes de l'année ?",
+             compris="Les frais de personnel (FP) divisés par les charges de fonctionnement (CF), "
+                     "chaque année, sur cinq ans. La norme CIPRES : au plus 85 %.",
+             exemple="(chiffres fictifs) frais de personnel 6 milliards, charges de "
+                     "fonctionnement 9 milliards : 6 / 9 = 67 %, sous la norme.",
+             question="Tu valides : le ratio = frais de personnel de l'année, divisés par les "
+                      "charges de fonctionnement de la même année ?",
              base=["Les termes 1 et 2."],
              sql="""SELECT ROUND(100 * :frais_personnel
          / :charges_fonctionnement, 1)
@@ -396,12 +429,16 @@ FROM   DUAL
 -- norme : au plus 85 %"""),
         dict(terme="Dépenses de formation (T64)",
              annuaire="La colonne « dépenses de formation (FOR) » (p. 52).",
-             compris="La somme des frais des inscriptions aux formations commencées dans "
-                     "l'année ; un frais vide compte zéro. Le champ « budget » des formations "
-                     "contient une année, pas un montant.",
-             question="Les frais saisis sur les inscriptions sont-ils toutes les dépenses de "
-                      "formation ?",
-             base=["GRH_INSCRIPTION : FRAIS_INSCRIPTION, FRAIS_SCOLARITE, FRAIS_TRANSPORT, "
+             compris="Deux sources possibles. La comptabilité : la grille de la CNSS prend les "
+                     "comptes 63812, 6386 et 6577. La base du personnel : la somme des frais "
+                     "saisis sur les inscriptions aux formations commencées dans l'année (un "
+                     "frais vide compte zéro). Le champ « budget » des formations contient une "
+                     "année, pas un montant.",
+             question="Les dépenses de formation : les comptes 63812, 6386 et 6577 de la "
+                      "comptabilité, ou les frais saisis sur les inscriptions ?",
+             base=["Comptabilité : comptes 63812, 6386 et 6577, gestion « G ou 7 » (grille de la "
+                   "CNSS, feuilles 07 et 09).",
+                   "GRH_INSCRIPTION : FRAIS_INSCRIPTION, FRAIS_SCOLARITE, FRAIS_TRANSPORT, "
                    "FRAIS_SEJOUR, FRAIS_DOSSIER, FRAIS_ASSURANCE, FRAIS_ACCESSOIRE.",
                    "GRH_FORMATION.DATE_DEBUT dans l'année ; GRH_FORMATION.BUDGET = une année."],
              sql="""SELECT SUM(NVL(i.FRAIS_INSCRIPTION, 0)
@@ -422,20 +459,23 @@ WHERE  f.DATE_DEBUT BETWEEN DATE '2024-01-01'
              annuaire="« Montant total des rémunérations payées aux salariés par un employeur "
                       "pour une période donnée » (glossaire, p. 64) ; dans T64, les comptes 651 "
                       "et 652 (p. 52).",
-             compris="Les rémunérations du personnel de la CNSS de l'année, lues dans les "
-                     "comptes 651 et 652 de la comptabilité.",
-             question="Les comptes 651 et 652 de la CNSS sont-ils bien les salaires du "
-                      "personnel ?",
-             base=["La comptabilité : schéma STG_GL, comptes 651 et 652."],
+             compris="Les rémunérations du personnel de la CNSS dans l'année : les comptes 651 et "
+                     "652 de la comptabilité, comme le disent l'Annuaire CIPRES et la grille de "
+                     "la CNSS (« total salaires payés »).",
+             question="Tu valides : la masse salariale est la somme des comptes 651 et 652 de la "
+                      "gestion administrative ?",
+             base=["La comptabilité : schéma STG_GL, comptes 651 et 652, gestion « G ou 7 »."],
              sql=ATTENTE.format("""le solde des
 -- comptes 651 et 652 de l'année, dans le
 -- grand livre (STG_GL)""")),
         dict(terme="Total budget et ratios (T64)",
              annuaire="Les ratios FOR / MSAL (norme : entre 1 % et 5 %) et FOR / BUD (p. 17 et "
                       "p. 52).",
-             compris="Les dépenses de formation divisées par la masse salariale, puis par le "
-                     "budget total de l'année. Le budget est dans la gestion budgétaire (montant, "
-                     "gestion, direction).",
+             compris="Deux ratios : les dépenses de formation divisées par la masse salariale "
+                     "(norme : entre 1 % et 5 %), puis divisées par le budget total de l'année. "
+                     "Le budget est dans la gestion budgétaire (montant, gestion, direction). Ce "
+                     "peut être le budget voté en début d'année, ou ce qui a vraiment été dépensé "
+                     "(le budget exécuté).",
              question="Le total budget : le budget voté, ou le budget exécuté ?",
              base=["Le budget : STG_BUDGET.", "Les dépenses de formation : le terme 4."],
              sql="""SELECT ROUND(100 * :depenses_formation

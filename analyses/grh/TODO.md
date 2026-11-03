@@ -36,7 +36,7 @@ Le lot 17 reconstitue ces tableaux depuis la base, avec les règles des requête
 | 1 | Effectif au 31/12 | T58, T59, T61, T65 | grh_effectif.sql et grh_ratio.sql corrigés ; T58, T61 et T65 publiés par la CNSS | Lot 17 fait (742 pour 758 ; âge et ancienneté retrouvés) ; catégorie trouvée : GRH_SITUATION.CATEGORIE (lot 18, Q103) ; T58 et T65 retrouvés avec elle (lot 19) ; contractuels = engagés (50) de l'année ; requête sur les permanents ; fiche pilote T58 |
 | 2 | Mouvements | T60 | Rapport et document T60 ; 22 questions à la DRH ; T60 publié par la CNSS (tableau 121) | Recrutements, retraites (02), démissions, licenciements retrouvés (Q99, Q116) ; les 84 engagés de 2019 expliquent l'écart des années passées ; décès, disponibilités, remises en activité et détachements par les décisions 07, 18, 37 et les statuts X, Y (lot 20, Q117) ; réécrire grh_mouvement.sql ; fiche T60 |
 | 3 | Formation | T62 (et la dépense de T64) | grh_formation.sql corrigé ; T62 publié par la CNSS (tableau 123) | Lot 17 fait (410 agents pour 480) ; ni agents (409) ni inscriptions (524) ne retombent (lot 18, Q108) ; ni par la catégorie (lot 19, Q113) : question à la DRH ; proposition : agents distincts, date de début ; fiche T62 |
-| 4 | Ratios financiers | T63, T64 | Pistes comptables du lot 9 | Bloqué : la paie et la comptabilité ne sont pas dans la copie ; fiche quand la source sera là |
+| 4 | Ratios financiers | T63, T64 | Pistes comptables du lot 9 | La paie manque, mais le grand livre (STG_GL) est dans la copie. Comptes de la CNSS : 651 et 652 (masse salariale), 63812, 6386 et 6577 (formation), 61 à 68 (charges), gestion G ou 7. Lot 22 (structure de STG_GL) à exécuter, puis totaux 2024 |
 
 ## Les tâches
 
@@ -50,7 +50,7 @@ Le lot 17 reconstitue ces tableaux depuis la base, avec les règles des requête
 | 3 | Les règles GRH (G1…) au README, prouvées par les lots | Claude | fait le 01/11/2026 : G1 à G11 au README, avec leurs preuves, et 7 questions à la DRH (QG1 à QG7), chacune réglée par un paramètre en attendant |
 | 4 | Requêtes ajustées (effectif, ratio, formation) et requête T60 réécrite | Claude | proposées le 01/11/2026 : t58_t65_effectif, t60, t62_requete_proposee.sql (réglages categorie_05, duree_contrat, disponibilite) ; reportées dans les requêtes DTM après le visa de la DRH |
 | 4 b | Exécuter les trois requêtes proposées (cliché 102026, exercice 2024) et comparer aux contrôles attendus de leur en-tête | toi, puis Claude | à faire |
-| 5 | Fiches de validation : T58 (pilote de T58, T59, T61, T65), T60, T62, T63-T64 | Claude | faites le 01/11/2026 dans excalidraw/schemas/grh/tableaux cipres : T58_effectif_31_12 (pilote), T60_mouvement_personnel, T62_personnel_forme ; T63-T64 attendent la paie et la comptabilité |
+| 5 | Fiches de validation : T58 (pilote de T58, T59, T61, T65), T60, T62, T63-T64 | Claude | faites le 01/11/2026 dans excalidraw/schemas/grh/tableaux cipres : T58_effectif_31_12 (pilote), T60_mouvement_personnel, T62_personnel_forme ; T63-T64 attendent les totaux du grand livre (lot 22) |
 | 5 b | Faire remplir les fiches T58, T60, T62 par la DRH (cases D'accord / Pas d'accord / À discuter) | toi, avec la DRH | à faire |
 | 6 | Schéma des règles GRH (Excalidraw) | Claude | fait le 01/11/2026 : schemas/grh/regles_grh (annuaire face à la base, G1 à G11, QG1 à QG7, index Q97 à Q117) ; à régénérer à chaque nouvelle règle |
 | 7 | Fiches de maîtrise « 4 gestion administrative » | Claude | à la fin |

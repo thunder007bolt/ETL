@@ -691,7 +691,9 @@ JOURS = [
                              "posent la question et disent où chercher. Ta question sur "
                              "« l'annuaire de la CNSS » : c'était l'annuaire statistique CNSS "
                              "2024, pas l'Annuaire CIPRES ; les deux fiches le disent "
-                             "maintenant partout.",
+                             "maintenant partout. Le terme 7 de T62 (avec ou sans promotion) "
+                             "reprend le lot 21 : 2 promotions liées à une formation en 2024, "
+                             "6 publiées.",
                       decide="Une section par famille de tableaux calculés de la même façon ; "
                              "la requête est donnée pour le premier, on change les codes pour "
                              "les autres. Deux noms fixes : « Annuaire CIPRES » (les pages "
@@ -705,6 +707,79 @@ JOURS = [
          ],
          reste=["Toi : présenter les deux fiches de lecture à côté de l'Annuaire CIPRES, et "
                 "noter les réponses dans les cases.",
+                "DRH : d'où viennent les 6 formés avec promotion de 2024 (T62) ? La base "
+                "n'en lie que 2 à une formation (lot 21, exécuté).",
+                "Toi : exécuter le lot 22 de la GRH (Q121 à Q123, structure du grand livre "
+                "STG_GL pour T63 et T64) et me coller le résultat ; ensuite, les totaux 2024 "
+                "par compte (651 et 652, 63812, 6386 et 6577, 61 à 68, gestion G ou 7).",
+                "Ensuite : reporter les réponses dans les règles (README, schémas des règles)."]),
+    Jour("2026-11-03", "Le cheminement d'une rente dans la base",
+         ["Le terme « dossiers déposés » de T26, les IJ et les rentes, expliqués simplement.",
+          "Le chemin d'une rente AT/MP dans la base, de la déclaration au paiement.",
+          "Ce chemin mis en schéma, sur une feuille à part."],
+         chantiers=[
+             Chantier("Le cheminement d'une rente AT/MP", "Prestations",
+                      demande="Expliquer en français facile le terme « dossiers déposés » de "
+                              "T26, puis ce que sont les IJ et une rente ; montrer comment une "
+                              "rente est enregistrée dans la base, étape par étape ; enfin le "
+                              "mettre en Excalidraw, sur une feuille à part.",
+                      fait="Schéma prestations/vie_dossier/cheminement_rente : le parcours en "
+                           "7 étapes (accident, demande au guichet, calcul, notification, "
+                           "paiement, vie de la rente, rentes de survivants), ce que chaque "
+                           "étape écrit (tables, colonnes, chiffres du lot 4, pièges), les clés "
+                           "d'une table à l'autre, un exemple fictif de bout en bout, les "
+                           "tableaux CIPRES où la rente compte.",
+                      trouve="Rien de nouveau dans les données : tout vient des lots 4 et 7. "
+                             "Une rente n'ouvre pas de dossier : elle arrive par une réception "
+                             "ANCIEN sur le dossier de l'accident et devient une ligne ARI de "
+                             "PRESTATION_ESP (ARSV, ARSF, ARSE, ARSA pour les survivants) ; "
+                             "chaque mois payé est un débours.",
+                      decide="Une feuille à part : les fiches, les règles et les README des "
+                             "prestations ne changent pas.",
+                      fichiers="excalidraw/sources/prestations/cheminement_rente.py ; "
+                               "schemas/prestations/vie_dossier/cheminement_rente.excalidraw.",
+                      etat="fait"),
+             Chantier("T26 : la question des dossiers déposés, en clair", "Prestations",
+                      demande="Dire ce que la question du terme « dossiers déposés » doit "
+                              "éclaircir, puis la reformuler pour qu'elle soit limpide.",
+                      fait="Fiche de lecture des prestations, T26, terme 3 : compris, exemple "
+                           "et question réécrits. La question devient : « quand la victime "
+                           "revient au guichet demander sa rente, des années après "
+                           "l'accident, cette demande compte comme un nouveau dossier déposé, "
+                           "l'année où elle est faite ? ».",
+                      trouve="Le point à trancher : un dépôt par accident, à la déclaration, "
+                             "ou un dépôt par demande. Avec un seul dépôt par accident, la "
+                             "ligne des rentes reste vide et la durée de liquidation d'une "
+                             "rente passe de 14 à 986 jours en médiane (lot 4, P62).",
+                      decide="La règle de la requête T26 ne change pas : un dépôt par demande, "
+                             "en attendant la réponse.",
+                      fichiers="sources/prestations/lecture_prestations.py ; "
+                               "schemas/prestations/fiche_de_lecture.",
+                      etat="fait"),
+             Chantier("Les termes flous des deux fiches de lecture, réécrits", "Projet",
+                      demande="Faire pareil pour les autres termes que je trouve flous.",
+                      fait="Relu les 110 termes. Réécrits : 35 entrées de la fiche des "
+                           "prestations (T25 à T57, dont les termes communs à T26 et T27) et 11 "
+                           "de la GRH (T59, T60, T62, T63, T64). Chaque fois une seule question, "
+                           "concrète ; plus de questions doubles, de codes non expliqués "
+                           "(PE_COT_AUTRE, PIL, CPT…) ni de « tu valides ce classement ? » ; un "
+                           "exemple chiffré quand il aide ; les normes CIPRES rappelées (45 "
+                           "jours, 5 % de contrôles, 85 %).",
+                      trouve="T63 et T64 ne demandent plus « quels comptes ? » : ils proposent "
+                             "les comptes de la grille de la CNSS (61 à 68 ; 651 et 652 ; "
+                             "63812, 6386 et 6577) et, pour les frais de personnel, les "
+                             "comptes 65 (proposition BI).",
+                      decide="Seuls les textes changent : les règles et les requêtes restent "
+                             "les mêmes.",
+                      fichiers="sources/prestations/lecture_prestations.py ; "
+                               "sources/grh/lecture_grh.py ; schemas/<domaine>/fiche_de_lecture.",
+                      etat="fait"),
+         ],
+         reste=["Toi : présenter les deux fiches de lecture à côté de l'Annuaire CIPRES, et "
+                "noter les réponses dans les cases.",
+                "DRH : d'où viennent les 6 formés avec promotion de 2024 (T62) ?",
+                "Toi : exécuter le lot 22 de la GRH (Q121 à Q123) et me coller le résultat ; "
+                "ensuite, les totaux 2024 par compte pour T63 et T64.",
                 "Ensuite : reporter les réponses dans les règles (README, schémas des règles)."]),
 ]
 
@@ -872,7 +947,7 @@ DECISIONS = [
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-02"
+MISE_A_JOUR = "2026-11-03"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
