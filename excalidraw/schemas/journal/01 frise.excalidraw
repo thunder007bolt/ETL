@@ -26,7 +26,7 @@
       "versionNonce": 1176985612,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "La frise : tous les jours de la mission",
@@ -62,7 +62,7 @@
       "versionNonce": 1410122559,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Journal de bord · semaine par semaine, de gauche à droite · chaque jour a sa fiche dans le dossier jours",
@@ -102,7 +102,7 @@
       "versionNonce": 946599057,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -131,7 +131,7 @@
       "versionNonce": 1753630874,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "À la fin de cette fiche, tu sauras",
@@ -169,7 +169,7 @@
       "versionNonce": 973773208,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "ce qui s'est passé chaque jour depuis le début de la mission, en trois ou quatre faits, pour retrouver vite le jour qui t'intéresse.",
@@ -209,7 +209,7 @@
       "versionNonce": 1172410007,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -238,7 +238,7 @@
       "versionNonce": 2016423889,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Comment lire cette fiche",
@@ -278,7 +278,7 @@
       "versionNonce": 879031452,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -307,7 +307,7 @@
       "versionNonce": 1228079853,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "une notion à connaître",
@@ -343,7 +343,7 @@
       "versionNonce": 1068081044,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "1. Avant la mission",
@@ -381,7 +381,7 @@
       "versionNonce": 1995351060,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -428,7 +428,7 @@
       "versionNonce": 686576518,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -459,7 +459,7 @@
       "versionNonce": 518724526,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -495,7 +495,7 @@
           "id": "rncrN8Omvaous3VfzwkY"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -524,7 +524,7 @@
       "versionNonce": 1529005221,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "avant",
@@ -562,7 +562,7 @@
       "versionNonce": 968045430,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Mai à juillet 2026",
@@ -600,7 +600,7 @@
       "versionNonce": 1887292083,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Avant la mission, de mai à juillet 2026 : la chaîne ETL (faits du DWH, clichés multiples), les premières tables DTM et les indicateurs CIPRES des prestations et de la GRH, d'après l'historique git.",
@@ -636,7 +636,7 @@
       "versionNonce": 184809395,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "2. Semaine du 19 au 25 octobre 2026",
@@ -674,7 +674,7 @@
       "versionNonce": 231653447,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -726,7 +726,7 @@
           "id": "rGC1jKZpigFJcAKnowGB"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -757,7 +757,7 @@
       "versionNonce": 1420543774,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -793,7 +793,7 @@
           "id": "xo4HMDPOmbH6uFHpPdoY"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -822,7 +822,7 @@
       "versionNonce": 1887061384,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "19/10",
@@ -860,7 +860,7 @@
       "versionNonce": 293026720,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Arrivée sur le terrain",
@@ -898,7 +898,7 @@
       "versionNonce": 71142205,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Début de la mission à la CNSS, au Burkina.\n• Règle : pas de refonte du modèle DTM.\n• Artefact « Roadmap métier » : les questions au\nmétier.",
@@ -936,7 +936,7 @@
       "versionNonce": 13728627,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-10-19 · reconstitué",
@@ -985,7 +985,7 @@
           "id": "UKwKchzxPRZh2kFfOJOV"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1016,7 +1016,7 @@
       "versionNonce": 58583158,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1052,7 +1052,7 @@
           "id": "5ZrC3MoMtwE0fqIeRrUG"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1081,7 +1081,7 @@
       "versionNonce": 432276172,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "20/10",
@@ -1119,7 +1119,7 @@
       "versionNonce": 271873622,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Les vues simples de la DSI",
@@ -1157,7 +1157,7 @@
       "versionNonce": 177073766,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Décision : la DSI fournit des vues simples, l'équipe\nBI fait les calculs CIPRES.\n• Doc « Spécification des vues BI CIPRES » pour la\nDSI, domaines 1 à 4.",
@@ -1195,7 +1195,7 @@
       "versionNonce": 1364796671,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-10-20 · reconstitué",
@@ -1244,7 +1244,7 @@
           "id": "5QFYcplsolR9LoLrlBHc"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1275,7 +1275,7 @@
       "versionNonce": 1021468669,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1311,7 +1311,7 @@
           "id": "uZUKLTCUuN2RZzB4Ux1U"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1340,7 +1340,7 @@
       "versionNonce": 1513351905,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "21/10",
@@ -1378,7 +1378,7 @@
       "versionNonce": 188440284,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "GRH : le profilage des mouvements",
@@ -1416,7 +1416,7 @@
       "versionNonce": 1851462312,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Lots 1 à 9 de la GRH (Q01 à Q69).\n• GRH_MOUVEMENT n'a ni recrutements ni départs :\npiste GRH_DECISION.\n• Règle : historiser chaque requête dans\nanalyses/<domaine>.",
@@ -1454,7 +1454,7 @@
       "versionNonce": 1860192489,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "mercredi · fiche jours/2026-10-21 · reconstitué",
@@ -1499,7 +1499,7 @@
           "id": "5QFYcplsolR9LoLrlBHc"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1530,7 +1530,7 @@
       "versionNonce": 251407360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1566,7 +1566,7 @@
           "id": "2URAilDHoNU31cpzVLAL"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1595,7 +1595,7 @@
       "versionNonce": 734128014,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "22/10",
@@ -1633,7 +1633,7 @@
       "versionNonce": 245403222,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "GRH : les requêtes DTM corrigées",
@@ -1671,7 +1671,7 @@
       "versionNonce": 681664158,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Effectif, ratio, indicateurs et formation corrigés\n(commit 1b44a0c).\n• Le DWH ne garde qu'un cliché (102026).\n• Validées par le lot 12 : 885 agents en 2025.",
@@ -1709,7 +1709,7 @@
       "versionNonce": 1635534525,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "jeudi · fiche jours/2026-10-22 · reconstitué",
@@ -1747,7 +1747,7 @@
       "versionNonce": 1868496187,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -1800,7 +1800,7 @@
       "versionNonce": 1730924645,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -1853,7 +1853,7 @@
       "versionNonce": 486689787,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -1913,7 +1913,7 @@
           "id": "Dgva2h59r2rpEBBzfadF"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1944,7 +1944,7 @@
       "versionNonce": 162581393,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -1980,7 +1980,7 @@
           "id": "BQxYQTrXDFMV2yM9KFP0"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2009,7 +2009,7 @@
       "versionNonce": 511214231,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "23/10",
@@ -2047,7 +2047,7 @@
       "versionNonce": 789458010,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "GRH : un questionnaire simple pour la\nCNSS",
@@ -2085,7 +2085,7 @@
       "versionNonce": 1115035595,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Le doc technique jugé trop complexe pour la CNSS.\n• Questionnaire CIPRES GRH : 33 questions sur T58 à\nT65.",
@@ -2123,7 +2123,7 @@
       "versionNonce": 569968069,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "vendredi · fiche jours/2026-10-23 · reconstitué",
@@ -2172,7 +2172,7 @@
           "id": "BRShSy14qTDWCxuR8iV0"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2203,7 +2203,7 @@
       "versionNonce": 1375015950,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2239,7 +2239,7 @@
           "id": "mjn1GH0gNMF8AIbNtXgB"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2268,7 +2268,7 @@
       "versionNonce": 29407431,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "24/10",
@@ -2306,7 +2306,7 @@
       "versionNonce": 1519688644,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "GRH : les agents temporaires",
@@ -2344,7 +2344,7 @@
       "versionNonce": 349907372,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Lot 13 : temporaires et agents de la fonction\npublique.\n• Questionnaire complété (question 13, glossaire).",
@@ -2382,7 +2382,7 @@
       "versionNonce": 794270025,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "samedi · fiche jours/2026-10-24 · reconstitué",
@@ -2427,7 +2427,7 @@
           "id": "BRShSy14qTDWCxuR8iV0"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2458,7 +2458,7 @@
       "versionNonce": 2060004898,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2494,7 +2494,7 @@
           "id": "CwsoHLlYSuGRlzsuqG13"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2523,7 +2523,7 @@
       "versionNonce": 766202976,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "25/10",
@@ -2561,7 +2561,7 @@
       "versionNonce": 188292170,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "GRH : l'Annuaire CIPRES devient\nlisible",
@@ -2599,7 +2599,7 @@
       "versionNonce": 1323689086,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Poppler installé : l'Annuaire se lit avec pdftotext.\n• Lots 14 et 15 : les types d'agents.\n• Encadrant = cadre de T58, d'après l'Annuaire.",
@@ -2637,7 +2637,7 @@
       "versionNonce": 1252438937,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "dimanche · fiche jours/2026-10-25 · reconstitué",
@@ -2675,7 +2675,7 @@
       "versionNonce": 1778752681,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -2728,7 +2728,7 @@
       "versionNonce": 502369597,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -2779,7 +2779,7 @@
       "versionNonce": 1280914316,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "3. Semaine du 26 octobre au 1 novembre 2026",
@@ -2817,7 +2817,7 @@
       "versionNonce": 243965576,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -2869,7 +2869,7 @@
           "id": "J2gPk9mJWroOInpzWKbd"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2900,7 +2900,7 @@
       "versionNonce": 370204195,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2936,7 +2936,7 @@
           "id": "OWBIwoSiunoFjwCGrjy1"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -2965,7 +2965,7 @@
       "versionNonce": 459949616,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "26/10",
@@ -3003,7 +3003,7 @@
       "versionNonce": 1640384609,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Prestations : le lancement",
@@ -3041,7 +3041,7 @@
       "versionNonce": 881662275,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Lots 1 et 2 des prestations exécutés ; règles R1 à\nR12.\n• Atelier de Kaya 2017 déposé.\n• Décision : le contenu des DTM n'est pas fiable.",
@@ -3079,7 +3079,7 @@
       "versionNonce": 728653021,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-10-26 · reconstitué",
@@ -3128,7 +3128,7 @@
           "id": "dggbdaxxqqdX9gHO8smD"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3159,7 +3159,7 @@
       "versionNonce": 1015232360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3195,7 +3195,7 @@
           "id": "7rx2sVNfwzZuEKMDmPty"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3224,7 +3224,7 @@
       "versionNonce": 1416881242,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "27/10",
@@ -3262,7 +3262,7 @@
       "versionNonce": 1760231369,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Prestations : T25 et le guide du\nmétier",
@@ -3300,7 +3300,7 @@
       "versionNonce": 1317097736,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Première requête T25 proposée.\n• Doc « Guide du métier » : CNSS, CIPRES, lexique.\n• Doc « Règles de calcul » : T25 à valider.",
@@ -3338,7 +3338,7 @@
       "versionNonce": 1646832221,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-10-27 · reconstitué",
@@ -3387,7 +3387,7 @@
           "id": "EFfNbiTtW0L2eEGNxySz"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3418,7 +3418,7 @@
       "versionNonce": 2165762,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3454,7 +3454,7 @@
           "id": "uRgMUkjoUmhpZu3S62tk"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3483,7 +3483,7 @@
       "versionNonce": 1323454454,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "29/10",
@@ -3521,7 +3521,7 @@
       "versionNonce": 811442592,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Tout en Excalidraw",
@@ -3559,7 +3559,7 @@
       "versionNonce": 1793220882,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Décision : documents et explications en schémas\nExcalidraw.\n• Revue des DTM_PRESTATION et DTM_DOSSIER ;\nDTM_DOSSIER proposée.\n• Lot 3 A : toutes les listes de codes.",
@@ -3597,7 +3597,7 @@
       "versionNonce": 1392303919,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "jeudi · fiche jours/2026-10-29 · reconstitué",
@@ -3642,7 +3642,7 @@
           "id": "EFfNbiTtW0L2eEGNxySz"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3673,7 +3673,7 @@
       "versionNonce": 1730603575,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3709,7 +3709,7 @@
           "id": "p3oLi2UIgajsGhexWgK2"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -3738,7 +3738,7 @@
       "versionNonce": 63462440,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "30/10",
@@ -3776,7 +3776,7 @@
       "versionNonce": 1343300405,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Prestations : T25 à T27, l'annuaire,\nla maîtrise",
@@ -3814,7 +3814,7 @@
       "versionNonce": 1794078927,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Lot 3 B et lot 4 : on compte des demandes ; T25, T26,\nT27 prêts.\n• Comparaison avec l'annuaire de la CNSS 2024 : 2 à 3\n% d'écart.\n• Règles R6 et R7 revues ; fiches de maîtrise par\ndomaine.",
@@ -3852,7 +3852,7 @@
       "versionNonce": 400193395,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "vendredi · fiche jours/2026-10-30",
@@ -3890,7 +3890,7 @@
       "versionNonce": 1699155477,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -3943,7 +3943,7 @@
       "versionNonce": 1030492732,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -3996,7 +3996,7 @@
       "versionNonce": 1926088181,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -4056,7 +4056,7 @@
           "id": "CqhswALuStATeR7DkM9j"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4087,7 +4087,7 @@
       "versionNonce": 2131272281,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4123,7 +4123,7 @@
           "id": "dhA4DwrtbUlPFaJQheOg"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4152,7 +4152,7 @@
       "versionNonce": 1465265369,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "31/10",
@@ -4190,7 +4190,7 @@
       "versionNonce": 1696170667,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Visionneuse hors ligne, journal de\nbord, T32 à T41",
@@ -4228,7 +4228,7 @@
       "versionNonce": 1932325927,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• La visionneuse marche sans Internet.\n• Le journal de bord : la mémoire du travail, jour par\njour.\n• T32 à T41 : lot 5 exécuté, règles à moins de 1 % de\nl'annuaire de la CNSS pour T32.\n• Lot 6 rédigé pour les écarts qui restent : T41, dates\npar défaut, suspensions.",
@@ -4266,7 +4266,7 @@
       "versionNonce": 1051389799,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "samedi · fiche jours/2026-10-31",
@@ -4311,7 +4311,7 @@
           "id": "CqhswALuStATeR7DkM9j"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4342,7 +4342,7 @@
       "versionNonce": 1875920130,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4378,7 +4378,7 @@
           "id": "udJhBmkfWYN40IDjTN6f"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4407,7 +4407,7 @@
       "versionNonce": 1324113769,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "01/11",
@@ -4445,7 +4445,7 @@
       "versionNonce": 1008440574,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Le lot 6 : T41 tranché",
@@ -4483,7 +4483,7 @@
       "versionNonce": 2146272896,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• T41 : seuls les enfants payés dans l'année comptent\n(+0,7 % de l'annuaire).\n• L'année 1900 est une date de naissance par défaut\n(503 bénéficiaires).\n• Les suspensions n'expliquent pas l'écart des veuves :\nreste A06, A07.\n• La fiche T41, sur le gabarit de T32.\n• T42 à T49 : lot 7 exécuté, la première saisie retombe\nsur l'annuaire à 1 %.\n• La fiche pilote T42.\n• T50 à T57 : lot 8 exécuté ; liquidées = annuaire,\nmontant à la saisie du paiement.\n• L'annuaire de la CNSS est arrêté fin mars : règle\nR13.\n• La fiche pilote de T50 à T57 ; la date des montants\nne bloque plus rien.\n• T31 (indus) : lot 9 exécuté, taux d'indus 0,39 % en\n2024, norme 2 %.\n• La fiche T31.\n• GRH : la méthode des prestations ; l'annuaire de la\nCNSS publie T58 à T65.\n• GRH, lot 17 : 742 permanents pour 758 ; âge et\nancienneté retrouvés ; lot 18.\n• GRH, Q99 : 104 recrutements en 2024 comme\nl'annuaire ; les 84 de 2019 retrouvés.\n• GRH, lot 18 : la catégorie de la CNSS est celle de la\nsituation ; lot 19.\n• GRH, lot 19 : T58 et T65 retrouvés ; 46 contractuels\n= engagés de l'année.\n• GRH : retraites à la date de la décision 02 ; lot 20\npour les autres mouvements.\n• GRH : disponibilités (07) et remises (18) retrouvées\n; règles G1 à G11 écrites.\n• GRH : le schéma des règles (regles_grh) en\nExcalidraw.\n• GRH : trois requêtes proposées (effectif, T60, T62),\navec leurs réglages.\n• GRH : le dossier « tableaux cipres » et les fiches\nT58, T60, T62.\n• Réunion du 02/11 : un doc des points à valider par\ndomaine.\n• Fiches CIPRES : des requêtes courtes sur les vraies\ntables, à la place des extraits.",
@@ -4521,7 +4521,7 @@
       "versionNonce": 1119249360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "dimanche · fiche jours/2026-11-01",
@@ -4559,7 +4559,7 @@
       "versionNonce": 1484019424,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -4610,7 +4610,7 @@
       "versionNonce": 688121769,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "4. Semaine du 2 au 8 novembre 2026",
@@ -4648,7 +4648,7 @@
       "versionNonce": 1785575764,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -4697,10 +4697,10 @@
       "boundElements": [
         {
           "type": "arrow",
-          "id": "kRK02oISLUiVFUyWVkI1"
+          "id": "2LfB0PF4hWULHbGUnwuh"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4731,7 +4731,7 @@
       "versionNonce": 1254340605,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4767,7 +4767,7 @@
           "id": "Q9QVVoqTmXAHN0HnPigS"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4796,7 +4796,7 @@
       "versionNonce": 1161758327,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "02/11",
@@ -4834,7 +4834,7 @@
       "versionNonce": 2008159536,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "La fiche de lecture, terme par terme",
@@ -4872,7 +4872,7 @@
       "versionNonce": 179109055,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Fiche de lecture des prestations, à lire à côté de\nl'Annuaire CIPRES.\n• Exemple sur T25 : onze termes, chacun compris, situé\ndans la base, vérifiable.\n• Forme validée : tous les tableaux, T25 à T57, et la\nfiche de la GRH, T58 à T65.",
@@ -4910,7 +4910,7 @@
       "versionNonce": 1594991230,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-11-02",
@@ -4952,10 +4952,14 @@
       "boundElements": [
         {
           "type": "arrow",
-          "id": "kRK02oISLUiVFUyWVkI1"
+          "id": "2LfB0PF4hWULHbGUnwuh"
+        },
+        {
+          "type": "arrow",
+          "id": "kLbTgBiGWUVVJTxtGqcx"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -4986,7 +4990,7 @@
       "versionNonce": 114444145,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -5022,7 +5026,7 @@
           "id": "CCS7RzzX5Hb2xzrflNmq"
         }
       ],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false
     },
@@ -5051,7 +5055,7 @@
       "versionNonce": 409679557,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "03/11",
@@ -5089,7 +5093,7 @@
       "versionNonce": 1679752401,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "Le cheminement d'une rente dans la\nbase",
@@ -5127,7 +5131,7 @@
       "versionNonce": 596722255,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "• Le terme « dossiers déposés » de T26, les IJ et les\nrentes, expliqués simplement.\n• Le chemin d'une rente AT/MP dans la base, de la\ndéclaration au paiement.\n• Ce chemin mis en schéma, sur une feuille à part.",
@@ -5165,7 +5169,7 @@
       "versionNonce": 1519642501,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-11-03",
@@ -5179,7 +5183,521 @@
       "lineHeight": 1.25
     },
     {
-      "id": "kRK02oISLUiVFUyWVkI1",
+      "id": "fuufa4u4tZtV2Yzw2U2H",
+      "type": "rectangle",
+      "x": 1325.0,
+      "y": 2934.5,
+      "width": 600.0,
+      "height": 263.5,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 842066261,
+      "version": 1,
+      "versionNonce": 1914939254,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "arrow",
+          "id": "kLbTgBiGWUVVJTxtGqcx"
+        },
+        {
+          "type": "arrow",
+          "id": "uhmzNXwx65T1Wok5o91P"
+        }
+      ],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "fxik6DEBmVQYQYPxKbaw",
+      "type": "rectangle",
+      "x": 1325.0,
+      "y": 2934.5,
+      "width": 600.0,
+      "height": 56,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#e7f5ff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 300521142,
+      "version": 1,
+      "versionNonce": 1663289992,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "C0YarQXFdvSDvXaTv6yS",
+      "type": "rectangle",
+      "x": 1339.0,
+      "y": 2945.5,
+      "width": 83.76,
+      "height": 34,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1262090243,
+      "version": 1,
+      "versionNonce": 1144403672,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "BKkUquo9WSmYlw5I9nHv"
+        }
+      ],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "BKkUquo9WSmYlw5I9nHv",
+      "type": "text",
+      "x": 1351.0,
+      "y": 2951.25,
+      "width": 59.760000000000005,
+      "height": 22.5,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1287179006,
+      "version": 1,
+      "versionNonce": 1910191864,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "04/11",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "C0YarQXFdvSDvXaTv6yS",
+      "originalText": "04/11",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "63Hk1KluSAveTuCLi6iF",
+      "type": "text",
+      "x": 1438.76,
+      "y": 2948.75,
+      "width": 407.88000000000005,
+      "height": 27.5,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1424622661,
+      "version": 1,
+      "versionNonce": 868414932,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "Le recueil des besoins de la CNSS",
+      "fontSize": 22,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "Le recueil des besoins de la CNSS",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "KxzStuVcVSuzD0R7vNYM",
+      "type": "text",
+      "x": 1345.0,
+      "y": 3006.5,
+      "width": 546.48,
+      "height": 90.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1284693155,
+      "version": 1,
+      "versionNonce": 1945488560,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "• Un nouveau document de la CNSS : le recueil des\nbesoins (v7), ateliers de janvier 2026.\n• Ses remarques, B01 à B41, sur une fiche à part, face à\nnos règles.",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "• Un nouveau document de la CNSS : le recueil des\nbesoins (v7), ateliers de janvier 2026.\n• Ses remarques, B01 à B41, sur une fiche à part, face à\nnos règles.",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "MwOt0PINVHDtCfqQaIqQ",
+      "type": "text",
+      "x": 1345.0,
+      "y": 3112.5,
+      "width": 303.84000000000003,
+      "height": 20.0,
+      "angle": 0,
+      "strokeColor": "#495057",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "kRK02oISLUiVFUyWVkI1"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 552690644,
+      "version": 1,
+      "versionNonce": 951276953,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "mercredi · fiche jours/2026-11-04",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "mercredi · fiche jours/2026-11-04",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "2Slo05yl6N0bzC4uyWcF",
+      "type": "rectangle",
+      "x": 1975.0,
+      "y": 2934.5,
+      "width": 600.0,
+      "height": 263.5,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1701559477,
+      "version": 1,
+      "versionNonce": 876761376,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "arrow",
+          "id": "uhmzNXwx65T1Wok5o91P"
+        }
+      ],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "afF6O6mDxJB1DRJjkBpO",
+      "type": "rectangle",
+      "x": 1975.0,
+      "y": 2934.5,
+      "width": 600.0,
+      "height": 56,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#e7f5ff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1969938298,
+      "version": 1,
+      "versionNonce": 1112344515,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "GxBHw5kpusb0CQijU3Fh",
+      "type": "rectangle",
+      "x": 1989.0,
+      "y": 2945.5,
+      "width": 83.76,
+      "height": 34,
+      "angle": 0,
+      "strokeColor": "#1971c2",
+      "backgroundColor": "#ffffff",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": {
+        "type": 3
+      },
+      "seed": 1404002162,
+      "version": 1,
+      "versionNonce": 1117348258,
+      "isDeleted": false,
+      "boundElements": [
+        {
+          "type": "text",
+          "id": "Eriu9bloTG7RivGjDICp"
+        }
+      ],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false
+    },
+    {
+      "id": "Eriu9bloTG7RivGjDICp",
+      "type": "text",
+      "x": 2001.0,
+      "y": 2951.25,
+      "width": 59.760000000000005,
+      "height": 22.5,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 527187136,
+      "version": 1,
+      "versionNonce": 540092526,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "05/11",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "center",
+      "verticalAlign": "middle",
+      "containerId": "GxBHw5kpusb0CQijU3Fh",
+      "originalText": "05/11",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "23LrVxnTBYULlByseYGn",
+      "type": "text",
+      "x": 2088.76,
+      "y": 2948.75,
+      "width": 398.20000000000005,
+      "height": 27.5,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 511444716,
+      "version": 1,
+      "versionNonce": 938354404,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "Les décisions face aux situations",
+      "fontSize": 22,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "Les décisions face aux situations",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "7ol6eGhTpXv5f37XV6W1",
+      "type": "text",
+      "x": 1995.0,
+      "y": 3006.5,
+      "width": 540.9,
+      "height": 90.0,
+      "angle": 0,
+      "strokeColor": "#1e1e1e",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 579343776,
+      "version": 1,
+      "versionNonce": 1033128758,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "• D'où vient chaque information de l'effectif : la fiche\nde l'agent, les décisions, la situation.\n• Lot 24 rédigé pour vérifier que les trois tables\nracontent la même histoire.",
+      "fontSize": 18,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "• D'où vient chaque information de l'effectif : la fiche\nde l'agent, les décisions, la situation.\n• Lot 24 rédigé pour vérifier que les trois tables\nracontent la même histoire.",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "P0yxjwBvd4vkpSDEjVQ7",
+      "type": "text",
+      "x": 1995.0,
+      "y": 3112.5,
+      "width": 274.40000000000003,
+      "height": 20.0,
+      "angle": 0,
+      "strokeColor": "#495057",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [
+        "g2s6HuhYzIYN17JOE5SK"
+      ],
+      "frameId": null,
+      "roundness": null,
+      "seed": 1342081509,
+      "version": 1,
+      "versionNonce": 1341562496,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "text": "jeudi · fiche jours/2026-11-05",
+      "fontSize": 16,
+      "fontFamily": 5,
+      "textAlign": "left",
+      "verticalAlign": "top",
+      "containerId": null,
+      "originalText": "jeudi · fiche jours/2026-11-05",
+      "autoResize": true,
+      "lineHeight": 1.25
+    },
+    {
+      "id": "2LfB0PF4hWULHbGUnwuh",
       "type": "arrow",
       "x": 631.0,
       "y": 3066.25,
@@ -5198,12 +5716,12 @@
       "roundness": {
         "type": 2
       },
-      "seed": 180081672,
+      "seed": 332680758,
       "version": 1,
-      "versionNonce": 701700292,
+      "versionNonce": 589530880,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1793704863275,
+      "updated": 1793882077013,
       "link": null,
       "locked": false,
       "points": [
@@ -5227,6 +5745,112 @@
       },
       "endBinding": {
         "elementId": "tWBDvEbzx4Bg5L6Aa7vA",
+        "focus": 0,
+        "gap": 6
+      }
+    },
+    {
+      "id": "kLbTgBiGWUVVJTxtGqcx",
+      "type": "arrow",
+      "x": 1281.0,
+      "y": 3066.25,
+      "width": 38.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#495057",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 1912916633,
+      "version": 1,
+      "versionNonce": 441402862,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false,
+      "startBinding": {
+        "elementId": "tWBDvEbzx4Bg5L6Aa7vA",
+        "focus": 0,
+        "gap": 6
+      },
+      "endBinding": {
+        "elementId": "fuufa4u4tZtV2Yzw2U2H",
+        "focus": 0,
+        "gap": 6
+      }
+    },
+    {
+      "id": "uhmzNXwx65T1Wok5o91P",
+      "type": "arrow",
+      "x": 1931.0,
+      "y": 3066.25,
+      "width": 38.0,
+      "height": 0.0,
+      "angle": 0,
+      "strokeColor": "#495057",
+      "backgroundColor": "transparent",
+      "fillStyle": "solid",
+      "strokeWidth": 2,
+      "strokeStyle": "solid",
+      "roughness": 1,
+      "opacity": 100,
+      "groupIds": [],
+      "frameId": null,
+      "roundness": {
+        "type": 2
+      },
+      "seed": 1602383192,
+      "version": 1,
+      "versionNonce": 798824380,
+      "isDeleted": false,
+      "boundElements": [],
+      "updated": 1793882077013,
+      "link": null,
+      "locked": false,
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          38.0,
+          0.0
+        ]
+      ],
+      "lastCommittedPoint": null,
+      "startArrowhead": null,
+      "endArrowhead": "arrow",
+      "elbowed": false,
+      "startBinding": {
+        "elementId": "fuufa4u4tZtV2Yzw2U2H",
+        "focus": 0,
+        "gap": 6
+      },
+      "endBinding": {
+        "elementId": "2Slo05yl6N0bzC4uyWcF",
         "focus": 0,
         "gap": 6
       }

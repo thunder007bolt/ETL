@@ -1,0 +1,433 @@
+UA_CODE	SIGLE	LIBELLE	NATURE	CATEGORIE	STATUT	REGION	UA_CODE_SUP	AGENTS_ACTIFS
+10001000	D.G	Direction Générale	Direction	C	O	000		5
+10001100	SP-DG	Secrétariat particulier DG	Service	C	O	000	10001000	1
+10001110	Protocole	Protocole	Service	C	O	000	10001000	0
+10001200	IG	Inspection Générale	Direction	C	O	000		4
+10001210	Secretariat IG	Secrétariat IG	Service	C	O	000	10001200	1
+10002000	C.T	Conseillers Techniques	Direction	C	O	000		2
+10002100	Secretariat CT	Secrétariat CT	Service	C	O	000	10002000	0
+10003000	D.P.C.G	Direction de la Planification et du Contrôle de Gestion	Direction	C	O	000		8
+10003100	Secretariat DPCG	Secrétariat DPCG	Service	C	O	000	10003000	0
+10003200	S.P.B	Service Planification et Budget	Service	C	O	000	10003000	1
+10003300	S.C.G	Service Contrôle de Gestion	Service	C	O	000	10003000	1
+10003310	D.A.I	Direction de l'Audit Interne	Direction	C	O	000		5
+10003311	Secretariat DAI	Secrétariat DAI	Service	C	O	000	10003310	1
+10004000	D.P.C	Direction de la Prospective et de la Coopération	Direction	C	O	000		6
+10004100	Secretariat DPC	Secrétariat DPC	Service	C	O	000	10004000	0
+10004200	S.E.S	Service des Études et Statistiques	Service	C	O	000	10004000	1
+10004300	S.C.R.I	Service Coopération et Relations Internationales	Service	C	O	000	10004000	0
+10004400	S.I.F	Service Ingénierie Financière	Service	C	O	000	10004000	1
+10005000	D.C.Q	Direction de la Communication et de la Qualité	Direction	C	O	000		5
+10005100	Secretariat DCQ	Secrétariat DCQ	Service	C	O	000	10005000	0
+10005200	S.C	Service Communication	Service	C	O	000	10005000	5
+10005300	S.M.Q	Service Management de la Qualité	Service	C	O	000	10005000	2
+10006000	C.A.J.C	Cellule Affaires Juridiques et du Contentieux	Direction	C	O	000		7
+10006100	Secretariat CAJC	Secrétariat CAJC	Service	C	O	000	10006000	1
+10007000	S.G	Secrétariat Général	Direction	C	O	000		17
+10007100	SP-SG	Secrétariat particulier SG	Service	C	O	000	10007000	2
+10007200	S.S	Service Sécurité	Service	C	O	000	10007000	0
+10007300	S.C.C	Service Central du Courrier	Service	C	O	000	10007000	4
+10007400	C.E	Chargés d'Études / SG	Service	C	O	000	10007000	0
+10007500	S.M	Service des Marchés	Service	C	O	000	10007000	4
+10007600	S.A.D	Service des Archives et de la Documentation	Service	C	O	000	10007000	5
+10008000	D.C.R	Direction Centrale du Recouvrement	Direction	C	O	000		6
+10008100	Secretariat DCR	Secrétariat DCR	Service	C	O	000	10008000	0
+10008200	S.C.R	Service Central du Recouvrement	Service	C	O	000	10008000	2
+10008300	S.P.A.V	Service Promotion de l'Assurance Volontaire	Service	C	O	000	10008000	0
+10008400	S.C.C.R	Service Central du Contentieux du Recouvrement	Service	C	O	000	10008000	4
+10009000	D.C.P	Direction Centrale des Prestations	Direction	C	O	000		5
+10009100	Secretariat DCP	Secrétariat DCP	Service	C	O	000	10009000	1
+10009200	SCP	Service Central des Prestations	Service	C	O	000	10009000	4
+10009300	SPE	Service des Prestations Extérieures	Service	C	O	000	10009000	5
+10010000	D.P.A.S.S	Direction de la Prévention et de l'Action Sanitaire et Sociale	Direction	C	O	000		10
+10010100	Secretariat DP	Secrétariat DPASS	Service	C	O	000	10010000	0
+10010200	SPRP	Service Prévention des Risques Professionnels	Service	C	O	000	10010000	7
+10010300	S.M.S / OUAGA	Service Médico-social de la SMI	Service	C	O	000	10010000	20
+10010400	S.P.A.S / OUAGA	Service Promotion des Assurés Sociaux	Service	C	O	000	10010000	12
+10011000	D.S.I	Direction des Systèmes d'Information	Direction	C	O	000		9
+10011100	Secretariat DSI	Secrétariat DSI	Service	C	O	000	10011000	1
+10011200	EDGP	Service Étude, Développement et Gestion des Projets	Service	C	O	000	10011000	1
+10011300	DEM	Service DBA, Exploitation et Maintenance	Service	C	O	000	10011000	4
+10011400	SAR	Service Sécurité et Architecture des Réseaux	Service	C	O	000	10011000	3
+10012000	D.F.C	Direction Financière et Comptable	Direction	C	O	000		20
+10012100	Secretariat DFC	Secrétariat DFC	Service	C	O	000	10012000	1
+10012200	SC	Service Comptabilité Générale	Service	C	O	000	10012000	3
+10012300	SOF	Service des Opérations Financières	Service	C	O	000	10012000	7
+10012400	ST	Service Trésorerie	Service	C	O	000	10012000	2
+10014000	D.R.H	Direction des Ressources Humaines	Direction	C	O	000		58
+10014100	Secretariat DRH	Secrétariat DRH	Service	C	O	000	10014000	2
+10014200	SGPEC	Service Gestion Prévisionnelle des Emplois et des Compétences	Service	C	O	000	10014000	9
+10014300	PAIE	Service Paie	Service	C	O	000	10014000	5
+10014400	SFPS	Service Formation Professionnelle et des Stages	Service	C	O	000	10014000	3
+10014500	CFP	Centre de Formation Professionnelle	Service	C	O	000	10014000	4
+10014600	SS	Service Social (du personnel)	Service	C	O	000	10014000	4
+10014800	SEXT	Service Extérieur	Service	C	O	000	10014000	21
+10015000	D.E.S.G	Direction de l'Équipement et des Services Généraux	Direction	C	O	000		11
+10015100	Secretariat DESG	Secrétariat DESG	Service	C	O	000	10015000	0
+10015200	SECTI	Service Étude et Contrôle des Travaux Immobiliers	Service	C	O	000	10015000	5
+10015300	SAL	Service Approvisionnement	Service	C	O	000	10015000	7
+10015400	SEGI	Service Gestion et Entretien du Patrimoine	Service	C	O	000	10015000	10
+10015500	SL	Service Logistique	Service	C	O	000	10015000	6
+11010000	D.R.O	Direction Régionale de Ouagadougou	Direction	R	O	100		45
+11010100	Sécrétariat DRO	Secrétariat DRO	Service	R	O	100	11010000	2
+11010200	SPCG-DRO	Service Planification et Contrôle de Gestion	Service	R	O	100	11010000	2
+11010300	SFC-DRO	Service Financier et Comptable	Service	R	O	100	11010000	10
+11010400	SAE-DRO	Service Administratif et du Personnel	Service	R	O	100	11010000	7
+11010410	SIS-DRO	Service Informatique et Statistique	Service	R	O	100	11010000	2
+11010500	DIV-P-DRO	Division Prestations	Service	R	O	100	11010000	4
+11010510	PF-DRO	Service Prestations Familiales	Service	R	O	100	11010000	10
+11010520	AV-DRO	Service Assurance Vieillesse	Service	R	O	100	11010000	17
+11010530	AT/MP-DRO	Service Accidents du Travail et Maladies Professionnelles	Service	R	O	100	11010000	6
+11010600	DIV-R-DRO	Division Recouvrement	Service	R	O	100	11010000	2
+11010610	SI-DRO	Service Immatriculation	Service	R	O	100	11010000	11
+11010620	SCS-DRO	Service Cotisations Sociales	Service	R	O	100	11010000	14
+11010630	SCE-DRO	Service Contrôle Employeurs	Service	R	O	100	11010000	45
+11011100	AGENCE CENTRALE	Agence Centrale	Service	R	O	100	11010000	0
+11011200	AGENCE KILWIN	Agence de Kilwin	Service	R	O	100	11010000	22
+11011300	AGENCE DASSASGHO	Agence de Dassasgho	Service	R	O	100	11010000	19
+11011400	AGENCE TANGHIN	Agence de Tanghin	Service	R	O	100	11010000	0
+11011800	AGENCE KOUDOUGOU	Agence de Koudougou	Service	R	O	100	11010000	11
+11011900	SMI KOUDOUGOU	SMI Koudougou	Service	R	O	100	11010000	2
+11012200	BUREAU POURA	Bureau de Poura	Service	R	O	100	11010000	1
+11012300	BUREAU LEO	Bureau de Léo	Service	R	O	100	11010000	0
+11012400	BUREAU MANGA	Bureau de Manga	Service	R	O	100	11010000	1
+12010000	D.R.F	Direction Régionale de Fada N'Gourma	Direction	R	O	200		12
+12010100	Secretariat DRF	Secrétariat DRF	Service	R	O	200	12010000	0
+12010200	SPCG-DRF	Service Planification et Contrôle de Gestion	Service	R	O	200	12010000	1
+12010300	FC-DRF	Service Financier et Comptable	Service	R	O	200	12010000	1
+12010400	SAP-DRF	Service Administratif et du Personnel	Service	R	O	200	12010000	2
+12010500	RC-DRF	Service du Recouvrement et du Contentieux	Service	R	O	200	12010000	4
+12010600	PRESTATION-DRF	Service des Prestations	Service	R	O	200	12010000	3
+12011100	BUREAU PAMA	Bureau de Pama	Service	R	O	200	12010000	0
+12011500	BUREAU BOGANDE	Bureau de Bogandé	Service	R	O	200	12010000	0
+12011700	AGENCE TAPOA(Diapaga)	Agence de Diapaga	Service	R	O	200	12010000	0
+12012100	AGENCE BOULGOU(Tenkodogo)	Agence de Tenkodogo	Service	R	O	200	12010000	12
+12012400	BUREAU KOUPELA	Bureau de Koupéla	Service	R	O	200	12010000	2
+12012500	BUREAU ZABRE	Bureau de Zabré	Service	R	O	200	12010000	2
+13010000	D.R.N	Direction Régionale du Nord	Direction	R	O	300		7
+13010100	Secretariat DRN	Secrétariat DRN	Service	R	O	300	13010000	0
+13010200	SPCG-DRN	Service Planification et Contrôle de Gestion	Service	R	O	300	13010000	1
+13010300	FC-DRN	Service Financier et Comptable	Service	R	O	300	13010000	2
+13010400	SAP-DRN	Service Administratif et du Personnel	Service	R	O	300	13010000	2
+13010500	RC-DRN	Service du Recouvrement et Contentieux	Service	R	O	300	13010000	5
+13010600	PRESTATION-DRN	Service des Prestations	Service	R	O	300	13010000	4
+13011100	BUREAU DJIBO	Bureau de Djibo	Service	R	O	300	13010000	0
+13011400	BUREAU YAKO	Bureau de Yako	Service	R	O	300	13010000	1
+13011500	AGENCE PROV-DORI	Agence de Dori	Service	R	O	300	13010000	10
+13011700	BUREAU GOROM-GOROM	Bureau de Gorom-Gorom	Service	R	O	300	13010000	0
+13012000	AGENCE PROV-KAYA	Agence de Kaya	Service	R	O	300	13010000	6
+13012400	BUREAU BOULSA	Bureau de Boulsa	Service	R	O	300	13010000	2
+13012700	BUREAU KONGOUSSI	Bureau de Kongoussi	Service	R	O	300	13010000	1
+14010000	D.R.D	Direction Régionale de Dédougou	Direction	R	O	400		15
+14010100	Secretariat DRD	Secrétariat DRD	Service	R	O	400	14010000	3
+14010200	SPCG-DRD	Service Planification et Contrôle de Gestion	Service	R	O	400	14010000	1
+14010300	FC-DRD	Service Financier et Comptable	Service	R	O	400	14010000	3
+14010400	SAP-DRD	Service Administratif et du Personnel	Service	R	O	400	14010000	1
+14010500	RC-DRD	Service du Recouvrement et Contentieux	Service	R	O	400	14010000	5
+14010600	PRESTATIONS-DRD	Service des Prestations	Service	R	O	400	14010000	6
+14011100	SMI-DRD	Service Médico-social de la SMI	Service	R	O	400	14010000	2
+14011400	AGENCE SOUROU(Tougan)	Agence de Tougan	Service	R	O	400	14010000	0
+14011800	BUREAU TOMA	Bureau de Toma	Service	R	O	400	14010000	2
+14012100	BUREAU BOROMO	Bureau de Boromo	Service	R	O	400	14010000	1
+14012400	BUREAU NOUNA	Bureau de Nouna	Service	R	O	400	14010000	0
+14012700	BUREAU SOLENZO	Bureau de Solenzo	Service	R	O	400	14010000	0
+15010000	D.R.B	Direction Régionale de Bobo-Dioulasso	Direction	R	O	500		23
+15010100	Secretariat -DRB	Secrétariat DRB	Service	R	O	500	15010000	3
+15010200	SPCG-DRB	Service Planification et Contrôle de Gestion	Service	R	O	500	15010000	1
+15010300	SFC-DRB	Service Financier et Comptable	Service	R	O	500	15010000	13
+15010400	SAP-DRB	Service Administratif et du Personnel	Service	R	O	500	15010000	6
+15010500	SIS-DRB	Service Informatique et Statistique	Service	R	O	500	15010000	1
+15010600	DIV-P-DRB	Division Prestations	Service	R	O	500	15010000	6
+15010610	SPF-DRB	Service Prestations Familiales	Service	R	O	500	15010000	7
+15010620	AV-DRB	Service Assurance Vieillesse	Service	R	O	500	15010000	3
+15010630	AT/MP-DRB	Service Accidents du Travail et Maladies Professionnelles	Service	R	O	500	15010000	5
+15010640	SPRP-DRB	Service Prévention des Risques Professionnels	Service	R	O	500	15010000	3
+15010650	SMI-DRB	Service Médico-social de la SMI	Service	R	O	500	15010000	12
+15010660	SPAS-DRB	Service Promotion des Assurés Sociaux	Service	R	O	500	15010000	6
+15010700	DIV-R-DRB	Division Recouvrement	Service	R	O	500	15010000	9
+15010710	SI-DRB	Service Immatriculation	Service	R	O	500	15010000	4
+15010720	SCS-DRB	Service Cotisations Sociales	Service	R	O	500	15010000	3
+15010730	SCE-DRB	Service Contrôle Employeurs	Service	R	O	500	15010000	11
+15011700	AGENCE SAKABI	Agence de Sakabi	Service	R	O	500	15010000	0
+15011800	AGENCE SARFALAO	Agence de Sarfalao	Service	R	O	500	15010000	5
+15011900	AGENCE PROV-BOUGOURIBA(Di	Agence de Diébougou	Service	R	O	500	15010000	6
+15012000	AGENCE PROV-TUY(Houndé)	Agence de Houndé	Service	R	O	500	15010000	5
+15012400	BUREAU ORODARA	Bureau d'Orodara	Service	R	O	500	15010000	2
+15012600	AGENCE PROV-COMOE(Banfora	Agence de Banfora	Service	R	O	500	15010000	10
+15012700	SMI BANFORA	SMI Banfora	Service	R	O	500	15010000	2
+15012900	AGENCE DE GAOUA	Agence de Gaoua	Service	R	O	500	15010000	6
+100060	C.A.J.C	Cellule Affaires Juridiques et Contentieux	Direction	C	N	000		0
+100061	Secretariat CAJC	Secrétariat CAJC	Service	C	N	000	100060	0
+100020	C.T	Conseillers Techniques	Direction	C	N	000		0
+100021	Secretariat CT	Secrétariat CT	Service	C	N	000	100020	0
+100150	D.A.E	Direction Administrative et de l'Équipement	Direction	C	N	000		0
+100153	SAL	Service Approvisionnement et Logistique	Service	C	N	000	100150	0
+100151	Secretariat DAE	Secrétariat DAE	Service	C	N	000	100150	0
+100152	SECTI	Service Étude et Contrôle des Travaux Immobiliers	Service	C	N	000	100150	0
+100154	SEGI	Service Entretien et Gestion des Immeubles	Service	C	N	000	100150	0
+100030	D.A.I	Direction de l'Audit Interne	Direction	C	N	000		0
+100033	A.A.G	Service d'Audit des Affaires Générales	Service	C	N	000	100030	0
+100032	A.P	Service d'Audit des Prestations	Service	C	N	000	100030	0
+100031	Secretariat DAI	Secrétariat DAI	Service	C	N	000	100030	0
+100050	D.C.A	Direction de la Communication et des Archives	Direction	C	N	000		0
+100053	S.A.I.D	Service des Archives et de l'Information Documentaire	Service	C	N	000	100050	0
+100052	S.C.P.A	Service de la Communication et de la Production	Service	C	N	000	100050	0
+100051	Secretariat DCA	Secrétariat DCA	Service	C	N	000	100050	0
+100130	D.C.G	Direction du Contrôle de Gestion	Direction	C	N	000		0
+100132	SB	Service du Budget	Service	C	N	000	100130	0
+100133	SCG	Service du Contrôle de Gestion	Service	C	N	000	100130	0
+100131	Secretariat DCG	Secrétariat DCG	Service	C	N	000	100130	0
+100090	D.C.P	Direction Centrale des Prestations	Direction	C	N	000		1
+100094	SCCP	Service Central du Contrôle des Prestations	Service	C	N	000	100090	0
+100092	SCP	Service Central des Prestations	Service	C	N	000	100090	0
+100091	Secretariat DCP	Secrétariat DCP	Service	C	N	000	100090	0
+100093	SPE	Service des Prestations Extérieures	Service	C	N	000	100090	0
+100080	D.C.R	Direction Centrale du Recouvrement	Direction	C	N	000		0
+100083	SCI	Service Central d'Immatriculation	Service	C	N	000	100080	0
+100084	SCoti	Service des Cotisations	Service	C	N	000	100080	0
+100086	SCtieux	Service Contentieux	Service	C	N	000	100080	0
+100085	SCtrl	Service du Contrôle	Service	C	N	000	100080	0
+100081	Secretariat DCR	Secrétariat DCR	Service	C	N	000	100080	0
+100082	SIR	Service de l'Inspection du Recouvrement	Service	C	N	000	100080	0
+100040	D.E.S	Direction des Études et de la Stratégie	Direction	C	N	000		0
+100042	S.E	Service des Études	Service	C	N	000	100040	0
+100041	Secretariat DES	Secrétariat DES	Service	C	N	000	100040	0
+100045	S.M.Q	Service du Management de la Qualité	Service	C	N	000	100040	0
+100043	S.S	Service Statistique	Service	C	N	000	100040	0
+100044	U.P.S	Unité de Planification Stratégique	Service	C	N	000	100040	0
+100120	D.F.C	Direction Financière et Comptable	Direction	C	N	000		0
+100122	SC	Service de la Comptabilité	Service	C	N	000	100120	0
+100121	Secretariat DFC	Secrétariat DFC	Service	C	N	000	100120	0
+100123	SOF	Service des Opérations Financières	Service	C	N	000	100120	0
+100010	D.G	Direction Générale	Direction	C	N	000		1
+100011	Secretariat DG	Secrétariat DG	Service	C	N	000	100010	0
+100100	D.P	Direction de la Prévention	Direction	C	N	000		0
+100101	Secretariat DP	Secrétariat DP	Service	C	N	000	100100	0
+100103	SMI-OUAGA	Service Médico-social de la SMI	Service	C	N	000	100100	0
+100104	SPAS-OUAGA	Service Promotion des Assurés Sociaux	Service	C	N	000	100100	0
+100102	SPRP	Service de la Prévention des Risques Professionnels	Service	C	N	000	100100	0
+150100	D.R.B	Direction Régionale de Bobo-Dioulasso	Direction	R	N	500		0
+150129	AGENCE DE GAOUA	Agence Provinciale de Poni (Gaoua)	Service	R	N	500	150100	0
+150119	AGENCE PROV-BOUGOURIBA(Di	Agence provinciale de la Bougouriba (Diébougou)	Service	R	N	500	150100	0
+150126	AGENCE PROV-COMOE(Banfora	Agence Provinciale de la Comoé (Banfora)	Service	R	N	500	150100	0
+150120	AGENCE PROV-TUY(Houndé)	Agence Provinciale de Tuy (Houndé)	Service	R	N	500	150100	0
+150117	AGENCE SAKABI	Agence de Sakabi	Service	R	N	500	150100	0
+150118	AGENCE SARFALAO	Agence de Sarfalao	Service	R	N	500	150100	0
+150111	AT/MP-DRB	Service Accidents du Travail et Maladies Professionnelles DRB	Service	R	N	500	150100	0
+150110	AV-DRB	Service Assurance Vieillesse DRB	Service	R	N	500	150100	0
+150124	BUREAU ORODARA	Bureau d'Orodara	Service	R	N	500	150100	0
+150102	CG-DRB	Service du Contrôle de Gestion DRB	Service	R	N	500	150100	0
+150103	FC-DRB	Service Financier et Comptable DRB	Service	R	N	500	150100	0
+150109	PF-DRB	Service Prestations Familiales DRB	Service	R	N	500	150100	0
+150106	RC-DRB	Service du Recouvrement et Contentieux DRB	Service	R	N	500	150100	0
+150104	SAE-DRB	Service Administratif et de l'Équipement DRB	Service	R	N	500	150100	0
+150101	Secretariat -DRB	Secrétariat DRB	Service	R	N	500	150100	0
+150105	SGP-DRB	Service Gestion du Personnel DRB	Service	R	N	500	150100	0
+150127	SMI BANFORA	SMI Banfora	Service	R	N	500	150100	0
+150115	SMI-DRB	Service Médico-social de la SMI (SMI/DRB)	Service	R	N	500	150100	0
+150107	SPAS-DRB	Service Promotion des Assurés Sociaux DRB	Service	R	N	500	150100	0
+150108	SPRP-DRB	Service Prévention des Risques Professionnels DRB	Service	R	N	500	150100	0
+140100	D.R.D	Direction Régionale de Dédougou	Direction	R	N	400		0
+140114	AGENCE SOUROU(Tougan)	Agence Provinciale du Sourou (Tougan)	Service	R	N	400	140100	0
+140121	BUREAU BOROMO	Bureau de Boromo	Service	R	N	400	140100	0
+140124	BUREAU NOUNA	Bureau de Nouna	Service	R	N	400	140100	0
+140127	BUREAU SOLENZO	Bureau de Solenzo	Service	R	N	400	140100	0
+140118	BUREAU TOMA	Bureau de Toma	Service	R	N	400	140100	0
+140102	CG-DRD	Service du Contrôle de Gestion DRD	Service	R	N	400	140100	0
+140103	FC-DRD	Service Financier et Comptable DRD	Service	R	N	400	140100	0
+140106	PRESTATIONS-DRD	Service des Prestations DRD	Service	R	N	400	140100	0
+140105	RC-DRD	Service du Recouvrement et Contentieux DRD	Service	R	N	400	140100	0
+140104	SAP-DRD	Service Administratif et du Personnel DRD	Service	R	N	400	140100	0
+140101	Secretariat DRD	Secrétariat DRD	Service	R	N	400	140100	0
+140111	SMI-DRD	Service Médico-social de la SMI DRD	Service	R	N	400	140100	0
+120100	D.R.F	Direction Régionale de Fada N'Gourma	Direction	R	N	200		0
+120121	AGENCE BOULGOU(Tenkodogo)	Agence Provinciale du Boulgou (Tenkodogo)	Service	R	N	200	120100	0
+120117	AGENCE TAPOA(Diapaga)	Agence Provinciale de la Tapoa (Diapaga)	Service	R	N	200	120100	0
+120115	BUREAU BOGANDE	Bureau de Bogandé	Service	R	N	200	120100	0
+120124	BUREAU KOUPELA	Bureau de Koupéla	Service	R	N	200	120100	0
+120111	BUREAU PAMA	Bureau de Pama	Service	R	N	200	120100	0
+120125	BUREAU ZABRE	Bureau de Zabré	Service	R	N	200	120100	0
+120102	CG-DRF	Service du Contrôle de Gestion DRF	Service	R	N	200	120100	0
+120103	FC-DRF	Service Financier et Comptable DRF	Service	R	N	200	120100	1
+120106	PRESTATION-DRF	Service des Prestations DRF	Service	R	N	200	120100	0
+120105	RC-DRF	Service du Recouvrement et du Contentieux DRF	Service	R	N	200	120100	0
+120104	SAP-DRF	Service Administratif et du Personnel DRF	Service	R	N	200	120100	0
+120101	Secretariat DRF	Secrétariat DRF	Service	R	N	200	120100	0
+100140	D.R.H	Direction des Ressources Humaines	Direction	C	N	000		2
+100145	CFP	Centre de Formation Professionnelle	Service	C	N	000	100140	0
+100143	PAIE	Service Paie	Service	C	N	000	100140	0
+100141	Secretariat DRH	Secrétariat DRH	Service	C	N	000	100140	0
+100148	SEXT	Service Extérieur	Service	C	N	000	100140	0
+100144	SFPS	Service Formation Professionnelle et des Stages	Service	C	N	000	100140	0
+100142	SGPC	Service Gestion du Personnel et des Carrières	Service	C	N	000	100140	0
+130100	D.R.N	Direction Régionale du Nord	Direction	R	N	300		0
+130115	AGENCE PROV-DORI	Agence Provinciale du Séno (Dori)	Service	R	N	300	130100	0
+130120	AGENCE PROV-KAYA	Agence Provinciale du Sanmatenga (Kaya)	Service	R	N	300	130100	0
+130124	BUREAU BOULSA	Bureau de Boulsa	Service	R	N	300	130100	0
+130111	BUREAU DJIBO	Bureau de Djibo	Service	R	N	300	130100	0
+130117	BUREAU GOROM-GOROM	Bureau de Gorom-Gorom	Service	R	N	300	130100	0
+130127	BUREAU KONGOUSSI	Bureau de Kongoussi	Service	R	N	300	130100	0
+130114	BUREAU YAKO	Bureau de Yako	Service	R	N	300	130100	0
+130102	CG-DRN	Service du Contrôle de Gestion DRN	Service	R	N	300	130100	0
+130103	FC-DRN	Service Financier et Comptable DRN	Service	R	N	300	130100	0
+130106	PRESTATION-DRN	Service des Prestations DRN	Service	R	N	300	130100	0
+130105	RC-DRN	Service du Recouvrement et Contentieux DRN	Service	R	N	300	130100	1
+130104	SAP-DRN	Service Administratif et du Personnel DRN	Service	R	N	300	130100	0
+130101	Secretariat DRN	Secrétariat DRN	Service	R	N	300	130100	0
+110100	D.R.O	Direction Régionale de Ouagadougou	Direction	R	N	100		0
+110113	AGENCE DASSASGHO	Agence de Dassasgho	Service	R	N	100	110100	0
+110112	AGENCE KILWIN	Agence de Kilwin	Service	R	N	100	110100	0
+110118	AGENCE KOUDOUGOU	Agence Provinciale du Boulkiemdé (Koudougou)	Service	R	N	100	110100	0
+110114	AGENCE TANGHIN	Agence de Tanghin	Service	R	N	100	110100	0
+110107	AT/MP-DRO	Service Accidents du Travail et Maladies Professionnelles DRO	Service	R	N	100	110100	0
+110106	AV-DRO	Service Assurance Vieillesse DRO	Service	R	N	100	110100	0
+110123	BUREAU LEO	Bureau de Léo	Service	R	N	100	110100	0
+110124	BUREAU MANGA	Bureau de Manga	Service	R	N	100	110100	0
+110122	BUREAU POURA	Bureau de Poura	Service	R	N	100	110100	0
+110102	CG-DRO	Service du Contrôle de Gestion DRO	Service	R	N	100	110100	0
+110105	PF-DRO	Service Prestations Familiales DRO	Service	R	N	100	110100	0
+110104	SAE-DRO	Service Administratif et de l'Équipement DRO	Service	R	N	100	110100	0
+110101	Sécrétariat DRO	Secrétariat DRO	Service	R	N	100	110100	0
+110103	SFC-DRO	Service Financier et Comptable DRO	Service	R	N	100	110100	1
+110119	SMI KOUDOUGOU	SMI Koudougou	Service	R	N	100	110100	0
+100110	D.S.I	Direction des Systèmes d'Information	Direction	C	N	000		0
+100113	DEM	Service DBA, Exploitation et Maintenance	Service	C	N	000	100110	0
+100112	EDGP	Service Étude, Développement et Gestion des Projets	Service	C	N	000	100110	0
+100114	SAR	Service Sécurité et Architecture des Réseaux	Service	C	N	000	100110	0
+100111	Secretariat DSI	Secrétariat DSI	Service	C	N	000	100110	0
+100070	S.G	Secrétariat Général	Direction	C	N	000		1
+100074	CE	Chargés d'Études / SG	Service	C	N	000	100070	0
+100073	SCC	Service Central du Courrier	Service	C	N	000	100070	0
+100071	Secretariat SG	Secrétariat SG	Service	C	N	000	100070	0
+100075	SM	Service des Marchés	Service	C	N	000	100070	0
+100072	SP	Secrétariat Particulier	Service	C	N	000	100070	0
+1000	DG	Direction générale	Direction	C	N	000		0
+1010	Conseillers Techniques	Conseillers techniques	Service	C	N	000	1000	0
+1011	COMREX	Service communication et relations extérieures	Service	C	N	000	1000	0
+1012	Bureau d'études	Bureau d'études	Service	C	N	000	1000	0
+1020	Secrétariat DG	Secrétariat DG	Service	C	N	000	1000	0
+5000	Cellule Etudes	Cellule études	Service	C	N	000	1000	0
+6000	CAJC	Cellule affaires juridiques et contentieux	Service	C	N	000	1000	0
+1100	DAFC	Direction administrative, financière et comptable	Direction	C	N	000		0
+1120	Secrétariat DAFC	Secrétariat DAFC	Service	C	N	000	1100	0
+1130	S-E-E	Service engagement et équipement	Service	C	N	000	1100	0
+1140	Svce Opérations Financières	Service des opérations financières	Service	C	N	000	1100	0
+1150	Svce comptable	Service comptable	Service	C	N	000	1100	0
+1300	CGAI	Contrôle de gestion et audit interne	Direction	C	N	000		0
+1320	Secrétariat CG-AI	Secrétariat CG-AI	Service	C	N	000	1300	0
+1330	Svce Contrôle de Gestion / CG-AI	Service contrôle de gestion CGAI	Service	C	N	000	1300	0
+1340	Svce Audit Interne	Service audit interne	Service	C	N	000	1300	0
+1345	Svce Budget / CG-AI	Service budget	Service	C	N	000	1300	0
+1400	DRH	Direction des ressources humaines	Direction	C	N	000		0
+1420	Secrétariat D.R.H.	Secrétariat D.R.H.	Service	C	N	000	1400	0
+1430	Svce Gestion Personnel	Service gestion du personnel	Service	C	N	000	1400	0
+1440	Svce Formation - Stages	Service formation et stages	Service	C	N	000	1400	0
+1450	Svce Paie	Service paie	Service	C	N	000	1400	0
+1460	Centre de formation	Centre de formation	Service	C	N	000	1400	0
+1490	Svces Extérieurs	Services extérieurs	Service	C	N	000	1400	0
+9100	Autres Services	Autres services	Service	C	N	000	1400	0
+1500	DIGI	Direction des investissements et de la gestion immobilière	Direction	C	N	000		0
+1520	Secrétariat DIGI	Secrétariat DIGI	Service	C	N	000	1500	0
+1530	Svce Etudes et Contrôle DIGI	Service études et contrôle	Service	C	N	000	1500	0
+1540	S.E.G.I./ DIGI	Service entretien et gestion des immeubles	Service	C	N	000	1500	0
+2000	DCP	Direction centrale des prestations	Direction	C	N	000		0
+2010	Secrétariat DCP	Secrétariat DCP	Service	C	N	000	2000	0
+2020	Svce Central des Prestations	Service central des prestations	Service	C	N	000	2000	0
+2030	Svce Prestations Exterieures	Service des prestations extérieures	Service	C	N	000	2000	0
+2100	SG	Secrétariat général	Direction	C	N	000		0
+2120	Secrétariat S.G.	Secrétariat S.G.	Service	C	N	000	2100	0
+2130	B.E - O.M.	Bureau. Études - O.M.	Service	C	N	000	2100	0
+2200	DIS	Direction de l'informatique et de la statistique	Direction	C	N	000		0
+2220	Secrétariat D.I.S.	Secrétariat D.I.S.	Service	C	N	000	2200	0
+2230	Svce informatique	Service informatique	Service	C	N	000	2200	0
+2240	Svce statistique	Service statistique	Service	C	N	000	2200	0
+2250	D.B.A. - S.I.	D.B.A. - Système d'information	Service	C	N	000	2200	0
+3000	DRC	Direction du recouvrement et du contentieux	Direction	C	N	000		0
+3020	Secrétariat DRC	Secrétariat DRC	Service	C	N	000	3000	0
+3030	Svce cotisation / DRC	Service cotisation Ouaga	Service	C	N	000	3000	0
+3040	Svce contentieux / DRC	Service contentieux Ouaga	Service	C	N	000	3000	0
+3050	Svce contrôle / DRC	Service contrôle DRC	Service	C	N	000	3000	0
+3060	Svce central d'immatriculation	Service central d'immatriculation	Service	C	N	000	3000	0
+3100	DPASS	Direction de la prévention, de l'action sanitaire et sociale	Direction	C	N	000		0
+3120	Secrétariat DPASS	Secrétariat DPASS	Service	C	N	000	3100	0
+3130	S.M.I. Ouaga	S.M.I. Ouaga	Service	C	N	000	3100	0
+3140	S.P.A.S Ouaga	S.P.A.S Ouaga	Service	C	N	000	3100	0
+3150	Svce Prévention Ouaga	Service prévention Ouaga	Service	C	N	000	3100	0
+3160	CPFACE	Centre de production et formation en audiovisuel et communication en entreprise	Service	C	N	000	3100	0
+3200	DRO	Direction régionale de Ouagadougou	Direction	R	N	100		0
+3210	Contrôle Gestion DRO	Contrôle gestion DRO	Service	R	N	100	3200	0
+3220	Secrétariat DRO	Secrétariat DRO	Service	R	N	100	3200	0
+3225	Svce Admin/Personnel DRO	Service administratif et du personnel DRO	Service	R	N	100	3200	0
+3230	Svce Financier/Comptable DRO	Service financier et comptable DRO	Service	R	N	100	3200	0
+3271	Svce AV DRO	Service AV DRO	Service	R	N	100	3200	0
+3272	Svce AT/MP DRO	Service AT/MP DRO	Service	R	N	100	3200	0
+3274	Svce PF DRO	Service PF DRO	Service	R	N	100	3200	0
+3280	Agence de Kilwin	Agence de Kilwin	Service	R	N	100	3200	0
+3284	Agence de Dassasgho	Agence de Dassasgho	Service	R	N	100	3200	2
+3288	Agence de Tanghin	Agence de Tanghin	Service	R	N	100	3200	0
+3310	Svce Provincial Koudougou	Service provincial de Koudougou	Service	R	N	100	3200	0
+3315	S.M.I. Koudougou	S.M.I. Koudougou	Service	R	N	100	3200	0
+3321	Guichet Poura	Guichet Poura	Service	R	N	100	3200	0
+3322	Guichet Leo	Guichet Léo	Service	R	N	100	3200	0
+3400	DRB	Direction régionale de Bobo-Dioulasso	Direction	R	N	500		0
+3410	Contrôle Gestion DRB	Contrôle gestion DRB	Service	R	N	500	3400	0
+3420	Secrétariat DRB	Secrétariat DRB	Service	R	N	500	3400	0
+3430	Svce Engagement/Equip. DRB	Service engagement et équipement DRB	Service	R	N	500	3400	0
+3431	Svce RH DRB	Service ressources humaines DRB	Service	R	N	500	3400	0
+3440	Svce Financier/Comptable DRB	Service financier et comptable DRB	Service	R	N	500	3400	0
+3462	Svce Recouvrement DRB	Service recouvrement DRB	Service	R	N	500	3400	0
+3471	Svce AV DRB	Service assurance vieillesse DRB	Service	R	N	500	3400	0
+3472	Svce AT DRB	Service accident de travail DRB	Service	R	N	500	3400	0
+3473	Svce Prévention DRB	Service prévention DRB	Service	R	N	500	3400	0
+3474	Svce PF DRB	Service prestation familiale DRB	Service	R	N	500	3400	0
+3475	S.M.I. DRB	Service santé maternelle et infantile DRB	Service	R	N	500	3400	0
+3476	S.P.A.S. DRB	S.P.A.S. DRB	Service	R	N	500	3400	0
+3477	Agence de Sarfalao	Agence de Sarfalao	Service	R	N	500	3400	0
+3478	Agence de Sakabi	Agence de Sakabi	Service	R	N	500	3400	0
+3491	Svce Provincial Hounde	Service provincial de Houndé	Service	R	N	500	3400	0
+3492	Guichet Orodara	Guichet Orodara	Service	R	N	500	3400	0
+3510	Svce Provincial Banfora	Service provincial de Banfora	Service	R	N	500	3400	0
+3511	S.M.I. Banfora	S.M.I. Banfora	Service	R	N	500	3400	0
+3530	Svce Provincial Diebougou	Service provincial de Diébougou	Service	R	N	500	3400	0
+3541	Svce Provincial Gaoua	Service provincial de Gaoua	Service	R	N	500	3400	0
+3600	DRD	Direction régionale de Dédougou	Direction	R	N	400		0
+3610	Contrôle Gestion DRD	Contrôle gestion DRD	Service	R	N	400	3600	0
+3620	Secrétariat DRD	Secrétariat DRD	Service	R	N	400	3600	0
+3630	Svce RH DRD	Service ressources humaines DRD	Service	R	N	400	3600	0
+3640	Svce Prestations DRD	Service des prestations DRD	Service	R	N	400	3600	0
+3650	Svce Engagement/Equip DRD	Service engagement et équipement DRD	Service	R	N	400	3600	0
+3660	Svce Comptable DRD	Service comptable DRD	Service	R	N	400	3600	0
+3670	Service Recouvrement DRD	Service recouvrement DRD	Service	R	N	400	3600	0
+3675	S.M.I. Dédougou	S.M.I. Dédougou	Service	R	N	400	3600	0
+3680	Svce Provincial Tougan	Service provincial de Tougan	Service	R	N	400	3600	0
+3685	Guichet Toma	Guichet Toma	Service	R	N	400	3600	0
+3691	Guichet Boromo	Guichet Boromo	Service	R	N	400	3600	0
+3692	Guichet Nouna	Guichet Nouna	Service	R	N	400	3600	0
+3695	Guichet Solenzo	Guichet Solenzo	Service	R	N	400	3600	0
+3800	DRN	Direction régionale du Nord	Direction	R	N	300		0
+3810	Contrôle Gestion DRN	Contrôle gestion DRN	Service	R	N	300	3800	0
+3820	Secrétariat DRN	Secrétariat DRN	Service	R	N	300	3800	0
+3830	Svce Admin/Personnel DRN	Service administratif et du personnel DRN	Service	R	N	300	3800	0
+3840	Svce Prestations DRN	Service prestations DRN	Service	R	N	300	3800	0
+3860	Svce Comptable DRN	Service comptable DRN	Service	R	N	300	3800	0
+3870	Svce Recouvrement DRN	Service recouvrement DRN	Service	R	N	300	3800	0
+3891	Guichet Djibo	Guichet Djibo	Service	R	N	300	3800	0
+3892	Guichet Yako	Guichet de Yako	Service	R	N	300	3800	0
+3910	Svce Provincial Dori	Service provincial de Dori	Service	R	N	300	3800	0
+3921	Guichet Gorom-Gorom	Guichet Gorom-Gorom	Service	R	N	300	3800	0
+3930	Svce Provincial Kaya	Service provincial de Kaya	Service	R	N	300	3800	0
+3941	Guichet Boulsa	Guichet Boulsa	Service	R	N	300	3800	0
+3942	Guichet Kongoussi	Guichet de Kongoussi	Service	R	N	300	3800	0
+4000	DRF	Direction régionale de Fada N'Gourma	Direction	R	N	200		0
+4010	Contrôle Gestion DRF	Contrôle gestion DRF	Service	R	N	200	4000	0
+4020	Secrétariat DRF	Secrétariat DRF	Service	R	N	200	4000	0
+4040	Svce Prestations DRF	Service des prestations Fada	Service	R	N	200	4000	0
+4050	Svce Admin/Personnel DRF	Service administratif et du personnel DRF	Service	R	N	200	4000	0
+4060	Svce Financier/Comptable DRF	Service financier et comptable DRF	Service	R	N	200	4000	0
+4070	Svce Recouvrement DRF	Service recouvrement DRF	Service	R	N	200	4000	0
+4080	Guichet de Pama	Guichet de Pama	Service	R	N	200	4000	0
+4092	Guichet de Bogandé	Guichet de Bogandé	Service	R	N	200	4000	0
+4093	Svce Provincial Diapaga	Service provincial de Diapaga	Service	R	N	200	4000	0
+4110	Svce Provincial Tenkodogo	Service provincial de Tenkodogo	Service	R	N	200	4000	0
+4121	Guichet Koupela	Guichet Koupéla	Service	R	N	200	4000	0
+4122	Guichet Zabre	Guichet Zabré	Service	R	N	200	4000	0

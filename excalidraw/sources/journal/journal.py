@@ -781,6 +781,152 @@ JOURS = [
                 "Toi : exécuter le lot 22 de la GRH (Q121 à Q123) et me coller le résultat ; "
                 "ensuite, les totaux 2024 par compte pour T63 et T64.",
                 "Ensuite : reporter les réponses dans les règles (README, schémas des règles)."]),
+    Jour("2026-11-04", "Le recueil des besoins de la CNSS",
+         ["Un nouveau document de la CNSS : le recueil des besoins (v7), ateliers de janvier 2026.",
+          "Ses remarques, B01 à B41, sur une fiche à part, face à nos règles."],
+         chantiers=[
+             Chantier("Le recueil des besoins de la CNSS (v7)", "Projet",
+                      demande="Lire en entier le nouveau document de cnss_files, puis faire une "
+                              "fiche Excalidraw qui énumère les remarques ; on verra après ce "
+                              "qu'on en reporte.",
+                      fait="Lu : 2566BF_CNSS_Analytics_Description_Besoins_v7.docx (termes de "
+                           "référence, tableaux CIPRES par domaine avec les commentaires de la "
+                           "CNSS, indicateurs du plan stratégique, 16 notes). Fiche "
+                           "besoins cnss/remarques_besoins_v7 : 41 remarques numérotées, en 7 "
+                           "parties.",
+                      trouve="12 confirmations (ligne de retraite anticipée, orphelins de "
+                             "moins de 25 ans, 5e catégorie en cadres moyens, comptes 65…), 8 "
+                             "contradictions (T31 et T28 tirés des fichiers Excel de la DAI, "
+                             "T54-T55 au montant liquidé, durée d'une rente depuis le certificat "
+                             "de consolidation, T59 en 5 domaines, ancienneté de T61), des "
+                             "comptes qui ne concordent pas avec la grille des ratios, et des "
+                             "exigences nouvelles (périodicité, période en paramètre, "
+                             "déclinaison par direction et agence).",
+                      decide="Rien n'est reporté dans les règles, fiches ou requêtes : la fiche "
+                             "sert à choisir ce qu'on reprend.",
+                      fichiers="excalidraw/sources/besoins_cnss/remarques_besoins_v7.py ; "
+                               "schemas/besoins cnss/remarques_besoins_v7.excalidraw.",
+                      etat="fait"),
+             Chantier("Les deux enregistrements de la réunion GRH du 03/11", "GRH",
+                      demande="Extraire les informations utiles de deux audios de notre réunion "
+                              "(cnss_files : opt.m4a, 59 min ; Voix 261103_144325.m4a, 13 min).",
+                      fait="Transcription sur le Mac, sans envoi en ligne : whisper.cpp et le "
+                           "modèle large-v3-turbo (installés le 04/11, ~/.cache/whisper.cpp). Une "
+                           "première passe bouclait sur des phrases répétées ; refaite sans "
+                           "contexte (option -mc 0). Lu en entier, informations triées par "
+                           "tableau (T59, T60, T61, T62, T63, T64).",
+                      trouve="T59 : construire les domaines à partir des services (unités "
+                             "administratives) avec une table de correspondance demandée à la "
+                             "CNSS. T60 : GRH_MOUVEMENT surtout interne, entrées et sorties dans "
+                             "GRH_SITUATION ; recrutement = toute entrée ? ; prise de service ou "
+                             "engagement ; date de décès jamais saisie. T62 : la finalité, pas la "
+                             "promotion obtenue ; diplômante = avec promotion ; toutes les "
+                             "formations ; catégorie à la date demandée. T63-T64 : la "
+                             "comptabilité, par des vues alimentées par la CNSS.",
+                      decide="Rien n'est reporté dans les règles : à trier avec toi.",
+                      fichiers="Fiche reunions/reunion_grh_2026-11-03 (M01 à M12, avec la "
+                               "minute de chaque point) ; script "
+                               "sources/reunions/reunion_grh_2026_11_03.py ; transcriptions dans "
+                               "le scratchpad de la session (temporaires).",
+                      etat="fait"),
+             Chantier("GRH : le compte rendu de la réunion, et l'effectif finalisé", "GRH",
+                      demande="Reprendre la réunion du 03/11 terme par terme (fiche de lecture "
+                              "GRH, termes 1 à 9 : l'effectif) ; faire le fichier Excel de "
+                              "correspondance unité → domaine ; mettre à jour la requête de "
+                              "l'effectif, avec la liste de ce qui reste et les points qui "
+                              "peuvent changer. Ne pas toucher à T60 ni T62, pas encore vus.",
+                      fait="Décisions notées terme par terme (filtre global de nature, G2 "
+                           "d'accord, catégories CNSS et CIPRES du recueil, temporaire sans fin "
+                           "connue = compté, ancienneté depuis la prise de service sans les "
+                           "interruptions, domaine par l'unité). Lot 23 (Q124 à Q131) exécuté : "
+                           "le code d'unité est UA_CODE, 432 unités CNSS. Fichier "
+                           "correspondance_unite_domaine.xlsx : les 432 unités, proposition par "
+                           "règles, liste déroulante, reprise des réponses à chaque mise à jour. "
+                           "Requête t58_t65_effectif réécrite, puis remise sur la structure de "
+                           "DTM_GRH_EFFECTIF à ta remarque (mêmes colonnes, même grain, même "
+                           "paramètre ; seules les règles changent ; 5 colonnes ajoutées : "
+                           "CATEGORIE, GROUPE_CATEGORIE, UA_CODE, DOMAINE_ACTIVITE, NB_CADRES) ; "
+                           "règles, réglages, points susceptibles de changer et 7 tâches "
+                           "restantes dans analyses/grh/regles_effectif.md.",
+                      trouve="Le code de domaine de la situation n'est pas fiable (66 unités sur "
+                             "139 mélangent les codes). Le recueil des besoins passe avant Kaya "
+                             "et l'Annuaire CIPRES (consigne de l'utilisateur). La mise en page "
+                             "des tableaux CIPRES se fait dans OBIEE, pas dans le DTM.",
+                      decide="Requête de l'effectif prête à exécuter ; T59 en « Domaine non "
+                             "renseigné » tant que le fichier n'est pas rendu et branché.",
+                      fichiers="analyses/grh : lot23_unites_administratives_t59.sql, "
+                               "unites_cnss.tsv, correspondance_unite_domaine.py et .xlsx, "
+                               "t58_t65_effectif_requete_proposee.sql, regles_effectif.md.",
+                      etat="en cours"),
+         ],
+         reste=["Toi : exécuter les deux requêtes de contrôle de l'effectif (en-tête du "
+                "fichier, cliché 102026) et me coller le résultat.",
+                "CNSS : remplir le fichier unité → domaine (132 lignes « À décider »).",
+                "Ensuite : les termes de T60 et T62 de la fiche de lecture.",
+                "Toi : relire la fiche des remarques et dire lesquelles reporter dans nos "
+                "règles et nos fiches.",
+                "DFC : trancher les comptes (charges de fonctionnement 61 à 66 ou 61 à 68 ; "
+                "dépenses de formation).",
+                "Toi : exécuter le lot 22 de la GRH (Q121 à Q123) et me coller le résultat.",
+                "Rien n'est commité depuis le 01/11."]),
+    Jour("2026-11-05", "Les décisions face aux situations",
+         ["D'où vient chaque information de l'effectif : la fiche de l'agent, les décisions, "
+          "la situation.",
+          "Lot 24 rédigé pour vérifier que les trois tables racontent la même histoire."],
+         chantiers=[
+             Chantier("GRH : sorties, retours et entrées, décision ou situation ?", "GRH",
+                      demande="Comprendre ce que veulent dire « sorties et retours » dans "
+                              "l'ancienneté (recueil des besoins, T61), où on les lit, si la "
+                              "nature de la situation peut servir pour les sorties ou pour "
+                              "les entrées ; puis préparer la requête de vérification.",
+                      fait="Réponses données à partir des lots 2, 13, 17, 18 et 20. Lot 24 "
+                           "rédigé (Q134 à Q139) : CLA par agent et face à la date "
+                           "d'embauche ; nature et statut de la situation autour des "
+                           "décisions 07, 14, 18, 37, 50, 51 ; statut E face aux décisions 07 "
+                           "et 18 ; permanents en disponibilité au 31/12/2024 selon la "
+                           "décision et selon le statut.",
+                      trouve="La fiche de l'agent donne l'entrée (date d'embauche : les 104 "
+                             "recrutements de 2024 retrouvés) ; les décisions donnent les "
+                             "départs, disponibilités, remises en activité et engagements ; la "
+                             "situation donne le classement. La nature de la situation n'a aucun "
+                             "code de sortie ni de retour (REC = reclassement, RET = "
+                             "rétrogradation, DIS = mise à disposition). Le statut E n'est "
+                             "presque jamais saisi (lot 18) : les agents inactifs comptés par le "
+                             "statut risquent de manquer les disponibilités.",
+                      decide="Rien n'est changé dans les règles ni dans la requête de "
+                             "l'effectif avant le résultat du lot 24.",
+                      fichiers="analyses/grh/lot24_decisions_et_situations.sql.",
+                      etat="fait"),
+             Chantier("GRH : le résultat du lot 24", "GRH",
+                      demande="Lire le résultat du lot 24 (Q134 à Q139), collé par "
+                              "l'utilisateur.",
+                      fait="Résultats et constats reportés dans le lot, bilan en tête du "
+                           "fichier, README à jour.",
+                      trouve="L'entrée reste la date d'embauche : le CLA la suit 9 fois sur 10 "
+                             "depuis 2019, mais avant 2000 c'est une reprise des données. Les "
+                             "décisions 07, 14, 18 et les renouvellements 50 ne créent presque "
+                             "jamais de situation. Le statut de la situation n'est pas daté : il "
+                             "est modifié sur la situation en cours au départ ou à l'absence "
+                             "(145 CLA de temporaires au statut X, 24 permanents présents au "
+                             "31/12/2024 déjà en R). Au 31/12/2024, les 6 permanents en "
+                             "disponibilité selon les décisions sont au statut A, donc comptés "
+                             "actifs par NB_AGENTS_INACTIFS.",
+                      decide="Proposition BI, à valider : compter les agents en disponibilité "
+                             "par les décisions 07 et 18, comme QG6 et G5. Rien n'est encore "
+                             "changé dans la requête ni dans les règles.",
+                      fichiers="analyses/grh/lot24_decisions_et_situations.sql ; "
+                               "analyses/grh/README.md.",
+                      etat="en cours"),
+         ],
+         reste=["Toi : dire si les agents inactifs (disponibilité) se comptent par les "
+                "décisions 07 et 18 plutôt que par le statut.",
+                "DSI : confirmer que le statut est modifié sur la situation en cours, et le "
+                "sens des natures REM, DET, ANN, ABA.",
+                "Toi : exécuter les deux requêtes de contrôle de l'effectif (cliché 102026).",
+                "CNSS : remplir le fichier unité → domaine.",
+                "Question à poser : au retour d'un agent, retirer le temps d'absence de "
+                "l'ancienneté, ou repartir de zéro ?",
+                "Rien n'est commité depuis le 01/11."]),
 ]
 
 # =============================================================================================
@@ -947,7 +1093,7 @@ DECISIONS = [
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-03"
+MISE_A_JOUR = "2026-11-05"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
