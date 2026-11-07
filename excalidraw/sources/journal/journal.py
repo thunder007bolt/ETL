@@ -911,18 +911,35 @@ JOURS = [
                              "31/12/2024 déjà en R). Au 31/12/2024, les 6 permanents en "
                              "disponibilité selon les décisions sont au statut A, donc comptés "
                              "actifs par NB_AGENTS_INACTIFS.",
-                      decide="Proposition BI, à valider : compter les agents en disponibilité "
-                             "par les décisions 07 et 18, comme QG6 et G5. Rien n'est encore "
-                             "changé dans la requête ni dans les règles.",
+                      decide="Proposition BI : compter les agents en disponibilité par les "
+                             "décisions 07 et 18, comme QG6 et G5. Acceptée par toi le 05/11.",
                       fichiers="analyses/grh/lot24_decisions_et_situations.sql ; "
                                "analyses/grh/README.md.",
-                      etat="en cours"),
+                      etat="fait"),
+             Chantier("GRH : deux corrections de la requête de l'effectif", "GRH",
+                      demande="Vérifier si la requête proposée T58 à T65 est correcte après le "
+                              "lot 24, puis corriger les deux points trouvés.",
+                      fait="Relue : entrée, départs, contrats, ancienneté et classement "
+                           "concordent avec le lot 24. Corrigé : les actifs et inactifs se "
+                           "lisent dans les décisions 07 et 18 (règle G13, réglage inactifs, "
+                           "STATUT pour revenir à l'ancien calcul) ; une fiche sans état compte "
+                           "comme encore là (G2). Contrôle T65 étendu au 31/12/2025. "
+                           "regles_effectif.md et README à jour.",
+                      trouve="La requête demandait une fiche ACTIF : les 67 fiches sans état "
+                             "(embauches récentes jusqu'au 28/01/2026) n'étaient comptées nulle "
+                             "part, ce qui risquait de sous-compter le 31/12/2025.",
+                      decide="G13 et la fiche sans état sont des propositions BI, à faire "
+                             "viser par la DRH avec les autres règles.",
+                      fichiers="analyses/grh : t58_t65_effectif_requete_proposee.sql, "
+                               "regles_effectif.md, README.md.",
+                      etat="fait"),
          ],
-         reste=["Toi : dire si les agents inactifs (disponibilité) se comptent par les "
-                "décisions 07 et 18 plutôt que par le statut.",
+         reste=["Toi : exécuter les deux requêtes de contrôle de l'effectif, jusqu'au "
+                "31/12/2025, et me coller le résultat.",
+                "Le schéma des règles GRH (regles_grh) n'a ni G12 ni G13.",
                 "DSI : confirmer que le statut est modifié sur la situation en cours, et le "
                 "sens des natures REM, DET, ANN, ABA.",
-                "Toi : exécuter les deux requêtes de contrôle de l'effectif (cliché 102026).",
+                "DRH : viser G13 et la fiche sans état, avec les autres règles.",
                 "CNSS : remplir le fichier unité → domaine.",
                 "Question à poser : au retour d'un agent, retirer le temps d'absence de "
                 "l'ancienneté, ou repartir de zéro ?",

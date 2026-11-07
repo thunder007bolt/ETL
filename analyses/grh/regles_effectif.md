@@ -1,6 +1,6 @@
 # L'effectif du personnel (T58, T59, T61, T65) : règles retenues
 
-État au 04/11/2026, après la réunion du 03/11/2026 avec la CNSS (termes 1 à 9 de la fiche de lecture GRH).
+État au 05/11/2026, après la réunion du 03/11/2026 avec la CNSS (termes 1 à 9 de la fiche de lecture GRH) et le lot 24 (les décisions face aux situations).
 
 La requête qui applique ces règles : [t58_t65_effectif_requete_proposee.sql](t58_t65_effectif_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête (partie 0). Changer un réglage ne demande pas de réécrire la requête.
 
@@ -39,7 +39,9 @@ Un agent qui n'a aucune situation suit la règle des permanents (G2) et reste co
 La date d'arrêté est le 31 décembre pour l'annuaire, ou toute autre date (fin de mois, fin de trimestre). Un permanent est compté quand **les deux conditions** sont remplies.
 
 1. **Il est entré au plus tard à la date d'arrêté.** La date d'entrée est la date d'embauche (GRH_PERSONNE.DATE_EMBAUCHE). Si elle est vide, c'est la date de prise de service.
-2. **Il n'est pas encore parti.** C'est le cas si sa fiche est encore active, ou si sa première décision de départ prend effet **après** la date d'arrêté.
+2. **Il n'est pas encore parti.** C'est le cas si sa fiche n'est pas inactive (GRH_PERSONNE.ETAT_EMPLOYE différent de INACTIF), ou si sa première décision de départ prend effet **après** la date d'arrêté.
+
+Une fiche **sans état** compte comme encore là. Ce sont des embauches récentes, dont la fiche n'a pas encore été passée à ACTIF : 67 fiches, jusqu'au 28/01/2026 (lot 2, Q10). Avant le 05/11/2026, la requête demandait une fiche ACTIF, et ces agents n'étaient comptés nulle part, ce qui risquait de sous-compter le 31/12/2025.
 
 Les décisions de départ (GRH_DECISION.CDEC_CODE, liste réglable `decisions_depart`) :
 
@@ -56,7 +58,7 @@ Une décision annulée par une décision **40** ne compte pas. Sans décision de
 
 *Exemple : retraite au 15/12/2024, l'agent n'est pas compté au 31/12/2024. Retraite au 15/01/2025, il est compté.*
 
-*Source : réunion du 03/11/2026 (« d'accord »).*
+*Source : réunion du 03/11/2026 (« d'accord ») ; fiche sans état : proposition BI du 05/11/2026.*
 
 ### G7. Le temporaire présent à la date d'arrêté (terme 6)
 
@@ -134,6 +136,22 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 
 *Source : réunion du 03/11/2026 (« on garde comme ça »).*
 
+### G13. Les agents actifs et inactifs (colonnes NB_AGENTS_ACTIFS et NB_AGENTS_INACTIFS)
+
+Ces deux colonnes existaient déjà dans la table. Les tableaux CIPRES ne les lisent pas (ils lisent NB_AGENTS et NB_CADRES), mais OBIEE peut les afficher.
+
+Un agent compté est **inactif** quand il est **en disponibilité à la date d'arrêté** : sa dernière mise en disponibilité (décision **07**) n'est pas suivie d'une remise en activité (décision **18**) à cette date. Les autres agents comptés sont **actifs**. C'est la même lecture que pour la disponibilité (QG6) et pour l'ancienneté (G5).
+
+**Pourquoi on ne lit plus le statut de la situation.** Avant, un agent était inactif si sa dernière situation avait le statut B (détachement), D (mise à disposition), E (disponibilité), F (suspendu) ou H (sous les drapeaux). Mais ce statut n'est pas daté. Quand un agent s'absente ou part, l'application modifie le statut de la situation en cours au lieu d'ouvrir une nouvelle situation. Le statut dit donc l'état d'aujourd'hui, pas celui de la date d'arrêté. Au 31/12/2024, les 6 permanents en disponibilité selon les décisions avaient le statut A et étaient comptés actifs (lot 24, Q137 à Q139).
+
+**Limite.** Le détachement, la mise à disposition, la suspension et le service militaire n'ont pas de paire de décisions début et fin connue. Ils ne sont plus comptés inactifs. Au 31/12/2024, le statut n'en trouvait qu'un seul (F).
+
+Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibilite` = HORS_EFFECTIF, les agents en disponibilité sortent de l'effectif, et NB_AGENTS_INACTIFS vaut 0.
+
+*Exemple : mise en disponibilité le 01/03/2023 (07), remise en activité le 01/06/2025 (18). L'agent est compté inactif au 31/12/2023 et au 31/12/2024, et actif au 31/12/2025.*
+
+*Source : lot 24 (05/11/2026) ; proposition BI, à faire viser par la DRH avec les autres règles.*
+
 ### La déclinaison et la périodicité
 
 - **Déclinaison :** la table reçoit le code de l'unité (colonne ajoutée UA_CODE). OBIEE en tire la direction, l'agence ou le bureau et la direction régionale grâce à la dimension des unités administratives (recueil des besoins v7, RH ligne 1 : « Direction, Agence »).
@@ -151,8 +169,9 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 | `regroupement_categorie` | 01-02, 03, 04-05, 06-HC ; cadres : 04, 05, 06, HC | déplacer une catégorie (Kaya 2017 mettait la 5e en cadres supérieurs) | recueil des besoins v7 |
 | `ordre_date_anciennete` | PRISE_SERVICE | EMBAUCHE | réunion du 03/11 |
 | `retirer_interruptions` | OUI | NON | recueil des besoins v7 |
-| `fin_contrat_inconnue` | PRESENT | FICHE (compté seulement si la fiche est active) | réunion du 03/11 |
+| `fin_contrat_inconnue` | PRESENT | FICHE (compté seulement si la fiche n'est pas inactive) | réunion du 03/11 |
 | `disponibilite` | PRESENT | HORS_EFFECTIF (comme le tableau 121 de l'annuaire CNSS 2024) | **pas encore tranché** (QG6) |
+| `inactifs` | DECISIONS (en disponibilité selon les décisions 07 et 18) | STATUT (statuts B, D, E, F, H de la situation, comme avant) | lot 24 |
 | `correspondance_domaine` | *vide : à brancher* | la table chargée depuis le fichier Excel | réunion du 03/11 |
 
 ---
@@ -163,6 +182,8 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 |---|---|---|---|
 | Temporaire sans fin de contrat connue | Compté présent | Le compter seulement si sa fiche est active (`fin_contrat_inconnue` = FICHE) | CNSS, au vu du chiffre |
 | Agent en disponibilité à la date d'arrêté | Compté dans l'effectif | Le sortir de l'effectif, comme l'annuaire CNSS 2024 | DRH (QG6) |
+| Agents inactifs | En disponibilité selon les décisions 07 et 18 | Revenir au statut de la situation (`inactifs` = STATUT) | DRH |
+| Fiche sans état (embauche récente) | Comptée comme encore là | Ne la compter qu'une fois passée à ACTIF | DRH |
 | Catégorie HC (hors catégorie) | Cadres supérieurs | Autre groupe | DRH |
 | Ordre des dates de l'ancienneté | Prise de service, puis embauche | Embauche d'abord | CNSS |
 | Interruptions de l'ancienneté | Retirées | Non retirées | CNSS |
@@ -181,6 +202,7 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 3. **10 agents actifs sont rattachés à une unité fermée** (lot 23, Q130). Ils sont comptés, avec le domaine de l'ancienne unité. Leur situation est à corriger dans l'application GRH.
 4. **Tant que la CNSS n'a pas rendu le fichier unité → domaine, tout T59 est en « Domaine non renseigné ».**
 5. **Pour les années 2019 à 2023**, les 84 agents engagés en 2019 n'ont pas de date de départ. La base ne les compte jamais présents, alors que l'annuaire CNSS les compte jusqu'en 2023 (règle G11). Ce point est sans effet à partir de 2025.
+6. **Les absences et les retours se lisent dans les décisions, pas dans les situations.** Une mise en disponibilité, une mise à disposition ou une remise en activité ne crée presque jamais de situation, et le statut de la situation est modifié au lieu d'être daté (lot 24). Pour que les agents inactifs et l'ancienneté soient justes, chaque disponibilité et chaque retour doivent avoir leur décision (07 et 18) dans l'application GRH.
 
 ---
 
@@ -188,10 +210,10 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 
 | N° | Tâche | Qui | État |
 |---|---|---|---|
-| 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026) et comparer à l'attendu ; puis une fois avec `periodicite` = MENSUELLE pour tester les fins de mois | toi, puis Claude | à faire |
+| 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026), jusqu'au 31/12/2025, et comparer à l'attendu ; puis une fois avec `periodicite` = MENSUELLE pour tester les fins de mois | toi, puis Claude | à faire |
 | 2 | Remplir le fichier unité → domaine, d'abord les 132 lignes « À décider » | CNSS | à faire |
 | 3 | Créer la table de correspondance (DTM.REF_GRH_UNITE_DOMAINE) et son chargement depuis le fichier Excel dans la chaîne Python et Jenkins ; brancher la partie 0 de la requête | Claude, puis toi pour le déploiement | à faire |
 | 4 | Script d'ajout des cinq colonnes (CATEGORIE, GROUPE_CATEGORIE, UA_CODE, DOMAINE_ACTIVITE, NB_CADRES) dans DTM et ODS.DTM_GRH_EFFECTIF, puis remplacement de grh_effectif.sql par cette requête ; décider avec Jules du sort de grh_ratio.sql | Claude, après le visa de la DRH | à faire |
 | 5 | Dans OBIEE : le filtre global de nature, le filtre qualité A, la déclinaison par direction, agence et direction régionale, T58 à T61 par GROUPE_CATEGORIE et sexe, le taux = SUM(NB_CADRES) / SUM(NB_AGENTS) | toi | à faire |
-| 6 | Trancher la disponibilité (QG6) et la catégorie HC | DRH | à faire |
+| 6 | Trancher la disponibilité (QG6) et la catégorie HC ; viser G13 (inactifs lus dans les décisions) et la fiche sans état (G2) | DRH | à faire |
 | 7 | Reporter les décisions dans la fiche de lecture GRH (termes 1 à 9, en gardant tes notes) et dans la fiche de validation T58 | Claude | à faire |

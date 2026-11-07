@@ -1,5 +1,6 @@
 -- =============================================================================
--- DTM_GRH_EFFECTIF — PROPOSITION du 04/11/2026 (T58, T59, T61, T65)
+-- DTM_GRH_EFFECTIF — PROPOSITION du 04/11/2026, corrigée le 05/11/2026 après
+-- le lot 24 (T58, T59, T61, T65)
 -- MÊME STRUCTURE que domaines/grh/dtm/sql/grh_effectif.sql : mêmes colonnes,
 -- même grain, même paramètre :1. Seules les règles changent (réunion du
 -- 03/11/2026 avec la CNSS, termes 1 à 9 de la fiche de lecture GRH, et recueil
@@ -49,9 +50,11 @@
 --   T65 :  SELECT ID_TEMPS, NATURE_EMPLOI, SUM(NB_AGENTS), SUM(NB_CADRES),
 --                 ROUND(100 * SUM(NB_CADRES) / SUM(NB_AGENTS), 1)
 --          FROM ( …la requête… )
---          WHERE ID_TEMPS BETWEEN 20201231 AND 20241231
+--          WHERE ID_TEMPS BETWEEN 20201231 AND 20251231
 --            AND QUALITE_EMPLOYE = 'A'
 --          GROUP BY ID_TEMPS, NATURE_EMPLOI ORDER BY 2, 1;
+--   Le 31/12/2025 est ajouté au contrôle : c'est l'année où comptent les
+--   fiches sans état (embauches récentes, G2), comptées depuis le 05/11/2026.
 -- Attendu (lots 17 à 19) : 742 permanents au 31/12/2024 (publié 758) ;
 --   employés 129 H / 44 F (133 / 44), maîtrise 92 / 115 (94 / 114), cadres
 --   moyens 139 / 165 (143 / 168), cadres supérieurs 40 / 18 (42 / 20) ;
@@ -66,9 +69,10 @@
 --     (QUALITE_EMPLOYE) : la CIPRES se lit avec QUALITE_EMPLOYE = 'A'.
 --   · G2 Permanent présent (et agent sans situation, comme avant) : entré au
 --     plus tard à la date d'arrêté (embauche, à défaut prise de service) et
---     pas encore parti : fiche encore active, ou premier départ (liste
---     decisions_depart, sauf décision annulée par une 40 ; à défaut le décès)
---     après la date d'arrêté.
+--     pas encore parti : fiche qui n'est pas INACTIF (une fiche sans état,
+--     embauche récente, compte comme encore là : 67 fiches, lot 2, Q10), ou
+--     premier départ (liste decisions_depart, sauf décision annulée par une
+--     40 ; à défaut le décès) après la date d'arrêté.
 --   · G7 Temporaire présent : la date d'arrêté tombe dans un de ses contrats.
 --     Début : engagement temporaire (50) non annulé. Fin : premier départ
 --     après le début ; sinon la veille du contrat suivant ; sinon aucune fin
@@ -87,7 +91,11 @@
 --   · G12 Domaine : celui de l'unité de la dernière situation (UA_CODE), lu
 --     dans la correspondance de la CNSS ; sinon « Domaine non renseigné ».
 --   · G6 Taux d'encadrement : NB_CADRES / NB_AGENTS (inchangé).
---   · Actifs et inactifs : comme avant (statuts B, D, E, F, H inactifs).
+--   · G13 Actifs et inactifs (NB_AGENTS_ACTIFS, NB_AGENTS_INACTIFS) : un agent
+--     compté est inactif s'il est en disponibilité à la date d'arrêté
+--     (dernière décision 07 sans décision 18 à la même date ou après), comme
+--     QG6 et G5. Le statut de la situation n'est plus lu : il n'est pas daté,
+--     il est modifié sur la situation en cours (lot 24, Q137 à Q139).
 --
 -- RÉGLAGES (partie 0) : chacun peut changer sans réécrire la requête.
 --   · periodicite           : 'ANNUELLE' (31/12 des exercices clos, comme
@@ -98,9 +106,13 @@
 --   · ordre_date_anciennete : 'PRISE_SERVICE' (réunion) ou 'EMBAUCHE' ;
 --   · retirer_interruptions : 'OUI' (recueil des besoins) ou 'NON' ;
 --   · fin_contrat_inconnue  : 'PRESENT' (réunion) ou 'FICHE' (compté
---     seulement si la fiche est encore active) ;
+--     seulement si la fiche n'est pas INACTIF) ;
 --   · disponibilite         : 'PRESENT' ou 'HORS_EFFECTIF' — question QG6 à
 --     la DRH, pas encore tranchée ;
+--   · inactifs              : 'DECISIONS' (lot 24 : disponibilité lue dans
+--     les décisions 07 et 18) ou 'STATUT' (comme avant : statuts B, D, E, F,
+--     H de la dernière situation). Avec disponibilite = 'HORS_EFFECTIF' et
+--     inactifs = 'DECISIONS', NB_AGENTS_INACTIFS vaut 0 ;
 --   · decisions_depart, codes_decision, regroupement_categorie : listes de
 --     codes, une ligne par code ;
 --   · correspondance_domaine : à brancher sur la table chargée depuis
@@ -121,7 +133,9 @@ parametres AS (
            -- G7 : contrat sans fin connue, 'PRESENT' ou 'FICHE'
            'PRESENT'               AS fin_contrat_inconnue,
            -- QG6 : permanent en disponibilité, 'PRESENT' ou 'HORS_EFFECTIF'
-           'PRESENT'               AS disponibilite
+           'PRESENT'               AS disponibilite,
+           -- G13 : agents inactifs lus dans les 'DECISIONS' (07, 18) ou le 'STATUT'
+           'DECISIONS'             AS inactifs
     FROM DUAL
 ),
 -- G2, G7 : les décisions de départ (GRH_DECISION.CDEC_CODE) ; une ligne par code
@@ -251,6 +265,7 @@ engagements AS (
     WHERE e.PERS_ID IS NOT NULL
       AND e.code = cd.engagement_temporaire
 ),
+
 -- fin d'un contrat, exclue : le premier départ après son début, sinon le début
 -- du contrat suivant (le contrat finit la veille) ; 31/12/9999 si aucune
 contrats AS (
@@ -358,7 +373,15 @@ base AS (
            GREATEST(FLOOR((da.date_arrete - p.debut_anciennete
                            - CASE pr.retirer_interruptions
                                  WHEN 'OUI' THEN NVL(ia.jours, 0) ELSE 0 END)
-                          / 365.25), 0)                           AS anciennete
+                          / 365.25), 0)                           AS anciennete,
+           -- G13 : 1 si l'agent est inactif à la date d'arrêté, sinon 0
+           CASE WHEN pr.inactifs = 'STATUT'
+                THEN CASE WHEN si.STATUT_EMPLOYE IN ('B','D','E','F','H')
+                          THEN 1 ELSE 0 END
+                ELSE CASE WHEN NVL(po.date_dispo,  DATE '1900-01-01')
+                             > NVL(po.date_remise, DATE '1900-01-01')
+                          THEN 1 ELSE 0 END
+           END                                                    AS inactif
     FROM dates da
     CROSS JOIN personnes p
     CROSS JOIN parametres pr
@@ -378,7 +401,8 @@ base AS (
             -- G2 : permanent présent (ou agent sans situation)
             (NVL(si.nature, '-') <> 'TEMPORAIRE'
              AND p.date_entree <= da.date_arrete
-             AND (p.etat = 'ACTIF' OR pd.date_depart > da.date_arrete)
+             -- fiche pas INACTIF (vide = embauche récente), ou départ après la date
+             AND (p.etat <> 'INACTIF' OR pd.date_depart > da.date_arrete)
              AND NOT (pr.disponibilite = 'HORS_EFFECTIF'
                       AND NVL(po.date_dispo, DATE '1900-01-01')
                           > NVL(po.date_remise, DATE '1900-01-01')))
@@ -388,7 +412,7 @@ base AS (
              AND tc.PERS_ID IS NOT NULL
              AND NOT (pr.fin_contrat_inconnue = 'FICHE'
                       AND tc.fin_inconnue = 1
-                      AND p.etat <> 'ACTIF'))
+                      AND p.etat = 'INACTIF'))
 )
 
 -- ── 8. Tranches d'âge et d'ancienneté, puis comptages par axe ──────────────
@@ -415,12 +439,10 @@ SELECT
     b.NATURE_EMPLOI,
     -- ── MESURES (comme avant) ────────────────────────────────────────
     COUNT(DISTINCT b.PERS_ID)                             AS NB_AGENTS,
-    -- Actifs : tous les statuts sauf B, D, E, F, H ; un agent sans situation est actif
-    COUNT(DISTINCT CASE WHEN NVL(b.STATUT_EMPLOYE, 'A') NOT IN ('B','D','E','F','H')
-                        THEN b.PERS_ID END)               AS NB_AGENTS_ACTIFS,
-    -- Inactifs : détachement, mise à disposition, disponibilité, suspension, drapeaux
-    COUNT(DISTINCT CASE WHEN b.STATUT_EMPLOYE IN ('B','D','E','F','H')
-                        THEN b.PERS_ID END)               AS NB_AGENTS_INACTIFS,
+    -- G13 : actifs = agents comptés qui ne sont pas en disponibilité à la date
+    COUNT(DISTINCT CASE WHEN b.inactif = 0 THEN b.PERS_ID END) AS NB_AGENTS_ACTIFS,
+    -- G13 : inactifs = en disponibilité (07 sans 18 après), réglage inactifs
+    COUNT(DISTINCT CASE WHEN b.inactif = 1 THEN b.PERS_ID END) AS NB_AGENTS_INACTIFS,
     ROUND(AVG(b.age), 1)                                  AS AGE_MOYEN,
     ROUND(AVG(b.anciennete), 1)                           AS ANCIENNETE_MOYENNE,
     -- ── CHARGEMENT (comme avant) ─────────────────────────────────────
