@@ -944,6 +944,102 @@ JOURS = [
                 "Question à poser : au retour d'un agent, retirer le temps d'absence de "
                 "l'ancienneté, ou repartir de zéro ?",
                 "Rien n'est commité depuis le 01/11."]),
+    Jour("2026-11-07", "La requête de l'effectif expliquée, et le lot 25",
+         ["La requête de l'effectif en schéma : une seule photo, mais des dates, et trois "
+          "agents fictifs rejoués au 31/12 de 2018 à 2025.",
+          "Lot 25 : les agents partis puis revenus sont tous des temporaires. G2 tient, la "
+          "requête ne change pas.",
+          "Tous les cas d'agents de l'effectif en un schéma : compté, inactif ou pas compté."],
+         chantiers=[
+             Chantier("GRH : la requête de l'effectif expliquée en schéma", "GRH",
+                      demande="Un petit schéma Excalidraw pour voir concrètement comment la "
+                              "requête de l'effectif retrouve ce qui est demandé pour les "
+                              "années passées.",
+                      fait="Schéma en quatre parties : l'idée (le DWH ne garde qu'une photo, "
+                           "mais la fiche, les situations et les décisions sont datées) ; la "
+                           "requête partie par partie (0 à 8, puis OBIEE) ; trois agents "
+                           "fictifs sur une frise de 2018 à 2025 (un permanent promu, mis en "
+                           "disponibilité puis retraité ; un temporaire à trois contrats ; un "
+                           "agent parti sans date, comme les 84 engagés de 2019) ; ce qui en "
+                           "sort et ce que la base ne permet pas de rejouer.",
+                      trouve="En dessinant : G2 ne lit que le premier départ et la fiche "
+                             "d'aujourd'hui. Un agent parti puis revenu pourrait être mal "
+                             "compté ; vérifié par le lot 25.",
+                      fichiers="schemas/grh/requete_effectif_pas_a_pas.excalidraw ; "
+                               "sources/grh/requete_effectif_pas_a_pas.py.",
+                      etat="fait"),
+             Chantier("GRH : lot 25, les agents partis puis revenus", "GRH",
+                      demande="Préparer un lot pour compter les agents partis puis revenus, "
+                              "et mesurer ce que G2 en fait à chaque 31/12.",
+                      fait="Lot 25 rédigé (Q140 à Q142), testé dans SQLite sur six agents "
+                           "fictifs, exécuté par toi ; résultats reportés dans le lot et le "
+                           "README des analyses GRH.",
+                      trouve="41 allers-retours pour 30 agents, tous des fins de contrat (35) "
+                             "suivies plus tard d'un nouvel engagement temporaire (50). Aucun "
+                             "permanent parti puis revenu, aucune titularisation juste après "
+                             "une 35. G2 ne compte personne pendant une absence et n'oublie "
+                             "qu'un agent sans situation, de 2015 à 2019. 747 permanents au "
+                             "31/12/2024 (742 au lot 17, qui ne prenait que les fiches ACTIF) ; "
+                             "886 au 31/12/2025.",
+                      decide="G2 reste telle quelle : la requête de l'effectif ne change pas.",
+                      fichiers="analyses/grh/lot25_partis_puis_revenus.sql ; "
+                               "analyses/grh/README.md.",
+                      etat="fait"),
+             Chantier("GRH : la structure comptable de T63 et T64", "GRH",
+                      demande="Mettre en place la structure (table ou vue matérialisée) que "
+                              "la CNSS alimentera, pour construire les tableaux GRH qui "
+                              "demandent des montants financiers. Toujours lire d'abord le "
+                              "recueil des besoins.",
+                      fait="Recueil v7 relu (RH lignes 6 et 7, indicateur de formation, "
+                           "Finance T66 et T69), puis l'Annuaire, la grille des ratios et "
+                           "Kaya. Table STG_GL.BI_GRH_SOLDE_COMPTABLE proposée : montants "
+                           "par exercice, mois, gestion, compte et section analytique, "
+                           "réalisés et budgétés. Elle est remplie par la DSI depuis Oracle "
+                           "GL, par son traitement ou par une vue matérialisée posée "
+                           "dessus. Avec elle : cinq questions à la DFC et quatre contrôles, "
+                           "testés dans SQLite.",
+                      trouve="Le recueil et la grille ne donnent pas les mêmes comptes : "
+                             "formation « 63, 86 et 87 » ou 63812, 6386 et 6577 ; charges "
+                             "61 à 66 ou 61 à 68 ; les frais de personnel prennent G et S, "
+                             "les charges G seule.",
+                      decide="Proposition BI : des montants par compte, pas des rubriques "
+                             "déjà calculées ; la BI choisit les comptes par réglage.",
+                      fichiers="analyses/grh/t63_t64_structure_comptable.sql ; "
+                               "analyses/grh/README.md.",
+                      etat="fait"),
+             Chantier("GRH : tous les cas d'agents de l'effectif", "GRH",
+                      demande="Lister clairement tous les cas d'agents que traite la requête "
+                              "de l'effectif (permanent, temporaire en fin de contrat…), puis "
+                              "les mettre dans un schéma Excalidraw simple.",
+                      fait="Recueil v7 relu (RH lignes 1 et 4 : permanent ou temporaire ; "
+                           "sorties et retours pour l'ancienneté). Liste donnée dans la "
+                           "conversation, puis schéma : le parcours d'un agent au 31/12, "
+                           "12 cas de permanents, 7 cas de temporaires, 3 cas entre les deux, "
+                           "le rangement (catégorie, âge, sexe, ancienneté, domaine), les "
+                           "réglages et les sources.",
+                      trouve="Un agent sans situation au 31/12 est compté, mais sa nature est "
+                             "vide : les filtres Permanent et Temporaire d'OBIEE l'écartent "
+                             "des tableaux. Nombre à compter.",
+                      fichiers="schemas/grh/cas_agents_effectif.excalidraw ; "
+                               "sources/grh/cas_agents_effectif.py.",
+                      etat="fait"),
+         ],
+         reste=["Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
+                "102026), jusqu'au 31/12/2025, et me coller le résultat.",
+                "Le schéma des règles GRH (regles_grh) n'a ni G12 ni G13.",
+                "DSI : confirmer que le statut est modifié sur la situation en cours, et le "
+                "sens des natures REM, DET, ANN, ABA.",
+                "DRH : viser G13 et la fiche sans état, avec les autres règles.",
+                "CNSS : remplir le fichier unité → domaine.",
+                "Question à poser : au retour d'un agent, retirer le temps d'absence de "
+                "l'ancienneté, ou repartir de zéro ?",
+                "DFC et DSI : valider la structure comptable de T63-T64, répondre aux cinq "
+                "questions, puis créer et alimenter la table.",
+                "À commiter : le lot 25, la structure de T63-T64, le schéma "
+                "requete_effectif_pas_a_pas, le schéma cas_agents_effectif, le README des "
+                "analyses GRH, et les retouches de la requête de l'effectif.",
+                "Compter les agents sans situation à chaque 31/12 (comptés, mais dans aucun "
+                "tableau)."]),
 ]
 
 # =============================================================================================
@@ -1110,7 +1206,7 @@ DECISIONS = [
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-05"
+MISE_A_JOUR = "2026-11-07"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
@@ -1126,9 +1222,10 @@ ETAT = [
      "pour la DRH. Plan sur le modèle des prestations ; lot 17 exécuté : 742 permanents "
      "pour 758 publiés ; âge, ancienneté, recrutements et retraites retrouvés ; lot 18 : "
      "la catégorie de la CNSS trouvée ; lots 19 et 20 : T58, T65 et T60 retrouvés, "
-     "contractuels expliqués.",
-     "Règles G1 à G11, schéma regles_grh, fiches T58, T60, T62 ; trois requêtes proposées "
-     "à exécuter ; visa de la DRH."),
+     "contractuels expliqués ; lot 24 : G13 et la fiche sans état ; lot 25 : G2 tient "
+     "(les agents partis puis revenus sont tous des temporaires).",
+     "Règles G1 à G13, schéma regles_grh, fiches T58, T60, T62, schéma de la requête de "
+     "l'effectif ; trois requêtes proposées à exécuter ; visa de la DRH."),
     ("Immatriculation et recouvrement (T1 à T24)", "à faire",
      "Les vues simples sont spécifiées pour la DSI (20/10).",
      "Pas encore d'analyse."),
@@ -1153,7 +1250,10 @@ EN_ATTENTE = [
     ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G11 ; répondre à "
                "QG1 à QG7 et au questionnaire CIPRES."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet, où sont saisis les "
-               "contrôles a posteriori."),
+               "contrôles a posteriori ; créer et alimenter BI_GRH_SOLDE_COMPTABLE depuis "
+               "Oracle GL (T63, T64)."),
+    ("La DFC", "Les comptes de T63 et T64 : charges de fonctionnement, formation, masse "
+               "salariale, total budget, section analytique (cinq questions)."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
 ]
 
@@ -1186,7 +1286,7 @@ LIVRABLES = [
     ("Les analyses (requêtes et constats)", [
         ("Prestations", "analyses/prestations", "lots 1 à 9 (P01 à P106), README (constats, "
                                                 "règles, questions), TODO, resultats/"),
-        ("GRH", "analyses/grh", "lots 1 à 20 (Q01 à Q117), règles G1 à G11, requêtes "
+        ("GRH", "analyses/grh", "lots 1 à 25 (Q01 à Q142), règles G1 à G13, requêtes "
                                 "proposées (effectif, T60, T62), README, TODO"),
         ("Annuaire de la CNSS 2024", "analyses/comparaison_annuaire_cnss_2024",
          "requêtes A01 à A08, tableau 18 reconstitué, déductions"),
@@ -1213,8 +1313,10 @@ LIVRABLES = [
                                                "dossier, les fiches de validation T25 à T27, "
                                                "T31, T32, T41, T42 et T50-T57"),
         ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024"),
-        ("GRH", "schemas/grh", "regles_grh (règles G1 à G11) ; tableaux cipres : fiches T58, "
-                               "T60, T62"),
+        ("GRH", "schemas/grh", "regles_grh (règles G1 à G11) ; requete_effectif_pas_a_pas "
+                               "(la requête de l'effectif expliquée) ; cas_agents_effectif "
+                               "(tous les cas d'agents) ; tableaux cipres : "
+                               "fiches T58, T60, T62"),
     ]),
     ("Les documents et artefacts (claude.ai)", [
         ("Roadmap métier", "claude.ai/artifact/419Uwt2pL2sbqKjiUBHTbu",

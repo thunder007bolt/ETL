@@ -62,60 +62,94 @@
 --   (publié 41 %, les 84 engagés de 2019, règle G11) ; temporaires : plus de
 --   46 (publié), à cause de la règle G7 ; T61 à recalculer.
 --
--- RÈGLES (détail dans analyses/grh/regles_effectif.md) :
---   · G1 Nature : celle de la dernière situation commencée au plus tard à la
---     date d'arrêté (NATURE_EMPLOI : PERMANENT ou TEMPORAIRE), filtre global
---     dans OBIEE. Toutes les qualités restent dans la table comme avant
---     (QUALITE_EMPLOYE) : la CIPRES se lit avec QUALITE_EMPLOYE = 'A'.
---   · G2 Permanent présent (et agent sans situation, comme avant) : entré au
---     plus tard à la date d'arrêté (embauche, à défaut prise de service) et
---     pas encore parti : fiche qui n'est pas INACTIF (une fiche sans état,
---     embauche récente, compte comme encore là : 67 fiches, lot 2, Q10), ou
---     premier départ (liste decisions_depart, sauf décision annulée par une
---     40 ; à défaut le décès) après la date d'arrêté.
---   · G7 Temporaire présent : la date d'arrêté tombe dans un de ses contrats.
---     Début : engagement temporaire (50) non annulé. Fin : premier départ
---     après le début ; sinon la veille du contrat suivant ; sinon aucune fin
---     connue, et l'agent est compté (réunion du 03/11).
---   · G3 Catégorie : GRH_SITUATION.CATEGORIE de la dernière situation,
---     regroupée par regroupement_categorie (01-02 employés, 03 maîtrise,
---     04-05 cadres moyens, 06 et HC cadres supérieurs) ; la colonne cadre de
---     ce tableau dit qui compte dans NB_CADRES.
---   · G4 Âge : années pleines à la date d'arrêté ; tranches de
---     DIM_GRH_TRANCHE_AGE. Date de naissance absente ou âge hors de 0 à 119 :
---     l'agent est compté, avec une tranche vide (avant, il n'était pas compté).
---   · Sexe : lu sur la fiche ; LIBELLE_SEXE comme avant.
---   · G5 Ancienneté : années pleines depuis la prise de service (à défaut
---     l'embauche), moins les interruptions : disponibilité (07) jusqu'à la
---     remise en activité (18), départ suivi d'un nouvel engagement (50 ou 51).
---   · G12 Domaine : celui de l'unité de la dernière situation (UA_CODE), lu
---     dans la correspondance de la CNSS ; sinon « Domaine non renseigné ».
---   · G6 Taux d'encadrement : NB_CADRES / NB_AGENTS (inchangé).
---   · G13 Actifs et inactifs (NB_AGENTS_ACTIFS, NB_AGENTS_INACTIFS) : un agent
---     compté est inactif s'il est en disponibilité à la date d'arrêté
---     (dernière décision 07 sans décision 18 à la même date ou après), comme
---     QG6 et G5. Le statut de la situation n'est plus lu : il n'est pas daté,
---     il est modifié sur la situation en cours (lot 24, Q137 à Q139).
+-- RÈGLES (détail et exemples dans analyses/grh/regles_effectif.md).
+-- La « date d'arrêté » est le jour où l'on photographie l'effectif
+-- (souvent le 31/12 ; parfois une fin de mois).
+--
+--   · G1 Nature
+--     Permanent ou temporaire, d'après la dernière situation commencée au
+--     plus tard à la date d'arrêté. Filtre global dans OBIEE. La table garde
+--     toutes les qualités (A, B, C) ; la CIPRES se lit avec qualité A.
+--     Un agent sans situation suit la règle des permanents (G2).
+--
+--   · G2 Permanent présent
+--     Compté s'il est entré au plus tard à la date d'arrêté ET s'il n'est
+--     pas encore parti.
+--     Entrée = date d'embauche ; si elle est vide, date de prise de service.
+--     Pas encore parti = fiche différente de INACTIF (une fiche sans état
+--     compte comme encore là), OU premier départ après la date d'arrêté.
+--     Départs : retraite 02, décès 34, fin de contrat 35, démission 36,
+--     rupture 52, licenciement 54 (liste réglable) ; une décision annulée
+--     par une 40 ne compte pas ; à défaut, la date de décès.
+--
+--   · G7 Temporaire présent
+--     Compté si la date d'arrêté tombe dans un de ses contrats.
+--     Début du contrat = engagement temporaire (décision 50), non annulé.
+--     Fin du contrat, dans cet ordre :
+--       1. premier départ après le début ;
+--       2. sinon, veille du contrat suivant ;
+--       3. sinon, aucune fin connue → l'agent est quand même compté
+--          (réglage fin_contrat_inconnue = PRESENT).
+--
+--   · G3 Catégorie
+--     Catégorie de la dernière situation, regroupée ainsi :
+--     01-02 employés, 03 maîtrise, 04-05 cadres moyens, 06 et HC cadres
+--     supérieurs. La colonne « cadre » de ce tableau dit qui entre dans
+--     NB_CADRES.
+--
+--   · G4 Âge
+--     Années pleines à la date d'arrêté, rangées dans DIM_GRH_TRANCHE_AGE.
+--     Date de naissance absente ou âge hors de 0 à 119 : l'agent reste
+--     compté, avec une tranche vide.
+--
+--   · Sexe
+--     Lu sur la fiche (M / F) ; LIBELLE_SEXE comme avant.
+--
+--   · G5 Ancienneté
+--     Années pleines depuis la prise de service (à défaut l'embauche),
+--     moins les périodes où l'agent n'était pas en activité :
+--     - disponibilité (décision 07) jusqu'au retour (décision 18) ;
+--     - départ suivi d'un nouvel engagement (50 ou 51).
+--
+--   · G12 Domaine
+--     Domaine de l'unité de la dernière situation (UA_CODE), lu dans la
+--     correspondance CNSS ; sinon « Domaine non renseigné ».
+--
+--   · G6 Taux d'encadrement
+--     NB_CADRES / NB_AGENTS (inchangé).
+--
+--   · G13 Actifs et inactifs
+--     Parmi les agents comptés : inactif = encore en disponibilité à la
+--     date d'arrêté (dernière décision 07 plus récente que la dernière 18).
+--     Les autres sont actifs. On ne lit plus le statut de la situation
+--     (B détaché, D mis à disposition, E disponibilité, F suspendu,
+--     H sous les drapeaux) : ce statut n'est pas daté. Le réglage
+--     inactifs = STATUT permet de revenir à l'ancienne lecture.
 --
 -- RÉGLAGES (partie 0) : chacun peut changer sans réécrire la requête.
---   · periodicite           : 'ANNUELLE' (31/12 des exercices clos, comme
---     avant) ou 'MENSUELLE' (ajoute la fin de chaque mois clos de l'année
---     passée et de l'année en cours). AVANT de passer à MENSUELLE, Jules doit
---     régler NB_AGENTS en « dernière valeur » sur le temps dans OBIEE, sinon
---     une année additionnerait ses douze mois ;
---   · ordre_date_anciennete : 'PRISE_SERVICE' (réunion) ou 'EMBAUCHE' ;
---   · retirer_interruptions : 'OUI' (recueil des besoins) ou 'NON' ;
---   · fin_contrat_inconnue  : 'PRESENT' (réunion) ou 'FICHE' (compté
---     seulement si la fiche n'est pas INACTIF) ;
---   · disponibilite         : 'PRESENT' ou 'HORS_EFFECTIF' — question QG6 à
---     la DRH, pas encore tranchée ;
---   · inactifs              : 'DECISIONS' (lot 24 : disponibilité lue dans
---     les décisions 07 et 18) ou 'STATUT' (comme avant : statuts B, D, E, F,
---     H de la dernière situation). Avec disponibilite = 'HORS_EFFECTIF' et
---     inactifs = 'DECISIONS', NB_AGENTS_INACTIFS vaut 0 ;
---   · decisions_depart, codes_decision, regroupement_categorie : listes de
---     codes, une ligne par code ;
---   · correspondance_domaine : à brancher sur la table chargée depuis
+--   · periodicite           : ANNUELLE = 31/12 des exercices clos ;
+--                             MENSUELLE = ajoute aussi les fins de mois
+--                             clos. Avant MENSUELLE, Jules doit régler
+--                             NB_AGENTS en « dernière valeur » dans OBIEE,
+--                             sinon une année additionnerait ses 12 mois.
+--   · ordre_date_anciennete : PRISE_SERVICE ou EMBAUCHE (début G5).
+--   · retirer_interruptions : OUI = soustraire les absences de l'ancienneté ;
+--                             NON = ne pas les soustraire.
+--   · fin_contrat_inconnue  : PRESENT = temporaire sans fin connue compté ;
+--                             FICHE = compté seulement si la fiche n'est
+--                             pas INACTIF.
+--   · disponibilite         : PRESENT = permanent en disponibilité reste
+--                             dans l'effectif ;
+--                             HORS_EFFECTIF = il en sort (QG6, pas encore
+--                             tranché par la DRH).
+--   · inactifs              : DECISIONS = inactif si disponibilité 07 sans
+--                             retour 18 après ;
+--                             STATUT = inactif si statut B, D, E, F ou H.
+--                             Avec HORS_EFFECTIF + DECISIONS,
+--                             NB_AGENTS_INACTIFS vaut 0.
+--   · decisions_depart, codes_decision, regroupement_categorie :
+--     listes de codes, une ligne par code.
+--   · correspondance_domaine : à brancher sur la table du fichier
 --     correspondance_unite_domaine.xlsx ; tant qu'elle est vide, tous les
 --     agents sont en « Domaine non renseigné ».
 -- =============================================================================
@@ -130,11 +164,11 @@ parametres AS (
            'PRISE_SERVICE'         AS ordre_date_anciennete,
            -- G5 : retirer les interruptions de l'ancienneté, 'OUI' ou 'NON'
            'OUI'                   AS retirer_interruptions,
-           -- G7 : contrat sans fin connue, 'PRESENT' ou 'FICHE'
+           -- G7 : sans fin de contrat, 'PRESENT' (compté) ou 'FICHE' (si actif)
            'PRESENT'               AS fin_contrat_inconnue,
-           -- QG6 : permanent en disponibilité, 'PRESENT' ou 'HORS_EFFECTIF'
+           -- QG6 : dispo permanente, 'PRESENT' (dans l'effectif) ou 'HORS_EFFECTIF'
            'PRESENT'               AS disponibilite,
-           -- G13 : agents inactifs lus dans les 'DECISIONS' (07, 18) ou le 'STATUT'
+           -- G13 : inactifs via 'DECISIONS' (07/18) ou 'STATUT' (B,D,E,F,H)
            'DECISIONS'             AS inactifs
     FROM DUAL
 ),
@@ -256,6 +290,8 @@ premier_depart AS (
 ),
 
 -- ── 4. Les contrats des temporaires (G7) ───────────────────────────────────
+-- Chaque engagement temporaire (décision 50) ouvre un contrat.
+-- debut = date de cet engagement ; debut_suivant = date du suivant, s'il y en a.
 engagements AS (
     SELECT e.PERS_ID, e.date_decision AS debut,
            LEAD(e.date_decision) OVER (PARTITION BY e.PERS_ID
@@ -265,9 +301,8 @@ engagements AS (
     WHERE e.PERS_ID IS NOT NULL
       AND e.code = cd.engagement_temporaire
 ),
-
--- fin d'un contrat, exclue : le premier départ après son début, sinon le début
--- du contrat suivant (le contrat finit la veille) ; 31/12/9999 si aucune
+-- Fin du contrat (jour exclu) : premier départ après le début ; sinon début
+-- du contrat suivant ; sinon 31/12/9999 = fin inconnue, contrat encore ouvert.
 contrats AS (
     SELECT g.PERS_ID, g.debut,
            LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
@@ -277,6 +312,8 @@ contrats AS (
                          AND dep.date_depart > g.debut
     GROUP BY g.PERS_ID, g.debut, g.debut_suivant
 ),
+-- Temporaires encore sous contrat à la date d'arrêté (debut <= date < fin).
+-- fin_inconnue = 1 s'il existe au moins un contrat sans date de fin connue.
 temporaires_sous_contrat AS (
     SELECT da.date_arrete, c.PERS_ID,
            MAX(CASE WHEN c.fin = DATE '9999-12-31' THEN 1 ELSE 0 END) AS fin_inconnue
@@ -287,6 +324,9 @@ temporaires_sous_contrat AS (
 ),
 
 -- ── 5. Les disponibilités (QG6) et les interruptions de l'ancienneté (G5) ──
+-- Dernière mise en disponibilité (07) et dernière remise en activité (18)
+-- au plus tard à la date d'arrêté. Si date_dispo > date_remise, l'agent est
+-- encore en disponibilité (inactif G13 ; éventuellement hors effectif QG6).
 positions AS (
     SELECT da.date_arrete, d.PERS_ID,
            MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END) AS date_dispo,
@@ -298,9 +338,9 @@ positions AS (
       AND d.code IN (cd.mise_en_disponibilite, cd.remise_en_activite)
     GROUP BY da.date_arrete, d.PERS_ID
 ),
+-- Périodes à retirer de l'ancienneté : disponibilité 07→18, ou départ suivi
+-- d'un nouvel engagement 50/51.
 interruptions AS (
-    -- mise en disponibilité, jusqu'à la remise en activité qui suit (ouverte
-    -- s'il n'y en a pas)
     SELECT d.PERS_ID, d.date_decision AS debut,
            (SELECT MIN(r.date_decision)
             FROM decisions r, codes_decision c2
@@ -312,7 +352,6 @@ interruptions AS (
     WHERE d.PERS_ID IS NOT NULL
       AND d.code = cd.mise_en_disponibilite
     UNION ALL
-    -- départ suivi d'un nouvel engagement (temporaire ou permanent)
     SELECT x.PERS_ID, x.debut, x.fin
     FROM (SELECT dep.PERS_ID, dep.date_depart AS debut,
                  (SELECT MIN(e.date_decision)
@@ -323,7 +362,8 @@ interruptions AS (
           FROM departs dep) x
     WHERE x.fin IS NOT NULL
 ),
--- jours d'interruption entre le début de l'ancienneté et la date d'arrêté
+-- Nombre de jours d'interruption entre le début de carrière et la date
+-- d'arrêté (uniquement le morceau de chaque période qui chevauche cet intervalle).
 interruptions_a_date AS (
     SELECT da.date_arrete, i.PERS_ID,
            SUM(GREATEST(0, LEAST(NVL(i.fin, da.date_arrete), da.date_arrete)
@@ -374,7 +414,10 @@ base AS (
                            - CASE pr.retirer_interruptions
                                  WHEN 'OUI' THEN NVL(ia.jours, 0) ELSE 0 END)
                           / 365.25), 0)                           AS anciennete,
-           -- G13 : 1 si l'agent est inactif à la date d'arrêté, sinon 0
+           -- G13 : 1 = inactif, 0 = actif
+           -- STATUT : B détaché, D mis à disposition, E dispo, F suspendu, H drapeaux
+           -- DECISIONS (valeur actuelle) : encore en disponibilité si
+           -- dernière 07 plus récente que dernière 18 (dates absentes = 1900)
            CASE WHEN pr.inactifs = 'STATUT'
                 THEN CASE WHEN si.STATUT_EMPLOYE IN ('B','D','E','F','H')
                           THEN 1 ELSE 0 END
@@ -439,9 +482,9 @@ SELECT
     b.NATURE_EMPLOI,
     -- ── MESURES (comme avant) ────────────────────────────────────────
     COUNT(DISTINCT b.PERS_ID)                             AS NB_AGENTS,
-    -- G13 : actifs = agents comptés qui ne sont pas en disponibilité à la date
+    -- G13 : actifs = agents comptés avec inactif = 0
     COUNT(DISTINCT CASE WHEN b.inactif = 0 THEN b.PERS_ID END) AS NB_AGENTS_ACTIFS,
-    -- G13 : inactifs = en disponibilité (07 sans 18 après), réglage inactifs
+    -- G13 : inactifs = agents comptés avec inactif = 1 (voir réglage inactifs)
     COUNT(DISTINCT CASE WHEN b.inactif = 1 THEN b.PERS_ID END) AS NB_AGENTS_INACTIFS,
     ROUND(AVG(b.age), 1)                                  AS AGE_MOYEN,
     ROUND(AVG(b.anciennete), 1)                           AS ANCIENNETE_MOYENNE,
