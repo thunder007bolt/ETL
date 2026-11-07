@@ -949,7 +949,9 @@ JOURS = [
           "agents fictifs rejoués au 31/12 de 2018 à 2025.",
           "Lot 25 : les agents partis puis revenus sont tous des temporaires. G2 tient, la "
           "requête ne change pas.",
-          "Tous les cas d'agents de l'effectif en un schéma : compté, inactif ou pas compté."],
+          "Tous les cas d'agents de l'effectif en un schéma : compté, inactif ou pas compté ; "
+          "puis la version technique, reliée au SQL.",
+          "T63 et T64 : la structure simple à envoyer à la DSI et à la DFC, sans SQL."],
          chantiers=[
              Chantier("GRH : la requête de l'effectif expliquée en schéma", "GRH",
                       demande="Un petit schéma Excalidraw pour voir concrètement comment la "
@@ -1023,6 +1025,54 @@ JOURS = [
                       fichiers="schemas/grh/cas_agents_effectif.excalidraw ; "
                                "sources/grh/cas_agents_effectif.py.",
                       etat="fait"),
+             Chantier("GRH : les cas d'agents reliés à la requête SQL", "GRH",
+                      demande="Une seconde version, plus technique, qui relie le schéma des "
+                              "cas aux requêtes, pour mieux comprendre la requête SQL.",
+                      fait="Schéma en sept parties : la requête en un coup d'œil (parties 0 "
+                           "à 8, CTE, lignes du fichier, grain, alias) ; le WHERE de base "
+                           "annoté ligne par ligne ; pour chaque cas (permanents, temporaires, "
+                           "entre les deux), le verdict, la partie, le bout de SQL qui décide "
+                           "et la raison ; les axes et les mesures ; le comptage final.",
+                      trouve="Trois cas tiennent à un NULL ramené par un LEFT JOIN : fiche "
+                             "INACTIF sans date (NULL > date jamais vrai), temporaire sans 50 "
+                             "(tc.PERS_ID NULL), agent sans situation (NATURE_EMPLOI NULL).",
+                      fichiers="schemas/grh/cas_agents_effectif_sql.excalidraw ; "
+                               "sources/grh/cas_agents_effectif_sql.py.",
+                      etat="fait"),
+             Chantier("GRH : la requête de T63 et T64", "GRH",
+                      demande="Les tableaux GRH en rapport avec la finance : deux ou trois "
+                              "tableaux à faire, en reprenant ce qui a été dit.",
+                      fait="Recueil v7 relu (RH lignes 6 et 7, Finance ligne 1, indicateur "
+                           "FOR / MSAL), puis l'Annuaire, Kaya et la grille : ce sont T63 "
+                           "(FP / CF) et T64 (FOR / MSAL et FOR / BUD). Requête proposée pour "
+                           "DTM_INDICATEURS_FINANCES_GRH, mêmes colonnes et même grain, sept "
+                           "colonnes ajoutées ; fichier de déploiement (fait DWH et ODS, SQL du "
+                           "fait, colonnes du DTM). Testée : syntaxe Oracle, rejeu SQLite sans "
+                           "écart.",
+                      trouve="« 63, 86 et 87 » pourrait vouloir dire 6386 et 6387. FP sur G et "
+                             "S face à CF sur G seule peut donner un ratio T63 au-dessus de 1.",
+                      decide="Proposition BI : comptes par réglage, valeurs par défaut du "
+                             "recueil ; taux seulement pour un exercice clos ; la déclinaison "
+                             "par unité viendra dans une autre table (QF5).",
+                      fichiers="analyses/grh/t63_t64_requete_proposee.sql ; "
+                               "analyses/grh/t63_t64_deploiement.sql ; analyses/grh/README.md.",
+                      etat="fait"),
+             Chantier("GRH : la structure de T63-T64 à envoyer à la CNSS", "GRH",
+                      demande="Pas de SQL : c'est à la CNSS de fournir les données. Définir "
+                              "seulement une structure simple (colonnes, types, granularité) "
+                              "que la DSI créera, en table ou en vue, et alimentera.",
+                      fait="Schéma à envoyer à la DSI et à la DFC : pourquoi (T63, T64, "
+                           "recueil v7), la structure (nom proposé, une ligne, dix colonnes "
+                           "avec type et contenu), des lignes fictives, les règles "
+                           "d'alimentation, ce que la BI en fera et les cinq questions à la DFC.",
+                      trouve="Le doc « Spécification des vues BI CIPRES » n'est pas accessible "
+                             "depuis cette conversation.",
+                      decide="Structure simplifiée : pas de mois (T63 et T64 sont annuels), un "
+                             "montant net, un indicateur d'exercice clos. Les fichiers SQL "
+                             "d'avant restent des brouillons BI, à aligner.",
+                      fichiers="schemas/grh/t63_t64_donnees_a_fournir.excalidraw ; "
+                               "sources/grh/t63_t64_donnees_a_fournir.py.",
+                      etat="fait"),
          ],
          reste=["Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025, et me coller le résultat.",
@@ -1033,10 +1083,13 @@ JOURS = [
                 "CNSS : remplir le fichier unité → domaine.",
                 "Question à poser : au retour d'un agent, retirer le temps d'absence de "
                 "l'ancienneté, ou repartir de zéro ?",
-                "DFC et DSI : valider la structure comptable de T63-T64, répondre aux cinq "
-                "questions, puis créer et alimenter la table.",
+                "DFC et DSI : valider la structure comptable de T63-T64, répondre aux "
+                "questions QF1 à QF5, puis créer et alimenter la table ; ensuite, déployer "
+                "la requête T63-T64.",
                 "À commiter : le lot 25, la structure de T63-T64, le schéma "
-                "requete_effectif_pas_a_pas, le schéma cas_agents_effectif, le README des "
+                "requete_effectif_pas_a_pas, les schémas cas_agents_effectif (simple et SQL), "
+                "la requête et le déploiement de T63-T64, le schéma t63_t64_donnees_a_fournir, "
+                "le README des "
                 "analyses GRH, et les retouches de la requête de l'effectif.",
                 "Compter les agents sans situation à chaque 31/12 (comptés, mais dans aucun "
                 "tableau)."]),
@@ -1223,9 +1276,11 @@ ETAT = [
      "pour 758 publiés ; âge, ancienneté, recrutements et retraites retrouvés ; lot 18 : "
      "la catégorie de la CNSS trouvée ; lots 19 et 20 : T58, T65 et T60 retrouvés, "
      "contractuels expliqués ; lot 24 : G13 et la fiche sans état ; lot 25 : G2 tient "
-     "(les agents partis puis revenus sont tous des temporaires).",
-     "Règles G1 à G13, schéma regles_grh, fiches T58, T60, T62, schéma de la requête de "
-     "l'effectif ; trois requêtes proposées à exécuter ; visa de la DRH."),
+     "(les agents partis puis revenus sont tous des temporaires). T63 et T64 : structure "
+     "comptable et requête proposées (07/11).",
+     "Règles G1 à G13, schéma regles_grh, fiches T58, T60, T62, schémas de la requête de "
+     "l'effectif et des cas d'agents ; trois requêtes proposées à exécuter ; visa de la DRH ; "
+     "T63-T64 attendent la DFC et le premier chargement de la DSI."),
     ("Immatriculation et recouvrement (T1 à T24)", "à faire",
      "Les vues simples sont spécifiées pour la DSI (20/10).",
      "Pas encore d'analyse."),
@@ -1250,10 +1305,11 @@ EN_ATTENTE = [
     ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G11 ; répondre à "
                "QG1 à QG7 et au questionnaire CIPRES."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet, où sont saisis les "
-               "contrôles a posteriori ; créer et alimenter BI_GRH_SOLDE_COMPTABLE depuis "
-               "Oracle GL (T63, T64)."),
+               "contrôles a posteriori ; créer (table ou vue) et alimenter "
+               "BI_GRH_SOLDE_COMPTABLE depuis Oracle GL, d'après le schéma "
+               "t63_t64_donnees_a_fournir (T63, T64)."),
     ("La DFC", "Les comptes de T63 et T64 : charges de fonctionnement, formation, masse "
-               "salariale, total budget, section analytique (cinq questions)."),
+               "salariale, total budget, section analytique (questions QF1 à QF5)."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
 ]
 
@@ -1315,7 +1371,9 @@ LIVRABLES = [
         ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024"),
         ("GRH", "schemas/grh", "regles_grh (règles G1 à G11) ; requete_effectif_pas_a_pas "
                                "(la requête de l'effectif expliquée) ; cas_agents_effectif "
-                               "(tous les cas d'agents) ; tableaux cipres : "
+                               "(tous les cas d'agents) et cas_agents_effectif_sql (les mêmes, "
+                               "reliés à la requête) ; t63_t64_donnees_a_fournir (la "
+                               "structure à envoyer à la CNSS) ; tableaux cipres : "
                                "fiches T58, T60, T62"),
     ]),
     ("Les documents et artefacts (claude.ai)", [
