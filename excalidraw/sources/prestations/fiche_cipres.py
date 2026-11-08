@@ -85,17 +85,21 @@ def chip(d, x, y, tag, groups=()):
 
 
 def banner(d, y, how_to):
-    """Bandeau du haut : comment valider, et la légende des sources. Renvoie le bas du bandeau."""
+    """Bandeau du haut : comment valider, et la légende des sources. Renvoie le bas du bandeau.
+    Il fait 250 de haut, et grandit seulement si la légende ou le texte ne tiennent pas (une
+    fiche qui ajoute une étiquette de source, comme « Recueil v7 » pour T60)."""
+    texte = wrap(how_to, 18, 1180)
+    h = max(250, 54 + len(SOURCES) * 36 + 16, 54 + height_of(texte, 18) + 20)
     g = d.group()
-    frame = d.box(25, y, WIDTH - 50, 250, bg=C["jaune_clair"], stroke=C["jaune_bord"], groups=g)
+    frame = d.box(25, y, WIDTH - 50, h, bg=C["jaune_clair"], stroke=C["jaune_bord"], groups=g)
     d.text(45, y + 16, "Comment valider cette fiche", 22, groups=g, inside=frame)
-    d.text(45, y + 54, wrap(how_to, 18, 1180), 18, groups=g, inside=frame)
+    d.text(45, y + 54, texte, 18, groups=g, inside=frame)
     d.text(1330, y + 16, "D'où vient chaque justification", 22, groups=g, inside=frame)
     for i, (tag, (_, _, meaning)) in enumerate(SOURCES.items()):
         cy = y + 54 + i * 36
         w = chip(d, 1330, cy, tag, groups=g)
         d.text(1330 + w + 12, cy + 5, meaning, 16, groups=g, inside=frame)
-    return y + 250
+    return y + h
 
 
 def mockup(d, x, y, label_w, col_w, label_head, label_rule, columns, groups, rows, row_h=54):

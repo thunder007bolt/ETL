@@ -1,13 +1,17 @@
 """
 Fiche de validation de T60 « Mouvement du personnel au cours des 5 dernières années » (état au
-01/11/2026).
+08/11/2026).
 
 Même gabarit que les fiches des prestations : la maquette, six agents fictifs sur un calendrier,
-les colonnes, huit règles avec leur SQL et cinq questions.
+les colonnes, neuf règles avec leur SQL et neuf questions. Mise à jour le 08/11/2026 avec la
+requête réécrite (règles G14 à G17 de analyses/grh/regles_t60.md) : les deux photos de T58, dans
+chaque nature (permanents, temporaires), et le détail des « autres » par les types de mouvement
+de l'application GRH, que demande le recueil des besoins. Les questions suivent la numérotation
+de regles_t60.md (1 à 8), plus les 84 engagés de 2019 (Q9).
 
-Sources : Annuaire CIPRES (p. 17, 51) ; atelier de Kaya 2017 (décès, prise de service) ;
-annuaire de la CNSS 2024 (tableau 121) ; analyses/grh (lots 7, 17 à 20, règles G1, G2, G8, G9) ;
-t60_requete_proposee.sql.
+Sources : recueil des besoins v7 (RH lignes 1 et 3) ; Annuaire CIPRES (p. 17, 51) ; atelier de
+Kaya 2017 (décès, prise de service) ; annuaire de la CNSS 2024 (tableau 121) ; réunion du
+03/11/2026 ; analyses/grh (lots 1, 7, 17 à 20, 24, 25) ; t60_requete_proposee.sql.
 
 Usage :
     python3 excalidraw/sources/grh/t60_mouvement.py [--force]
@@ -20,16 +24,23 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from fiche_grh import HOW_TO_DEBUT, OUTPUT_DIR, figures  # noqa: E402
+import fiche_cipres  # noqa: E402
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 from fiche_cipres import (WIDTH, banner, cards_grid, cards_with_sql, chip, height_of,  # noqa: E402
                           line_cards, mockup, timeline, wrap)
 
 OUTPUT = OUTPUT_DIR / "T60_mouvement_personnel.excalidraw"
 
+# l'étiquette du recueil des besoins, en tête : il prime sur Kaya et sur l'Annuaire CIPRES
+RECUEIL = {"Recueil v7": (C["vert_clair"], C["vert"],
+                          "le recueil des besoins de la CNSS (v7), qui prime sur les autres")}
+
 HOW_TO = HOW_TO_DEBUT + (
-    "T60 suit l'effectif permanent de T58 d'une fin d'année à l'autre : début + entrées − "
-    "sorties = fin. Il remplace la requête DTM actuelle, qui lit une table sans recrutements ni "
-    "départs.")
+    "T60 suit l'effectif de T58 d'une fin d'année à l'autre, dans chaque nature (le tableau des "
+    "permanents, celui des temporaires) : début + entrées − sorties = fin. Chaque « autre » "
+    "entrée ou sortie porte un type de mouvement de l'application GRH, comme le demande le "
+    "recueil des besoins. T60 remplace la requête DTM actuelle, qui lit une table sans "
+    "recrutements ni départs.")
 
 # ce qu'un agent fictif donne dans T60 de 2024
 MOUVEMENTS = {
@@ -53,34 +64,39 @@ EXAMPLES = [
          dates="décès le 10/02, liquidation des droits le 15/10/2024",
          resultat="Sortie « décès » en 2024, datée par la liquidation des droits : la base n'a "
                   "plus la date du décès. Un décès de fin d'année glisse sur l'année suivante "
-                  "(question Q1)."),
+                  "(question Q3)."),
     dict(nom="Agent D", detail="mis en disponibilité", debut=date(2023, 10, 1),
          fin=date(2025, 3, 31), sortie="question",
          dates="disponibilité le 01/06/2024 (07), remise le 01/02/2025 (18)",
-         resultat="Aujourd'hui : ni sortie ni entrée. Comme l'annuaire : sortie « disponibilité » "
-                  "en 2024, entrée « remise en activité » en 2025 (question Q2)."),
+         resultat="Aujourd'hui : il reste dans l'effectif, ni sortie ni entrée. Comme l'annuaire : "
+                  "sortie « disponibilité » en 2024, entrée « remise en activité » en 2025 "
+                  "(question Q2)."),
     dict(nom="Agent E", detail="temporaire devenu permanent", debut=date(2024, 7, 1),
          fin=date(2025, 3, 31), sortie="entree", dates="permanent depuis le 01/07/2024",
-         resultat="Entrée « autre » en 2024 : il entre dans l'effectif permanent sans être "
-                  "recruté dans l'année."),
+         resultat="Chez les permanents : entrée « autre » en 2024, il était temporaire. Chez les "
+                  "temporaires : sortie « autre » la même année. Il n'est recruté qu'une fois, "
+                  "l'année de son engagement."),
     dict(nom="Agent F", detail="recruté et parti en 2024", debut=date(2024, 2, 1),
          fin=date(2024, 9, 30), sortie="aucun", dates="embauché le 01/02, démission le 30/09",
          resultat="Ni entrée ni sortie : absent au 31/12/2023 comme au 31/12/2024 (question "
-                  "Q4)."),
+                  "Q7)."),
 ]
 
 LINES = [
     (1, "Effectif au début et à la fin",
-     "les permanents présents au 31/12 de l'année d'avant, puis de l'année : ceux de T58",
-     "de 2020 à 2023, la base compte 84 agents de moins que l'annuaire (question Q3)", "Données"),
+     "les agents présents au 31/12 de l'année d'avant, puis de l'année, comptés comme dans "
+     "T58 : le tableau des permanents, ou celui des temporaires",
+     "2024 : 677 et 747 dans la base, 767 et 758 dans l'annuaire ; l'écart vient des 84 "
+     "engagés de 2019 (question Q9)", "Données"),
     (2, "Entrées",
-     "recrutement : embauché dans l'année ; autres : remise en activité, temporaire devenu "
-     "permanent",
+     "recrutement : un permanent embauché dans l'année, ou un temporaire qui signe un nouveau "
+     "contrat ; autres : temporaire devenu permanent, remise en activité, détaché",
      "104 recrutements en 2024 dans la base comme dans l'annuaire", "Données"),
     (3, "Sorties",
-     "retraite, décès ; autres : démission, licenciement, fin de contrat, mise en disponibilité",
-     "le tableau 121 de l'annuaire de la CNSS détaille les « autres » ; la requête aussi",
-     "Données"),
+     "retraite, décès ; autres : démission, licenciement, fin de contrat, disponibilité, agent "
+     "passé dans l'autre nature",
+     "chaque « autre » porte un type de mouvement de la liste de la CNSS (règle 8)",
+     "Recueil v7"),
     (4, "Le contrôle",
      "début + entrées − sorties = fin, chaque année",
      "toujours vrai : entrées et sorties se lisent d'une fin d'année à l'autre",
@@ -89,37 +105,50 @@ LINES = [
 
 RULES = [
     dict(n="1", titre="L'effectif au début et à la fin",
-         regle="Les permanents présents au 31 décembre, comptés comme dans T58. L'effectif au "
-               "début d'une année est celui du 31 décembre de l'année d'avant.",
-         sources=[("Annuaire", "p. 51 : effectif en début et en fin d'année"),
-                  ("Données", "2024 : 672 au début et 742 à la fin dans la base ; 767 et 758 "
-                              "publiés. L'écart du début vient des 84 engagés de 2019 (lot 17, "
-                              "Q99)")]),
+         regle="Les agents présents au 31 décembre, comptés comme dans T58 : un permanent entré "
+               "et pas encore parti, un temporaire sous contrat. L'effectif au début d'une année "
+               "est celui du 31 décembre de l'année d'avant. Chaque agent est compté dans sa "
+               "nature : le tableau des permanents, ou celui des temporaires.",
+         sources=[("Recueil v7", "RH ligne 1 : par type d'employé, permanent ou temporaire"),
+                  ("Annuaire", "p. 51 : effectif en début et en fin d'année"),
+                  ("Données", "2024 : 677 au début et 747 à la fin dans la base ; 767 et 758 "
+                              "publiés. L'écart vient des 84 engagés de 2019 (lots 17 et 25 ; "
+                              "question Q9)")]),
     dict(n="2", titre="Entrées et sorties, d'une fin d'année à l'autre",
-         regle="Une entrée est un permanent présent à la fin de l'année et absent au début ; une "
-               "sortie, l'inverse. Ainsi début + entrées − sorties = fin, toujours.",
-         sources=[("Base", "la table des mouvements n'a ni recrutement ni départ : la requête "
-                           "DTM actuelle ne peut pas servir (lot 1)"),
+         regle="Une entrée est un agent présent à la fin de l'année et absent au début, dans sa "
+               "nature ; une sortie, l'inverse. Ainsi début + entrées − sorties = fin, toujours. "
+               "Un temporaire devenu permanent sort des temporaires et entre chez les "
+               "permanents.",
+         sources=[("Base", "la table des mouvements de l'application n'a ni recrutement ni "
+                           "départ : la requête DTM actuelle ne peut pas servir (lot 1 ; "
+                           "réunion du 03/11)"),
                   ("Proposition BI", "un agent entré et sorti la même année n'apparaît pas ; "
-                                     "question Q4")]),
+                                     "question Q7")]),
     dict(n="3", titre="Le recrutement",
-         regle="Une entrée d'un agent embauché dans l'année (date d'embauche, à défaut prise de "
-               "service).",
+         regle="Un permanent embauché dans l'année (date d'embauche, à défaut prise de "
+               "service). Chez les temporaires : un nouveau contrat (engagement 50) d'un agent "
+               "qui n'avait aucun contrat au 31 décembre d'avant.",
          sources=[("Annuaire", "p. 51 : « recrutement »"),
                   ("Kaya 2017", "la note de prise de service vaut en attendant la décision "
                                 "d'engagement"),
                   ("Données", "104 en 2024, comme l'annuaire ; aucun de 2020 à 2023 (lot 17, "
-                              "Q99)")]),
+                              "Q99)"),
+                  ("Proposition BI", "la date d'embauche avant la prise de service ; question "
+                                     "Q4")]),
     dict(n="4", titre="Les autres entrées",
-         regle="Une remise en activité après une disponibilité (décision 18), un temporaire "
-               "devenu permanent, un retour sans décision.",
+         regle="Dans cet ordre : un agent classé comme détaché (décision 37) ; un agent revenu "
+               "de disponibilité (décision 18), si la disponibilité sort de l'effectif ; un "
+               "agent qui était dans l'autre nature au 31 décembre d'avant, comme un temporaire "
+               "devenu permanent ; sinon, une entrée sans explication, à vérifier.",
          sources=[("Données", "décisions 18 : 4, 3, 6, 5, 4 de 2020 à 2024, pour 3, 2, 3, 5, 6 "
-                              "remises publiées (lot 20, Q117)"),
-                  ("Proposition BI", "la remise compte selon le réglage disponibilite ; "
+                              "remises publiées (lot 20, Q117) ; aucune décision 37 chez les "
+                              "permanents"),
+                  ("Proposition BI", "la remise compte selon le réglage de la disponibilité ; "
                                      "question Q2")]),
     dict(n="5", titre="La retraite",
-         regle="Une sortie dont la première décision de départ, dans l'année, est l'admission à "
-               "la retraite (décision 02), à sa date de vigueur.",
+         regle="Une sortie dont le premier départ, dans l'année, est l'admission à la retraite "
+               "(décision 02), à sa date de vigueur. Une retraite suivie d'un décès la même "
+               "année reste une retraite.",
          sources=[("Base", "décision 02 « admission à la retraite »"),
                   ("Données", "39, 31, 29, 30, 25 de 2020 à 2024, pour 43, 31, 26, 32, 23 "
                               "publiées ; compter une retraite de décembre l'année suivante "
@@ -131,27 +160,51 @@ RULES = [
                   ("Données", "aucune date de décès saisie depuis 2010 ; la liquidation vient "
                               "8,5 mois après le décès en moyenne (lot 7, Q42) : 19 sorties de "
                               "2020 à 2024 pour 17 décès publiés (lot 18, Q109)"),
-                  ("Proposition BI", "la liquidation des droits ; question Q1")]),
+                  ("Proposition BI", "la liquidation des droits ; question Q3")]),
     dict(n="7", titre="Les autres sorties",
-         regle="Démission (36), licenciement (54), fin de contrat (35, 52), mise en "
-               "disponibilité (décision 07, selon le réglage), permanent devenu temporaire.",
+         regle="Démission (36), licenciement (54), fin de contrat (35, et la rupture 52), mise "
+               "en disponibilité (07, si la disponibilité sort de l'effectif), agent passé dans "
+               "l'autre nature ; sinon, une sortie sans départ daté, à vérifier. Pour un "
+               "temporaire, c'est le dernier départ de l'année qui compte.",
          sources=[("Données", "démissions exactes (1 en 2023, 2 en 2024), licenciements à 1 "
                               "près ; décisions 07 : 2, 4, 2, 5, 5 pour 5, 3, 2, 4, 7 "
-                              "disponibilités publiées (lot 20, Q117)"),
-                  ("Proposition BI", "les détachements restent introuvables ; question Q5")]),
-    dict(n="8", titre="Cinq exercices et le contrôle",
+                              "disponibilités publiées (lot 20, Q117) ; 2024 : 1 sortie sans "
+                              "départ daté"),
+                  ("Proposition BI", "la rupture 52 en fin de contrat ; les détachements et les "
+                                     "mises à disposition restent introuvables ; questions Q5 "
+                                     "et Q6")]),
+    dict(n="8", titre="Le détail des « autres »",
+         regle="Chaque autre entrée et chaque autre sortie porte un type de mouvement de la "
+               "liste de l'application GRH : remise en activité, détaché ; démission, "
+               "licenciement, disponibilité, mise à disposition, fin de détachement, fin de "
+               "contrat, autres. Une raison s'y ajoute : la décision qui a servi, ou le "
+               "changement de nature.",
+         sources=[("Recueil v7", "RH ligne 3 : « Autre : il faut le détailler (lister pour la "
+                                 "CNSS) »"),
+                  ("Base", "la table des types de mouvement de l'application GRH : 18 types, "
+                           "les rubriques du tableau 121 de l'annuaire de la CNSS"),
+                  ("Proposition BI", "question Q1")]),
+    dict(n="9", titre="Cinq exercices, le contrôle et les unités",
          regle="Une ligne par exercice, des quatre années d'avant à l'année choisie. Une "
-               "colonne de contrôle vérifie début + entrées − sorties − fin = 0.",
-         sources=[("Annuaire", "p. 51 : « au cours des 5 dernières années »")]),
+               "colonne de contrôle vérifie début + entrées − sorties − fin = 0. Par direction, "
+               "agence ou bureau, la fin se lit dans T58 : une mutation n'est ni une entrée ni "
+               "une sortie.",
+         sources=[("Annuaire", "p. 51 : « au cours des 5 dernières années »"),
+                  ("Recueil v7", "RH ligne 3 : par direction, agence et bureau, chaque année"),
+                  ("Proposition BI", "les mutations dans une unité ; question Q8")]),
 ]
 
 # Pour chaque règle, une requête courte sur les vraies tables de l'application (USER_GRH), pour
 # l'année 2024, avec en commentaire le chiffre à retrouver. La règle 1 construit les listes
-# permanents_2023 et permanents_2024 (règle 2 de T58 aux deux dates) ; la règle 5, sorties_2024.
+# permanents_2023 et permanents_2024 (comme la règle 2 de T58, la fiche sans état comptée) ; la
+# règle 5, sorties_2024. Les renvois s'écrivent « (règle n) » : la fiche de lecture les lit
+# « (terme n) ».
 SQL = {
     "1": """-- les permanents présents au 31/12/2023
--- et au 31/12/2024 : la règle 2 de T58,
--- aux deux dates, réutilisée ensuite
+-- et au 31/12/2024, comme dans T58
+-- (règle 2) : une fiche sans état
+-- (embauche récente) compte ; réutilisés
+-- ensuite
 WITH fins AS (
   SELECT DATE '2023-12-31' AS fin FROM DUAL
   UNION ALL
@@ -173,7 +226,7 @@ permanents AS (
            AND    x.DATE_DEBUT <= f.fin)
   AND    NVL(p.DATE_EMBAUCHE,
              p.DATE_PRISE_SERVICE) <= f.fin
-  AND   (p.ETAT_EMPLOYE = 'ACTIF'
+  AND   (NVL(p.ETAT_EMPLOYE, '-') <> 'INACTIF'
          OR (SELECT MIN(d.DATE_VIGUEUR)
              FROM   USER_GRH.GRH_DECISION d
              WHERE  d.PERS_ID = p.PERS_ID
@@ -187,9 +240,11 @@ permanents_2024 AS (
 SELECT annee, COUNT(*)
 FROM   permanents
 GROUP  BY annee
--- 2023 (début de 2024) : 672 ; 2024 : 742
--- (l'annuaire : 767 et 758 ; l'écart du
--- début vient des 84 engagés de 2019)""",
+-- 2023 (début de 2024) : environ 677 ;
+-- 2024 : environ 747 (l'annuaire : 767 et
+-- 758 ; l'écart vient des 84 engagés de
+-- 2019). La requête complète écarte aussi
+-- les départs annulés par une 40""",
     "2": """-- entrée : dans la liste de fin, pas
 -- dans celle du début ; sortie : l'inverse
 SELECT
@@ -202,7 +257,8 @@ SELECT
           (SELECT PERS_ID
            FROM   permanents_2024)) AS sorties
 FROM   DUAL
--- 2024 : entrées − sorties = 742 − 672 = 70""",
+-- 2024 : 104 entrées et 34 sorties ;
+-- 104 − 34 = 747 − 677 = 70""",
     "3": """-- une entrée embauchée en 2024 (à défaut
 -- d'embauche, la prise de service)
 SELECT COUNT(*)
@@ -219,6 +275,7 @@ WHERE  PERS_ID NOT IN
        (SELECT PERS_ID FROM permanents_2023)
 AND    NVL(DATE_EMBAUCHE, DATE_PRISE_SERVICE)
          < DATE '2024-01-01'
+-- 2024 : 0 attendu (l'annuaire : 7)
 -- à part : les remises en activité (18)
 SELECT COUNT(DISTINCT PERS_ID)
 FROM   USER_GRH.GRH_DECISION
@@ -226,10 +283,9 @@ WHERE  CDEC_CODE = '18'
 AND    DATE_VIGUEUR BETWEEN DATE '2024-01-01'
                         AND DATE '2024-12-31'
 -- 2024 : 4 décisions 18 (6 remises publiées)""",
-    "5": """-- sorties_2024 : la première décision de
--- départ des présents du 31/12/2023,
--- quand elle tombe en 2024 ; à ajouter
--- à la suite du WITH de la règle 1
+    "5": """-- sorties_2024 : le premier départ des
+-- présents du 31/12/2023, quand il tombe
+-- en 2024 ; à ajouter au WITH (règle 1)
 sorties_2024 AS (
   SELECT d.PERS_ID, d.CDEC_CODE
   FROM   permanents_2023 p
@@ -264,6 +320,14 @@ GROUP  BY CDEC_CODE
 -- 36 démission, 54 licenciement,
 -- 35 et 52 fin de contrat
 -- 2024 : 36 = 2 ; 54 = 1 (comme l'annuaire)
+-- les sorties sans départ daté en 2024
+SELECT COUNT(*)
+FROM   permanents_2023
+WHERE  PERS_ID NOT IN
+       (SELECT PERS_ID FROM permanents_2024)
+AND    PERS_ID NOT IN
+       (SELECT PERS_ID FROM sorties_2024)
+-- 2024 : 1 attendu
 -- à part : les mises en disponibilité (07)
 SELECT COUNT(DISTINCT PERS_ID)
 FROM   USER_GRH.GRH_DECISION
@@ -271,7 +335,20 @@ WHERE  CDEC_CODE = '07'
 AND    DATE_VIGUEUR BETWEEN DATE '2024-01-01'
                         AND DATE '2024-12-31'
 -- 2024 : 5 (l'annuaire : 7)""",
-    "8": """-- début + entrées − sorties − fin
+    "8": """-- la liste de la CNSS : les types de
+-- mouvement de l'application GRH
+SELECT CODE_NAT_MVT, CODE_TYPE_MVT,
+       LIB_TYPE_MVT, DOMAINE_TYPE_MVT
+FROM   USER_GRH.GRH_TYPE_MOUVEMENT
+ORDER  BY CODE_NAT_MVT, RANG_TYPE_MVT
+-- 18 types. Domaine ALL, les colonnes de
+-- T60 : DEBUT, RECRU, AUTRE_ENT, RET, DEC,
+-- AUTRE_SORT. Domaine CNSS, le détail des
+-- « autres » : REM, DETAC ; LIC, DEM,
+-- DISP, MISE_DIS, FIN_DETACH, FIN_CTRAT ;
+-- et les mouvements internes AFF, MUT,
+-- PROMO, RETRO, hors T60""",
+    "9": """-- début + entrées − sorties − fin
 SELECT (SELECT COUNT(*) FROM permanents_2023)
      + (SELECT COUNT(*) FROM permanents_2024
         WHERE  PERS_ID NOT IN
@@ -290,25 +367,25 @@ FROM   DUAL
 
 SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
             "(schéma USER_GRH), pour l'année 2024, à copier dans SQL Developer. La règle 1 "
-            "construit les permanents présents au 31/12/2023 et au 31/12/2024 (la règle 2 de la "
-            "fiche T58, aux deux dates) : les listes permanents_2023 et permanents_2024. La "
-            "règle 5 y ajoute la liste sorties_2024, que les règles 6 et 7 réutilisent. Pour les "
-            "autres règles, on colle leur requête sous ce WITH, à la place de sa dernière "
-            "requête. Le commentaire en fin de requête donne le chiffre à retrouver. La "
-            "requête complète, sur les copies de l'entrepôt, est dans "
+            "construit les permanents présents au 31/12/2023 et au 31/12/2024, comme la règle 2 "
+            "de la fiche T58, une fiche sans état comptant comme présente : les listes "
+            "permanents_2023 et permanents_2024. La règle 5 y ajoute la liste sorties_2024, que "
+            "les règles 6 et 7 réutilisent. Pour les autres règles, on colle leur requête sous ce "
+            "WITH, à la place de sa dernière requête. Le commentaire en fin de requête donne le "
+            "chiffre à retrouver. Ces requêtes suivent les permanents ; la requête complète, sur "
+            "les copies de l'entrepôt, suit aussi les temporaires : "
             "analyses/grh/t60_requete_proposee.sql.")
 
+# numérotées comme les questions de analyses/grh/regles_t60.md (1 à 8), plus Q9
 QUESTIONS = [
-    dict(n="Q1", titre="La date d'un décès",
-         regle="La base n'a plus de date de décès depuis 2010. Peut-on la saisir, ou celle du "
-               "communiqué nécrologique ?",
-         cas=[("Si la date est saisie",
-               "le décès compte l'année où il a lieu, comme dans l'annuaire."),
-              ("Sinon",
-               "il compte à la liquidation des droits, environ 8 mois plus tard ; un décès de "
-               "fin d'année glisse sur l'année suivante.")],
-         sources=[("Kaya 2017", "le communiqué nécrologique vaut en attendant l'acte"),
-                  ("Données", "lot 7, Q42 ; lot 18, Q109")]),
+    dict(n="Q1", titre="La liste des « autres »",
+         regle="Pour détailler les « autres », la requête reprend la liste des types de "
+               "mouvement de l'application GRH : remise en activité, détaché ; démission, "
+               "licenciement, disponibilité, mise à disposition, fin de détachement, fin de "
+               "contrat, autres. Cette liste convient-elle ?",
+         sources=[("Recueil v7", "RH ligne 3 : « lister pour la CNSS »"),
+                  ("Base", "les mêmes rubriques que le tableau 121 de l'annuaire de la "
+                           "CNSS")]),
     dict(n="Q2", titre="La disponibilité",
          regle="Une mise en disponibilité est-elle une sortie, et la remise en activité une "
                "entrée ?",
@@ -318,27 +395,65 @@ QUESTIONS = [
                "2 à 5 sorties « disponibilité » et 3 à 6 entrées « remise en activité » par "
                "an ; l'agent sort aussi de T58.")],
          sources=[("Données", "lot 20, Q117"),
-                  ("Proposition BI", "le réglage disponibilite")]),
-    dict(n="Q3", titre="Les 84 engagés de 2019",
+                  ("Proposition BI", "le même réglage dans T58 et T60")]),
+    dict(n="Q3", titre="La date d'un décès",
+         regle="La base n'a plus de date de décès depuis 2010. Peut-on la saisir, ou celle du "
+               "communiqué nécrologique ?",
+         cas=[("Si la date est saisie",
+               "le décès compte l'année où il a lieu, comme dans l'annuaire."),
+              ("Sinon",
+               "il compte à la liquidation des droits, environ 8 mois plus tard ; un décès de "
+               "fin d'année glisse sur l'année suivante.")],
+         sources=[("Kaya 2017", "le communiqué nécrologique vaut en attendant l'acte"),
+                  ("Données", "lot 7, Q42 ; lot 18, Q109")]),
+    dict(n="Q4", titre="La date d'entrée",
+         regle="Un agent embauché le 15/12 prend son service le 05/01. Entre-t-il l'année de son "
+               "embauche, ou celle de sa prise de service ?",
+         cas=[("L'embauche (proposition)",
+               "comme T58 : la date d'embauche, à défaut la prise de service."),
+              ("La prise de service",
+               "il entre l'année où il prend son service ; T58 et T60 changent ensemble.")],
+         sources=[("Kaya 2017", "la note de prise de service vaut en attendant la décision "
+                                "d'engagement"),
+                  ("Proposition BI", "point ouvert à la réunion du 03/11")]),
+    dict(n="Q5", titre="Les détachements",
+         regle="L'annuaire compte 2 détachements et 2 fins de détachement en 2023, 1 "
+               "détachement en 2024. Où sont-ils saisis ?",
+         sources=[("Données", "aucune décision de classement d'un détaché (37) chez les "
+                              "permanents (lot 20, Q117)"),
+                  ("Proposition BI", "en attendant, ils tombent dans les autres entrées ou "
+                                     "sorties")]),
+    dict(n="Q6", titre="La mise à disposition",
+         regle="Un agent mis à disposition d'un autre organisme (décision 14) reste aujourd'hui "
+               "dans l'effectif. Doit-il en sortir jusqu'à son retour ?",
+         cas=[("Non (proposition)", "il reste compté, comme aujourd'hui."),
+              ("Oui", "une sortie « mise à disposition », puis une entrée au retour ; il faut "
+                      "dater le retour.")],
+         sources=[("Base", "décision 14 « mise à disposition »"),
+                  ("Données", "le statut de la situation n'est pas daté (lot 24)")]),
+    dict(n="Q7", titre="Entré et sorti la même année",
+         regle="Un agent recruté puis parti dans la même année n'apparaît ni en entrée ni en "
+               "sortie. Faut-il le compter dans les deux ?",
+         cas=[("Non (proposition)", "le calcul reste simple : début + entrées − sorties = fin."),
+              ("Oui", "il est compté une fois en entrée et une fois en sortie, par un réglage "
+                      "déjà prêt.")],
+         sources=[("Proposition BI", "cas rare chez les permanents")]),
+    dict(n="Q8", titre="Les mutations dans une agence",
+         regle="Un agent muté d'une agence à une autre n'est ni une entrée ni une sortie de la "
+               "CNSS. Pour une direction ou une agence, faut-il montrer ses arrivées et ses "
+               "départs par mutation ?",
+         cas=[("Non (proposition)", "la fin de l'agence se lit dans l'effectif (T58) ; l'écart "
+                                    "avec début + entrées − sorties donne ses mutations "
+                                    "nettes."),
+              ("Oui", "il faut ajouter des lignes d'arrivée et de départ par unité.")],
+         sources=[("Recueil v7", "RH ligne 3 : par direction, agence et bureau")]),
+    dict(n="Q9", titre="Les 84 engagés de 2019",
          regle="L'annuaire compte 84 « autres entrées » en 2019 et 84 « autres sorties » en "
                "2024. La base ne date pas leur départ. Que s'est-il passé ?",
          sources=[("Données", "84 recrutés en 2019, jamais présents en fin d'année ; 10 radiés "
                               "dès 2019 (lots 17 et 20, Q99, Q117)"),
                   ("Proposition BI", "laisser 2019 à 2023 tels que la base les donne : sans "
                                      "effet à partir de 2025")]),
-    dict(n="Q4", titre="Entré et sorti la même année",
-         regle="Un agent recruté puis parti dans la même année n'apparaît ni en entrée ni en "
-               "sortie. Faut-il le compter dans les deux ?",
-         cas=[("Non (proposition)", "le calcul reste simple : début + entrées − sorties = fin."),
-              ("Oui", "il faut l'ajouter à part, en entrée et en sortie.")],
-         sources=[("Proposition BI", "cas rare chez les permanents")]),
-    dict(n="Q5", titre="Les détachements",
-         regle="L'annuaire compte 2 détachements et 2 fins de détachement en 2023, 1 "
-               "détachement en 2024. Où sont-ils saisis ?",
-         sources=[("Données", "aucune décision d'engagement de détaché (37) chez les "
-                              "permanents (lot 20, Q117)"),
-                  ("Proposition BI", "en attendant, ils tombent dans les autres entrées ou "
-                                     "sorties")]),
 ]
 
 BI_CHECKS = ("Les recrutements de 2024 retombent exactement sur l'annuaire de la CNSS (104) ; "
@@ -348,6 +463,8 @@ BI_CHECKS = ("Les recrutements de 2024 retombent exactement sur l'annuaire de la
              "près par an.\n"
              "L'effectif du début est sous l'annuaire de 84 agents de 2020 à 2023 : les engagés "
              "de 2019 sans date de départ.\n"
+             "La requête proposée a été rejouée sur des agents fictifs, un par cas, avec chaque "
+             "réglage : chaque mouvement est celui attendu. Elle reste à exécuter sur la base.\n"
              "La requête DTM actuelle lit une table sans recrutements ni départs : elle ne peut "
              "pas servir.")
 
@@ -356,41 +473,45 @@ RETRAITES = [("2020", 43, 39), ("2021", 31, 31), ("2022", 26, 29), ("2023", 32, 
 
 
 def build():
+    # l'étiquette « Recueil v7 » s'ajoute à la légende de cette fiche seulement
+    fiche_cipres.SOURCES = {**RECUEIL, **fiche_cipres.SOURCES}
     d = Diagram(seed=60)
     inner = WIDTH - 50
 
-    d.text(0, 0, "T60 · Le mouvement du personnel permanent, sur cinq ans", 48)
+    d.text(0, 0, "T60 · Le mouvement du personnel, sur cinq ans", 48)
     d.text(0, 66, "« Mouvement du personnel au cours des 5 dernières années » · ce que l'équipe BI "
-                  "a compris, à valider · état au 01/11/2026", 22, C["doux"])
+                  "a compris, à valider · état au 08/11/2026", 22, C["doux"])
     y = banner(d, 120, HOW_TO) + 40
 
     # ------------------------------------------------------------------ 1. coup d'œil
     sec = d.section(0, y, WIDTH, 0, "1. Le tableau en un coup d'œil")
     top = y + 65
     g = d.group()
-    text = wrap("Il suit le personnel permanent d'une année à l'autre : combien au début, combien "
-                "sont entrés (recrutés ou revenus), combien sont sortis (retraite, décès, "
-                "autres), combien à la fin. Cinq années côte à côte montrent les vagues de "
-                "recrutement et de départs.", 18, 720)
-    about_h = 54 + height_of(text, 18) + 16 + 2 * 36 + 10
+    text = wrap("Il suit le personnel d'une année à l'autre : combien au début, combien sont "
+                "entrés (recrutés ou revenus), combien sont sortis (retraite, décès, autres), "
+                "combien à la fin. Il se lit pour les permanents, ou pour les temporaires. Cinq "
+                "années côte à côte montrent les vagues de recrutement et de départs.", 18, 720)
+    etiquettes = [("Recueil v7", "RH ligne 3 : détailler les « autres »"),
+                  ("Annuaire", "description p. 17, maquette p. 51"),
+                  ("Données", "annuaire de la CNSS 2024, tableau 121")]
+    about_h = 54 + height_of(text, 18) + 16 + len(etiquettes) * 36 + 10
     about = d.box(25, top, 760, about_h, bg=C["blanc"], stroke=C["gris_bord"], groups=g)
     d.text(45, top + 16, "À quoi sert T60", 22, groups=g, inside=about)
     d.text(45, top + 54, text, 18, groups=g, inside=about)
     cy = top + 54 + height_of(text, 18) + 16
-    for tag, line in [("Annuaire", "description p. 17, maquette p. 51"),
-                      ("Données", "annuaire de la CNSS 2024, tableau 121")]:
+    for tag, line in etiquettes:
         w = chip(d, 45, cy, tag, groups=g)
         d.text(45 + w + 10, cy + 4, line, 18, groups=g, inside=about)
         cy += 36
     fbottom = figures(
         d, 25, top + about_h + 20, 760, "De 2020 à 2024 : la base face à l'annuaire de la CNSS",
         "2024 : 104 recrutements des deux côtés ; 767 au début et 758 à la fin dans l'annuaire, "
-        "672 et 742 dans la base, qui n'a pas les 84 engagés de 2019.",
+        "677 et 747 dans la base, qui n'a pas les 84 engagés de 2019.",
         "Départs à la retraite, de 2020 à 2024 :", RETRAITES,
-        "annuaire CNSS 2024, tableau 121 ; lots 17 et 19")
+        "annuaire CNSS 2024, tableau 121 ; lots 17, 19 et 25")
 
     bottom = mockup(
-        d, 830, top, 220, (WIDTH - 25 - 830 - 220) / 7, "Exercice", "8",
+        d, 830, top, 220, (WIDTH - 25 - 830 - 220) / 7, "Exercice", "9",
         columns=[("Effectif au début", "1"), ("Recrutement", "3"), ("Autres", "4"),
                  ("Retraite", "5"), ("Décès", "6"), ("Autres", "7"), ("Effectif à la fin", "1")],
         groups=[(1, 2, "ENTRÉES", "2"), (3, 5, "SORTIES", "2")],
@@ -401,10 +522,10 @@ def build():
         row_h=54)
     d.text(830, bottom + 14, wrap("Chaque ligne est un exercice ; N est l'année choisie. Le "
                                   "début d'une ligne est la fin de la ligne d'avant (règle 1). "
-                                  "Le détail des « autres » (démissions, licenciements, "
-                                  "disponibilités…) suit dans la requête, comme dans le tableau "
-                                  "121 de l'annuaire de la CNSS.", 18, WIDTH - 25 - 830), 18,
-           C["doux"])
+                                  "Le tableau se lit pour les permanents, ou pour les "
+                                  "temporaires. Le détail des « autres » suit la liste de la "
+                                  "CNSS (règle 8), comme le tableau 121 de l'annuaire de la "
+                                  "CNSS.", 18, WIDTH - 25 - 830), 18, C["doux"])
     sec["height"] = max(bottom + 110, fbottom) + 30 - sec["y"]
 
     # ------------------------------------------------------------------ 2. exemples
@@ -413,7 +534,7 @@ def build():
                                     "fictifs")
     bottom = timeline(d, 25, y + 70, inner, date(2023, 10, 1), date(2025, 3, 31), 2024,
                       EXAMPLES, outcomes=MOUVEMENTS,
-                      axis_label="Dans le calendrier : l'agent permanent, en poste")
+                      axis_label="Dans le calendrier : l'agent, en poste")
     sec["height"] = bottom + 30 - sec["y"]
 
     # ------------------------------------------------------------------ 3. colonnes
@@ -439,11 +560,13 @@ def build():
     sec = d.section(0, y, WIDTH, 0, "5. Les questions pour la DRH")
     bottom = cards_grid(d, 25, y + 70, inner, 3, QUESTIONS)
     g = d.group()
-    checks = d.box(25, bottom + 20, inner, 170, bg=C["gris"], stroke=C["gris_bord"], groups=g)
-    d.text(45, bottom + 36, "Ce que l'équipe BI a vérifié dans les données (01/11/2026) : pas de "
+    h_checks = 70 + height_of(BI_CHECKS, 16) + 24
+    checks = d.box(25, bottom + 20, inner, h_checks, bg=C["gris"], stroke=C["gris_bord"],
+                   groups=g)
+    d.text(45, bottom + 36, "Ce que l'équipe BI a vérifié dans les données (08/11/2026) : pas de "
                             "réponse attendue", 20, groups=g, inside=checks)
     d.text(45, bottom + 70, BI_CHECKS, 16, groups=g, inside=checks)
-    sec["height"] = bottom + 20 + 170 + 30 - sec["y"]
+    sec["height"] = bottom + 20 + h_checks + 30 - sec["y"]
     return d
 
 

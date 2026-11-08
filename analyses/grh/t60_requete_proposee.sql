@@ -185,7 +185,7 @@
 --                             MÊME VALEUR que la requête de l'effectif, sinon
 --                             la fin ne retombe plus sur T58 (QG6).
 --   · fin_contrat_inconnue  : PRESENT ou FICHE ; même valeur que l'effectif.
---   · passages_annee        : NON (proposition de la fiche T60, Q4) ou OUI.
+--   · passages_annee        : NON (proposition de la fiche T60, Q7) ou OUI.
 --   · mouvements_internes   : COMME_AVANT ou AUCUN.
 --   · decisions_depart      : code de décision → type de sortie ; même liste
 --                             de codes que l'effectif.

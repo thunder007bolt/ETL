@@ -1125,7 +1125,8 @@ JOURS = [
           "de T58, d'un 31/12 à l'autre.",
           "Le détail des « autres » demandé par le recueil v7 : les codes de mouvement de "
           "la CNSS, déjà dans l'application GRH.",
-          "Les règles G14 à G17, et un schéma de T60 cas par cas."],
+          "Les règles G14 à G17, et trois schémas de T60 : les cas, les mêmes reliés au SQL, "
+          "la requête pas à pas."],
          chantiers=[
              Chantier("GRH : la requête de T60", "GRH",
                       demande="Attaquer le tableau 60, le mouvement du personnel.",
@@ -1209,23 +1210,99 @@ JOURS = [
                                "sources/grh/requete_mouvement_pas_a_pas.py ; dossiers schemas/grh/"
                                "T58 effectif, T60 mouvements, T63 T64 finances ; README.",
                       etat="fait"),
+             Chantier("GRH : les cas de mouvement reliés au SQL", "GRH",
+                      demande="La version technique des cas de mouvement de T60, reliée au "
+                              "SQL, comme celle des cas d'agents de l'effectif.",
+                      fait="Schéma en sept parties : la requête en un coup d'œil (parties 0 à "
+                           "14, CTE, lignes, grain, alias) ; le cœur (les deux photos, puis le "
+                           "WHERE et le CASE des entrées et des sorties, repères E1 à E8 et S1 "
+                           "à S7) ; 7 cas d'entrée, 8 de sortie et 8 sans mouvement, chacun avec "
+                           "ses lignes, le SQL qui décide et la raison ; le rangement (axes et "
+                           "mesures) ; le comptage final et les colonnes de T60 dans OBIEE. Les "
+                           "numéros de ligne sont lus dans le fichier SQL, et chaque bout de SQL "
+                           "est comparé au fichier à chaque génération.",
+                      trouve="Les 25 agents fictifs, un par cas, donnent chacun le mouvement "
+                             "affiché, pour les quatre combinaisons des réglages. Deux cas "
+                             "ajoutés pour expliquer les ELSE : entré sans explication "
+                             "(AUTRE_ENT · SANS_MOTIF) et sorti sans départ daté (AUTRE_SORT · "
+                             "SANS_MOTIF). Sans le NVL qui compare les natures, l'agent sans "
+                             "situation ne bougerait jamais.",
+                      fichiers="schemas/grh/T60 mouvements/cas_mouvements_t60_sql ; "
+                               "sources/grh/cas_mouvements_t60_sql.py ; README ; regles_t60.md "
+                               "(point 8).",
+                      etat="fait"),
+             Chantier("GRH : T60 dans la fiche de lecture et la fiche de validation", "GRH",
+                      demande="Reporter les règles de T60 dans la fiche de lecture GRH et dans "
+                              "la fiche T60, avant de les voir en réunion.",
+                      fait="Recueil v7 relu (RH ligne 3 : détailler les « autres », par "
+                           "direction, agence et bureau ; RH ligne 1 : permanents et "
+                           "temporaires). Fiche T60 : neuf règles avec leur SQL (le détail des "
+                           "« autres » en règle 8), neuf questions numérotées comme "
+                           "regles_t60.md, plus les 84 engagés de 2019 ; l'étiquette « Recueil "
+                           "v7 » s'ajoute à sa légende. Fiche de lecture : les termes de T60 "
+                           "réécrits, et un terme de plus, le détail des « autres ». Tes "
+                           "notes du 03/11 sur T58 ont été remises telles quelles après la "
+                           "régénération.",
+                      trouve="Les chiffres passent à 677 au début et 747 à la fin de 2024 "
+                             "(lot 25 : la fiche sans état compte). La partie T58 de la fiche de "
+                             "lecture et la fiche T58 montrent encore les règles du 01/11 (742, "
+                             "contrat de 18 mois).",
+                      decide="Les questions de la fiche T60 suivent la numérotation de "
+                             "regles_t60.md : l'ancienne Q4 (entré et sorti la même année) "
+                             "devient Q7.",
+                      fichiers="sources/grh : t60_mouvement.py, lecture_grh.py ; "
+                               "sources/prestations/fiche_cipres.py (bandeau) ; schémas "
+                               "tableaux cipres/T60_mouvement_personnel et fiche_de_lecture ; "
+                               "regles_t60.md, README, TODO, t60_requete_proposee.sql (un "
+                               "renvoi).",
+                      etat="fait"),
+             Chantier("GRH : les tableaux du personnel de l'annuaire CNSS 2024", "GRH",
+                      demande="Dans le tableau CIPRES de 2024, la remise en activité est une "
+                              "entrée et la disponibilité une sortie : est-ce la réponse à notre "
+                              "question ? Et quelles autres règles de la gestion administrative "
+                              "ces tableaux donnent-ils ?",
+                      fait="Partie IX de l'annuaire CNSS 2024 lue (tableaux 119 à 126) et "
+                           "contrôlée par le calcul : l'égalité début + entrées − sorties = fin "
+                           "tient chaque année de 2015 à 2024 ; les catégories détaillées du "
+                           "tableau 126 retombent sur les quatre groupes du tableau 119 ; les "
+                           "cadres du taux d'encadrement sont les cadres moyens et supérieurs. "
+                           "Schéma à part, dans le dossier annuaire cnss.",
+                      trouve="Oui pour QG6 : la CNSS sort l'agent en disponibilité de "
+                             "l'effectif et le fait rentrer à sa remise en activité ; ses "
+                             "disponibilités et remises suivent les décisions 07 et 18 de la "
+                             "base. Aussi : HC en cadres supérieurs ; la liste des « autres » "
+                             "de T60 est celle de la CNSS ; pas de colonne mise à disposition ; "
+                             "88 cadres supérieurs formés pour 62 en poste (T62 : des "
+                             "participations ?) ; aucun T59 par domaine, mais 20 directions. "
+                             "Avec HORS_EFFECTIF, la base compte 741 permanents fin 2024 au lieu "
+                             "de 747 (écart avec 758 : 17).",
+                      fichiers="schemas/annuaire cnss/gestion_administrative_2024 ; "
+                               "sources/annuaire_cnss/gestion_administrative_2024.py ; README. "
+                               "Règles, requêtes et questions GRH inchangées.",
+                      etat="fait"),
          ],
-         reste=["Toi : exécuter les deux requêtes de contrôle de T60 (en-tête du fichier, "
+         reste=["Toi : dire si on intègre les conclusions de l'annuaire CNSS 2024 : "
+                "disponibilite = HORS_EFFECTIF dans T58 et T60 (QG6), HC confirmé, questions 1 "
+                "et 6 de T60, QG2 et QG4 précisées, les 20 directions pour G12.",
+                "Toi : exécuter les deux requêtes de contrôle de T60 (en-tête du fichier, "
                 "cliché 102026 ; disponibilite à PRESENT, puis à HORS_EFFECTIF) et me coller le "
                 "résultat.",
                 "Claude : éclaircir les trois cas annotés « A MIEUX ECLAIRCIR » du schéma "
                 "cas_agents_effectif, si tu le veux.",
                 "Toi : vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT a les 18 codes de la CNSS, plus "
                 "NOM.",
-                "Claude : reporter les règles de T60 dans la fiche de lecture GRH et dans la "
-                "fiche T60, avant de les voir en réunion.",
+                "Toi, avec la CNSS : voir en réunion les termes de T60 de la fiche de lecture "
+                "et la fiche T60.",
+                "Claude : mettre à jour la partie T58 de la fiche de lecture et la fiche T58 "
+                "(747 au 31/12/2024, contrats des temporaires), si tu le veux.",
                 "DRH : trancher la disponibilité (QG6), qui change T58 et T60 ensemble ; "
                 "répondre aux 8 questions de regles_t60.md.",
                 "Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025.",
                 "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
-                "À commiter : la requête T60 et regles_t60.md, les schémas de T60 (cas, pas "
-                "à pas) et le rangement des schémas GRH en dossiers, "
+                "À commiter : la requête T60 et regles_t60.md, les schémas de T60 (cas, cas "
+                "SQL, pas à pas) et le rangement des schémas GRH en dossiers, la fiche T60 et "
+                "la fiche de lecture GRH avec leurs sources, le gabarit fiche_cipres, "
                 "les schémas vues cnss et leurs sources, les README, le TODO GRH et le "
                 "journal."]),
 ]
@@ -1428,7 +1505,7 @@ ETAT = [
      "DTM, avec le détail des « autres » par les codes de la CNSS.",
      "Règles G1 à G17, schéma regles_grh, fiches T58, T60, T62, schémas de la requête de "
      "l'effectif, des cas d'agents et de T60 ; requêtes de l'effectif et de T60 à exécuter ; "
-     "fiche de lecture T60 à mettre à jour, puis réunion ; visa de la DRH ; "
+     "fiche de lecture et fiche T60 à jour (08/11), à voir en réunion ; visa de la DRH ; "
      "T63-T64 attendent la DFC et le premier chargement de la DSI."),
     ("Immatriculation et recouvrement (T1 à T24)", "à faire",
      "Les vues simples sont spécifiées pour la DSI (20/10).",
@@ -1473,8 +1550,8 @@ EN_ATTENTE = [
 
 # la suite, dans l'ordre
 SUITE = [
-    ("T60", "Reporter le résultat des contrôles ; mettre à jour les termes de T60 de la fiche "
-            "de lecture et la fiche T60 ; voir T60 en réunion avec la CNSS ; puis T62."),
+    ("T60", "Reporter le résultat des contrôles ; voir en réunion avec la CNSS la fiche T60 et "
+            "ses termes de la fiche de lecture (à jour le 08/11) ; puis T62."),
     ("Les requêtes GRH", "Reporter l'exécution des trois requêtes proposées ; ajuster les "
                          "fiches T58, T60, T62 si les chiffres bougent ; puis les fiches de "
                          "maîtrise « 4 gestion administrative »."),
@@ -1538,7 +1615,8 @@ LIVRABLES = [
                                "(la requête de l'effectif expliquée) ; cas_agents_effectif "
                                "(tous les cas d'agents) et cas_agents_effectif_sql (les mêmes, "
                                "reliés à la requête) ; cas_mouvements_t60 (T60 cas par "
-                               "cas) et requete_mouvement_pas_a_pas ; t63_t64_donnees_a_fournir (la "
+                               "cas), cas_mouvements_t60_sql (les mêmes, reliés à la requête) "
+                               "et requete_mouvement_pas_a_pas ; t63_t64_donnees_a_fournir (la "
                                "structure à envoyer à la CNSS) ; tableaux cipres : "
                                "fiches T58, T60, T62"),
     ]),

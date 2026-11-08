@@ -125,7 +125,7 @@ Dans OBIEE, les colonnes « autres » de la maquette se détaillent par CODE_TYP
 
 Un agent embauché en février et parti en octobre n'est présent à aucune des deux photos.
 
-- **NON** (valeur retenue) : il n'est pas compté. C'est la proposition de la fiche T60 (question Q4).
+- **NON** (valeur retenue) : il n'est pas compté. C'est la proposition de la fiche T60 (question Q7).
 - **OUI** : il est compté une fois en entrée (RECRU) et une fois en sortie (le code de son départ), pour un permanent comme pour un temporaire dont le contrat commence et finit dans l'exercice.
 
 Dans les deux cas, début + entrées − sorties = fin reste vrai.
@@ -178,7 +178,7 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 | Réglage | Valeur retenue | Autre valeur possible | D'où vient la valeur |
 |---|---|---|---|
 | `fin_contrat_inconnue` | PRESENT | FICHE | même valeur que l'effectif ; réunion du 03/11 |
-| `passages_annee` | NON | OUI | proposition de la fiche T60 (Q4) |
+| `passages_annee` | NON | OUI | proposition de la fiche T60 (Q7) |
 | `mouvements_internes` | COMME_AVANT | AUCUN | comme avant |
 | `decisions_depart` | 02 RET, 34 DEC, 35 FIN_CTRAT, 36 DEM, 52 FIN_CTRAT, 54 LIC | un code en plus ou en moins, un autre type | mêmes codes que l'effectif |
 | `codes_decision` | annulation 40 ; engagements 50 et 51 ; disponibilité 07 et remise 18 ; détaché 37 | autres codes | lots 3, 13, 20 |
@@ -192,7 +192,7 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 | Disponibilité (réglage `disponibilite`) | PRESENT : l'agent reste dans l'effectif, ni sortie ni retour | HORS_EFFECTIF : sortie DISP et retour REM, dans T58 et T60 à la fois | DRH (QG6) |
 | Date d'un décès | Date de décès, sinon liquidation des droits (34) | Une date saisie, ou celle du communiqué nécrologique | DRH (QG3, M12) |
 | Date d'entrée | Embauche, sinon prise de service (comme T58) | Prise de service d'abord, comme l'ancienneté | CNSS (M10) |
-| Entré et sorti la même année | Pas compté | Compté en entrée et en sortie | DRH (Q4) |
+| Entré et sorti la même année | Pas compté | Compté en entrée et en sortie | DRH (Q7) |
 | Rupture du contrat (52) | Fin de contrat | Licenciement, ou autre sortie | DRH |
 | Mise à disposition (14) | Pas une sortie | Une sortie MISE_DIS, avec un retour | DRH |
 | Détachements | Décision 37 (aucune chez les permanents) | La source que donnera la DRH | DRH (QG7) |
@@ -256,10 +256,12 @@ Chacune a une valeur par défaut dans la requête ; la réponse change un régla
 | 4 | La date d'entrée est-elle la prise de service, comme pour l'ancienneté ? (M10) | L'embauche, sinon la prise de service |
 | 5 | Où sont saisis les détachements et les fins de détachement ? (QG7) | La décision 37 |
 | 6 | Une mise à disposition (décision 14) est-elle une sortie ? | Non |
-| 7 | Un agent recruté puis parti dans la même année doit-il apparaître en entrée et en sortie ? (Q4) | Non |
+| 7 | Un agent recruté puis parti dans la même année doit-il apparaître en entrée et en sortie ? | Non |
 | 8 | Pour une direction ou une agence, faut-il montrer les arrivées et les départs par mutation ? | Non : la fin de l'unité vient de T58 |
 
 La question M09 (un temporaire compte-t-il comme recrutement ?) est réglée par le filtre de nature. Le tableau des permanents compte les permanents embauchés, celui des temporaires les nouveaux contrats. Un temporaire devenu permanent est une « autre entrée » des permanents.
+
+La fiche de validation T60 (`excalidraw/schemas/grh/tableaux cipres/T60_mouvement_personnel`) pose ces huit questions avec les mêmes numéros, Q1 à Q8, plus Q9 : les 84 engagés de 2019.
 
 ---
 
@@ -269,6 +271,7 @@ La question M09 (un temporaire compte-t-il comme recrutement ?) est réglée par
 - **Rejeu dans SQLite** sur 22 agents fictifs, un par cas (retraite, décès par la date ou la liquidation, démission, licenciement par décision collective, disponibilité, contrats renouvelés, titularisation, embauche sans situation au 31/12, fiche inactive sans date, agent B, retraite annulée, contrat sans fin, fiche sans état, mutation, détaché, rupture de contrat, entrés et sortis dans l'année…), pour les quatre combinaisons des réglages `disponibilite` et `passages_annee`. Chaque mouvement est celui attendu.
 - **Début + entrées − sorties = début de l'exercice suivant**, pour chaque nature, qualité et sexe.
 - **L'effectif de début est celui de la requête de l'effectif (T58)** à chaque 31/12 comparé.
+- **Les cas du schéma technique, agent par agent** (`cas_mouvements_t60_sql`, 08/11) : un agent fictif par cas, 25 en tout, lus dans la CTE `mouvements` avant le comptage, pour les quatre combinaisons des réglages. Chacun donne le mouvement affiché ; une sortie est bien rangée avec la situation du début, une entrée avec celle de la fin.
 
 Pas encore exécutée sur la base de la CNSS : c'est la tâche 1.
 
@@ -280,7 +283,7 @@ Pas encore exécutée sur la base de la CNSS : c'est la tâche 1.
 |---|---|---|---|
 | 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026), de 2020 à 2025, avec le réglage `disponibilite` à PRESENT, puis à HORS_EFFECTIF, et comparer au tableau du point 5 | toi, puis Claude | à faire |
 | 2 | Vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT contient les 18 codes de la CNSS, plus NOM (`SELECT CODE_TYPE_MVT, CODE_NAT_MVT FROM DTM.DIM_GRH_TYPE_MOUVEMENT ORDER BY 2, 1`) | toi | à faire |
-| 3 | Mettre à jour les termes de T60 de la fiche de lecture GRH et la fiche de validation T60 avec ces règles, puis les voir en réunion avec la CNSS | Claude, puis toi avec la CNSS | à faire |
+| 3 | Mettre à jour les termes de T60 de la fiche de lecture GRH et la fiche de validation T60 avec ces règles, puis les voir en réunion avec la CNSS | Claude, puis toi avec la CNSS | mises à jour le 08/11/2026 (9 termes ; 9 règles et 9 questions) ; réunion à faire |
 | 4 | Faire trancher les questions du point 7, d'abord la disponibilité (elle change aussi T58) | DRH | à faire |
 | 5 | Script d'ajout des quatre colonnes dans DTM et ODS.DTM_GRH_MOUVEMENT, puis remplacement de grh_mouvement.sql par cette requête | Claude, après le visa de la DRH | à faire |
 | 6 | Dans OBIEE : la maquette de T60 (point 2), les filtres qualité A et nature, le détail des autres, la fin par unité lue dans T58 | toi, avec Jules | à faire |

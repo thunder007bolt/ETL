@@ -190,50 +190,76 @@ T60 = dict(
     annee="2024",
     resume=("Pour moi, ce tableau explique, année par année, comment on passe de l'effectif du "
             "1er janvier à celui du 31 décembre : les entrées (recrutements, autres) et les "
-            "sorties (retraites, décès, autres)."),
+            "sorties (retraites, décès, autres). Il se lit pour les permanents, ou pour les "
+            "temporaires, et le recueil des besoins demande de détailler les « autres »."),
     termes=[
         dict(terme="Effectif début et fin d'année",
              annuaire="Les colonnes « effectif début année » et « effectif fin année » (p. 51).",
-             compris="Les permanents présents au 31 décembre, comptés comme dans T58. L'effectif "
-                     "du début d'une année est celui du 31 décembre de l'année d'avant.",
+             compris="Les agents présents au 31 décembre, comptés comme dans T58 : un permanent "
+                     "entré et pas encore parti, un temporaire sous contrat. L'effectif du début "
+                     "d'une année est celui du 31 décembre de l'année d'avant. Chaque agent est "
+                     "compté dans sa nature : le tableau se lit pour les permanents, ou pour les "
+                     "temporaires (recueil des besoins v7, RH ligne 1).",
+             exemple="l'effectif du 1er janvier 2024 est celui du 31/12/2023 : 677 permanents.",
              question="Tu valides : l'effectif du 1er janvier = celui du 31 décembre d'avant ?",
-             base=["La liste du terme 2 de T58, au 31/12/2023 et au 31/12/2024.",
-                   "2024 : 672 au début, 742 à la fin (l'annuaire CNSS 2024 : 767 et 758)."],
+             base=["La liste du terme 2 de T58, au 31/12/2023 et au 31/12/2024 ; une fiche sans "
+                   "état (ETAT_EMPLOYE vide, embauche récente) compte comme présente.",
+                   "GRH_SITUATION.NATURE_EMPLOIE, dans la dernière situation avant le 31/12 : "
+                   "PERMANENT ou TEMPORAIRE.",
+                   "2024 : 677 au début, 747 à la fin (l'annuaire CNSS 2024 : 767 et 758)."],
              sql=sql(t60, "1")),
         dict(terme="Entrées et sorties",
              annuaire="Les entrées et les sorties de l'année (p. 51).",
-             compris="Une entrée est un permanent présent à la fin de l'année et absent au "
-                     "début ; une sortie, l'inverse. Ainsi début + entrées − sorties = fin, "
-                     "toujours. La table des mouvements de la base n'a ni recrutement ni départ : "
-                     "elle ne peut pas servir.",
+             compris="Une entrée est un agent présent à la fin de l'année et absent au début, "
+                     "dans sa nature ; une sortie, l'inverse. Ainsi début + entrées − sorties = "
+                     "fin, toujours. Un temporaire devenu permanent sort des temporaires et entre "
+                     "chez les permanents. Une mutation d'une agence à une autre n'est ni une "
+                     "entrée ni une sortie. La table des mouvements de la base n'a ni recrutement "
+                     "ni départ : elle ne peut pas servir.",
              question="Un agent recruté puis parti la même année : faut-il le compter en entrée "
                       "et en sortie ?",
-             base=["Les deux listes du terme 1, comparées.",
-                   "GRH_MOUVEMENT : sans recrutement ni départ."],
+             base=["Les deux listes du terme 1, comparées agent par agent.",
+                   "GRH_MOUVEMENT : presque que des affectations, mutations et nominations ; ni "
+                   "recrutement ni départ."],
              sql=sql(t60, "2")),
         dict(terme="Recrutement",
              annuaire="La colonne « recrutement » des entrées (p. 51).",
-             compris="Une entrée d'un agent embauché dans l'année. L'atelier de Kaya : la note "
-                     "de prise de service vaut en attendant la décision d'engagement.",
-             question="Tu valides : un recrutement = une entrée embauchée dans l'année ?",
+             compris="Un permanent embauché dans l'année : sa date d'embauche, à défaut sa prise "
+                     "de service, tombe dans l'année. Chez les temporaires, un nouveau contrat "
+                     "(engagement 50) d'un agent qui n'avait aucun contrat au 31 décembre "
+                     "d'avant. L'atelier de Kaya : la note de prise de service vaut en attendant "
+                     "la décision d'engagement.",
+             exemple="embauché le 15/12/2024, il prend son service le 05/01/2025 : je le compte "
+                     "recruté en 2024.",
+             question="Un agent embauché le 15/12 qui prend son service le 05/01 : est-il recruté "
+                      "l'année de son embauche ou celle de sa prise de service ?",
              base=["GRH_PERSONNE.DATE_EMBAUCHE dans l'année, à défaut DATE_PRISE_SERVICE.",
-                   "2024 : 104, exactement comme l'annuaire CNSS 2024."],
+                   "Temporaires : GRH_DECISION.CDEC_CODE = '50', engagement temporaire.",
+                   "2024 : 104 permanents, exactement comme l'annuaire CNSS 2024."],
              sql=sql(t60, "3")),
         dict(terme="Autres entrées",
              annuaire="La colonne « autres » des entrées (p. 51).",
-             compris="Une remise en activité après une disponibilité, un temporaire devenu "
-                     "permanent, un retour sans décision.",
+             compris="Dans cet ordre : un agent classé comme détaché (décision 37) ; un agent "
+                     "revenu de disponibilité (décision 18), seulement si la DRH décide qu'un "
+                     "agent en disponibilité sort de l'effectif ; un agent qui était dans l'autre "
+                     "nature au 31 décembre d'avant, comme un temporaire devenu permanent. Sinon, "
+                     "c'est une entrée sans explication, à vérifier.",
              question="Une remise en activité après une disponibilité est-elle une entrée ?",
-             base=["GRH_DECISION.CDEC_CODE = '18' : remise en activité.",
-                   "2024 : 4 décisions 18 (6 remises publiées)."],
+             base=["GRH_DECISION.CDEC_CODE : 37 classement d'un agent détaché (aucune chez les "
+                   "permanents), 18 remise en activité.",
+                   "GRH_SITUATION.NATURE_EMPLOIE au 31/12 d'avant : TEMPORAIRE pour un "
+                   "temporaire devenu permanent.",
+                   "2024 : aucune autre entrée de permanent ; 4 décisions 18 (l'annuaire CNSS "
+                   "2024 : 7 autres entrées, dont 6 remises)."],
              sql=sql(t60, "4")),
         dict(terme="Retraite",
              annuaire="La colonne « retraite » des sorties (p. 51).",
              compris="Un agent part à la retraite l'année où prend effet sa décision d'admission "
                      "à la retraite. S'il a plusieurs décisions de départ, seule la première "
-                     "compte. J'ai aussi essayé de compter les départs de décembre l'année "
-                     "suivante : on s'éloigne davantage de l'annuaire CNSS 2024 (16 d'écart sur "
-                     "5 ans, contre 11).",
+                     "compte : une retraite suivie d'un décès la même année reste une retraite. "
+                     "J'ai aussi essayé de compter les départs de décembre l'année suivante : on "
+                     "s'éloigne davantage de l'annuaire CNSS 2024 (16 d'écart sur 5 ans, contre "
+                     "11).",
              question="Tu valides : un départ à la retraite compte l'année où la décision prend "
                       "effet ?",
              base=["GRH_DECISION.CDEC_CODE = '02', DATE_VIGUEUR.",
@@ -253,25 +279,50 @@ T60 = dict(
              sql=sql(t60, "6")),
         dict(terme="Autres sorties",
              annuaire="La colonne « autres » des sorties (p. 51).",
-             compris="Démission, licenciement, fin de contrat, mise en disponibilité, permanent "
-                     "devenu temporaire. L'annuaire CNSS 2024 compte aussi des détachements, "
-                     "introuvables dans la base.",
+             compris="Démission (36), licenciement (54), fin de contrat (35, et la rupture du "
+                     "contrat 52), mise en disponibilité (07, seulement si la DRH la sort de "
+                     "l'effectif), agent passé dans l'autre nature. Pour un temporaire, c'est le "
+                     "dernier départ de l'année qui compte. Sans départ daté, c'est une sortie "
+                     "sans explication, à vérifier. L'annuaire CNSS 2024 compte aussi des "
+                     "détachements, introuvables dans la base.",
              question="Les détachements : où sont-ils saisis ?",
              base=["GRH_DECISION.CDEC_CODE : 36 démission, 54 licenciement, 35 et 52 fin de "
                    "contrat, 07 mise en disponibilité.",
-                   "2024 : 2 démissions et 1 licenciement, comme l'annuaire CNSS 2024 ; 5 "
-                   "disponibilités (7 publiées)."],
+                   "2024 : 2 démissions et 1 licenciement, comme l'annuaire CNSS 2024, et 1 "
+                   "sortie sans départ daté ; 5 décisions 07 (7 disponibilités publiées)."],
              sql=sql(t60, "7")),
+        dict(terme="Le détail des « autres »",
+             annuaire="La colonne « autres » des entrées et des sorties, sans détail (p. 51). Le "
+                      "recueil des besoins v7 (RH ligne 3) demande : « Autre : il faut le "
+                      "détailler (lister pour la CNSS) ».",
+             compris="Chaque autre entrée et chaque autre sortie porte un type de mouvement de la "
+                     "liste de l'application GRH : remise en activité, détaché ; démission, "
+                     "licenciement, disponibilité, mise à disposition, fin de détachement, fin de "
+                     "contrat, autres. J'y ajoute la raison : la décision qui a servi, ou le "
+                     "changement de nature. L'annuaire CNSS 2024 (tableau 121) détaille déjà ses "
+                     "« autres » avec les mêmes rubriques.",
+             exemple="un temporaire devenu permanent en 2024 compte chez les permanents dans les "
+                     "« autres entrées », avec la raison « était temporaire ».",
+             question="Pour détailler les « autres », peut-on reprendre la liste des types de "
+                      "mouvement de l'application GRH ?",
+             base=["GRH_TYPE_MOUVEMENT : 18 types. Domaine ALL, les colonnes de T60 : DEBUT, "
+                   "RECRU, AUTRE_ENT, RET, DEC, AUTRE_SORT. Domaine CNSS, le détail : REM, "
+                   "DETAC ; LIC, DEM, DISP, MISE_DIS, FIN_DETACH, FIN_CTRAT.",
+                   "AFF, MUT, PROMO, RETRO : les mouvements internes, hors T60.",
+                   "Aucune mise à disposition ni fin de détachement datée dans la base."],
+             sql=sql(t60, "8")),
         dict(terme="Les 5 dernières années",
              annuaire="Les années N-4 à N (p. 51).",
              compris="Une ligne par année, des quatre années d'avant à l'année choisie, et un "
-                     "contrôle : début + entrées − sorties − fin = 0. De 2019 à 2023, il manque "
-                     "84 agents engagés en 2019, que la base ne fait jamais sortir.",
+                     "contrôle : début + entrées − sorties − fin = 0. Le recueil des besoins "
+                     "demande aussi le tableau par direction, agence et bureau : la fin d'une "
+                     "unité se lit alors dans T58. De 2019 à 2023, il manque 84 agents engagés en "
+                     "2019, que la base ne fait jamais sortir.",
              question="Les 84 engagés de 2019 : que sont-ils devenus, et quand sont-ils partis ?",
-             base=["Les termes 1 à 7, une fois par année.",
+             base=["Les termes 1 à 8, une fois par année.",
                    "Les 84 de 2019 : engagement non annulé, fiche inactive, aucune date de "
                    "départ."],
-             sql=sql(t60, "8")),
+             sql=sql(t60, "9")),
     ],
 )
 
