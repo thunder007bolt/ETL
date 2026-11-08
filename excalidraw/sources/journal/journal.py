@@ -1290,9 +1290,15 @@ JOURS = [
                            "Correction : write_with_history et Diagram.save comparent les "
                            "dessins sans l'heure ; un schéma inchangé n'est ni réécrit ni "
                            "versionné, et les générateurs l'affichent « inchangé ». Vérifié : "
-                           "23 fiches inchangées, aucune nouvelle version.",
-                      trouve="L'historique du journal compte 1 552 versions, dont 1 337 "
-                             "identiques à la précédente à l'heure près.",
+                           "23 fiches inchangées, aucune nouvelle version. Puis, à ta demande, "
+                           "les 1 337 versions en double (toutes du script) sont retirées de "
+                           "l'historique du journal, mises dans une corbeille temporaire de la "
+                           "session : il en reste 218, une par état distinct, et la visionneuse "
+                           "reconnaît toujours la version actuelle de chaque fiche.",
+                      trouve="L'historique du journal comptait 1 552 versions, dont 1 337 "
+                             "identiques à la précédente à l'heure près (la fiche du 19/10 en "
+                             "avait 81 ; elle en garde 1). Ailleurs, il ne reste que 20 doublons "
+                             "(maîtrise 13, prestations 6, GRH 1).",
                       fichiers="lib/historique.py, lib/excalidraw_builder.py ; messages de "
                                "sources/maitrise/fiches.py, fiche_de_lecture.py, "
                                "points_a_valider.py, vues_cnss/vues_cnss.py.",
@@ -1320,8 +1326,8 @@ JOURS = [
                                "requete_effectif_pas_a_pas ; schémas correspondants.",
                       etat="fait"),
          ],
-         reste=["Toi : dire si je supprime les 1 337 versions en double de l'historique du "
-                "journal (identiques à la précédente, à l'heure près).",
+         reste=["Toi : relancer la visionneuse que tu utilises (port 8765) : elle a été lancée "
+                "avant le correctif de l'historique.",
                 "Toi : exécuter les deux requêtes de contrôle de T60 (en-tête du fichier, "
                 "cliché 102026 ; disponibilite à HORS_EFFECTIF, puis à PRESENT pour comparer) et "
                 "me coller le résultat.",
@@ -1573,8 +1579,8 @@ ETAT = [
 EN_ATTENTE = [
     ("Toi", "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
             "disponibilite à HORS_EFFECTIF, la valeur retenue, puis à PRESENT) ; vérifier les "
-            "codes de DIM_GRH_TYPE_MOUVEMENT ; dire si je supprime les versions en double de "
-            "l'historique du journal. "
+            "codes de DIM_GRH_TYPE_MOUVEMENT ; relancer la visionneuse (correctif de "
+            "l'historique). "
             "Au point du 02/11 : la date des montants (R4). Exécuter les trois requêtes "
             "GRH proposées (102026, 2024) ; faire viser G1 à G11 et poser QG1 à QG7 ; A06 et A07 ; les requêtes proposées sur le cliché 092026 ; relancer "
             "A04 ; commiter le travail du 31/10 et du 01/11."),
