@@ -1,10 +1,15 @@
 """
 Schéma « T63 et T64 : les données à fournir par la CNSS » (état au 07/11/2026).
 
-La structure que l'équipe BI demande à la DSI et à la DFC pour T63 et T64 :
-pourquoi, les colonnes (nom, type, obligatoire, contenu), une ligne
-d'exemple fictive, les règles, et ce qu'il faut savoir de la DFC. Pas de SQL :
-la DSI crée elle-même la table ou la vue et l'alimente depuis Oracle GL.
+Ce que l'équipe BI demande à la DSI et à la DFC pour T63 et T64 : pourquoi, la
+structure (nom, colonnes, types, grain), des lignes d'exemple fictives, les
+règles, et ce qu'il faut savoir de la DFC. Pas de SQL : la CNSS crée la vue
+dans la base source et l'alimente depuis Oracle GL.
+
+Depuis le 07/11/2026 au soir, la structure est la vue commune de la
+comptabilité, V_BI_BALANCE_COMPTABLE, qui sert aussi à la gestion financière
+(schemas/vues cnss/01 balance comptable). Ses colonnes et ses règles viennent
+de sources/vues_cnss/commun.py : les deux schémas disent la même chose.
 
 Usage :
     python3 excalidraw/sources/grh/t63_t64_donnees_a_fournir.py [--force]
@@ -15,167 +20,101 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "lib"))
+sys.path.insert(0, str(ROOT / "sources" / "vues_cnss"))
 
-from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
+from excalidraw_builder import C, Diagram, main  # noqa: E402
+from commun import (BALANCE_COLONNES, BALANCE_EXEMPLE_LARGEURS,  # noqa: E402
+                    BALANCE_EXEMPLE_NOMS, BALANCE_LIGNE, BALANCE_NOM, BALANCE_REGLES,
+                    WIDTH, bloc, entete, exemple, rangee, tableau_colonnes)
 
-OUTPUT = ROOT / "schemas" / "grh" / "t63_t64_donnees_a_fournir.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "T63 T64 finances" / "t63_t64_donnees_a_fournir.excalidraw"
 
-WIDTH = 2400
+BLEU = (C["bleu_clair"], C["bleu"])
+JAUNE = (C["jaune_clair"], C["jaune_bord"])
+VERT = (C["vert_clair"], C["vert"])
+BLANC = (C["blanc"], C["encre"])
 
-# (colonne, type, obligatoire, contenu)
-COLONNES = [
-    ("EXERCICE", "NUMBER(4)", "oui", "Année de l'exercice comptable (exemple : 2024)"),
-    ("CODE_GESTION", "VARCHAR2(5)", "oui",
-     "Gestion d'Oracle GL, telle qu'elle y est notée : G ou 7, S ou 5, I ou 6, T ou 8, E ou 9"),
-    ("COMPTE", "VARCHAR2(20)", "oui", "Compte de comptabilité générale, au niveau le plus fin"),
-    ("LIBELLE_COMPTE", "VARCHAR2(240)", "non", "Intitulé du compte dans le plan comptable"),
-    ("SECTION_ANALYTIQUE", "VARCHAR2(30)", "oui",
-     "Centre de coût de la dépense, « - » s'il n'y en a pas. Il sert à décliner T63 et T64 "
-     "par direction, agence et bureau"),
-    ("CODE_UNITE", "VARCHAR2(12)", "non",
-     "Unité administrative de la GRH qui correspond à la section, si la DSI la connaît"),
-    ("NATURE_MONTANT", "VARCHAR2(10)", "oui",
-     "REALISE : dépenses comptabilisées ; BUDGET : budget définitif de l'exercice"),
-    ("MONTANT", "NUMBER(18,2)", "oui",
-     "Montant en francs CFA, cumulé sur l'exercice : débit moins crédit"),
-    ("EXERCICE_CLOS", "CHAR(1)", "oui", "O si l'exercice est clôturé dans Oracle GL, N sinon"),
-    ("DATE_MISE_A_JOUR", "DATE", "oui", "Date à laquelle la ligne a été alimentée"),
-]
-
+# lignes fictives, colonnes de BALANCE_EXEMPLE_NOMS
 EXEMPLE = [
-    ("2024", "G", "651100", "Salaires et appointements", "DG01", "", "REALISE", "1 250 000 000",
-     "O", "15/01/2026"),
-    ("2024", "S", "652000", "Primes et gratifications", "DPASS", "", "REALISE", "84 000 000",
-     "O", "15/01/2026"),
-    ("2024", "G", "638600", "Frais de formation", "-", "", "REALISE", "12 500 000", "O",
-     "15/01/2026"),
-    ("2024", "G", "651100", "Salaires et appointements", "DG01", "", "BUDGET", "1 300 000 000",
-     "O", "15/01/2026"),
+    ("2024", "3", "G", "COMMUN", "651100", "Salaires et appointements", "DG01", "REALISE",
+     "104 000 000", "0", "O", "15/04/2024"),
+    ("2024", "3", "S", "COMMUN", "652000", "Primes et gratifications", "DPASS", "REALISE",
+     "7 000 000", "0", "O", "15/04/2024"),
+    ("2024", "5", "G", "COMMUN", "638600", "Frais de formation", "-", "REALISE", "2 500 000",
+     "0", "O", "15/06/2024"),
+    ("2024", "12", "G", "COMMUN", "651100", "Salaires et appointements", "DG01", "BUDGET",
+     "1 300 000 000", "0", "O", "15/01/2025"),
 ]
 
 
 def build():
     d = Diagram(seed=63)
 
-    def bloc(x, y, w, h, txt, size=20, couleurs=(C["blanc"], C["encre"]), sw=2):
-        g = d.group()
-        b = d.box(x, y, w, h, bg=couleurs[0], stroke=couleurs[1], stroke_width=sw, groups=g)
-        d.text(x + 22, y + 16, txt, size, groups=g, inside=b)
-        return b
+    def section(top, titre):
+        return d.section(0, top, WIDTH, 300, titre)
 
-    # ------------------------------------------------------------------ titre
-    d.text(0, 0, "T63 et T64 : les données à fournir par la CNSS", 48)
-    d.text(0, 66, "Structure demandée par l'équipe BI à la DSI et à la DFC · la DSI choisit "
-                  "d'en faire une table ou une vue, et l'alimente depuis Oracle GL · "
-                  "état au 07/11/2026", 22, C["doux"])
+    def fermer(sec, bas):
+        sec["height"] = bas + 40 - sec["y"]
+        return bas + 40 + 50
+
+    s = entete(d, "T63 et T64 : les données à fournir par la CNSS",
+               f"Ces montants viendront de la vue commune de la comptabilité, {BALANCE_NOM}, que "
+               "la CNSS crée dans la base source et alimente depuis Oracle GL. Elle sert aussi "
+               "à la gestion financière (schéma « vues cnss / 01 balance comptable ») · état au "
+               "07/11/2026")
 
     # ------------------------------------------------------------------ 1. pourquoi
-    s1 = 140
-    d.section(0, s1, WIDTH, 330, "1. Pourquoi ces données")
-    bloc(40, s1 + 80, 740, 210,
-         "T63 : FRAIS DE PERSONNEL\nsur CHARGES DE FONCTIONNEMENT\n\n5 dernières années, "
-         "fin d'exercice\nnorme : 85 % au plus", 22, couleurs=(C["bleu_clair"], C["bleu"]))
-    bloc(820, s1 + 80, 740, 210,
-         "T64 : DÉPENSES DE FORMATION\nsur MASSE SALARIALE, et sur TOTAL BUDGET\n\n"
-         "5 dernières années, fin d'exercice\nnorme : de 1 à 5 % (formation / masse salariale)",
-         22, couleurs=(C["bleu_clair"], C["bleu"]))
-    bloc(1600, s1 + 80, 760, 210,
-         "CES MONTANTS SONT DANS ORACLE GL\nla paie n'est pas dans la base de la GRH\n\n"
-         "recueil des besoins v7 (T63, T64) :\n« Voir la DFC » · « Source : Oracle GL »\n"
-         "« Déclinaison : Direction, Agence, Bureau »", 20,
-         couleurs=(C["jaune_clair"], C["jaune_bord"]))
+    sec = section(s, "1. Pourquoi ces données")
+    bas = rangee(d, s + 80, [
+        ("T63 : FRAIS DE PERSONNEL sur CHARGES DE FONCTIONNEMENT\n5 dernières années, fin "
+         "d'exercice\nnorme : 85 % au plus", BLEU, 2),
+        ("T64 : DÉPENSES DE FORMATION sur MASSE SALARIALE, et sur TOTAL BUDGET\n5 dernières "
+         "années, fin d'exercice\nnorme : de 1 à 5 % (formation / masse salariale)", BLEU, 2),
+        ("CES MONTANTS SONT DANS ORACLE GL\nla paie n'est pas dans la base de la GRH\n"
+         "recueil des besoins v7 (T63, T64) : « Voir la DFC » · « Source : Oracle GL » · "
+         "« Déclinaison : Direction, Agence, Bureau »", JAUNE, 2),
+    ], size=21)
+    s = fermer(sec, bas)
 
     # ------------------------------------------------------------------ 2. structure
-    s2 = s1 + 330 + 50
-    sec2 = d.section(0, s2, WIDTH, 1000, "2. La structure demandée")
-    bloc(40, s2 + 80, 2320, 100,
-         "NOM PROPOSÉ : BI_GRH_SOLDE_COMPTABLE (table ou vue, au choix de la DSI)\n"
-         "UNE LIGNE = un exercice × une gestion × un compte × une section analytique × une "
-         "nature de montant (réalisé ou budget)", 22, couleurs=(C["vert_clair"], C["vert"]), sw=3)
-    widths = [400, 280, 190, 1390]
-    xs = [40]
-    for w in widths[:-1]:
-        xs.append(xs[-1] + w + 20)
-    top = s2 + 210
-    for titre, x in zip(["Colonne", "Type", "Obligatoire", "Contenu"], xs):
-        d.text(x + 4, top, titre, 21, C["doux"])
-    y = top + 42
-    for i, (col, typ, obl, contenu) in enumerate(COLONNES):
-        h = 70
-        fond = C["blanc"] if i % 2 == 0 else C["section"]
-        g = d.group()
-        ligne = d.box(40, y, 2320, h, bg=fond, stroke=C["gris_bord"], stroke_width=1, groups=g)
-        d.text(xs[0] + 16, y + 20, col, 20, groups=g, inside=ligne, mono=True)
-        d.text(xs[1] + 16, y + 21, typ, 19, C["doux"], groups=g, inside=ligne, mono=True)
-        d.text(xs[2] + 16, y + 21, obl, 20, C["vert"] if obl == "oui" else C["doux"], groups=g,
-               inside=ligne)
-        d.text(xs[3] + 16, y + 21, contenu, 19, groups=g, inside=ligne)
-        y += h + 8
-    sec2["height"] = y + 32 - s2
+    sec = section(s, "2. La structure demandée")
+    b = bloc(d, 40, s + 80, WIDTH - 80,
+             f"NOM PROPOSÉ : {BALANCE_NOM} (une vue dans la base source, alimentée depuis "
+             f"Oracle GL)\nUNE LIGNE = {BALANCE_LIGNE}", 22, VERT, sw=3)
+    bas = tableau_colonnes(d, b["y"] + b["height"] + 30, BALANCE_COLONNES)
+    s = fermer(sec, bas)
 
     # ------------------------------------------------------------------ 3. exemple
-    s3 = y + 32 + 50
-    sec3 = d.section(0, s3, WIDTH, 400, "3. À quoi ça ressemble (lignes fictives)")
-    ew = [150, 190, 150, 360, 260, 170, 230, 260, 180, 230]
-    ex = [40]
-    for w in ew[:-1]:
-        ex.append(ex[-1] + w + 12)
-    top = s3 + 80
-    noms = ["EXERCICE", "CODE_GESTION", "COMPTE", "LIBELLE_COMPTE", "SECTION_ANALYTIQUE",
-            "CODE_UNITE", "NATURE_MONTANT", "MONTANT", "EXERCICE_CLOS", "DATE_MISE_A_JOUR"]
-    for nom, x, w in zip(noms, ex, ew):
-        d.box(x, top, w, 50, nom, 13, bg=C["gris"], stroke=C["gris_bord"], stroke_width=1)
-    y = top + 60
-    for ligne in EXEMPLE:
-        for val, x, w in zip(ligne, ex, ew):
-            d.box(x, y, w, 48, val if val else " ", 16, bg=C["blanc"], stroke=C["gris_bord"],
-                  stroke_width=1)
-        y += 56
-    sec3["height"] = y + 30 - s3
+    sec = section(s, "3. À quoi ça ressemble (comptes et montants fictifs)")
+    bas = exemple(d, s + 80, BALANCE_EXEMPLE_NOMS, BALANCE_EXEMPLE_LARGEURS, EXEMPLE)
+    s = fermer(sec, bas)
 
     # ------------------------------------------------------------------ 4. règles
-    s4 = y + 30 + 50
-    d.section(0, s4, WIDTH, 470, "4. Les règles d'alimentation")
-    bloc(40, s4 + 80, 1140, 350,
-         "CE QU'ON MET DEDANS\n"
-         "· le réalisé : les comptes de charges (classes 6 et 8),\n"
-         "  de toutes les gestions\n"
-         "· le budget : tous les comptes budgétés de l'exercice\n"
-         "  (fonctionnement et investissement), budget définitif\n"
-         "· les 5 derniers exercices clos et l'exercice en cours\n"
-         "· des montants en francs CFA, cumulés sur l'exercice", 20)
-    bloc(1220, s4 + 80, 1140, 350,
-         "CE QU'ON N'Y MET PAS\n"
-         "· aucune écriture une à une : des totaux par compte\n"
-         "· aucun nom, aucun tiers, aucun numéro bancaire\n\n"
-         "MISE À JOUR\n"
-         "· au moins après chaque clôture d'exercice ;\n"
-         "  si possible après chaque clôture mensuelle\n"
-         "· un exercice remis à jour remplace toutes ses lignes", 20)
+    sec = section(s, "4. Les règles d'alimentation")
+    bas = rangee(d, s + 80, [(t, BLANC, 2) for t in BALANCE_REGLES], size=20)
+    s = fermer(sec, bas)
 
     # ------------------------------------------------------------------ 5. BI et DFC
-    s5 = s4 + 470 + 50
-    d.section(0, s5, WIDTH, 470, "5. Ce que la BI en fera, et ce qu'il faut savoir de la DFC")
-    bloc(40, s5 + 80, 1140, 350,
-         "LA BI REGROUPE LES COMPTES (recueil des besoins v7)\n"
+    sec = section(s, "5. Ce que la BI en fera, et ce qu'il faut savoir de la DFC")
+    bas = rangee(d, s + 80, [
+        ("LA BI REGROUPE LES COMPTES (recueil des besoins v7)\n"
          "· frais de personnel : comptes 65, gestions G et S\n"
          "· masse salariale : comptes 651 et 652\n"
          "· dépenses de formation : « 63, 86 et 87 », gestions G et S\n"
          "· charges de fonctionnement : comptes 61 à 66, gestion G\n"
          "· total budget : les lignes BUDGET\n"
-         "Puis elle calcule T63 et T64, par année et par unité.\n"
-         "Un compte changé ne demande aucune nouvelle extraction.", 20,
-         couleurs=(C["vert_clair"], C["vert"]))
-    bloc(1220, s5 + 80, 1140, 350,
-         "LES QUESTIONS À LA DFC\n"
-         "1. Charges de fonctionnement : comptes 61 à 66, ou 61 à 68 ?\n"
-         "   gestion G seule, ou G et S ?\n"
-         "2. Formation : que veut dire « 63, 86 et 87 » ?\n"
-         "   6386 et 6387 ? ou 63812, 6386 et 6577 ?\n"
+         "Puis elle calcule T63 et T64, par année et par unité. Un compte changé ne demande "
+         "aucune nouvelle extraction.", VERT, 2),
+        ("LES QUESTIONS À LA DFC\n"
+         "1. Charges de fonctionnement : comptes 61 à 66, ou 61 à 68 ? gestion G seule, ou G "
+         "et S ?\n"
+         "2. Formation : que veut dire « 63, 86 et 87 » ? 6386 et 6387 ? ou 63812, 6386 et "
+         "6577 ?\n"
          "3. Masse salariale : 651 et 652, ou 651 seul ?\n"
          "4. Total budget : quelles gestions ? avec l'investissement ?\n"
-         "5. Les charges de personnel ont-elles une section analytique ?", 20,
-         couleurs=(C["jaune_clair"], C["jaune_bord"]))
+         "5. Les charges de personnel ont-elles une section analytique ?", JAUNE, 2),
+    ], size=20)
+    fermer(sec, bas)
     return d
 
 

@@ -951,7 +951,9 @@ JOURS = [
           "requête ne change pas.",
           "Tous les cas d'agents de l'effectif en un schéma : compté, inactif ou pas compté ; "
           "puis la version technique, reliée au SQL.",
-          "T63 et T64 : la structure simple à envoyer à la DSI et à la DFC, sans SQL."],
+          "T63 et T64 : la structure simple à envoyer à la DSI et à la DFC, sans SQL.",
+          "Prestations et Finance : trois vues à demander à la CNSS, dont une balance "
+          "comptable commune."],
          chantiers=[
              Chantier("GRH : la requête de l'effectif expliquée en schéma", "GRH",
                       demande="Un petit schéma Excalidraw pour voir concrètement comment la "
@@ -1073,6 +1075,30 @@ JOURS = [
                       fichiers="schemas/grh/t63_t64_donnees_a_fournir.excalidraw ; "
                                "sources/grh/t63_t64_donnees_a_fournir.py.",
                       etat="fait"),
+             Chantier("Prestations et Finance : les vues à demander à la CNSS", "Tous",
+                      demande="D'après le recueil v7 et les tableaux CIPRES, trouver ce qui "
+                              "manque en prestations et en gestion financière, et proposer des "
+                              "vues simples, combinées si possible, que la CNSS créera dans la "
+                              "base source. Ne pas lire la comptabilité de la copie : la CNSS "
+                              "la dit non valide.",
+                      fait="Recueil v7 relu (Prestation, Finance), maquettes de l'Annuaire "
+                           "(T28 à T30, T63 à T76), Kaya, nos lots. Quatre schémas dans "
+                           "schemas/vues cnss : le sommaire, et trois vues. "
+                           "V_BI_BALANCE_COMPTABLE est la balance d'Oracle GL, mois par mois, "
+                           "avec le budget : T63, T64, T66 à T76, SP1, SP2. "
+                           "V_BI_CONTROLE_POSTERIORI couvre T28 à T30, V_BI_RESERVE couvre "
+                           "T75. Le schéma T63-T64 reprend la vue commune.",
+                      trouve="Prestations : seuls les contrôles a posteriori manquent. T31 "
+                             "est dans la base (AJUSTEMENT) et T71 semble dans TXDEPOT. "
+                             "Finance : une seule balance mensuelle suffit, avec le mois 0 "
+                             "pour T72 et la branche pour T66 à T68 ; les réserves sont "
+                             "calculées à la main par la DFC.",
+                      decide="Trois vues au lieu d'une par tableau ; noms en V_BI_ ; la BI "
+                             "regroupe les comptes par réglage. Lot 22 abandonné.",
+                      fichiers="schemas/vues cnss (00 à 03) ; sources/vues_cnss "
+                               "(vues_cnss.py, commun.py) ; schéma t63_t64_donnees_a_fournir "
+                               "aligné.",
+                      etat="fait"),
          ],
          reste=["Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025, et me coller le résultat.",
@@ -1083,16 +1109,125 @@ JOURS = [
                 "CNSS : remplir le fichier unité → domaine.",
                 "Question à poser : au retour d'un agent, retirer le temps d'absence de "
                 "l'ancienneté, ou repartir de zéro ?",
-                "DFC et DSI : valider la structure comptable de T63-T64, répondre aux "
-                "questions QF1 à QF5, puis créer et alimenter la table ; ensuite, déployer "
-                "la requête T63-T64.",
+                "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
+                "DSI, DFC, DAI : créer et alimenter les trois vues, répondre aux questions des "
+                "schémas ; ensuite, la BI écrit les requêtes (T28 à T30, T63 à T76).",
                 "À commiter : le lot 25, la structure de T63-T64, le schéma "
                 "requete_effectif_pas_a_pas, les schémas cas_agents_effectif (simple et SQL), "
                 "la requête et le déploiement de T63-T64, le schéma t63_t64_donnees_a_fournir, "
+                "les schémas vues cnss et leurs sources, "
                 "le README des "
                 "analyses GRH, et les retouches de la requête de l'effectif.",
                 "Compter les agents sans situation à chaque 31/12 (comptés, mais dans aucun "
                 "tableau)."]),
+    Jour("2026-11-08", "T60, le mouvement du personnel",
+         ["T60 réécrite sur la structure de DTM_GRH_MOUVEMENT : deux photos de l'effectif "
+          "de T58, d'un 31/12 à l'autre.",
+          "Le détail des « autres » demandé par le recueil v7 : les codes de mouvement de "
+          "la CNSS, déjà dans l'application GRH.",
+          "Les règles G14 à G17, et un schéma de T60 cas par cas."],
+         chantiers=[
+             Chantier("GRH : la requête de T60", "GRH",
+                      demande="Attaquer le tableau 60, le mouvement du personnel.",
+                      fait="Recueil v7 relu (RH ligne 3 : détailler les « autres », "
+                           "déclinaison direction, agence, bureau, périodicité annuelle ; RH "
+                           "ligne 1 : permanent ou temporaire), puis Kaya, l'Annuaire CIPRES, "
+                           "la réunion du 03/11 (M06 à M12) et les lots 1, 17, 18, 20, 24, 25. "
+                           "Requête réécrite avec la structure de DTM_GRH_MOUVEMENT (mêmes "
+                           "colonnes, même grain, même paramètre ; quatre colonnes ajoutées : "
+                           "QUALITE_EMPLOYE, NATURE_EMPLOI, UA_CODE, MOTIF_MVT). Début et fin = "
+                           "les présents de T58 au 31/12 ; entrées et sorties d'une photo à "
+                           "l'autre, par nature, avec les codes de la CNSS et un motif ; "
+                           "réglages passages_annee et mouvements_internes. Testée hors ligne : "
+                           "syntaxe Oracle, rejeu SQLite sur 22 agents fictifs et 4 "
+                           "combinaisons de réglages, sans écart, même début que T58.",
+                      trouve="La table des types de mouvement de la CNSS (GRH_TYPE_MOUVEMENT) "
+                             "a déjà le détail des « autres » : remise en activité, détaché ; "
+                             "licenciement, démission, disponibilité, mise à disposition, fin "
+                             "de détachement, fin de contrat. Le tableau 121 de l'annuaire CNSS "
+                             "2024 détaille de la même façon. Par unité, début + entrées − "
+                             "sorties ne donne pas la fin à cause des mutations : la fin d'une "
+                             "unité se lit dans T58.",
+                      decide="Proposition BI : la requête reprend ces codes ; la disponibilité "
+                             "suit le réglage de l'effectif (PRESENT) ; un agent entré et sorti "
+                             "dans l'année n'est pas compté (Q4 de la fiche T60) ; les mouvements "
+                             "internes restent lus comme avant.",
+                      fichiers="analyses/grh : t60_requete_proposee.sql (réécrite), "
+                               "regles_t60.md, README, TODO.",
+                      etat="fait"),
+             Chantier("GRH : T60 cas par cas, en schéma", "GRH",
+                      demande="Expliquer la nouvelle requête de T60 en schéma, comme les cas "
+                              "d'agents de l'effectif (tout en Excalidraw).",
+                      fait="Schéma en six parties : les deux photos ; la maquette CIPRES avec "
+                           "les codes de la CNSS sous chaque colonne ; 6 cas d'entrée ; 8 cas "
+                           "de sortie ; 8 cas sans mouvement ; 2024 face à l'annuaire CNSS. "
+                           "Puis T60 dans OBIEE, les réglages et les sources.",
+                      trouve="2024 : 677 au début, 104 recrutements, 25 retraites, 5 décès, 4 "
+                             "autres sorties, 747 à la fin, pour 767, 104, 23, 3, 94 et 758 "
+                             "publiés ; l'écart vient des 84 engagés de 2019, des "
+                             "disponibilités et du décalage des décès.",
+                      fichiers="schemas/grh/cas_mouvements_t60.excalidraw ; "
+                               "sources/grh/cas_mouvements_t60.py.",
+                      etat="fait"),
+             Chantier("GRH : la disponibilité, réglage de la CTE parametres de T60", "GRH",
+                      demande="Rendre paramétrable, dans T60, le traitement des disponibilités "
+                              "et des remises en activité, comme dans la CTE parametres de la "
+                              "requête de l'effectif.",
+                      fait="J'avais d'abord compris une variable saisie à l'exécution (:2) et "
+                           "modifié les deux requêtes : annulé à ta remarque. L'effectif est "
+                           "revenu à sa version commitée (requête, règles, deux schémas). Dans "
+                           "T60, la disponibilité reste un réglage de la CTE parametres (PRESENT "
+                           "ou HORS_EFFECTIF), avec un commentaire qui dit ce que fait chaque "
+                           "valeur ; le cliché n'y figure plus. L'effectif avait déjà ce réglage "
+                           "(ligne 170, appliqué dans le WHERE) : seul son commentaire est rendu "
+                           "explicite. Tests refaits : 0 écart pour les deux valeurs.",
+                      trouve="Le schéma cas_agents_effectif porte trois annotations "
+                             "« A MIEUX ECLAIRCIR » (fin de contrat puis réengagé, temporaire "
+                             "devenu permanent, aucune fin de contrat saisie) : il n'a pas été "
+                             "régénéré.",
+                      decide="« Paramètres » veut dire la CTE parametres de la requête, pas une "
+                             "variable :2. Même valeur de disponibilite dans T58 et T60 : tu "
+                             "gardes PRESENT en attendant la réponse de la DRH (QG6).",
+                      fichiers="analyses/grh : t60_requete_proposee.sql, regles_t60.md, "
+                               "README, t58_t65_effectif_requete_proposee.sql et "
+                               "regles_effectif.md (commentaire) ; schéma cas_mouvements_t60.",
+                      etat="fait"),
+             Chantier("GRH : la requête du mouvement pas à pas, et les schémas rangés", "GRH",
+                      demande="Un schéma « requête du mouvement pas à pas », comme celui de "
+                              "l'effectif ; et regrouper les schémas de la GRH, en désordre.",
+                      fait="Schéma en quatre parties : l'idée des deux photos ; la requête partie "
+                           "par partie, avec ses numéros de ligne lus dans le fichier SQL ; six "
+                           "agents fictifs d'un 31/12 à l'autre (retraite, recrutement, "
+                           "titularisation, disponibilité, décès lu à la liquidation, entré et "
+                           "sorti la même année) ; les lignes de 2024 qu'ils donnent, rejouées "
+                           "dans la requête, le contrôle attendu et les limites. Schémas GRH "
+                           "rangés par famille : T58 effectif, T60 mouvements, T63 T64 finances, "
+                           "déplacés avec leur historique comme le fait la visionneuse.",
+                      trouve="Les six agents donnent bien les lignes du schéma, avec PRESENT comme "
+                             "avec HORS_EFFECTIF (DISP en 2023, REM en 2025).",
+                      fichiers="schemas/grh/T60 mouvements/requete_mouvement_pas_a_pas ; "
+                               "sources/grh/requete_mouvement_pas_a_pas.py ; dossiers schemas/grh/"
+                               "T58 effectif, T60 mouvements, T63 T64 finances ; README.",
+                      etat="fait"),
+         ],
+         reste=["Toi : exécuter les deux requêtes de contrôle de T60 (en-tête du fichier, "
+                "cliché 102026 ; disponibilite à PRESENT, puis à HORS_EFFECTIF) et me coller le "
+                "résultat.",
+                "Claude : éclaircir les trois cas annotés « A MIEUX ECLAIRCIR » du schéma "
+                "cas_agents_effectif, si tu le veux.",
+                "Toi : vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT a les 18 codes de la CNSS, plus "
+                "NOM.",
+                "Claude : reporter les règles de T60 dans la fiche de lecture GRH et dans la "
+                "fiche T60, avant de les voir en réunion.",
+                "DRH : trancher la disponibilité (QG6), qui change T58 et T60 ensemble ; "
+                "répondre aux 8 questions de regles_t60.md.",
+                "Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
+                "102026), jusqu'au 31/12/2025.",
+                "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
+                "À commiter : la requête T60 et regles_t60.md, les schémas de T60 (cas, pas "
+                "à pas) et le rangement des schémas GRH en dossiers, "
+                "les schémas vues cnss et leurs sources, les README, le TODO GRH et le "
+                "journal."]),
 ]
 
 # =============================================================================================
@@ -1253,13 +1388,25 @@ DECISIONS = [
              "Les requêtes grh_effectif, grh_ratio et grh_formation changent de champ ; la "
              "catégorie 05 devient un paramètre.",
              statut="proposé"),
+    Decision("2026-11-08", "T60 : deux photos de T58 et les codes de mouvement de la CNSS",
+             "Le mouvement d'un exercice se lit entre les présents de T58 au 31/12 d'avant et "
+             "au 31/12 (début + entrées − sorties = fin) ; chaque entrée et chaque sortie "
+             "reçoit un code de la table GRH_TYPE_MOUVEMENT de la CNSS (RECRU, REM, DETAC, "
+             "AUTRE_ENT ; RET, DEC, LIC, DEM, DISP, FIN_CTRAT, AUTRE_SORT…) et un motif.",
+             "Le recueil des besoins v7 demande de détailler les « autres » ; la CNSS a déjà "
+             "cette liste, et l'annuaire CNSS 2024 (tableau 121) l'utilise. La table des "
+             "mouvements de l'application n'a ni recrutement ni départ (lot 1, M06).",
+             "Proposition BI, à faire viser par la DRH",
+             "grh_mouvement.sql sera remplacée par t60_requete_proposee.sql, avec quatre "
+             "colonnes de plus dans DTM_GRH_MOUVEMENT ; T60 se met en page dans OBIEE.",
+             statut="proposé"),
 ]
 
 # =============================================================================================
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-07"
+MISE_A_JOUR = "2026-11-08"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
@@ -1277,16 +1424,20 @@ ETAT = [
      "la catégorie de la CNSS trouvée ; lots 19 et 20 : T58, T65 et T60 retrouvés, "
      "contractuels expliqués ; lot 24 : G13 et la fiche sans état ; lot 25 : G2 tient "
      "(les agents partis puis revenus sont tous des temporaires). T63 et T64 : structure "
-     "comptable et requête proposées (07/11).",
-     "Règles G1 à G13, schéma regles_grh, fiches T58, T60, T62, schémas de la requête de "
-     "l'effectif et des cas d'agents ; trois requêtes proposées à exécuter ; visa de la DRH ; "
+     "comptable et requête proposées (07/11). T60 réécrite le 08/11 sur la structure du "
+     "DTM, avec le détail des « autres » par les codes de la CNSS.",
+     "Règles G1 à G17, schéma regles_grh, fiches T58, T60, T62, schémas de la requête de "
+     "l'effectif, des cas d'agents et de T60 ; requêtes de l'effectif et de T60 à exécuter ; "
+     "fiche de lecture T60 à mettre à jour, puis réunion ; visa de la DRH ; "
      "T63-T64 attendent la DFC et le premier chargement de la DSI."),
     ("Immatriculation et recouvrement (T1 à T24)", "à faire",
      "Les vues simples sont spécifiées pour la DSI (20/10).",
      "Pas encore d'analyse."),
-    ("Gestion financière (T66 à T76)", "à faire",
-     "Rien encore.",
-     "Pas encore d'analyse."),
+    ("Gestion financière (T66 à T76)", "en cours",
+     "Vues proposées le 07/11 (schemas/vues cnss) : la balance comptable commune "
+     "(T66 à T76, SP1, SP2) et les réserves (T75). La comptabilité de la copie n'est pas "
+     "lue : la CNSS la dit non valide.",
+     "Soumettre les vues à la CNSS ; requêtes à écrire quand elles seront créées."),
     ("Outils", "fait",
      "Visionneuse hors ligne, fiches de maîtrise, journal de bord, schémas de travail.",
      "Tenir le journal et les fiches à jour."),
@@ -1294,7 +1445,10 @@ ETAT = [
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Au point du 02/11 : la date des montants (R4). Exécuter les trois requêtes "
+    ("Toi", "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
+            "disponibilite à PRESENT, puis à HORS_EFFECTIF) ; vérifier les "
+            "codes de DIM_GRH_TYPE_MOUVEMENT. "
+            "Au point du 02/11 : la date des montants (R4). Exécuter les trois requêtes "
             "GRH proposées (102026, 2024) ; faire viser G1 à G11 et poser QG1 à QG7 ; A06 et A07 ; les requêtes proposées sur le cliché 092026 ; relancer "
             "A04 ; commiter le travail du 31/10 et du 01/11."),
     ("La direction des prestations", "Répondre aux questions des fiches T25 à T27 (13), "
@@ -1302,26 +1456,33 @@ EN_ATTENTE = [
                                      "R6, "
                                      "R7, la limite de 25 ans des orphelins, le montant, la "
                                      "coordination et la règle de T41 (enfants payés)."),
-    ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G11 ; répondre à "
-               "QG1 à QG7 et au questionnaire CIPRES."),
-    ("La DSI", "Le sens des statuts, le circuit des paiements sans effet, où sont saisis les "
-               "contrôles a posteriori ; créer (table ou vue) et alimenter "
-               "BI_GRH_SOLDE_COMPTABLE depuis Oracle GL, d'après le schéma "
-               "t63_t64_donnees_a_fournir (T63, T64)."),
-    ("La DFC", "Les comptes de T63 et T64 : charges de fonctionnement, formation, masse "
-               "salariale, total budget, section analytique (questions QF1 à QF5)."),
+    ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G17 ; répondre à "
+               "QG1 à QG7 et au questionnaire CIPRES ; trancher la disponibilité (QG6) et "
+               "les 8 questions de T60 (regles_t60.md)."),
+    ("La DSI", "Le sens des statuts, le circuit des paiements sans effet ; créer et "
+               "alimenter les vues des schémas vues cnss : V_BI_BALANCE_COMPTABLE (depuis "
+               "Oracle GL), V_BI_CONTROLE_POSTERIORI (avec la DAI), V_BI_RESERVE (avec la "
+               "DFC)."),
+    ("La DFC", "Répondre aux questions des schémas vues cnss 01 et 03 et T63-T64 : branche "
+               "des écritures, types de placement, réalisé du budget, comptes de formation et "
+               "de masse salariale, réserves."),
+    ("La DAI", "Dire où sont les contrôles a posteriori depuis juillet 2025 ; alimenter "
+               "V_BI_CONTROLE_POSTERIORI ; comparer son fichier des indus à la base (T31)."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
 ]
 
 # la suite, dans l'ordre
 SUITE = [
+    ("T60", "Reporter le résultat des contrôles ; mettre à jour les termes de T60 de la fiche "
+            "de lecture et la fiche T60 ; voir T60 en réunion avec la CNSS ; puis T62."),
     ("Les requêtes GRH", "Reporter l'exécution des trois requêtes proposées ; ajuster les "
                          "fiches T58, T60, T62 si les chiffres bougent ; puis les fiches de "
                          "maîtrise « 4 gestion administrative »."),
     ("Les fiches de maîtrise", "Mettre à jour le dossier 3 prestations avec les lots 5 à 9 et "
                                "les règles R13, T41, T50-T57, T31."),
-    ("Les contrôles (T28 à T30)", "Bloqués : la table des contrôles n'est plus alimentée "
-                                  "depuis juillet 2025 ; réponse de la DSI attendue."),
+    ("Les contrôles (T28 à T30)", "La table des contrôles n'est plus alimentée depuis "
+                                  "juillet 2025 : vue V_BI_CONTROLE_POSTERIORI proposée le "
+                                  "07/11, à créer par la CNSS."),
     ("La décision R4", "Dès ta réponse : régler date_montant, revoir la règle « Montant » des "
                        "fiches T32, T41, T42."),
     ("Finir T32 à T41", "Reporter A06 et A07 pour les veuves et les orphelins ; faire "
@@ -1342,8 +1503,9 @@ LIVRABLES = [
     ("Les analyses (requêtes et constats)", [
         ("Prestations", "analyses/prestations", "lots 1 à 9 (P01 à P106), README (constats, "
                                                 "règles, questions), TODO, resultats/"),
-        ("GRH", "analyses/grh", "lots 1 à 25 (Q01 à Q142), règles G1 à G13, requêtes "
-                                "proposées (effectif, T60, T62), README, TODO"),
+        ("GRH", "analyses/grh", "lots 1 à 25 (Q01 à Q142), règles G1 à G17, requêtes "
+                                "proposées (effectif, T60, T62), regles_effectif.md, "
+                                "regles_t60.md, README, TODO"),
         ("Annuaire de la CNSS 2024", "analyses/comparaison_annuaire_cnss_2024",
          "requêtes A01 à A08, tableau 18 reconstitué, déductions"),
     ]),
@@ -1369,10 +1531,14 @@ LIVRABLES = [
                                                "dossier, les fiches de validation T25 à T27, "
                                                "T31, T32, T41, T42 et T50-T57"),
         ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024"),
-        ("GRH", "schemas/grh", "regles_grh (règles G1 à G11) ; requete_effectif_pas_a_pas "
+        ("Vues CNSS", "schemas/vues cnss", "les vues à demander à la CNSS : sommaire, balance "
+                                          "comptable, contrôles a posteriori, réserves"),
+        ("GRH", "schemas/grh", "rangé par famille : T58 effectif, T60 mouvements, T63 T64 "
+                               "finances ; regles_grh (règles G1 à G11) ; requete_effectif_pas_a_pas "
                                "(la requête de l'effectif expliquée) ; cas_agents_effectif "
                                "(tous les cas d'agents) et cas_agents_effectif_sql (les mêmes, "
-                               "reliés à la requête) ; t63_t64_donnees_a_fournir (la "
+                               "reliés à la requête) ; cas_mouvements_t60 (T60 cas par "
+                               "cas) et requete_mouvement_pas_a_pas ; t63_t64_donnees_a_fournir (la "
                                "structure à envoyer à la CNSS) ; tableaux cipres : "
                                "fiches T58, T60, T62"),
     ]),

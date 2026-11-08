@@ -141,7 +141,7 @@
 --   · disponibilite         : PRESENT = permanent en disponibilité reste
 --                             dans l'effectif ;
 --                             HORS_EFFECTIF = il en sort (QG6, pas encore
---                             tranché par la DRH).
+--                             tranché par la DRH) ; même valeur dans T60.
 --   · inactifs              : DECISIONS = inactif si disponibilité 07 sans
 --                             retour 18 après ;
 --                             STATUT = inactif si statut B, D, E, F ou H.
@@ -166,7 +166,7 @@ parametres AS (
            'OUI'                   AS retirer_interruptions,
            -- G7 : sans fin de contrat, 'PRESENT' (compté) ou 'FICHE' (si actif)
            'PRESENT'               AS fin_contrat_inconnue,
-           -- QG6 : dispo permanente, 'PRESENT' (dans l'effectif) ou 'HORS_EFFECTIF'
+           -- QG6 : en disponibilité, 'PRESENT' = compté (inactif) ; 'HORS_EFFECTIF' = sorti
            'PRESENT'               AS disponibilite,
            -- G13 : inactifs via 'DECISIONS' (07/18) ou 'STATUT' (B,D,E,F,H)
            'DECISIONS'             AS inactifs

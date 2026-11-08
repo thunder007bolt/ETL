@@ -23,7 +23,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "grh" / "requete_effectif_pas_a_pas.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "T58 effectif" / "requete_effectif_pas_a_pas.excalidraw"
 
 WIDTH = 2600
 ANNEES = list(range(2018, 2026))

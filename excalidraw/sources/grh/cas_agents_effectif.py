@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "grh" / "cas_agents_effectif.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "T58 effectif" / "cas_agents_effectif.excalidraw"
 
 WIDTH = 2600
 GAP = 40

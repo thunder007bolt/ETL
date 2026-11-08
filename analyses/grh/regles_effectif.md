@@ -170,7 +170,7 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 | `ordre_date_anciennete` | PRISE_SERVICE | EMBAUCHE | réunion du 03/11 |
 | `retirer_interruptions` | OUI | NON | recueil des besoins v7 |
 | `fin_contrat_inconnue` | PRESENT | FICHE (compté seulement si la fiche n'est pas inactive) | réunion du 03/11 |
-| `disponibilite` | PRESENT | HORS_EFFECTIF (comme le tableau 121 de l'annuaire CNSS 2024) | **pas encore tranché** (QG6) |
+| `disponibilite` | PRESENT (l'agent en disponibilité est compté, inactif) | HORS_EFFECTIF (il sort de l'effectif, comme le tableau 121 de l'annuaire CNSS 2024) | **pas encore tranché** (QG6) ; même valeur dans la requête de T60 |
 | `inactifs` | DECISIONS (en disponibilité selon les décisions 07 et 18) | STATUT (statuts B, D, E, F, H de la situation, comme avant) | lot 24 |
 | `correspondance_domaine` | *vide : à brancher* | la table chargée depuis le fichier Excel | réunion du 03/11 |
 
