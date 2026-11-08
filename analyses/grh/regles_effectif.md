@@ -1,6 +1,6 @@
 # L'effectif du personnel (T58, T59, T61, T65) : règles retenues
 
-État au 05/11/2026, après la réunion du 03/11/2026 avec la CNSS (termes 1 à 9 de la fiche de lecture GRH) et le lot 24 (les décisions face aux situations).
+État au 05/11/2026, après la réunion du 03/11/2026 avec la CNSS (termes 1 à 9 de la fiche de lecture GRH) et le lot 24 (les décisions face aux situations). Le 08/11/2026, l'annuaire CNSS 2024 (tableaux 119 à 126) a tranché la disponibilité (hors effectif) et confirmé HC en cadres supérieurs.
 
 La requête qui applique ces règles : [t58_t65_effectif_requete_proposee.sql](t58_t65_effectif_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête (partie 0). Changer un réglage ne demande pas de réécrire la requête.
 
@@ -146,7 +146,7 @@ Un agent compté est **inactif** quand il est **en disponibilité à la date d'a
 
 **Limite.** Le détachement, la mise à disposition, la suspension et le service militaire n'ont pas de paire de décisions début et fin connue. Ils ne sont plus comptés inactifs. Au 31/12/2024, le statut n'en trouvait qu'un seul (F).
 
-Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibilite` = HORS_EFFECTIF, les agents en disponibilité sortent de l'effectif, et NB_AGENTS_INACTIFS vaut 0.
+Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibilite` = HORS_EFFECTIF, la valeur retenue le 08/11/2026, les agents en disponibilité sortent de l'effectif, et NB_AGENTS_INACTIFS vaut 0 : la colonne ne sert plus qu'avec PRESENT.
 
 *Exemple : mise en disponibilité le 01/03/2023 (07), remise en activité le 01/06/2025 (18). L'agent est compté inactif au 31/12/2023 et au 31/12/2024, et actif au 31/12/2025.*
 
@@ -166,11 +166,11 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 | `periodicite` | ANNUELLE (31/12 des exercices clos, comme avant) | MENSUELLE (fins de mois de l'année passée et de l'année en cours) | recueil des besoins v7 ; à activer avec Jules |
 | `decisions_depart` | 02, 34, 35, 36, 52, 54 | ajouter ou retirer un code | réunion du 03/11 |
 | `codes_decision` | annulation 40 ; engagements 50 et 51 ; disponibilité 07 et remise 18 | autres codes | lots 3, 13, 20 |
-| `regroupement_categorie` | 01-02, 03, 04-05, 06-HC ; cadres : 04, 05, 06, HC | déplacer une catégorie (Kaya 2017 mettait la 5e en cadres supérieurs) | recueil des besoins v7 |
+| `regroupement_categorie` | 01-02, 03, 04-05, 06-HC ; cadres : 04, 05, 06, HC | déplacer une catégorie (Kaya 2017 mettait la 5e en cadres supérieurs) | recueil des besoins v7 ; confirmé par l'annuaire CNSS 2024 (le tableau 126 retombe sur le 119, HC compris) |
 | `ordre_date_anciennete` | PRISE_SERVICE | EMBAUCHE | réunion du 03/11 |
 | `retirer_interruptions` | OUI | NON | recueil des besoins v7 |
 | `fin_contrat_inconnue` | PRESENT | FICHE (compté seulement si la fiche n'est pas inactive) | réunion du 03/11 |
-| `disponibilite` | PRESENT (l'agent en disponibilité est compté, inactif) | HORS_EFFECTIF (il sort de l'effectif, comme le tableau 121 de l'annuaire CNSS 2024) | **pas encore tranché** (QG6) ; même valeur dans la requête de T60 |
+| `disponibilite` | HORS_EFFECTIF (il sort de l'effectif, comme le tableau 121 de l'annuaire CNSS 2024) | PRESENT (l'agent en disponibilité est compté, inactif) | **tranché le 08/11/2026** (QG6) : annuaire CNSS 2024, tableau 121, et réunion du 03/11 (M11) ; même valeur dans la requête de T60 |
 | `inactifs` | DECISIONS (en disponibilité selon les décisions 07 et 18) | STATUT (statuts B, D, E, F, H de la situation, comme avant) | lot 24 |
 | `correspondance_domaine` | *vide : à brancher* | la table chargée depuis le fichier Excel | réunion du 03/11 |
 
@@ -181,7 +181,7 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 | Point | Ce qui est retenu | Ce qui pourrait changer | Qui décide |
 |---|---|---|---|
 | Temporaire sans fin de contrat connue | Compté présent | Le compter seulement si sa fiche est active (`fin_contrat_inconnue` = FICHE) | CNSS, au vu du chiffre |
-| Agent en disponibilité à la date d'arrêté | Compté dans l'effectif | Le sortir de l'effectif, comme l'annuaire CNSS 2024 | DRH (QG6) |
+| Agent en disponibilité à la date d'arrêté | Sorti de l'effectif, comme l'annuaire CNSS 2024 (tableau 121) ; 741 permanents au 31/12/2024 au lieu de 747 | Le garder dans l'effectif, compté inactif (`disponibilite` = PRESENT) | tranché le 08/11/2026 (QG6) ; la DRH peut le revoir |
 | Agents inactifs | En disponibilité selon les décisions 07 et 18 | Revenir au statut de la situation (`inactifs` = STATUT) | DRH |
 | Fiche sans état (embauche récente) | Comptée comme encore là | Ne la compter qu'une fois passée à ACTIF | DRH |
 | Catégorie HC (hors catégorie) | Cadres supérieurs | Autre groupe | DRH |
@@ -215,5 +215,5 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 | 3 | Créer la table de correspondance (DTM.REF_GRH_UNITE_DOMAINE) et son chargement depuis le fichier Excel dans la chaîne Python et Jenkins ; brancher la partie 0 de la requête | Claude, puis toi pour le déploiement | à faire |
 | 4 | Script d'ajout des cinq colonnes (CATEGORIE, GROUPE_CATEGORIE, UA_CODE, DOMAINE_ACTIVITE, NB_CADRES) dans DTM et ODS.DTM_GRH_EFFECTIF, puis remplacement de grh_effectif.sql par cette requête ; décider avec Jules du sort de grh_ratio.sql | Claude, après le visa de la DRH | à faire |
 | 5 | Dans OBIEE : le filtre global de nature, le filtre qualité A, la déclinaison par direction, agence et direction régionale, T58 à T61 par GROUPE_CATEGORIE et sexe, le taux = SUM(NB_CADRES) / SUM(NB_AGENTS) | toi | à faire |
-| 6 | Trancher la disponibilité (QG6) et la catégorie HC ; viser G13 (inactifs lus dans les décisions) et la fiche sans état (G2) | DRH | à faire |
+| 6 | Viser G13 (inactifs lus dans les décisions) et la fiche sans état (G2) ; la disponibilité (QG6) et la catégorie HC sont tranchées par l'annuaire CNSS 2024 le 08/11/2026 | DRH | en cours |
 | 7 | Reporter les décisions dans la fiche de lecture GRH (termes 1 à 9, en gardant tes notes) et dans la fiche de validation T58 | Claude | à faire |

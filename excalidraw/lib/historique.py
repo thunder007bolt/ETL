@@ -78,25 +78,49 @@ def _keep(folder, content, source):
     write_atomic(target, content)
 
 
+def meme_dessin(a, b):
+    """Vrai si deux contenus de schéma ne diffèrent que par le champ « updated » des éléments,
+    l'heure que le builder pose à chaque génération. Réécrire ou garder une telle version ne
+    change rien au dessin : avant le 08/11/2026, chaque génération du journal créait ainsi une
+    version de chacune de ses fiches, même inchangée."""
+    if a == b:
+        return True
+    if a is None or b is None:
+        return False
+    try:
+        da, db = json.loads(a), json.loads(b)
+    except ValueError:
+        return False
+    for doc in (da, db):
+        if isinstance(doc, dict):
+            for e in doc.get("elements", []):
+                if isinstance(e, dict):
+                    e.pop("updated", None)
+    return da == db
+
+
 def write_with_history(path, content, source):
-    """Écrit un schéma en gardant l'état précédent et le nouveau dans l'historique."""
+    """Écrit un schéma en gardant l'état précédent et le nouveau dans l'historique. Ne fait rien
+    si le dessin est déjà celui du disque (meme_dessin). Renvoie vrai si le fichier est écrit."""
     if source not in SOURCES:
         raise ValueError(f"source inconnue : {source}")
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
+    current = path.read_text(encoding="utf-8") if path.exists() else None
+    if current is not None and meme_dessin(current, content):
+        return False
     folder = _folder(path)
     if folder is None:
         write_atomic(path, content)
-        return
+        return True
     latest = _latest_content(folder)
-    if path.exists():
-        current = path.read_text(encoding="utf-8")
-        if current != latest:
-            _keep(folder, current, "disque")
-            latest = current
+    if current is not None and not meme_dessin(current, latest):
+        _keep(folder, current, "disque")
+        latest = current
     write_atomic(path, content)
-    if content != latest:
+    if not meme_dessin(content, latest):
         _keep(folder, content, source)
+    return True
 
 
 def list_versions(path):
@@ -119,7 +143,8 @@ def list_versions(path):
         })
     current = None
     if entries and Path(path).is_file():
-        if entries[0].read_text(encoding="utf-8") == Path(path).read_text(encoding="utf-8"):
+        if meme_dessin(entries[0].read_text(encoding="utf-8"),
+                       Path(path).read_text(encoding="utf-8")):
             current = entries[0].stem
     return {"versions": versions, "actuelle": current}
 

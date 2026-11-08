@@ -101,16 +101,17 @@ PERMANENTS = [
      "                  AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))",
      "Une décision visée par une 40 n'entre pas dans decisions : ni dans departs, ni dans "
      "engagements, ni dans positions."),
-    ("En disponibilité (07 sans retour 18)", "COMPTÉ, MAIS INACTIF", "inactif",
-     "5 · positions (l. 330 à 340)\n7 · base, colonne inactif\n(l. 421 à 427)",
+    ("En disponibilité (07 sans retour 18)", "PAS COMPTÉ (HORS EFFECTIF)", "non",
+     "5 · positions (l. 330 à 340)\n7 · base, WHERE [4]\n(l. 449 à 451)",
      "MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END)  -- 07\n"
      "MAX(CASE WHEN d.code = cd.remise_en_activite    THEN d.date_decision END)  -- 18\n"
      "…\n"
-     "ELSE CASE WHEN NVL(po.date_dispo,  DATE '1900-01-01')\n"
-     "             > NVL(po.date_remise, DATE '1900-01-01')\n"
-     "          THEN 1 ELSE 0 END                   -- 1 = inactif",
-     "Au 31/12, sa dernière 07 est plus récente que sa dernière 18 : inactif = 1. Il reste "
-     "compté, car disponibilite = 'PRESENT' (ligne [4] du WHERE)."),
+     "AND NOT (pr.disponibilite = 'HORS_EFFECTIF'          -- vrai : valeur retenue\n"
+     "         AND NVL(po.date_dispo, DATE '1900-01-01')\n"
+     "             > NVL(po.date_remise, DATE '1900-01-01')))   -- vrai : 07 après 18",
+     "Au 31/12, sa dernière 07 est plus récente que sa dernière 18. Avec disponibilite = "
+     "'HORS_EFFECTIF' (retenu le 08/11/2026, comme l'annuaire CNSS 2024), la ligne [4] du WHERE "
+     "l'écarte. Avec 'PRESENT', il serait compté inactif."),
     ("Revenu de disponibilité (18)", "COMPTÉ, ACTIF", "oui",
      "5 · positions, interruptions,\ninterruptions_a_date\n(l. 330 à 375)\n"
      "7 · base, anciennete (l. 413)",
@@ -288,7 +289,8 @@ RANGEMENT = [
      "7 · base, inactif (l. 421)\n8 · SELECT (l. 486 à 488)",
      "COUNT(DISTINCT CASE WHEN b.inactif = 0 THEN b.PERS_ID END) AS NB_AGENTS_ACTIFS\n"
      "COUNT(DISTINCT CASE WHEN b.inactif = 1 THEN b.PERS_ID END) AS NB_AGENTS_INACTIFS",
-     "inactif = 1 : en disponibilité au 31/12 (voir la partie 3). Les tableaux CIPRES ne "
+     "inactif = 1 : en disponibilité au 31/12 ; avec 'HORS_EFFECTIF' (retenu), il n'est plus "
+     "compté, la colonne vaut 0. Les tableaux CIPRES ne "
      "lisent pas ces colonnes."),
 ]
 
@@ -481,8 +483,9 @@ def build():
         ("[2] Entré au plus tard à la date. Faux → « embauché après le 31/12 ».", "non"),
         ("[3] Pas encore parti : fiche pas INACTIF, OU premier départ après la date. Fiche "
          "INACTIF sans départ : NULL > date n'est jamais vrai → jamais compté.", "attention"),
-        ("[4] Réglage disponibilite. 'PRESENT' (valeur actuelle) : toujours vrai, l'agent en "
-         "disponibilité reste. 'HORS_EFFECTIF' : il sort.", "inactif"),
+        ("[4] Réglage disponibilite. 'HORS_EFFECTIF' (valeur retenue le 08/11/2026, comme "
+         "l'annuaire CNSS 2024) : l'agent en disponibilité sort. 'PRESENT' : toujours vrai, il "
+         "resterait.", "inactif"),
         ("[5] Aiguillage vers les temporaires : situation TEMPORAIRE à cette date.", "oui"),
         ("[6] Une ligne dans temporaires_sous_contrat : la date tombe dans un contrat. Pas de "
          "50, ou contrat fini → NULL → pas compté.", "attention"),

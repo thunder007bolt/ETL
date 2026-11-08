@@ -412,7 +412,8 @@ def main():
         path = OUT_DIR / f"{nom}.excalidraw"
         try:
             d.save(path, force=args.force)
-            print(f"{len(d.elements)} éléments écrits dans {path}")
+            print(f"inchangé : {path}" if d.inchange
+                  else f"{len(d.elements)} éléments écrits dans {path}")
         except FileExistsError as e:
             print(e)
         for warning in d.warnings:

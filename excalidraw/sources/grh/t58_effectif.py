@@ -45,10 +45,10 @@ EXAMPLES = [
          resultat="Pas compté au 31/12/2024 : il est parti avant. Il était compté au "
                   "31/12/2023."),
     dict(nom="Agent D", detail="mis en disponibilité", debut=date(2023, 10, 1),
-         fin=date(2025, 3, 31), sortie="question",
+         fin=date(2025, 3, 31), sortie="exclu",
          dates="disponibilité depuis le 01/06/2024 (décision 07)",
-         resultat="Compté aujourd'hui ; pas compté si l'agent en disponibilité sort de "
-                  "l'effectif, comme dans l'annuaire de la CNSS (question Q4)."),
+         resultat="Pas compté au 31/12/2024 : en disponibilité, il sort de l'effectif, comme "
+                  "dans l'annuaire de la CNSS (question Q4, retenue le 08/11/2026)."),
     dict(nom="Agent E", detail="contractuel", debut=date(2024, 7, 1),
          fin=date(2025, 3, 31), sortie="compte", dates="engagé le 01/07/2024 (décision 50)",
          resultat="Compté dans la partie « contractuels » de T58 ; pas dans T59, T61 ni T65, qui "
@@ -340,15 +340,16 @@ QUESTIONS = [
          sources=[("Annuaire", "p. 17 : sept domaines"),
                   ("Données", "fin 2025 : PIL 431 actifs, ACT 50 dont 41 femmes (lot 8, Q47)"),
                   ("Proposition BI", "oui aux deux ; le lot 16 lira les libellés")]),
-    dict(n="Q4", titre="L'agent en disponibilité",
-         regle="Un agent mis en disponibilité au 31 décembre fait-il partie de l'effectif ?",
-         cas=[("Oui (réglage actuel)", "il reste compté, comme dans les requêtes DTM."),
-              ("Non (comme l'annuaire de la CNSS)",
+    dict(n="Q4", titre="L'agent en disponibilité (retenu le 08/11)",
+         regle="L'annuaire de la CNSS sort l'agent en disponibilité de l'effectif (tableau 121) ; "
+               "la requête fait de même depuis le 08/11/2026. Vous le confirmez ?",
+         cas=[("Non, il n'en fait pas partie (retenu)",
                "il sort de l'effectif jusqu'à sa remise en activité (décision 18) ; T60 compte "
-               "les deux mouvements.")],
-         sources=[("Données", "2 à 5 mises en disponibilité par an chez les permanents (lot "
-                              "20, Q117)"),
-                  ("Proposition BI", "le réglage disponibilite")]),
+               "les deux mouvements."),
+              ("Oui", "il reste compté, comme dans les requêtes DTM d'avant.")],
+         sources=[("Données", "annuaire CNSS 2024, tableau 121 ; 2 à 5 mises en disponibilité "
+                              "par an chez les permanents (lot 20, Q117)"),
+                  ("Proposition BI", "le réglage disponibilite, le même dans T60")]),
     dict(n="Q5", titre="Les 84 engagés de 2019",
          regle="84 agents engagés en 2019 n'ont aucune date de départ dans la base. L'annuaire "
                "les compte jusqu'en 2023. Que sont-ils devenus, et quand sont-ils partis ?",

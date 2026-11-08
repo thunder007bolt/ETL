@@ -1,5 +1,6 @@
 """
-Schéma « La requête de l'effectif, pas à pas » (état au 07/11/2026).
+Schéma « La requête de l'effectif, pas à pas » (état au 07/11/2026 ; disponibilité hors
+effectif depuis le 08/11/2026, comme l'annuaire CNSS 2024).
 
 Explique comment analyses/grh/t58_t65_effectif_requete_proposee.sql retrouve
 l'effectif au 31/12 des années passées avec le seul cliché d'aujourd'hui :
@@ -81,8 +82,9 @@ def cellule_a(annee):
     lignes = ["compté"]
     couleur = COMPTE
     if A_DISPO[0] <= jour < A_DISPO[1]:
-        lignes = ["compté, mais inactif", "(en disponibilité)"]
-        couleur = INACTIF
+        # disponibilite = HORS_EFFECTIF (08/11/2026) : l'agent en disponibilité n'est pas compté
+        return ("pas compté\nen disponibilité\n(07 sans 18 au 31/12)\n"
+                f"{groupe} ({code})"), INACTIF
     lignes += [f"{groupe} ({code})", f"{age(A_NAISSANCE, jour)} ans · anc. {ans(anciennete(jour))}"]
     if annee == 2023:
         lignes.append("(dispo retirée)")
@@ -219,7 +221,7 @@ def build():
     bloc(40, y8 + 260, 2520, 120,
          "RÉGLAGES (partie 0) : ils changent le résultat sans réécrire la requête ; "
          "valeur actuelle en premier\n"
-         "dates d'arrêté : ANNUELLE ou MENSUELLE  ·  disponibilité : PRESENT ou HORS_EFFECTIF  ·  "
+         "dates d'arrêté : ANNUELLE ou MENSUELLE  ·  disponibilité : HORS_EFFECTIF ou PRESENT  ·  "
          "temporaire sans fin connue : PRESENT ou FICHE\n"
          "inactifs : DECISIONS ou STATUT  ·  début de l'ancienneté : PRISE_SERVICE ou EMBAUCHE  ·  "
          "retirer les interruptions : OUI ou NON", 19, couleurs=(C["jaune_clair"], C["jaune_bord"]))
@@ -228,7 +230,7 @@ def build():
     s3 = s2 + 1170
     sec3 = d.section(0, s3, WIDTH, 1080, "3. Concrètement : trois agents fictifs, au 31/12 "
                                         "de chaque année")
-    for i, (txt, (bg, bord)) in enumerate([("compté", COMPTE), ("compté, mais inactif", INACTIF),
+    for i, (txt, (bg, bord)) in enumerate([("compté", COMPTE), ("hors effectif (dispo)", INACTIF),
                                             ("pas compté", NON)]):
         d.box(1640 + i * 310, s3 + 22, 280, 40, txt, 17, bg=bg, stroke=bord)
 
@@ -315,8 +317,8 @@ def build():
          "(A : maîtrise jusqu'en 2020, cadre moyen ensuite).\n"
          "Un départ daté le fait sortir au bon moment, même si sa fiche dit INACTIF aujourd'hui "
          "(A compte encore au 31/12/2024). Sa disponibilité\n"
-         "le rend inactif au 31/12/2022 et sort de son ancienneté. Sans aucune date, la requête "
-         "ne peut rien rejouer (C).", 20, couleurs=(C["jaune_clair"], C["jaune_bord"]))
+         "le sort de l'effectif au 31/12/2022 (comme l'annuaire CNSS 2024) et de son ancienneté. "
+         "Sans aucune date, la requête ne peut rien rejouer (C).", 20, couleurs=(C["jaune_clair"], C["jaune_bord"]))
     sec3["height"] = bas + 30 + 120 + 40 - s3
 
     # ------------------------------------------------------------------ 4. résultat et limites
@@ -332,8 +334,8 @@ def build():
          f"Un agent ne compte qu'une fois par 31/12 : on additionne\n"
          f"sur tous les axes, mais jamais d'une date à l'autre.", 20)
     bloc(40, s4 + 350, 1220, 170,
-         "ATTENDU AU CONTRÔLE (lots 17 à 19 ; la requête reste à exécuter)\n"
-         "742 permanents au 31/12/2024 (annuaire de la CNSS : 758)\n"
+         "ATTENDU AU CONTRÔLE (lots 17 à 25 ; la requête reste à exécuter)\n"
+         "environ 741 permanents au 31/12/2024 (annuaire de la CNSS : 758)\n"
          "taux d'encadrement (T65) : 48,8 % en 2024 (publié : 49,2 %),\n"
          "environ 42 % de 2020 à 2023 (publié : 41 %) : l'écart vient des\n"
          "84 engagés de 2019, comme l'agent C", 20, couleurs=(C["vert_clair"], C["vert"]))
@@ -343,7 +345,7 @@ def build():
          "  (agent C, les 84 engagés de 2019 : question QG2 à la DRH)\n"
          "· le statut de la situation (détaché, en disponibilité…) n'est pas\n"
          "  daté : il est écrasé sur la situation en cours. On lit donc\n"
-         "  les décisions 07 et 18 pour les inactifs (règle G13)\n"
+         "  les décisions 07 et 18 pour la disponibilité (QG6, G13)\n"
          "· ce qui n'est pas daté vaut pour toutes les années tel qu'il est\n"
          "  aujourd'hui : la qualité (A, B, C), le domaine de l'unité\n\n"
          "Tout le reste se rejoue, car chaque fait a sa date : entrées,\n"

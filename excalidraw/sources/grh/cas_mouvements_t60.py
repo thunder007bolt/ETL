@@ -46,8 +46,8 @@ ENTREES = [
     ("Temporaire devenu permanent", "temporaire au 31/12 d'avant,\npermanent au 31/12 :\n"
      "il entre chez les permanents", "AUTRE_ENT · ÉTAIT TEMPORAIRE", "entree"),
     ("Revenu de disponibilité", "remis en activité (18) ; il était\nen disponibilité (07) au "
-     "31/12 d'avant\nseulement si la dispo sort de l'effectif", "REM · SELON LE RÉGLAGE",
-     "reglage"),
+     "31/12 d'avant,\nhors de l'effectif, comme l'annuaire", "REM · REMISE EN ACTIVITÉ",
+     "entree"),
     ("Détaché à la CNSS", "décision 37 (classement d'un agent\ndétaché) dans l'année\n"
      "aucune chez les permanents aujourd'hui", "DETAC · DÉTACHÉ", "absent"),
     ("Embauché fin décembre,\nsans situation au 31/12", "nature vide au 31/12 : il n'est\n"
@@ -66,8 +66,8 @@ SORTIES = [
      "sortie"),
     ("Fin de contrat", "décision 35, ou rupture du contrat 52 :\nle temporaire n'a plus de "
      "contrat\nau 31/12", "FIN_CTRAT · AUTRES SORTIES", "sortie"),
-    ("Mis en disponibilité", "décision 07, pas encore de retour (18)\nau 31/12 ; seulement si "
-     "la dispo\nsort de l'effectif (2024 : 5 décisions)", "DISP · SELON LE RÉGLAGE", "reglage"),
+    ("Mis en disponibilité", "décision 07, pas encore de retour (18)\nau 31/12 : il sort de "
+     "l'effectif,\ncomme l'annuaire (2024 : 5 décisions)", "DISP · AUTRES SORTIES", "sortie"),
     ("Titularisé, vu des temporaires", "temporaire au 31/12 d'avant,\npermanent au 31/12 :\n"
      "il quitte les temporaires", "AUTRE_SORT · DEVIENT PERMANENT", "sortie"),
     ("Retraite, puis décès la même année", "seul le premier départ compte,\ncomme pour "
@@ -83,8 +83,8 @@ SANS_MOUVEMENT = [
      "31/12 (lot 25)", "AUCUN MOUVEMENT", "rien"),
     ("Départ annulé", "la décision de départ est annulée\npar une décision 40 :\non l'ignore",
      "AUCUN MOUVEMENT", "rien"),
-    ("En disponibilité (réglage actuel)", "PRESENT : l'agent reste dans\nl'effectif ; ni sortie "
-     "ni retour\n(question QG6)", "AUCUN MOUVEMENT (RÉGLAGE)", "reglage"),
+    ("Toujours en disponibilité", "en disponibilité aux deux 31/12 :\nhors de l'effectif aux "
+     "deux photos,\nni sortie ni retour cette année-là", "AUCUN MOUVEMENT", "rien"),
     ("Entré et sorti la même année", "absent des deux 31/12 ;\nréglage passages_annee : NON\n"
      "(OUI = une entrée et une sortie)", "PAS COMPTÉ (RÉGLAGE)", "reglage"),
     ("Fiche INACTIF, sans date de départ", "84 engagés de 2019 : jamais présents,\nni entrée "
@@ -107,15 +107,16 @@ MAQUETTE = [
 
 # 2024, permanents : (colonne, base, annuaire CNSS 2024, pourquoi l'écart)
 CHIFFRES_2024 = [
-    ("Effectif début", "677", "767", "les 84 engagés de 2019, jamais comptés par la base (G11)"),
+    ("Effectif début", "672", "767", "les 84 engagés de 2019, jamais comptés par la base (G11)"),
     ("Recrutement", "104", "104", "retrouvé"),
-    ("Autres entrées", "0", "7", "6 remises en activité et 1 détachement : réglage QG6, "
-                                 "détachement introuvable"),
+    ("Autres entrées", "4", "7", "4 remises en activité pour 6 publiées ; le détachement "
+                                 "publié est introuvable dans la base"),
     ("Retraite", "25", "23", "à quelques unités près, chaque année"),
     ("Décès", "5", "3", "liquidation des droits, 8 mois après le décès"),
-    ("Autres sorties", "4", "94", "les 84 de 2019 sortis par l'annuaire ; 7 disponibilités "
-                                  "(réglage)"),
-    ("Effectif fin", "747", "758", "= T58 au 31/12/2024 (lot 25)"),
+    ("Autres sorties", "9", "94", "les 84 de 2019 sortis par l'annuaire ; 5 disponibilités pour "
+                                  "7 ; 2 démissions et 1 licenciement, comme l'annuaire"),
+    ("Effectif fin", "741", "758", "= T58 au 31/12/2024 : 747 (lot 25) moins les 6 agents en "
+                                   "disponibilité"),
 ]
 
 
@@ -237,8 +238,8 @@ def build():
 
     # ------------------------------------------------------------------ 6. 2024
     s6 = bas5 + 40 + 50
-    sec6 = d.section(0, s6, WIDTH, 700, "6. 2024 : ce que la base devrait donner, face à "
-                                        "l'annuaire CNSS 2024 (permanents)")
+    sec6 = d.section(0, s6, WIDTH, 700, "6. 2024 : ce que la base devrait donner (environ), "
+                                        "face à l'annuaire CNSS 2024 (permanents)")
     cols = [("Colonne de T60", 380), ("Base", 200), ("Annuaire CNSS", 240),
             ("Pourquoi l'écart", 1640)]
     xs, x = [], 40
@@ -270,8 +271,8 @@ def build():
          "  l'écart = les mutations nettes", 20)
     bloc(890, s7, 820, hb,
          "CE QUI PEUT CHANGER (CTE parametres)\n"
-         "· disponibilité : reste dans l'effectif, ou sortie\n"
-         "  DISP et retour REM (QG6, T58 et T60 ensemble)\n"
+         "· disponibilité : sortie DISP et retour REM (retenu\n"
+         "  le 08/11, annuaire CNSS), ou PRESENT : T58 et T60\n"
          "· entré et sorti la même année : non, ou oui\n"
          "· décision → type de sortie (52 = fin de contrat)\n"
          "· mouvements internes : comme avant, ou retirés", 20,

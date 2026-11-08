@@ -267,6 +267,7 @@ def generate(fiches, force=False, seulement=None, dossier=FOLDER):
         except FileExistsError as e:
             print("IGNORÉE", e)
             continue
-        print(f"{len(d.elements)} éléments écrits dans {path.relative_to(ROOT)}")
+        print(f"inchangée : {path.relative_to(ROOT)}" if d.inchange
+              else f"{len(d.elements)} éléments écrits dans {path.relative_to(ROOT)}")
         for warning in d.warnings:
             print("ATTENTION", warning)

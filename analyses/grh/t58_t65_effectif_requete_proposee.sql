@@ -1,6 +1,6 @@
 -- =============================================================================
--- DTM_GRH_EFFECTIF — PROPOSITION du 04/11/2026, corrigée le 05/11/2026 après
--- le lot 24 (T58, T59, T61, T65)
+-- DTM_GRH_EFFECTIF — PROPOSITION du 04/11/2026, corrigée le 05/11/2026 (lot 24)
+-- et le 08/11/2026 (disponibilité hors effectif) ; T58, T59, T61, T65
 -- MÊME STRUCTURE que domaines/grh/dtm/sql/grh_effectif.sql : mêmes colonnes,
 -- même grain, même paramètre :1. Seules les règles changent (réunion du
 -- 03/11/2026 avec la CNSS, termes 1 à 9 de la fiche de lecture GRH, et recueil
@@ -55,12 +55,12 @@
 --          GROUP BY ID_TEMPS, NATURE_EMPLOI ORDER BY 2, 1;
 --   Le 31/12/2025 est ajouté au contrôle : c'est l'année où comptent les
 --   fiches sans état (embauches récentes, G2), comptées depuis le 05/11/2026.
--- Attendu (lots 17 à 19) : 742 permanents au 31/12/2024 (publié 758) ;
---   employés 129 H / 44 F (133 / 44), maîtrise 92 / 115 (94 / 114), cadres
---   moyens 139 / 165 (143 / 168), cadres supérieurs 40 / 18 (42 / 20) ;
---   T65 permanents 48,8 % en 2024 (publié 49,2 %), environ 42 % de 2020 à 2023
---   (publié 41 %, les 84 engagés de 2019, règle G11) ; temporaires : plus de
---   46 (publié), à cause de la règle G7 ; T61 à recalculer.
+-- Attendu : environ 741 permanents au 31/12/2024 (publié 758) : 747 (lot 25)
+--   moins 6 en disponibilité (lot 24). Lots 17 à 19 (742 agents) : employés
+--   129 H / 44 F (133 / 44), maîtrise 92 / 115 (94 / 114), cadres moyens
+--   139 / 165 (143 / 168), cadres supérieurs 40 / 18 (42 / 20) ; T65 48,8 %
+--   en 2024 (publié 49,2 %), environ 42 % de 2020 à 2023 (publié 41 %, G11) ;
+--   temporaires : plus de 46 (publié), à cause de G7 ; T61 à recalculer.
 --
 -- RÈGLES (détail et exemples dans analyses/grh/regles_effectif.md).
 -- La « date d'arrêté » est le jour où l'on photographie l'effectif
@@ -120,11 +120,11 @@
 --
 --   · G13 Actifs et inactifs
 --     Parmi les agents comptés : inactif = encore en disponibilité à la
---     date d'arrêté (dernière décision 07 plus récente que la dernière 18).
---     Les autres sont actifs. On ne lit plus le statut de la situation
---     (B détaché, D mis à disposition, E disponibilité, F suspendu,
---     H sous les drapeaux) : ce statut n'est pas daté. Le réglage
---     inactifs = STATUT permet de revenir à l'ancienne lecture.
+--     date d'arrêté (dernière décision 07 plus récente que la dernière 18) ;
+--     avec disponibilite = HORS_EFFECTIF (actuel), il n'est pas compté et
+--     NB_AGENTS_INACTIFS vaut 0. On ne lit plus le statut de la situation
+--     (B, D, E, F, H), qui n'est pas daté ; le réglage inactifs = STATUT
+--     permet de revenir à l'ancienne lecture.
 --
 -- RÉGLAGES (partie 0) : chacun peut changer sans réécrire la requête.
 --   · periodicite           : ANNUELLE = 31/12 des exercices clos ;
@@ -138,10 +138,10 @@
 --   · fin_contrat_inconnue  : PRESENT = temporaire sans fin connue compté ;
 --                             FICHE = compté seulement si la fiche n'est
 --                             pas INACTIF.
---   · disponibilite         : PRESENT = permanent en disponibilité reste
---                             dans l'effectif ;
---                             HORS_EFFECTIF = il en sort (QG6, pas encore
---                             tranché par la DRH) ; même valeur dans T60.
+--   · disponibilite         : HORS_EFFECTIF (retenu le 08/11/2026, annuaire
+--                             CNSS 2024 tableau 121) = l'agent en
+--                             disponibilité sort de l'effectif ; PRESENT = il
+--                             y reste (QG6) ; même valeur dans T60.
 --   · inactifs              : DECISIONS = inactif si disponibilité 07 sans
 --                             retour 18 après ;
 --                             STATUT = inactif si statut B, D, E, F ou H.
@@ -166,8 +166,8 @@ parametres AS (
            'OUI'                   AS retirer_interruptions,
            -- G7 : sans fin de contrat, 'PRESENT' (compté) ou 'FICHE' (si actif)
            'PRESENT'               AS fin_contrat_inconnue,
-           -- QG6 : en disponibilité, 'PRESENT' = compté (inactif) ; 'HORS_EFFECTIF' = sorti
-           'PRESENT'               AS disponibilite,
+           -- QG6 : en disponibilité, 'HORS_EFFECTIF' = sorti (retenu) ; 'PRESENT' = compté
+           'HORS_EFFECTIF'         AS disponibilite,
            -- G13 : inactifs via 'DECISIONS' (07/18) ou 'STATUT' (B,D,E,F,H)
            'DECISIONS'             AS inactifs
     FROM DUAL

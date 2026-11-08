@@ -196,17 +196,21 @@ T60 = dict(
         dict(terme="Effectif début et fin d'année",
              annuaire="Les colonnes « effectif début année » et « effectif fin année » (p. 51).",
              compris="Les agents présents au 31 décembre, comptés comme dans T58 : un permanent "
-                     "entré et pas encore parti, un temporaire sous contrat. L'effectif du début "
+                     "entré, pas encore parti ni en disponibilité (comme l'annuaire CNSS 2024), "
+                     "un temporaire sous contrat. L'effectif du début "
                      "d'une année est celui du 31 décembre de l'année d'avant. Chaque agent est "
                      "compté dans sa nature : le tableau se lit pour les permanents, ou pour les "
                      "temporaires (recueil des besoins v7, RH ligne 1).",
-             exemple="l'effectif du 1er janvier 2024 est celui du 31/12/2023 : 677 permanents.",
+             exemple="l'effectif du 1er janvier 2024 est celui du 31/12/2023 : environ 672 "
+                     "permanents.",
              question="Tu valides : l'effectif du 1er janvier = celui du 31 décembre d'avant ?",
              base=["La liste du terme 2 de T58, au 31/12/2023 et au 31/12/2024 ; une fiche sans "
-                   "état (ETAT_EMPLOYE vide, embauche récente) compte comme présente.",
+                   "état (ETAT_EMPLOYE vide, embauche récente) compte comme présente ; un agent "
+                   "en disponibilité (décision 07 sans 18 après) n'est pas compté.",
                    "GRH_SITUATION.NATURE_EMPLOIE, dans la dernière situation avant le 31/12 : "
                    "PERMANENT ou TEMPORAIRE.",
-                   "2024 : 677 au début, 747 à la fin (l'annuaire CNSS 2024 : 767 et 758)."],
+                   "2024 : environ 672 au début, 741 à la fin (l'annuaire CNSS 2024 : 767 et "
+                   "758)."],
              sql=sql(t60, "1")),
         dict(terme="Entrées et sorties",
              annuaire="Les entrées et les sorties de l'année (p. 51).",
@@ -240,17 +244,18 @@ T60 = dict(
         dict(terme="Autres entrées",
              annuaire="La colonne « autres » des entrées (p. 51).",
              compris="Dans cet ordre : un agent classé comme détaché (décision 37) ; un agent "
-                     "revenu de disponibilité (décision 18), seulement si la DRH décide qu'un "
-                     "agent en disponibilité sort de l'effectif ; un agent qui était dans l'autre "
-                     "nature au 31 décembre d'avant, comme un temporaire devenu permanent. Sinon, "
-                     "c'est une entrée sans explication, à vérifier.",
-             question="Une remise en activité après une disponibilité est-elle une entrée ?",
+                     "revenu de disponibilité (décision 18), comme dans l'annuaire CNSS 2024 "
+                     "(tableau 121) ; un agent qui était dans l'autre nature au 31 décembre "
+                     "d'avant, comme un temporaire devenu permanent. Sinon, c'est une entrée sans "
+                     "explication, à vérifier.",
+             question="Un temporaire devenu permanent dans l'année : tu valides qu'il compte en "
+                      "« autre entrée » chez les permanents, et pas en recrutement ?",
              base=["GRH_DECISION.CDEC_CODE : 37 classement d'un agent détaché (aucune chez les "
                    "permanents), 18 remise en activité.",
                    "GRH_SITUATION.NATURE_EMPLOIE au 31/12 d'avant : TEMPORAIRE pour un "
                    "temporaire devenu permanent.",
-                   "2024 : aucune autre entrée de permanent ; 4 décisions 18 (l'annuaire CNSS "
-                   "2024 : 7 autres entrées, dont 6 remises)."],
+                   "2024 : environ 4 remises en activité (décisions 18) ; l'annuaire CNSS 2024 : "
+                   "7 autres entrées, dont 6 remises et 1 détachement."],
              sql=sql(t60, "4")),
         dict(terme="Retraite",
              annuaire="La colonne « retraite » des sorties (p. 51).",
@@ -280,8 +285,8 @@ T60 = dict(
         dict(terme="Autres sorties",
              annuaire="La colonne « autres » des sorties (p. 51).",
              compris="Démission (36), licenciement (54), fin de contrat (35, et la rupture du "
-                     "contrat 52), mise en disponibilité (07, seulement si la DRH la sort de "
-                     "l'effectif), agent passé dans l'autre nature. Pour un temporaire, c'est le "
+                     "contrat 52), mise en disponibilité (07 : l'agent sort de l'effectif, comme "
+                     "dans l'annuaire CNSS 2024), agent passé dans l'autre nature. Pour un temporaire, c'est le "
                      "dernier départ de l'année qui compte. Sans départ daté, c'est une sortie "
                      "sans explication, à vérifier. L'annuaire CNSS 2024 compte aussi des "
                      "détachements, introuvables dans la base.",

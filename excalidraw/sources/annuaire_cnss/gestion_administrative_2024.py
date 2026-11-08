@@ -9,8 +9,9 @@ activité est une entrée et la disponibilité une sortie ; est-ce la réponse �
 2. les autres règles, tableau par tableau (T58 à T65) ;
 3. ce que je propose d'intégrer, et ce qui reste ouvert.
 
-Analyse ponctuelle, rangée avec les autres analyses de l'annuaire de la CNSS : les règles, les
-requêtes et les questions du domaine GRH ne sont pas modifiées (à faire sur demande).
+Rangée avec les autres analyses de l'annuaire de la CNSS. Ses conclusions ont été intégrées le
+08/11/2026, à la demande de l'utilisateur : disponibilité hors effectif dans T58 et T60, règles,
+questions, fiches et schémas GRH mis à jour.
 Les chiffres sont recopiés de cnss_files/Annuaire_2024_CNSS_BURKINA-FASO.pdf, p. 89 à 94
 (pdftotext -layout) ; ceux de la base viennent des lots GRH (analyses/grh).
 
@@ -102,7 +103,7 @@ VERDICT = ("OUI, ÇA RÉPOND À QG6 (et à la question 2 de T60). Pour la CNSS, 
            "règle écrite par la CNSS sur ce point, et les décisions 07 et 18 de la base la "
            "suivent.\n"
            "Chez nous : le réglage disponibilite passe à HORS_EFFECTIF, dans la CTE parametres "
-           "des deux requêtes, T58 et T60 (pas encore fait : à ta demande).")
+           "des deux requêtes, T58 et T60 (fait le 08/11/2026, à ta demande).")
 
 EFFET = ("CE QUE ÇA CHANGE DANS NOS CHIFFRES (2024, permanents)\n"
          "· Effectif fin 2024 : 741 au lieu de 747, les 6 agents en disponibilité sortent ; "
@@ -230,8 +231,7 @@ def build():
     d.text(0, 0, "Annuaire CNSS 2024 · La gestion administrative, face à nos règles", 48)
     d.text(0, 66, "Annuaire statistique de la CNSS n° 32, partie IX, tableaux 119 à 126 (p. 89 à "
                   "94) : les tableaux du personnel au format CIPRES\nce qu'ils disent de nos "
-                  "règles GRH et de nos questions ouvertes · analyse ponctuelle, sans changer nos "
-                  "règles · état au 08/11/2026", 22, C["doux"])
+                  "règles GRH et de nos questions ouvertes · conclusions intégrées le 08/11/2026", 22, C["doux"])
     lx = 25
     for genre, (bg, bord, label) in VERDICTS.items():
         d.box(lx, 130, 40, 22, bg=bg, stroke=bord)
@@ -352,8 +352,8 @@ def build():
 
     # ------------------------------------------------------------------ 3. propositions
     s3 = sec2["y"] + sec2["height"] + 50
-    sec3 = d.section(0, s3, WIDTH, 0, "3. Ce que je propose d'intégrer dans nos règles (à ta "
-                                      "demande), et ce qui reste ouvert")
+    sec3 = d.section(0, s3, WIDTH, 0, "3. Ce qui est intégré dans nos règles (08/11/2026), et "
+                                      "ce qui reste ouvert")
     lignes = [wrap(f"{i}. {p}", 20, INNER - 70) for i, p in enumerate(PROPOSITIONS, 1)]
     hp = 20 + sum(height_of(t, 20) + 10 for t in lignes) + 10
     g = d.group()

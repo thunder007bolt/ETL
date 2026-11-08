@@ -1,6 +1,6 @@
 # Le mouvement du personnel (T60) : règles proposées
 
-État au 08/11/2026. Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Ces règles sont des propositions, à faire viser par la DRH.
+État au 08/11/2026. Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Ces règles sont des propositions, à faire viser par la DRH. Le 08/11, l'annuaire CNSS 2024 (tableaux 119 à 126, schéma `annuaire cnss/gestion_administrative_2024`) a tranché la disponibilité : elle sort de l'effectif (réglage HORS_EFFECTIF).
 
 La requête qui applique ces règles : [t60_requete_proposee.sql](t60_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête, dans la CTE `parametres` (partie 0), comme dans la requête de l'effectif. Changer un réglage ne demande pas de réécrire la requête.
 
@@ -36,14 +36,14 @@ Ordre de priorité : une décision de réunion avec la CNSS, puis le recueil des
 |---|---|---|---|---|
 | DEBUT | Début de l'année | INITIAL | Effectif début | G14 |
 | RECRU | Recrutement | ENTREES | Recrutement | G8 |
-| REM | Remise en activité | ENTREES | Autres entrées | G8, réglage `disponibilite` = HORS_EFFECTIF |
+| REM | Remise en activité | ENTREES | Autres entrées | G8, réglage `disponibilite` = HORS_EFFECTIF (valeur retenue) |
 | DETAC | Détaché | ENTREES | Autres entrées | G8 (décision 37) |
 | AUTRE_ENT | Autres entrées | ENTREES | Autres entrées | G8 |
 | RET | Retraite | SORTIES | Retraite | G9 (décision 02) |
 | DEC | Décès | SORTIES | Décès | G9 (date de décès, sinon décision 34) |
 | LIC | Licenciement | SORTIES | Autres sorties | G9 (décision 54) |
 | DEM | Démission | SORTIES | Autres sorties | G9 (décision 36) |
-| DISP | Disponibilité (sans solde) | SORTIES | Autres sorties | G9, réglage `disponibilite` = HORS_EFFECTIF |
+| DISP | Disponibilité (sans solde) | SORTIES | Autres sorties | G9, réglage `disponibilite` = HORS_EFFECTIF (valeur retenue) |
 | MISE_DIS | Mise à disposition | SORTIES | Autres sorties | pas rempli (question 6) |
 | FIN_DETACH | Fin de détachement | SORTIES | Autres sorties | pas rempli (question 5) |
 | FIN_CTRAT | Fin de contrat | SORTIES | Autres sorties | G9 (décisions 35, 52) |
@@ -74,7 +74,7 @@ Pour un permanent (et un agent sans situation) :
 
 1. **DETAC** s'il a une décision **37** (classement d'un agent détaché) dans l'exercice ;
 2. **RECRU** s'il est **entré dans l'exercice** : date d'embauche, à défaut date de prise de service (motif EMBAUCHE) ;
-3. **REM** s'il était **en disponibilité au début** (décision 07 sans 18 après). Seulement avec le réglage `disponibilite` = HORS_EFFECTIF : sinon un agent en disponibilité ne quitte jamais l'effectif.
+3. **REM** s'il était **en disponibilité au début** (décision 07 sans 18 après). Seulement avec le réglage `disponibilite` = HORS_EFFECTIF, la valeur retenue le 08/11/2026 : avec PRESENT, un agent en disponibilité ne quitte jamais l'effectif.
 
 Pour un temporaire :
 
@@ -105,7 +105,7 @@ Un agent **sort** dans l'exercice quand il est présent au début dans une natur
    | 54 licenciement | LIC |
    | date de décès de la fiche | DEC |
 
-2. **DISP** s'il est **en disponibilité à la fin**. Seulement avec le réglage `disponibilite` = HORS_EFFECTIF.
+2. **DISP** s'il est **en disponibilité à la fin**. Seulement avec le réglage `disponibilite` = HORS_EFFECTIF, la valeur retenue.
 3. **AUTRE_SORT** s'il est présent à la fin dans **une autre nature** (motif DEVIENT_PERMANENT ou DEVIENT_TEMPORAIRE) ;
 4. sinon **AUTRE_SORT** avec le motif SANS_MOTIF : un agent sorti sans départ daté.
 
@@ -166,10 +166,12 @@ Ils s'écrivent en tête de la requête, dans la CTE `parametres` (partie 0), co
 
 | Valeur | Ce que fait la requête |
 |---|---|
-| **PRESENT** (valeur actuelle) | un permanent en disponibilité (décision 07, pas encore de retour 18) reste dans l'effectif : ni sortie, ni retour |
-| **HORS_EFFECTIF** | il sort de l'effectif : une sortie DISP à la mise en disponibilité, une entrée REM au retour, comme le tableau 121 de l'annuaire CNSS 2024 |
+| **HORS_EFFECTIF** (valeur retenue le 08/11/2026) | un permanent en disponibilité (décision 07, pas encore de retour 18) sort de l'effectif : une sortie DISP à la mise en disponibilité, une entrée REM au retour, comme le tableau 121 de l'annuaire CNSS 2024 |
+| **PRESENT** | il reste dans l'effectif : ni sortie, ni retour |
 
-La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa propre CTE `parametres`. Il faut lui donner **la même valeur dans les deux requêtes**, sinon la fin de T60 ne retombe plus sur l'effectif de T58. La DRH n'a pas encore tranché (QG6).
+La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa propre CTE `parametres`. Il faut lui donner **la même valeur dans les deux requêtes**, sinon la fin de T60 ne retombe plus sur l'effectif de T58.
+
+**Pourquoi HORS_EFFECTIF (QG6, tranchée le 08/11/2026).** Le tableau 121 de l'annuaire CNSS 2024 range « Disponibilité » dans les sorties et « Remise en activité » dans les entrées. Son égalité début + entrées − sorties = fin tient chaque année de 2015 à 2024 : l'effectif publié ne compte donc pas les agents en disponibilité. L'interlocuteur de la CNSS l'avait dit à la réunion du 03/11 (M11). Le recueil des besoins, l'atelier de Kaya et l'Annuaire CIPRES n'en disent rien. Disponibilités moins remises, cumulées depuis 2015, donnent +6 fin 2024, l'ordre de grandeur des 6 agents en disponibilité que la base trouve au 31/12/2024 (lot 24).
 
 *Exemple : mise en disponibilité le 01/03/2023, remise en activité le 01/06/2025. Avec PRESENT, l'agent est compté au début et à la fin de chaque année, sans mouvement. Avec HORS_EFFECTIF, il sort en 2023 (DISP), n'est pas compté au 31/12/2023 ni au 31/12/2024, et rentre en 2025 (REM).*
 
@@ -189,13 +191,13 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 
 | Point | Ce qui est retenu | Ce qui pourrait changer | Qui décide |
 |---|---|---|---|
-| Disponibilité (réglage `disponibilite`) | PRESENT : l'agent reste dans l'effectif, ni sortie ni retour | HORS_EFFECTIF : sortie DISP et retour REM, dans T58 et T60 à la fois | DRH (QG6) |
+| Disponibilité (réglage `disponibilite`) | HORS_EFFECTIF : sortie DISP et retour REM, dans T58 et T60 à la fois (annuaire CNSS 2024, tableau 121) | PRESENT : l'agent reste dans l'effectif, ni sortie ni retour | tranché le 08/11/2026 (QG6) ; la DRH peut encore le revoir |
 | Date d'un décès | Date de décès, sinon liquidation des droits (34) | Une date saisie, ou celle du communiqué nécrologique | DRH (QG3, M12) |
 | Date d'entrée | Embauche, sinon prise de service (comme T58) | Prise de service d'abord, comme l'ancienneté | CNSS (M10) |
 | Entré et sorti la même année | Pas compté | Compté en entrée et en sortie | DRH (Q7) |
 | Rupture du contrat (52) | Fin de contrat | Licenciement, ou autre sortie | DRH |
-| Mise à disposition (14) | Pas une sortie | Une sortie MISE_DIS, avec un retour | DRH |
-| Détachements | Décision 37 (aucune chez les permanents) | La source que donnera la DRH | DRH (QG7) |
+| Mise à disposition (14) | Pas une sortie : le tableau 121 de l'annuaire CNSS 2024 n'en a pas de colonne | Une sortie MISE_DIS, avec un retour | DRH |
+| Détachements | Décision 37 (aucune chez les permanents) ; l'annuaire CNSS les compte (2 en 2023, 1 en 2024) | La source que donnera la DRH | DRH (QG7) |
 | Mutations entre unités | Pas de mouvement ; fin d'une unité lue dans T58 | Des lignes d'arrivée et de départ par unité | CNSS |
 | Mouvements internes | Repris de GRH_MOUVEMENT comme avant | Retirés (`mouvements_internes` = AUCUN) | Jules |
 
@@ -203,7 +205,9 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 
 ## 5. Les chiffres attendus, face à l'annuaire CNSS 2024
 
-Permanents (agents A), réglages par défaut (disponibilité PRESENT). « Base » : ce que la requête devrait donner, d'après les lots 17, 18 et 25, à quelques agents près. « Annuaire » : tableau 121 de l'annuaire CNSS 2024.
+Permanents (agents A), avec le réglage disponibilité PRESENT. « Base » : ce que la requête devrait donner, d'après les lots 17, 18 et 25, à quelques agents près. « Annuaire » : tableau 121 de l'annuaire CNSS 2024.
+
+Avec le réglage retenu (HORS_EFFECTIF), le début et la fin baissent des agents en disponibilité à chaque 31/12 (6 au 31/12/2024, lot 24), et les disponibilités et remises en activité apparaissent. 2024 : environ 672 au début, 104 recrutements, 4 autres entrées (remises), 25 retraites, 5 décès, 9 autres sorties (2 démissions, 1 licenciement, 5 disponibilités, 1 sans départ daté), 741 à la fin. L'écart avec les 758 publiés passe de 11 à 17.
 
 | Année | | Début | Recrutement | Autres entrées | Retraite | Décès | Autres sorties | Fin |
 |---|---|---|---|---|---|---|---|---|
@@ -225,7 +229,7 @@ Le détail de l'annuaire, autres entrées : remises en activité 3, 2, 3, 5, 6 ;
 Les écarts s'expliquent :
 
 - **Début et fin** : les 84 agents engagés en 2019, sans date de départ, que la base ne compte jamais (G11). L'annuaire les sort tous en 2024 (les 84 « autres »). Sans eux, l'écart tombe à 8 à 16 agents par an.
-- **Disponibilités et remises en activité** : la base les a (décisions 07 et 18, à 1 à 3 près par an), mais le réglage PRESENT les garde dans l'effectif. Avec HORS_EFFECTIF, elles apparaissent en DISP et REM.
+- **Disponibilités et remises en activité** : la base les a (décisions 07 et 18, à 1 à 3 près par an). Avec le réglage retenu (HORS_EFFECTIF), elles apparaissent en DISP et REM, comme dans l'annuaire.
 - **Décès** : lus dans la liquidation des droits, environ 8 mois après le décès. Un décès de fin d'année glisse sur l'année suivante (19 sorties pour 17 décès de 2020 à 2024).
 - **Recrutements, retraites, démissions, licenciements** : retrouvés à l'unité ou à quelques unités près.
 
@@ -235,8 +239,8 @@ Les écarts s'expliquent :
 
 1. **Les 84 agents engagés en 2019** n'ont pas de date de départ : la base ne les compte jamais, ni en entrée ni en sortie. L'annuaire CNSS les compte de 2019 à 2023. Ce point est sans effet à partir de 2025.
 2. **Aucune date de décès n'est saisie depuis 2010.** Un décès compte à la liquidation des droits, souvent l'année suivante. La solution est de saisir la date du décès dans l'application GRH.
-3. **Les disponibilités et les remises en activité** ne sont des mouvements que si la DRH décide qu'un agent en disponibilité sort de l'effectif (QG6) : on passe alors le réglage `disponibilite` à HORS_EFFECTIF dans les deux requêtes. L'annuaire CNSS 2024 les compte, et l'interlocuteur de la CNSS l'a dit aussi à la réunion du 03/11 (M11).
-4. **Les détachements et les fins de détachement** publiés par l'annuaire ne se trouvent pas dans la base : aucune décision 37 chez les permanents.
+3. **Les disponibilités et les remises en activité** sont des mouvements : un agent en disponibilité sort de l'effectif et y rentre à sa remise en activité, comme dans l'annuaire CNSS 2024 (tableau 121) et comme l'a dit l'interlocuteur de la CNSS le 03/11 (M11). Réglage `disponibilite` = HORS_EFFECTIF dans les deux requêtes, depuis le 08/11/2026. L'effectif de la base baisse d'autant (6 agents au 31/12/2024).
+4. **Les détachements et les fins de détachement** publiés par l'annuaire (tableau 121) ne se trouvent pas dans la base : aucune décision 37 chez les permanents.
 5. **Un agent embauché en fin d'année sans situation au 31/12** est compté dans T58 avec une nature vide, donc dans aucun des deux tableaux. L'année suivante, il apparaît chez les permanents en « autre entrée » (motif ETAIT_SANS_SITUATION), et non en recrutement.
 6. **Par unité, la fin ne se calcule pas** : les mutations entre unités ne sont pas des entrées ni des sorties. La fin d'une unité se lit dans T58.
 7. **Un temporaire parti puis réengagé dans la même année**, présent aux deux 31/12, ne fait aucun mouvement.
@@ -250,12 +254,12 @@ Chacune a une valeur par défaut dans la requête ; la réponse change un régla
 
 | N° | Question | En attendant |
 |---|---|---|
-| 1 | La liste des « autres » ci-dessus (remise en activité, détaché, démission, licenciement, disponibilité, mise à disposition, fin de détachement, fin de contrat, autres) vous convient-elle ? | La liste de la CNSS (GRH_TYPE_MOUVEMENT) |
-| 2 | Une mise en disponibilité est-elle une sortie, et la remise en activité une entrée ? (QG6) | Non : l'agent reste dans l'effectif (réglage PRESENT) |
+| 1 | La liste des « autres » ci-dessus (remise en activité, détaché, démission, licenciement, disponibilité, mise à disposition, fin de détachement, fin de contrat, autres) vous convient-elle ? | La liste de la CNSS (GRH_TYPE_MOUVEMENT) ; c'est celle du tableau 121 de l'annuaire CNSS 2024 |
+| 2 | Une mise en disponibilité est-elle une sortie, et la remise en activité une entrée ? (QG6) | **Tranchée le 08/11/2026 : oui**, comme le tableau 121 de l'annuaire CNSS 2024 (réglage HORS_EFFECTIF) |
 | 3 | Peut-on saisir la date du décès, ou celle du communiqué nécrologique ? (QG3, M12) | La liquidation des droits (34) |
 | 4 | La date d'entrée est-elle la prise de service, comme pour l'ancienneté ? (M10) | L'embauche, sinon la prise de service |
-| 5 | Où sont saisis les détachements et les fins de détachement ? (QG7) | La décision 37 |
-| 6 | Une mise à disposition (décision 14) est-elle une sortie ? | Non |
+| 5 | Où sont saisis les détachements et les fins de détachement ? L'annuaire CNSS les compte (QG7) | La décision 37 |
+| 6 | Une mise à disposition (décision 14) est-elle une sortie ? | Non : aucune colonne dans le tableau 121 de l'annuaire CNSS 2024 |
 | 7 | Un agent recruté puis parti dans la même année doit-il apparaître en entrée et en sortie ? | Non |
 | 8 | Pour une direction ou une agence, faut-il montrer les arrivées et les départs par mutation ? | Non : la fin de l'unité vient de T58 |
 
@@ -281,9 +285,9 @@ Pas encore exécutée sur la base de la CNSS : c'est la tâche 1.
 
 | N° | Tâche | Qui | État |
 |---|---|---|---|
-| 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026), de 2020 à 2025, avec le réglage `disponibilite` à PRESENT, puis à HORS_EFFECTIF, et comparer au tableau du point 5 | toi, puis Claude | à faire |
+| 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026), de 2020 à 2025, avec le réglage retenu (`disponibilite` = HORS_EFFECTIF), puis avec PRESENT, et comparer au point 5 | toi, puis Claude | à faire |
 | 2 | Vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT contient les 18 codes de la CNSS, plus NOM (`SELECT CODE_TYPE_MVT, CODE_NAT_MVT FROM DTM.DIM_GRH_TYPE_MOUVEMENT ORDER BY 2, 1`) | toi | à faire |
 | 3 | Mettre à jour les termes de T60 de la fiche de lecture GRH et la fiche de validation T60 avec ces règles, puis les voir en réunion avec la CNSS | Claude, puis toi avec la CNSS | mises à jour le 08/11/2026 (9 termes ; 9 règles et 9 questions) ; réunion à faire |
-| 4 | Faire trancher les questions du point 7, d'abord la disponibilité (elle change aussi T58) | DRH | à faire |
+| 4 | Faire trancher les questions du point 7 ; la disponibilité est tranchée le 08/11/2026 par l'annuaire CNSS 2024 (HORS_EFFECTIF, T58 et T60) | DRH | en cours |
 | 5 | Script d'ajout des quatre colonnes dans DTM et ODS.DTM_GRH_MOUVEMENT, puis remplacement de grh_mouvement.sql par cette requête | Claude, après le visa de la DRH | à faire |
 | 6 | Dans OBIEE : la maquette de T60 (point 2), les filtres qualité A et nature, le détail des autres, la fin par unité lue dans T58 | toi, avec Jules | à faire |

@@ -25,7 +25,7 @@ import sys
 import time
 from pathlib import Path
 
-from historique import moved_to, write_with_history
+from historique import meme_dessin, moved_to, write_with_history
 
 FONT = 5            # Excalifont, la police manuscrite par défaut d'Excalidraw
 CHAR_WIDTH = 0.63   # largeur d'un caractère hors des classes ci-dessous, en fraction de la taille
@@ -89,6 +89,8 @@ class Diagram:
         self.warnings = []
         self._rng = random.Random(seed)
         self._now = int(time.time() * 1000)
+        # vrai après save() si le dessin était déjà celui du disque : rien n'a été écrit
+        self.inchange = False
 
     def _id(self):
         return "".join(self._rng.choice(_ALPHABET) for _ in range(20))
@@ -222,11 +224,17 @@ class Diagram:
             raise FileExistsError(
                 f"{path} a été déplacé dans la visionneuse vers {target}. Pour le régénérer à sa "
                 f"nouvelle place : --output {target} --force (et mettre à jour OUTPUT dans le script).")
+        content = json.dumps(self.to_dict(), ensure_ascii=False, indent=2)
+        # même dessin que sur le disque (à l'heure près) : ni écriture, ni nouvelle version
+        if path.exists() and meme_dessin(path.read_text(encoding="utf-8"), content):
+            self.inchange = True
+            return path
         if path.exists() and not force:
             raise FileExistsError(
                 f"{path} existe déjà et a peut-être été retouché dans la visionneuse. "
                 "Relancer avec --force pour l'écraser : l'état actuel restera dans l'historique.")
-        write_with_history(path, json.dumps(self.to_dict(), ensure_ascii=False, indent=2), "script")
+        write_with_history(path, content, "script")
+        self.inchange = False
         return path
 
 
@@ -242,6 +250,9 @@ def main(build, default_output):
         path = diagram.save(args.output, force=args.force)
     except FileExistsError as e:
         sys.exit(str(e))
-    print(f"{len(diagram.elements)} éléments écrits dans {path}")
+    if diagram.inchange:
+        print(f"inchangé (même dessin, rien d'écrit) : {path}")
+    else:
+        print(f"{len(diagram.elements)} éléments écrits dans {path}")
     for warning in diagram.warnings:
         print("ATTENTION", warning)

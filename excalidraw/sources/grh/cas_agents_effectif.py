@@ -54,7 +54,7 @@ PERMANENTS = [
     ("Départ annulé", "la décision de départ est annulée\n"
      "par une décision 40 : on l'ignore", "COMPTÉ (DÉPART IGNORÉ)", "oui"),
     ("En disponibilité", "mis en disponibilité (07),\npas encore de retour (18)\n"
-     "6 permanents au 31/12/2024", "COMPTÉ, MAIS INACTIF", "inactif"),
+     "6 permanents au 31/12/2024", "PAS COMPTÉ (HORS EFFECTIF)", "non"),
     ("Revenu de disponibilité", "remis en activité (18) ; la disponibilité\n"
      "est retirée de son ancienneté", "COMPTÉ, ACTIF", "oui"),
     ("Détaché, mis à disposition,\nsuspendu, sous les drapeaux",
@@ -233,8 +233,8 @@ def build():
     s6 = s5 + 360 + 40
     bloc(40, s6, 1240, 250,
          "CE QUI PEUT CHANGER, SANS RÉÉCRIRE LA REQUÊTE (réglages)\n"
-         "· disponibilité : compté (PRESENT) ou sorti de l'effectif\n"
-         "  (HORS_EFFECTIF) : à trancher par la DRH (QG6)\n"
+         "· disponibilité : sorti de l'effectif (HORS_EFFECTIF, retenu\n"
+         "  le 08/11 : annuaire CNSS 2024) ou compté (PRESENT)\n"
          "· temporaire sans fin connue : compté (PRESENT),\n"
          "  ou seulement si sa fiche est active (FICHE)\n"
          "· liste des départs : 02, 34, 35, 36, 52, 54, un code en plus ou en moins", 20,

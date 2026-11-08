@@ -26,7 +26,7 @@
       "versionNonce": 837365134,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "La requête du mouvement (T60), pas à pas",
@@ -62,7 +62,7 @@
       "versionNonce": 1264623756,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "Comment t60_requete_proposee.sql retrouve les entrées et les sorties de chaque année, avec la seule photo d'aujourd'hui\nFaits du DWH, cliché 102026 · règles proposées, en attente du visa de la DRH · agents fictifs · état au 08/11/2026",
@@ -100,7 +100,7 @@
       "versionNonce": 550308398,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -127,7 +127,7 @@
       "versionNonce": 206535552,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1. L'idée : comparer deux photos de l'effectif",
@@ -174,7 +174,7 @@
           "id": "DS9gP1oJ1IpAm0K15OBJ"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -201,7 +201,7 @@
       "versionNonce": 1193349056,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "LA TABLE DES MOUVEMENTS NE SUFFIT PAS\nGRH_MOUVEMENT : affectations,\nmutations, nominations ;\nni recrutement, ni retraite, ni décès\n(lot 1 ; réunion du 03/11, M06)",
@@ -252,7 +252,7 @@
           "id": "JtbslLxxX7CBQ2zkL8K1"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -279,7 +279,7 @@
       "versionNonce": 708743282,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "MAIS L'EFFECTIF SE REJOUE À CHAQUE 31/12\nla requête de l'effectif (T58) dit\nqui était présent à n'importe quel 31/12 :\nentrées, départs, contrats et\ndisponibilités sont datés",
@@ -326,7 +326,7 @@
           "id": "JtbslLxxX7CBQ2zkL8K1"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -353,7 +353,7 @@
       "versionNonce": 1145848313,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "ALORS T60 COMPARE DEUX PHOTOS\nle 31/12 d'avant et le 31/12 de l'année\nprésent à la fin, pas au début : ENTRÉE\nprésent au début, plus à la fin : SORTIE\nla fiche ou une décision dit pourquoi",
@@ -391,7 +391,7 @@
       "versionNonce": 1206947696,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -444,7 +444,7 @@
       "versionNonce": 854491282,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -499,7 +499,7 @@
       "versionNonce": 552145633,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -528,7 +528,7 @@
       "versionNonce": 1614123658,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "Toujours : DÉBUT + ENTRÉES − SORTIES = FIN, et la fin est l'effectif de T58 au 31/12. Chaque agent est comparé dans sa nature (permanent, temporaire) :\nle filtre de nature d'OBIEE donne un tableau des permanents et un tableau des temporaires, chacun juste.",
@@ -566,7 +566,7 @@
       "versionNonce": 368876981,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -593,7 +593,7 @@
       "versionNonce": 1673578992,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "2. La requête, partie par partie (numéros du fichier et lignes)",
@@ -638,7 +638,7 @@
           "id": "phedD1ekkJJMdfRClSgE"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -667,7 +667,7 @@
       "versionNonce": 940126332,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PARTIES 1 À 7 : LES MÊMES QUE LA REQUÊTE DE L'EFFECTIF (voir « la requête de l'effectif, pas à pas », dans le dossier T58 effectif)",
@@ -710,7 +710,7 @@
           "id": "uuQILiKs83gTJLDZgUmm"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -737,16 +737,16 @@
       "versionNonce": 1814514254,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "1. LES 31/12\nde chaque année, sans trou\nexercice : d0 = 31/12\nd'avant, d1 = 31/12\n\nl. 235 à 259",
+      "text": "1. LES 31/12\nde chaque année, sans trou\nexercice : d0 = 31/12\nd'avant, d1 = 31/12\n\nl. 243 à 267",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "7KJoyUn2HnJgrUWQRwcf",
-      "originalText": "1. LES 31/12\nde chaque année, sans trou\nexercice : d0 = 31/12\nd'avant, d1 = 31/12\n\nl. 235 à 259",
+      "originalText": "1. LES 31/12\nde chaque année, sans trou\nexercice : d0 = 31/12\nd'avant, d1 = 31/12\n\nl. 243 à 267",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -780,7 +780,7 @@
           "id": "0KXH6fNPxYVNIHwae9IE"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -807,16 +807,16 @@
       "versionNonce": 1987886146,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "2. LES AGENTS\nentrée = embauche,\nsinon prise de service\nqualité A, B ou C\n\nl. 261 à 270",
+      "text": "2. LES AGENTS\nentrée = embauche,\nsinon prise de service\nqualité A, B ou C\n\nl. 269 à 278",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "DglYRFnkmsNrdK7hdnBq",
-      "originalText": "2. LES AGENTS\nentrée = embauche,\nsinon prise de service\nqualité A, B ou C\n\nl. 261 à 270",
+      "originalText": "2. LES AGENTS\nentrée = embauche,\nsinon prise de service\nqualité A, B ou C\n\nl. 269 à 278",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -850,7 +850,7 @@
           "id": "kOZKffIUOa9TfZYuuJFQ"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -877,16 +877,16 @@
       "versionNonce": 1404131964,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "3. LES DÉPARTS\n02, 34, 35, 36, 52, 54,\nou date de décès ; chacun\navec son type de sortie\n\nl. 272 à 317",
+      "text": "3. LES DÉPARTS\n02, 34, 35, 36, 52, 54,\nou date de décès ; chacun\navec son type de sortie\n\nl. 280 à 325",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "DC3PvU5arcghGGZuQub3",
-      "originalText": "3. LES DÉPARTS\n02, 34, 35, 36, 52, 54,\nou date de décès ; chacun\navec son type de sortie\n\nl. 272 à 317",
+      "originalText": "3. LES DÉPARTS\n02, 34, 35, 36, 52, 54,\nou date de décès ; chacun\navec son type de sortie\n\nl. 280 à 325",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -920,7 +920,7 @@
           "id": "MN6rgxqFAYGjEC4Rko4X"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -947,16 +947,16 @@
       "versionNonce": 1915082909,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "4. LES CONTRATS\nchaque engagement 50 :\nun début et une fin\n\nl. 319 à 349",
+      "text": "4. LES CONTRATS\nchaque engagement 50 :\nun début et une fin\n\nl. 327 à 357",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "EjXw6VWHleIjBKkZbbiG",
-      "originalText": "4. LES CONTRATS\nchaque engagement 50 :\nun début et une fin\n\nl. 319 à 349",
+      "originalText": "4. LES CONTRATS\nchaque engagement 50 :\nun début et une fin\n\nl. 327 à 357",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -990,7 +990,7 @@
           "id": "TcZLQA5dQaUhZ3H7p5UJ"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1017,16 +1017,16 @@
       "versionNonce": 413250214,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "5. LES DISPONIBILITÉS\ndernière 07 et\ndernière 18 au 31/12\n\nl. 351 à 364",
+      "text": "5. LES DISPONIBILITÉS\ndernière 07 et\ndernière 18 au 31/12\n\nl. 359 à 372",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "pwVuay45JQvKvsY71Z7r",
-      "originalText": "5. LES DISPONIBILITÉS\ndernière 07 et\ndernière 18 au 31/12\n\nl. 351 à 364",
+      "originalText": "5. LES DISPONIBILITÉS\ndernière 07 et\ndernière 18 au 31/12\n\nl. 359 à 372",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1060,7 +1060,7 @@
           "id": "q3kwrYq96ptZV1PTsYwg"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1087,16 +1087,16 @@
       "versionNonce": 1446826144,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "6. LA SITUATION\nla dernière au 31/12 :\nnature, qualification,\nunité\n\nl. 366 à 377",
+      "text": "6. LA SITUATION\nla dernière au 31/12 :\nnature, qualification,\nunité\n\nl. 374 à 385",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "jIm499H23leturyo2voV",
-      "originalText": "6. LA SITUATION\nla dernière au 31/12 :\nnature, qualification,\nunité\n\nl. 366 à 377",
+      "originalText": "6. LA SITUATION\nla dernière au 31/12 :\nnature, qualification,\nunité\n\nl. 374 à 385",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1130,7 +1130,7 @@
           "id": "dG0C2wMkV26meDyVXjlr"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1157,16 +1157,16 @@
       "versionNonce": 226061655,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "7. LES PRÉSENTS\nchaque agent à chaque\n31/12, règles de T58\n(G2, G7)\n\nl. 379 à 413",
+      "text": "7. LES PRÉSENTS\nchaque agent à chaque\n31/12, règles de T58\n(G2, G7)\n\nl. 387 à 421",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "HQFq2xHqx9w0JAy3qnQz",
-      "originalText": "7. LES PRÉSENTS\nchaque agent à chaque\n31/12, règles de T58\n(G2, G7)\n\nl. 379 à 413",
+      "originalText": "7. LES PRÉSENTS\nchaque agent à chaque\n31/12, règles de T58\n(G2, G7)\n\nl. 387 à 421",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1214,7 +1214,7 @@
           "id": "1j9VwlY523LW7ZckWElY"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1243,16 +1243,16 @@
       "versionNonce": 814228513,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "8. LES DEUX PHOTOS DE CHAQUE EXERCICE (G14) · l. 415 à 447\nau_debut : les présents au 31/12 d'avant · a_la_fin : les présents au 31/12 de l'année · comparés agent par agent, dans leur nature\nà côté : le dernier départ de l'année (pour les temporaires) et les agents classés comme détachés (37)",
+      "text": "8. LES DEUX PHOTOS DE CHAQUE EXERCICE (G14) · l. 423 à 455\nau_debut : les présents au 31/12 d'avant · a_la_fin : les présents au 31/12 de l'année · comparés agent par agent, dans leur nature\nà côté : le dernier départ de l'année (pour les temporaires) et les agents classés comme détachés (37)",
       "fontSize": 20,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "8. LES DEUX PHOTOS DE CHAQUE EXERCICE (G14) · l. 415 à 447\nau_debut : les présents au 31/12 d'avant · a_la_fin : les présents au 31/12 de l'année · comparés agent par agent, dans leur nature\nà côté : le dernier départ de l'année (pour les temporaires) et les agents classés comme détachés (37)",
+      "originalText": "8. LES DEUX PHOTOS DE CHAQUE EXERCICE (G14) · l. 423 à 455\nau_debut : les présents au 31/12 d'avant · a_la_fin : les présents au 31/12 de l'année · comparés agent par agent, dans leur nature\nà côté : le dernier départ de l'année (pour les temporaires) et les agents classés comme détachés (37)",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1281,7 +1281,7 @@
       "versionNonce": 266540365,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -1345,7 +1345,7 @@
           "id": "U7NS7fwDrVgXTYwG1xHv"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1374,16 +1374,16 @@
       "versionNonce": 1702474083,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "9. LES ENTRÉES (G8) · l. 449 à 506\nprésent à la fin, absent au début\n(dans la même nature) ; le code :\n· DETAC : décision 37\n· RECRU : embauche dans l'année ;\n  temporaire : aucun contrat au début\n· REM : retour de dispo (réglage)\n· AUTRE_ENT : autre nature au début\n  (ETAIT_TEMPORAIRE…), sinon SANS_MOTIF",
+      "text": "9. LES ENTRÉES (G8) · l. 457 à 514\nprésent à la fin, absent au début\n(dans la même nature) ; le code :\n· DETAC : décision 37\n· RECRU : embauche dans l'année ;\n  temporaire : aucun contrat au début\n· REM : retour de dispo (réglage)\n· AUTRE_ENT : autre nature au début\n  (ETAIT_TEMPORAIRE…), sinon SANS_MOTIF",
       "fontSize": 19,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "9. LES ENTRÉES (G8) · l. 449 à 506\nprésent à la fin, absent au début\n(dans la même nature) ; le code :\n· DETAC : décision 37\n· RECRU : embauche dans l'année ;\n  temporaire : aucun contrat au début\n· REM : retour de dispo (réglage)\n· AUTRE_ENT : autre nature au début\n  (ETAIT_TEMPORAIRE…), sinon SANS_MOTIF",
+      "originalText": "9. LES ENTRÉES (G8) · l. 457 à 514\nprésent à la fin, absent au début\n(dans la même nature) ; le code :\n· DETAC : décision 37\n· RECRU : embauche dans l'année ;\n  temporaire : aucun contrat au début\n· REM : retour de dispo (réglage)\n· AUTRE_ENT : autre nature au début\n  (ETAIT_TEMPORAIRE…), sinon SANS_MOTIF",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1423,7 +1423,7 @@
           "id": "8lYIcD3TYu5zChfD8WU4"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1432,7 +1432,7 @@
       "type": "text",
       "x": 699.5,
       "y": 1336,
-      "width": 399.76,
+      "width": 399.0,
       "height": 213.75,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -1452,16 +1452,16 @@
       "versionNonce": 1036230699,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "10. LES SORTIES (G9) · l. 508 à 562\nprésent au début, absent à la fin ;\nle départ qui l'a fait sortir :\n· 02 RET · 34 ou décès DEC · 36 DEM\n· 54 LIC · 35 et 52 FIN_CTRAT\n· DISP : en dispo à la fin (réglage)\n· AUTRE_SORT : autre nature à la fin\n  (DEVIENT_PERMANENT…), sinon\n  SANS_MOTIF",
+      "text": "10. LES SORTIES (G9) · l. 516 à 570\nprésent au début, absent à la fin ;\nle départ qui l'a fait sortir :\n· 02 RET · 34 ou décès DEC · 36 DEM\n· 54 LIC · 35 et 52 FIN_CTRAT\n· DISP : en dispo à la fin (réglage)\n· AUTRE_SORT : autre nature à la fin\n  (DEVIENT_PERMANENT…), sinon\n  SANS_MOTIF",
       "fontSize": 19,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "10. LES SORTIES (G9) · l. 508 à 562\nprésent au début, absent à la fin ;\nle départ qui l'a fait sortir :\n· 02 RET · 34 ou décès DEC · 36 DEM\n· 54 LIC · 35 et 52 FIN_CTRAT\n· DISP : en dispo à la fin (réglage)\n· AUTRE_SORT : autre nature à la fin\n  (DEVIENT_PERMANENT…), sinon\n  SANS_MOTIF",
+      "originalText": "10. LES SORTIES (G9) · l. 516 à 570\nprésent au début, absent à la fin ;\nle départ qui l'a fait sortir :\n· 02 RET · 34 ou décès DEC · 36 DEM\n· 54 LIC · 35 et 52 FIN_CTRAT\n· DISP : en dispo à la fin (réglage)\n· AUTRE_SORT : autre nature à la fin\n  (DEVIENT_PERMANENT…), sinon\n  SANS_MOTIF",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1501,7 +1501,7 @@
           "id": "xcaIqYG3mCIp7dakUTI1"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1530,16 +1530,16 @@
       "versionNonce": 1528053248,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "11. ENTRÉ ET SORTI DANS L'ANNÉE (G16)\nl. 564 à 622\nabsent des deux photos,\nprésent entre les deux\nréglage passages_annee :\n· NON : pas compté (actuel)\n· OUI : une entrée RECRU\n  et une sortie (son départ)",
+      "text": "11. ENTRÉ ET SORTI DANS L'ANNÉE (G16)\nl. 572 à 630\nabsent des deux photos,\nprésent entre les deux\nréglage passages_annee :\n· NON : pas compté (actuel)\n· OUI : une entrée RECRU\n  et une sortie (son départ)",
       "fontSize": 19,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "11. ENTRÉ ET SORTI DANS L'ANNÉE (G16)\nl. 564 à 622\nabsent des deux photos,\nprésent entre les deux\nréglage passages_annee :\n· NON : pas compté (actuel)\n· OUI : une entrée RECRU\n  et une sortie (son départ)",
+      "originalText": "11. ENTRÉ ET SORTI DANS L'ANNÉE (G16)\nl. 572 à 630\nabsent des deux photos,\nprésent entre les deux\nréglage passages_annee :\n· NON : pas compté (actuel)\n· OUI : une entrée RECRU\n  et une sortie (son départ)",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1575,7 +1575,7 @@
           "id": "kkQszZXTe86CR1Cnulnd"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1604,16 +1604,16 @@
       "versionNonce": 2077131140,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "12. LES MOUVEMENTS INTERNES (G17)\nl. 624 à 651\nlus dans GRH_MOUVEMENT, comme avant :\naffectations, mutations,\nnominations (validées O) ;\nhors T60\nses DIS, DET, REM ne sont plus lus\nlit : FAIT_GRH_MOUVEMENT",
+      "text": "12. LES MOUVEMENTS INTERNES (G17)\nl. 632 à 659\nlus dans GRH_MOUVEMENT, comme avant :\naffectations, mutations,\nnominations (validées O) ;\nhors T60\nses DIS, DET, REM ne sont plus lus\nlit : FAIT_GRH_MOUVEMENT",
       "fontSize": 19,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "12. LES MOUVEMENTS INTERNES (G17)\nl. 624 à 651\nlus dans GRH_MOUVEMENT, comme avant :\naffectations, mutations,\nnominations (validées O) ;\nhors T60\nses DIS, DET, REM ne sont plus lus\nlit : FAIT_GRH_MOUVEMENT",
+      "originalText": "12. LES MOUVEMENTS INTERNES (G17)\nl. 632 à 659\nlus dans GRH_MOUVEMENT, comme avant :\naffectations, mutations,\nnominations (validées O) ;\nhors T60\nses DIS, DET, REM ne sont plus lus\nlit : FAIT_GRH_MOUVEMENT",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1642,7 +1642,7 @@
       "versionNonce": 919169817,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -1695,7 +1695,7 @@
       "versionNonce": 873530091,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -1748,7 +1748,7 @@
       "versionNonce": 1721663081,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -1824,7 +1824,7 @@
           "id": "9YW6tuARKmp8N0KqRnlK"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1853,16 +1853,16 @@
       "versionNonce": 41929290,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "13. TOUT ENSEMBLE · 14. LE COMPTAGE · l. 653 à 731\nune ligne par agent, exercice et code, puis comptées par\nexercice × code × qualification × sexe × qualité\n× nature d'emploi × unité × motif\nla nature (ENTREES, SORTIES…) et le sens viennent de\nDIM_GRH_TYPE_MOUVEMENT ; mesures : NB_MOUVEMENTS, NB_AGENTS",
+      "text": "13. TOUT ENSEMBLE · 14. LE COMPTAGE · l. 661 à 739\nune ligne par agent, exercice et code, puis comptées par\nexercice × code × qualification × sexe × qualité\n× nature d'emploi × unité × motif\nla nature (ENTREES, SORTIES…) et le sens viennent de\nDIM_GRH_TYPE_MOUVEMENT ; mesures : NB_MOUVEMENTS, NB_AGENTS",
       "fontSize": 20,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "13. TOUT ENSEMBLE · 14. LE COMPTAGE · l. 653 à 731\nune ligne par agent, exercice et code, puis comptées par\nexercice × code × qualification × sexe × qualité\n× nature d'emploi × unité × motif\nla nature (ENTREES, SORTIES…) et le sens viennent de\nDIM_GRH_TYPE_MOUVEMENT ; mesures : NB_MOUVEMENTS, NB_AGENTS",
+      "originalText": "13. TOUT ENSEMBLE · 14. LE COMPTAGE · l. 661 à 739\nune ligne par agent, exercice et code, puis comptées par\nexercice × code × qualification × sexe × qualité\n× nature d'emploi × unité × motif\nla nature (ENTREES, SORTIES…) et le sens viennent de\nDIM_GRH_TYPE_MOUVEMENT ; mesures : NB_MOUVEMENTS, NB_AGENTS",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -1900,7 +1900,7 @@
           "id": "9YW6tuARKmp8N0KqRnlK"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -1927,7 +1927,7 @@
       "versionNonce": 599011502,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PUIS OBIEE : LE TABLEAU T60\nfiltres : qualité A, nature d'emploi (global), 5 ans\ndébut = DEBUT · recrutement = RECRU\nautres entrées = ENTREES sauf RECRU\nretraite = RET · décès = DEC\nautres sorties = SORTIES sauf RET et DEC\nfin = début + entrées − sorties",
@@ -1965,7 +1965,7 @@
       "versionNonce": 1131744723,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2018,7 +2018,7 @@
       "versionNonce": 1813465856,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2071,7 +2071,7 @@
       "versionNonce": 1360397362,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2124,7 +2124,7 @@
       "versionNonce": 1011099709,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2177,7 +2177,7 @@
       "versionNonce": 857744702,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2232,7 +2232,7 @@
       "versionNonce": 205667492,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2261,16 +2261,16 @@
       "versionNonce": 1107012927,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "0. LES RÉGLAGES (CTE parametres, l. 198 à 233) : ils changent le résultat sans réécrire la requête ; valeur actuelle en premier\ndisponibilite : PRESENT ou HORS_EFFECTIF (même valeur que T58)  ·  fin_contrat_inconnue : PRESENT ou FICHE  ·  passages_annee : NON ou OUI  ·  mouvements_internes : COMME_AVANT ou AUCUN\ndecisions_depart : le type de sortie de chaque décision (02 RET, 34 DEC, 35 et 52 FIN_CTRAT, 36 DEM, 54 LIC)",
+      "text": "0. LES RÉGLAGES (CTE parametres, l. 205 à 241) : ils changent le résultat sans réécrire la requête ; valeur actuelle en premier\ndisponibilite : HORS_EFFECTIF ou PRESENT (même valeur que T58)  ·  fin_contrat_inconnue : PRESENT ou FICHE  ·  passages_annee : NON ou OUI  ·  mouvements_internes : COMME_AVANT ou AUCUN\ndecisions_depart : le type de sortie de chaque décision (02 RET, 34 DEC, 35 et 52 FIN_CTRAT, 36 DEM, 54 LIC)",
       "fontSize": 19,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "0. LES RÉGLAGES (CTE parametres, l. 198 à 233) : ils changent le résultat sans réécrire la requête ; valeur actuelle en premier\ndisponibilite : PRESENT ou HORS_EFFECTIF (même valeur que T58)  ·  fin_contrat_inconnue : PRESENT ou FICHE  ·  passages_annee : NON ou OUI  ·  mouvements_internes : COMME_AVANT ou AUCUN\ndecisions_depart : le type de sortie de chaque décision (02 RET, 34 DEC, 35 et 52 FIN_CTRAT, 36 DEM, 54 LIC)",
+      "originalText": "0. LES RÉGLAGES (CTE parametres, l. 205 à 241) : ils changent le résultat sans réécrire la requête ; valeur actuelle en premier\ndisponibilite : HORS_EFFECTIF ou PRESENT (même valeur que T58)  ·  fin_contrat_inconnue : PRESENT ou FICHE  ·  passages_annee : NON ou OUI  ·  mouvements_internes : COMME_AVANT ou AUCUN\ndecisions_depart : le type de sortie de chaque décision (02 RET, 34 DEC, 35 et 52 FIN_CTRAT, 36 DEM, 54 LIC)",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -2299,7 +2299,7 @@
       "versionNonce": 690622514,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2326,7 +2326,7 @@
       "versionNonce": 1905369969,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "3. Concrètement : six agents fictifs, d'un 31/12 à l'autre",
@@ -2369,7 +2369,7 @@
           "id": "d2GupWZbPFs5BE4ki3uR"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2396,7 +2396,7 @@
       "versionNonce": 688593362,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent au 31/12",
@@ -2439,7 +2439,7 @@
           "id": "x7risyzGSpEvW39wREOy"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2466,7 +2466,7 @@
       "versionNonce": 1583733502,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -2509,7 +2509,7 @@
           "id": "0kML3AtQdXDoTTAxjARU"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2536,7 +2536,7 @@
       "versionNonce": 2139039488,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "entrée",
@@ -2579,7 +2579,7 @@
           "id": "iIoRwHzFQzoNjuWCFlHf"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2606,7 +2606,7 @@
       "versionNonce": 455648896,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "sortie",
@@ -2649,7 +2649,7 @@
           "id": "ni32BCSuAbbCVrmAUKcS"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -2676,7 +2676,7 @@
       "versionNonce": 852915724,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "selon un réglage",
@@ -2712,7 +2712,7 @@
       "versionNonce": 1492623245,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2020",
@@ -2750,7 +2750,7 @@
       "versionNonce": 643248435,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2793,7 +2793,7 @@
       "versionNonce": 1369420841,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2021",
@@ -2831,7 +2831,7 @@
       "versionNonce": 1019125575,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2874,7 +2874,7 @@
       "versionNonce": 759584560,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2022",
@@ -2912,7 +2912,7 @@
       "versionNonce": 878337211,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -2955,7 +2955,7 @@
       "versionNonce": 522440457,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2023",
@@ -2993,7 +2993,7 @@
       "versionNonce": 1222656887,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3036,7 +3036,7 @@
       "versionNonce": 1057007874,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2024",
@@ -3074,7 +3074,7 @@
       "versionNonce": 1412906568,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3117,7 +3117,7 @@
       "versionNonce": 1979162982,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "photo du\n31/12/2025",
@@ -3155,7 +3155,7 @@
       "versionNonce": 18252283,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3198,7 +3198,7 @@
       "versionNonce": 1928878442,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "mouvement 2021",
@@ -3234,7 +3234,7 @@
       "versionNonce": 1466881439,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "mouvement 2022",
@@ -3270,7 +3270,7 @@
       "versionNonce": 1473465437,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "mouvement 2023",
@@ -3306,7 +3306,7 @@
       "versionNonce": 1178896281,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "mouvement 2024",
@@ -3342,7 +3342,7 @@
       "versionNonce": 1495009168,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "mouvement 2025",
@@ -3382,7 +3382,7 @@
       "versionNonce": 1816122525,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -3411,7 +3411,7 @@
       "versionNonce": 85563275,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AGENT A : PERMANENT, RETRAITÉ\nprésent depuis 1995\nadmis à la retraite (02)\nle 30/06/2024\nfiche aujourd'hui : INACTIF",
@@ -3449,7 +3449,7 @@
       "versionNonce": 784880710,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3494,7 +3494,7 @@
       "versionNonce": 828067748,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -3523,7 +3523,7 @@
       "versionNonce": 1013242661,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3568,7 +3568,7 @@
       "versionNonce": 1695465419,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3613,7 +3613,7 @@
       "versionNonce": 1224864150,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3658,7 +3658,7 @@
       "versionNonce": 1076236877,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3703,7 +3703,7 @@
       "versionNonce": 1496990529,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3748,7 +3748,7 @@
       "versionNonce": 647613984,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3791,7 +3791,7 @@
       "versionNonce": 1410264919,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "02 : retraite\n30/06/2024",
@@ -3829,7 +3829,7 @@
       "versionNonce": 1024849182,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -3872,7 +3872,7 @@
       "versionNonce": 786377703,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -3906,7 +3906,7 @@
           "id": "RstDeXjzmmgCusQzBX2z"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -3933,7 +3933,7 @@
       "versionNonce": 1662542819,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -3976,7 +3976,7 @@
           "id": "wdFTlJJXeIarL9Hq4k78"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4003,7 +4003,7 @@
       "versionNonce": 2114565602,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -4046,7 +4046,7 @@
           "id": "gdIF38orVucdEAgFRArl"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4073,7 +4073,7 @@
       "versionNonce": 1527456132,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -4116,7 +4116,7 @@
           "id": "zig017UioHAyJHrl2FQu"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4143,7 +4143,7 @@
       "versionNonce": 538822695,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -4186,7 +4186,7 @@
           "id": "sWltzzQ0MkpAVQrVTCvG"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4213,7 +4213,7 @@
       "versionNonce": 1199416761,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -4256,7 +4256,7 @@
           "id": "35GHdnpmqSEgDxyxQMui"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4283,7 +4283,7 @@
       "versionNonce": 1472678859,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -4326,7 +4326,7 @@
           "id": "VtETCWivXKsZDymymF7F"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4353,7 +4353,7 @@
       "versionNonce": 879002902,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "SORTIE · RET\ndécision 02",
@@ -4393,7 +4393,7 @@
       "versionNonce": 278010488,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4422,7 +4422,7 @@
       "versionNonce": 2026218468,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AGENT B : PERMANENT, RECRUTÉ\nembauché le 01/03/2022\n(date d'embauche de sa fiche)\nfiche aujourd'hui : ACTIF",
@@ -4460,7 +4460,7 @@
       "versionNonce": 452027053,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4505,7 +4505,7 @@
       "versionNonce": 1670011297,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4534,7 +4534,7 @@
       "versionNonce": 529397578,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4579,7 +4579,7 @@
       "versionNonce": 2075646093,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4624,7 +4624,7 @@
       "versionNonce": 1383942786,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4669,7 +4669,7 @@
       "versionNonce": 515380828,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4714,7 +4714,7 @@
       "versionNonce": 516425901,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4759,7 +4759,7 @@
       "versionNonce": 114058763,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4802,7 +4802,7 @@
       "versionNonce": 67541303,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "embauche\n01/03/2022",
@@ -4840,7 +4840,7 @@
       "versionNonce": 1845600672,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -4883,7 +4883,7 @@
       "versionNonce": 1107473063,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4917,7 +4917,7 @@
           "id": "NeHaQsiF0kEOp68mejzD"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -4944,7 +4944,7 @@
       "versionNonce": 1961178931,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -4987,7 +4987,7 @@
           "id": "TABJaRY9kV32Mh5iodDd"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5014,7 +5014,7 @@
       "versionNonce": 154738210,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -5057,7 +5057,7 @@
           "id": "tFDMslPvUlqtpKaAQkBi"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5084,7 +5084,7 @@
       "versionNonce": 1035129411,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -5127,7 +5127,7 @@
           "id": "Jstz7undM8JD8x76UyIC"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5154,7 +5154,7 @@
       "versionNonce": 551208846,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -5197,7 +5197,7 @@
           "id": "R0IEH5DiAa2k7JxsGuDL"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5224,7 +5224,7 @@
       "versionNonce": 570610359,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -5267,7 +5267,7 @@
           "id": "oPKz2pBcwRoiLeq1R2HK"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5294,7 +5294,7 @@
       "versionNonce": 608221996,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -5337,7 +5337,7 @@
           "id": "CWNjnE1BeSuGtkcbI9kt"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5364,7 +5364,7 @@
       "versionNonce": 1979479556,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "ENTRÉE · RECRU\nembauche dans l'année",
@@ -5404,7 +5404,7 @@
       "versionNonce": 1132725104,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5433,7 +5433,7 @@
       "versionNonce": 193996795,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AGENT C : TEMPORAIRE, PUIS TITULARISÉ\nengagé (50) le 01/06/2022\nnouvelle situation PERMANENT\nle 01/07/2024\nfiche aujourd'hui : ACTIF",
@@ -5471,7 +5471,7 @@
       "versionNonce": 792557248,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5516,7 +5516,7 @@
       "versionNonce": 565098824,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5545,7 +5545,7 @@
       "versionNonce": 1463381070,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5574,7 +5574,7 @@
       "versionNonce": 988963613,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5619,7 +5619,7 @@
       "versionNonce": 1378817799,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5664,7 +5664,7 @@
       "versionNonce": 1198926545,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5709,7 +5709,7 @@
       "versionNonce": 1633460873,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5754,7 +5754,7 @@
       "versionNonce": 429447873,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5799,7 +5799,7 @@
       "versionNonce": 1416705694,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5842,7 +5842,7 @@
       "versionNonce": 1722635834,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "50 : engagé\n01/06/2022",
@@ -5880,7 +5880,7 @@
       "versionNonce": 666447716,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -5923,7 +5923,7 @@
       "versionNonce": 2083744661,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -5950,7 +5950,7 @@
       "versionNonce": 1483775973,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "permanent\n01/07/2024",
@@ -5988,7 +5988,7 @@
       "versionNonce": 1756604690,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -6031,7 +6031,7 @@
       "versionNonce": 1140454392,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6065,7 +6065,7 @@
           "id": "7pIvjIRX9ESkNcV3pGXt"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6092,7 +6092,7 @@
       "versionNonce": 598419046,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -6135,7 +6135,7 @@
           "id": "O9Cbsy1r7p1STaCu410L"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6162,7 +6162,7 @@
       "versionNonce": 1321486603,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -6205,7 +6205,7 @@
           "id": "c3nG1z8gTEu8yR3fjyob"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6232,7 +6232,7 @@
       "versionNonce": 737592232,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent\ntemporaire",
@@ -6275,7 +6275,7 @@
           "id": "nndfiLx5Wlw93fO1WrBZ"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6302,7 +6302,7 @@
       "versionNonce": 330564641,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent\ntemporaire",
@@ -6345,7 +6345,7 @@
           "id": "32FeUbsgG7dvcFVjMyt6"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6372,7 +6372,7 @@
       "versionNonce": 2113004298,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent\npermanent",
@@ -6415,7 +6415,7 @@
           "id": "OhjbIX5H3nhixoWY31it"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6442,7 +6442,7 @@
       "versionNonce": 706960849,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent\npermanent",
@@ -6485,7 +6485,7 @@
           "id": "dnwa3ZW5UJo59v76roYj"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6512,7 +6512,7 @@
       "versionNonce": 424269634,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "ENTRÉE · RECRU\ntableau des temporaires",
@@ -6555,7 +6555,7 @@
           "id": "BXlACbzYP0DABNu6wluK"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6582,7 +6582,7 @@
       "versionNonce": 169302576,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "SORTIE · AUTRE_SORT\ndevient permanent (temporaires)",
@@ -6625,7 +6625,7 @@
           "id": "Vxy6Vs7t71hq6oSgNgDP"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6652,7 +6652,7 @@
       "versionNonce": 96752648,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "ENTRÉE · AUTRE_ENT\nétait temporaire (permanents)",
@@ -6692,7 +6692,7 @@
       "versionNonce": 837092090,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6721,16 +6721,16 @@
       "versionNonce": 1827452107,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "AGENT D : PERMANENT EN DISPONIBILITÉ\nmis en disponibilité (07)\nle 01/03/2023\nde retour (18) le 01/06/2025\nréglage actuel : PRESENT",
+      "text": "AGENT D : PERMANENT EN DISPONIBILITÉ\nmis en disponibilité (07)\nle 01/03/2023\nde retour (18) le 01/06/2025\nhors de l'effectif entre les deux",
       "fontSize": 17,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "AGENT D : PERMANENT EN DISPONIBILITÉ\nmis en disponibilité (07)\nle 01/03/2023\nde retour (18) le 01/06/2025\nréglage actuel : PRESENT",
+      "originalText": "AGENT D : PERMANENT EN DISPONIBILITÉ\nmis en disponibilité (07)\nle 01/03/2023\nde retour (18) le 01/06/2025\nhors de l'effectif entre les deux",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -6759,7 +6759,7 @@
       "versionNonce": 1926202477,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -6804,7 +6804,7 @@
       "versionNonce": 982376041,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6833,7 +6833,7 @@
       "versionNonce": 237932731,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -6862,7 +6862,7 @@
       "versionNonce": 763550499,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -6907,7 +6907,7 @@
       "versionNonce": 1555352275,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -6952,7 +6952,7 @@
       "versionNonce": 1618918277,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -6997,7 +6997,7 @@
       "versionNonce": 985597243,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -7042,7 +7042,7 @@
       "versionNonce": 820642583,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -7087,7 +7087,7 @@
       "versionNonce": 1443269894,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -7130,7 +7130,7 @@
       "versionNonce": 2067048168,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "07 : dispo\n01/03/2023",
@@ -7168,7 +7168,7 @@
       "versionNonce": 434698324,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -7211,7 +7211,7 @@
       "versionNonce": 1613283518,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7238,7 +7238,7 @@
       "versionNonce": 1922069891,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "18 : retour\n01/06/2025",
@@ -7276,7 +7276,7 @@
       "versionNonce": 1685432166,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -7319,7 +7319,7 @@
       "versionNonce": 151460113,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7353,7 +7353,7 @@
           "id": "bBjFmoRMj1dqPE6gWbjw"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7380,7 +7380,7 @@
       "versionNonce": 961026142,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -7423,7 +7423,7 @@
           "id": "dGBzyG5cg7AvNTSNHYC1"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7450,7 +7450,7 @@
       "versionNonce": 1035994795,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -7493,7 +7493,7 @@
           "id": "f4yttXbFCOtTKrn09y4N"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7520,7 +7520,7 @@
       "versionNonce": 1827564634,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -7563,7 +7563,7 @@
           "id": "P62PChqSl0vPqAOMYAl7"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7590,7 +7590,7 @@
       "versionNonce": 1659632596,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -7633,7 +7633,7 @@
           "id": "rHBxQmGr2Um3bDeROCTi"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7660,16 +7660,16 @@
       "versionNonce": 844727097,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "présent\nen dispo",
+      "text": "absent\nen dispo",
       "fontSize": 15,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "eT4FwCOCHnzq1f60p8vD",
-      "originalText": "présent\nen dispo",
+      "originalText": "absent\nen dispo",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -7703,7 +7703,7 @@
           "id": "QvbXIh2YmtdZtjEwuOO1"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7730,16 +7730,16 @@
       "versionNonce": 1442869556,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "présent\nen dispo",
+      "text": "absent\nen dispo",
       "fontSize": 15,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "Ju1VtQixcX1xCu0CZXbt",
-      "originalText": "présent\nen dispo",
+      "originalText": "absent\nen dispo",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -7751,8 +7751,8 @@
       "width": 340,
       "height": 50,
       "angle": 0,
-      "strokeColor": "#f08c00",
-      "backgroundColor": "#ffec99",
+      "strokeColor": "#e8590c",
+      "backgroundColor": "#ffd8a8",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -7773,16 +7773,16 @@
           "id": "7SLaBQ3uzac0a8gVvYSl"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
     {
       "id": "7SLaBQ3uzac0a8gVvYSl",
       "type": "text",
-      "x": 1529.233401779603,
+      "x": 1612.183401779603,
       "y": 3534.25,
-      "width": 300.0,
+      "width": 134.1,
       "height": 37.5,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -7800,16 +7800,16 @@
       "versionNonce": 1820538122,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "PRESENT : aucun mouvement\nHORS_EFFECTIF : SORTIE · DISP",
+      "text": "SORTIE · DISP\ndécision 07",
       "fontSize": 15,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "9j0a0Pf4pHFj1ysed6Yg",
-      "originalText": "PRESENT : aucun mouvement\nHORS_EFFECTIF : SORTIE · DISP",
+      "originalText": "SORTIE · DISP\ndécision 07",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -7821,8 +7821,8 @@
       "width": 340,
       "height": 50,
       "angle": 0,
-      "strokeColor": "#f08c00",
-      "backgroundColor": "#ffec99",
+      "strokeColor": "#2f9e44",
+      "backgroundColor": "#b2f2bb",
       "fillStyle": "solid",
       "strokeWidth": 2,
       "strokeStyle": "solid",
@@ -7843,16 +7843,16 @@
           "id": "hOfFwgeOsAjR5PLtuIqD"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
     {
       "id": "hOfFwgeOsAjR5PLtuIqD",
       "type": "text",
-      "x": 2175.8214579055443,
+      "x": 2258.771457905544,
       "y": 3534.25,
-      "width": 287.7,
+      "width": 121.79999999999998,
       "height": 37.5,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -7870,16 +7870,16 @@
       "versionNonce": 1272467313,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "PRESENT : aucun mouvement\nHORS_EFFECTIF : ENTRÉE · REM",
+      "text": "ENTRÉE · REM\ndécision 18",
       "fontSize": 15,
       "fontFamily": 5,
       "textAlign": "center",
       "verticalAlign": "middle",
       "containerId": "2DHTVELlRj8TjRbkQID5",
-      "originalText": "PRESENT : aucun mouvement\nHORS_EFFECTIF : ENTRÉE · REM",
+      "originalText": "ENTRÉE · REM\ndécision 18",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -7910,7 +7910,7 @@
       "versionNonce": 202177027,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -7939,7 +7939,7 @@
       "versionNonce": 491547364,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AGENT E : PERMANENT, DÉCÉDÉ\ndécédé le 15/10/2023,\ndate jamais saisie\nliquidation des droits (34)\nle 01/07/2024",
@@ -7977,7 +7977,7 @@
       "versionNonce": 418429207,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8022,7 +8022,7 @@
       "versionNonce": 2094125645,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8051,7 +8051,7 @@
       "versionNonce": 184914562,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8080,7 +8080,7 @@
       "versionNonce": 936194788,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8125,7 +8125,7 @@
       "versionNonce": 490313932,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8170,7 +8170,7 @@
       "versionNonce": 615483887,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8215,7 +8215,7 @@
       "versionNonce": 1646935752,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8260,7 +8260,7 @@
       "versionNonce": 1521669838,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8305,7 +8305,7 @@
       "versionNonce": 1486143364,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8348,7 +8348,7 @@
       "versionNonce": 733965715,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "décès\nnon saisi",
@@ -8386,7 +8386,7 @@
       "versionNonce": 438466759,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8429,7 +8429,7 @@
       "versionNonce": 578448527,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8456,7 +8456,7 @@
       "versionNonce": 1840597331,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "34 : liquidation\n01/07/2024",
@@ -8494,7 +8494,7 @@
       "versionNonce": 69390315,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -8537,7 +8537,7 @@
       "versionNonce": 932343786,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8571,7 +8571,7 @@
           "id": "CrTdRr8qMF4ZuOFHXb1d"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8598,7 +8598,7 @@
       "versionNonce": 1786915540,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -8641,7 +8641,7 @@
           "id": "s3pu2pPoOa2ekOQgSM0c"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8668,7 +8668,7 @@
       "versionNonce": 28409656,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -8711,7 +8711,7 @@
           "id": "Ou7BgXDmD7S4PI8HYbjg"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8738,7 +8738,7 @@
       "versionNonce": 847967816,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent",
@@ -8781,7 +8781,7 @@
           "id": "dCco5GJZwZuUDUKIXa1I"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8808,7 +8808,7 @@
       "versionNonce": 612091020,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "présent\npour la base",
@@ -8851,7 +8851,7 @@
           "id": "cdQUmbAAipaY7IAkdHPz"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8878,7 +8878,7 @@
       "versionNonce": 1869088283,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -8921,7 +8921,7 @@
           "id": "wnXh860R3wbsWPaByREm"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -8948,7 +8948,7 @@
       "versionNonce": 802884956,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -8991,7 +8991,7 @@
           "id": "4qXtEasbkpgknZXUA1n7"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9018,7 +9018,7 @@
       "versionNonce": 999176487,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "SORTIE · DEC\ndécision 34 : en 2024, pas 2023",
@@ -9058,7 +9058,7 @@
       "versionNonce": 705014680,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9087,7 +9087,7 @@
       "versionNonce": 368318126,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AGENT F : ENTRÉ ET SORTI LA MÊME ANNÉE\nembauché le 01/02/2024\ndémission (36) le 01/10/2024\nfiche aujourd'hui : INACTIF",
@@ -9125,7 +9125,7 @@
       "versionNonce": 1490176245,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9170,7 +9170,7 @@
       "versionNonce": 1173948935,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9199,7 +9199,7 @@
       "versionNonce": 1330293218,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9244,7 +9244,7 @@
       "versionNonce": 413285439,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9289,7 +9289,7 @@
       "versionNonce": 984128289,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9334,7 +9334,7 @@
       "versionNonce": 1476056368,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9379,7 +9379,7 @@
       "versionNonce": 2013381284,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9424,7 +9424,7 @@
       "versionNonce": 1403401349,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9467,7 +9467,7 @@
       "versionNonce": 848346910,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "embauche\n01/02/2024",
@@ -9505,7 +9505,7 @@
       "versionNonce": 2010960656,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9548,7 +9548,7 @@
       "versionNonce": 1966264321,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9575,7 +9575,7 @@
       "versionNonce": 1138828973,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "36 : démission\n01/10/2024",
@@ -9613,7 +9613,7 @@
       "versionNonce": 764473375,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "points": [
@@ -9656,7 +9656,7 @@
       "versionNonce": 1959807776,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9690,7 +9690,7 @@
           "id": "INccfUGoUU94mLOw0yy4"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9717,7 +9717,7 @@
       "versionNonce": 970884777,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -9760,7 +9760,7 @@
           "id": "sx2PYLC4ZhAwHIOza5Mh"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9787,7 +9787,7 @@
       "versionNonce": 1138613770,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -9830,7 +9830,7 @@
           "id": "gP9PEDlEp0Ggsa9diZGw"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9857,7 +9857,7 @@
       "versionNonce": 1686969125,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -9900,7 +9900,7 @@
           "id": "84rmX1k8wutZWep97tgv"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9927,7 +9927,7 @@
       "versionNonce": 2023073625,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -9970,7 +9970,7 @@
           "id": "UO18HQgW0HZSfFDwEbm4"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -9997,7 +9997,7 @@
       "versionNonce": 1555509533,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -10040,7 +10040,7 @@
           "id": "ajkO5zVijJGAAUykZ7Ng"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -10067,7 +10067,7 @@
       "versionNonce": 826428200,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "absent",
@@ -10110,7 +10110,7 @@
           "id": "0B3kG5cu96romPC8y54e"
         }
       ],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -10137,7 +10137,7 @@
       "versionNonce": 1441095236,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "passages_annee = NON : rien\nOUI : RECRU, puis DEM",
@@ -10177,7 +10177,7 @@
       "versionNonce": 29203956,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -10206,7 +10206,7 @@
       "versionNonce": 1863256731,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "À RETENIR : chaque année, la requête regarde l'agent à deux dates, le 31/12 d'avant et le 31/12 de l'année. S'il change de case (absent, puis présent, ou l'inverse),\nc'est un mouvement, et la fiche ou une décision en donne le code. Ce qui se passe entre les deux photos sans les changer ne compte pas (agent F), et un fait\nsans date n'est vu qu'à sa première trace datée (agent E). Un temporaire titularisé sort des temporaires et entre chez les permanents la même année (agent C).",
@@ -10244,7 +10244,7 @@
       "versionNonce": 1578416440,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -10271,7 +10271,7 @@
       "versionNonce": 2069449521,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "4. Ce qui en sort, et ce que la base ne permet pas de rejouer",
@@ -10311,7 +10311,7 @@
       "versionNonce": 1812521714,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -10340,7 +10340,7 @@
       "versionNonce": 1377732993,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "LES LIGNES DE 2024 POUR CES AGENTS (ID_TEMPS = 20241231)",
@@ -10378,7 +10378,7 @@
       "versionNonce": 1968678970,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "CODE_TYPE_MVT",
@@ -10416,7 +10416,7 @@
       "versionNonce": 1311036003,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "NATURE_EMPLOI",
@@ -10454,7 +10454,7 @@
       "versionNonce": 1591173025,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "MOTIF_MVT",
@@ -10492,7 +10492,7 @@
       "versionNonce": 261311182,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "NB_AGENTS",
@@ -10530,7 +10530,7 @@
       "versionNonce": 1706352776,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "qui",
@@ -10568,7 +10568,7 @@
       "versionNonce": 1791483707,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DEBUT",
@@ -10606,7 +10606,7 @@
       "versionNonce": 1968722840,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PERMANENT",
@@ -10644,7 +10644,7 @@
       "versionNonce": 489763265,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "(vide)",
@@ -10682,16 +10682,16 @@
       "versionNonce": 718063342,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "4",
+      "text": "3",
       "fontSize": 17,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "4",
+      "originalText": "3",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -10700,7 +10700,7 @@
       "type": "text",
       "x": 980,
       "y": 4706,
-      "width": 92.47999999999999,
+      "width": 64.94,
       "height": 21.25,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -10720,16 +10720,16 @@
       "versionNonce": 487763319,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "A, B, D, E",
+      "text": "A, B, E",
       "fontSize": 17,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "A, B, D, E",
+      "originalText": "A, B, E",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -10758,7 +10758,7 @@
       "versionNonce": 1870953499,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DEBUT",
@@ -10796,7 +10796,7 @@
       "versionNonce": 1518371162,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "TEMPORAIRE",
@@ -10834,7 +10834,7 @@
       "versionNonce": 1297812393,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "(vide)",
@@ -10872,7 +10872,7 @@
       "versionNonce": 1765713174,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1",
@@ -10910,7 +10910,7 @@
       "versionNonce": 2081309582,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "C",
@@ -10948,7 +10948,7 @@
       "versionNonce": 671647235,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AUTRE_ENT",
@@ -10986,7 +10986,7 @@
       "versionNonce": 425753730,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PERMANENT",
@@ -11024,7 +11024,7 @@
       "versionNonce": 1102772734,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "ETAIT_TEMPORAIRE",
@@ -11062,7 +11062,7 @@
       "versionNonce": 444181389,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1",
@@ -11100,7 +11100,7 @@
       "versionNonce": 1722793316,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "C",
@@ -11138,7 +11138,7 @@
       "versionNonce": 4738572,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "RET",
@@ -11176,7 +11176,7 @@
       "versionNonce": 1366235253,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PERMANENT",
@@ -11214,7 +11214,7 @@
       "versionNonce": 73714764,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DECISION_02",
@@ -11252,7 +11252,7 @@
       "versionNonce": 1647728341,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1",
@@ -11290,7 +11290,7 @@
       "versionNonce": 684681176,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "A",
@@ -11328,7 +11328,7 @@
       "versionNonce": 89200537,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DEC",
@@ -11366,7 +11366,7 @@
       "versionNonce": 426402632,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "PERMANENT",
@@ -11404,7 +11404,7 @@
       "versionNonce": 1935664544,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DECISION_34",
@@ -11442,7 +11442,7 @@
       "versionNonce": 983892569,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1",
@@ -11480,7 +11480,7 @@
       "versionNonce": 1092994656,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "E",
@@ -11518,7 +11518,7 @@
       "versionNonce": 579814476,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "AUTRE_SORT",
@@ -11556,7 +11556,7 @@
       "versionNonce": 587700389,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "TEMPORAIRE",
@@ -11594,7 +11594,7 @@
       "versionNonce": 720792012,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "DEVIENT_PERMANENT",
@@ -11632,7 +11632,7 @@
       "versionNonce": 1382378954,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "1",
@@ -11670,7 +11670,7 @@
       "versionNonce": 68993677,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "C",
@@ -11688,7 +11688,7 @@
       "type": "text",
       "x": 62,
       "y": 4932,
-      "width": 636.82,
+      "width": 660.7900000000001,
       "height": 63.75,
       "angle": 0,
       "strokeColor": "#495057",
@@ -11708,16 +11708,16 @@
       "versionNonce": 1241129890,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "B et D ne bougent pas : présents aux deux photos, dans la même nature.\nF n'a aucune ligne : passages_annee = NON. Les lignes DEBUT sont\nadditionnées ici : la table en a une par qualification, sexe, unité…",
+      "text": "B ne bouge pas : présent aux deux photos. D non plus : en disponibilité,\nil est absent des deux (sorti en 2023, de retour en 2025). F n'a aucune\nligne : passages_annee = NON. Les lignes DEBUT sont additionnées ici.",
       "fontSize": 17,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "B et D ne bougent pas : présents aux deux photos, dans la même nature.\nF n'a aucune ligne : passages_annee = NON. Les lignes DEBUT sont\nadditionnées ici : la table en a une par qualification, sexe, unité…",
+      "originalText": "B ne bouge pas : présent aux deux photos. D non plus : en disponibilité,\nil est absent des deux (sorti en 2023, de retour en 2025). F n'a aucune\nligne : passages_annee = NON. Les lignes DEBUT sont additionnées ici.",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -11748,7 +11748,7 @@
       "versionNonce": 119511000,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -11777,16 +11777,16 @@
       "versionNonce": 1331164259,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "LA LIGNE 2024 DE T60 DANS OBIEE (permanents)\ndébut 4 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\nfin 3 (B, C, D) = l'effectif de T58 au 31/12/2024",
+      "text": "LA LIGNE 2024 DE T60 DANS OBIEE (permanents)\ndébut 3 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\nfin 2 (B, C) = l'effectif de T58 au 31/12/2024",
       "fontSize": 20,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "LA LIGNE 2024 DE T60 DANS OBIEE (permanents)\ndébut 4 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\nfin 3 (B, C, D) = l'effectif de T58 au 31/12/2024",
+      "originalText": "LA LIGNE 2024 DE T60 DANS OBIEE (permanents)\ndébut 3 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\nfin 2 (B, C) = l'effectif de T58 au 31/12/2024",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -11817,7 +11817,7 @@
       "versionNonce": 825007452,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -11826,7 +11826,7 @@
       "type": "text",
       "x": 62,
       "y": 5226,
-      "width": 811.8000000000001,
+      "width": 794.0,
       "height": 125.0,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -11846,16 +11846,16 @@
       "versionNonce": 437543134,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
-      "text": "ATTENDU AU CONTRÔLE (lots 17, 18 et 25 ; la requête reste à exécuter)\n2024, permanents : 677 au début, 104 recrutements, 25 retraites,\n5 décès, 4 autres sorties, 747 à la fin\nannuaire CNSS 2024 : 767, 104, 23 retraites, 3 décès, 94 autres sorties\n(dont les 84 engagés de 2019), 758 à la fin",
+      "text": "ATTENDU AU CONTRÔLE (lots 17 à 25 ; la requête reste à exécuter)\n2024, permanents : environ 672 au début, 104 recrutements, 4 remises,\n25 retraites, 5 décès, 9 autres sorties, 741 à la fin\nannuaire CNSS 2024 : 767, 104, 23 retraites, 3 décès, 94 autres sorties\n(dont les 84 engagés de 2019), 758 à la fin",
       "fontSize": 20,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "ATTENDU AU CONTRÔLE (lots 17, 18 et 25 ; la requête reste à exécuter)\n2024, permanents : 677 au début, 104 recrutements, 25 retraites,\n5 décès, 4 autres sorties, 747 à la fin\nannuaire CNSS 2024 : 767, 104, 23 retraites, 3 décès, 94 autres sorties\n(dont les 84 engagés de 2019), 758 à la fin",
+      "originalText": "ATTENDU AU CONTRÔLE (lots 17 à 25 ; la requête reste à exécuter)\n2024, permanents : environ 672 au début, 104 recrutements, 4 remises,\n25 retraites, 5 décès, 9 autres sorties, 741 à la fin\nannuaire CNSS 2024 : 767, 104, 23 retraites, 3 décès, 94 autres sorties\n(dont les 84 engagés de 2019), 758 à la fin",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -11886,7 +11886,7 @@
       "versionNonce": 1393780649,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false
     },
@@ -11915,7 +11915,7 @@
       "versionNonce": 527396383,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794135379488,
+      "updated": 1794162909860,
       "link": null,
       "locked": false,
       "text": "CE QUE LA BASE D'AUJOURD'HUI NE PERMET PAS DE REJOUER\n\n· un départ sans date : l'agent n'est présent à aucune photo,\n  donc ni entrée ni sortie. C'est le cas des 84 engagés de 2019,\n  que l'annuaire fait entrer en 2019 et sortir en 2024 (G11, QG2)\n\n· un décès sans date : l'agent sort à la liquidation des droits (34),\n  environ 8 mois plus tard, souvent l'année suivante (agent E ;\n  question QG3 à la DRH)\n\n· les détachements et fins de détachement de l'annuaire :\n  aucune décision 37 chez les permanents (QG7)\n\n· une mutation d'une unité à l'autre n'est pas un mouvement :\n  par direction ou agence, la fin se lit dans T58, et l'écart\n  donne les mutations nettes de l'unité\n\n· ce qui se passe entre deux photos sans les changer : un agent\n  entré et sorti dans l'année (agent F, réglage passages_annee),\n  un temporaire parti puis réengagé avant le 31/12\n\nTout le reste se rejoue, car chaque fait a sa date.",

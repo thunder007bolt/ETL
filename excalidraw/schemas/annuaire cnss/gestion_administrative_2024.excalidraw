@@ -26,7 +26,7 @@
       "versionNonce": 1166202442,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Annuaire CNSS 2024 · La gestion administrative, face à nos règles",
@@ -44,7 +44,7 @@
       "type": "text",
       "x": 0,
       "y": 66,
-      "width": 1556.72,
+      "width": 1542.42,
       "height": 55.0,
       "angle": 0,
       "strokeColor": "#495057",
@@ -62,16 +62,16 @@
       "versionNonce": 365448738,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
-      "text": "Annuaire statistique de la CNSS n° 32, partie IX, tableaux 119 à 126 (p. 89 à 94) : les tableaux du personnel au format CIPRES\nce qu'ils disent de nos règles GRH et de nos questions ouvertes · analyse ponctuelle, sans changer nos règles · état au 08/11/2026",
+      "text": "Annuaire statistique de la CNSS n° 32, partie IX, tableaux 119 à 126 (p. 89 à 94) : les tableaux du personnel au format CIPRES\nce qu'ils disent de nos règles GRH et de nos questions ouvertes · conclusions intégrées le 08/11/2026",
       "fontSize": 22,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "Annuaire statistique de la CNSS n° 32, partie IX, tableaux 119 à 126 (p. 89 à 94) : les tableaux du personnel au format CIPRES\nce qu'ils disent de nos règles GRH et de nos questions ouvertes · analyse ponctuelle, sans changer nos règles · état au 08/11/2026",
+      "originalText": "Annuaire statistique de la CNSS n° 32, partie IX, tableaux 119 à 126 (p. 89 à 94) : les tableaux du personnel au format CIPRES\nce qu'ils disent de nos règles GRH et de nos questions ouvertes · conclusions intégrées le 08/11/2026",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -100,7 +100,7 @@
       "versionNonce": 283393803,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -127,7 +127,7 @@
       "versionNonce": 1653567256,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "tranche une question",
@@ -165,7 +165,7 @@
       "versionNonce": 1014534497,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -192,7 +192,7 @@
       "versionNonce": 332441889,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "confirme une règle",
@@ -230,7 +230,7 @@
       "versionNonce": 1749752859,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -257,7 +257,7 @@
       "versionNonce": 434117617,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "précise une question",
@@ -295,7 +295,7 @@
       "versionNonce": 919104002,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -322,7 +322,7 @@
       "versionNonce": 1178210126,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "écart à expliquer",
@@ -360,7 +360,7 @@
       "versionNonce": 1720853421,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -387,7 +387,7 @@
       "versionNonce": 1938312163,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1. Ta question : la disponibilité et la remise en activité (tableau 121, T60)",
@@ -423,7 +423,7 @@
       "versionNonce": 585445060,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 121 · Mouvement du personnel permanent de la CNSS (p. 91), recopié ; les deux dernières colonnes sont calculées ici (le cumul part du 1er janvier 2015 : −1 en 2015, l'agent remis en activité était en disponibilité avant)",
@@ -466,7 +466,7 @@
           "id": "HDXSUMPm1OQ9g3jfUGR8"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -493,7 +493,7 @@
       "versionNonce": 505460467,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "ENTRÉES",
@@ -536,7 +536,7 @@
           "id": "62y5o44atQdxl7I6ufrh"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -563,7 +563,7 @@
       "versionNonce": 1028231788,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "SORTIES",
@@ -606,7 +606,7 @@
           "id": "eDE20jXKNqYLgnHL7EpT"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -633,7 +633,7 @@
       "versionNonce": 2059438223,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "CALCULÉ ICI",
@@ -676,7 +676,7 @@
           "id": "NB6rLLbLZBiStW7OYjnt"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -703,7 +703,7 @@
       "versionNonce": 1074783295,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Année",
@@ -746,7 +746,7 @@
           "id": "N58KlQi3mLbUjhB3o9ai"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -773,7 +773,7 @@
       "versionNonce": 52334632,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Effectif début",
@@ -816,7 +816,7 @@
           "id": "AYAhWTDX6K2n4NrGC5ag"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -843,7 +843,7 @@
       "versionNonce": 991559246,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Recrutement",
@@ -886,7 +886,7 @@
           "id": "MZDCqeqOMKCyvkWBjzvD"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -913,7 +913,7 @@
       "versionNonce": 933758824,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Remise en\nactivité",
@@ -956,7 +956,7 @@
           "id": "p7qD74ipjMi6QaVysnhH"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -983,7 +983,7 @@
       "versionNonce": 586004356,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Détachement",
@@ -1026,7 +1026,7 @@
           "id": "1UUcOIxaGOqcn5zSWtua"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1053,7 +1053,7 @@
       "versionNonce": 289520553,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Autres",
@@ -1096,7 +1096,7 @@
           "id": "JwtN8V8J46xgB71fvqUY"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1123,7 +1123,7 @@
       "versionNonce": 354795243,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Retraite",
@@ -1166,7 +1166,7 @@
           "id": "zaZQilNWV08jgEWLsrh5"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1193,7 +1193,7 @@
       "versionNonce": 1674862971,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Décès",
@@ -1236,7 +1236,7 @@
           "id": "NdFXIqGWvhyrbg8Cz3jX"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1263,7 +1263,7 @@
       "versionNonce": 831325623,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Licenciement",
@@ -1306,7 +1306,7 @@
           "id": "NPONY3a7FGtGuo4Mhisf"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1333,7 +1333,7 @@
       "versionNonce": 962645665,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Démission",
@@ -1376,7 +1376,7 @@
           "id": "mSqcqJPRJy8gN5uVG8SJ"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1403,7 +1403,7 @@
       "versionNonce": 1051755165,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Disponibilité",
@@ -1446,7 +1446,7 @@
           "id": "sB5X80v9ApQsqb7fAg01"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1473,7 +1473,7 @@
       "versionNonce": 1998241281,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Fin de\ndétachement",
@@ -1516,7 +1516,7 @@
           "id": "gC1rAeFRlujsUtERu3jE"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1543,7 +1543,7 @@
       "versionNonce": 157008798,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Autres",
@@ -1586,7 +1586,7 @@
           "id": "WTtrJifDvn9if1CMIyni"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1613,7 +1613,7 @@
       "versionNonce": 1333659761,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Effectif fin",
@@ -1656,7 +1656,7 @@
           "id": "m8IKDEetJ32uMrV7FVqm"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1683,7 +1683,7 @@
       "versionNonce": 1732186575,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Début + E − S −\nfin",
@@ -1726,7 +1726,7 @@
           "id": "v4wLdxWcFhkbBYD7YDoY"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1753,7 +1753,7 @@
       "versionNonce": 1719048066,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Dispo − remises\n(cumul)",
@@ -1796,7 +1796,7 @@
           "id": "1k4nPN9w0A8dElPVq7IS"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1823,7 +1823,7 @@
       "versionNonce": 1082306028,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2015",
@@ -1866,7 +1866,7 @@
           "id": "JyqyQ015K14pXFcaSqqD"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1893,7 +1893,7 @@
       "versionNonce": 728766288,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "938",
@@ -1936,7 +1936,7 @@
           "id": "GAKgPOhlJ6avxD0Pqqtf"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -1963,7 +1963,7 @@
       "versionNonce": 920287258,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "42",
@@ -2006,7 +2006,7 @@
           "id": "a9CxaPhvfScEnykiQckx"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2033,7 +2033,7 @@
       "versionNonce": 162726422,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -2076,7 +2076,7 @@
           "id": "UxSTlN5EjmiphZB5aU8E"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2103,7 +2103,7 @@
       "versionNonce": 613977710,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -2146,7 +2146,7 @@
           "id": "Wnv6PVv9KVTvYn2ewHfq"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2173,7 +2173,7 @@
       "versionNonce": 37716006,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -2216,7 +2216,7 @@
           "id": "iYj7mBXwJA641OS4hqd9"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2243,7 +2243,7 @@
       "versionNonce": 1590346458,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "51",
@@ -2286,7 +2286,7 @@
           "id": "NjzqmPzdSCUWF4M05SMN"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2313,7 +2313,7 @@
       "versionNonce": 83426501,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -2356,7 +2356,7 @@
           "id": "ffdVR01KuiY89R9qfHc0"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2383,7 +2383,7 @@
       "versionNonce": 2008309208,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -2426,7 +2426,7 @@
           "id": "GYSQ9gyuOSmK3n3JsBzY"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2453,7 +2453,7 @@
       "versionNonce": 1067775778,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -2496,7 +2496,7 @@
           "id": "eyg8p7JsPdiRcSNPbcdA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2523,7 +2523,7 @@
       "versionNonce": 1307415803,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -2566,7 +2566,7 @@
           "id": "5RScDf2DDRZPvwlFBbRK"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2593,7 +2593,7 @@
       "versionNonce": 1492199360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -2636,7 +2636,7 @@
           "id": "mtL9U5GBYkGk1o8l6err"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2663,7 +2663,7 @@
       "versionNonce": 1595417819,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -2706,7 +2706,7 @@
           "id": "OWFxmH1OV7TQOc1mp83f"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2733,7 +2733,7 @@
       "versionNonce": 1781048972,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "926",
@@ -2776,7 +2776,7 @@
           "id": "UqcB4oQGi9fpTrwxIW8Y"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2803,7 +2803,7 @@
       "versionNonce": 1702801787,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -2846,7 +2846,7 @@
           "id": "13Hg8nDBLxTubYyuoCZL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2873,7 +2873,7 @@
       "versionNonce": 1034363031,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "-1",
@@ -2916,7 +2916,7 @@
           "id": "BX4hofYoWBO6heWt2GEK"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -2943,7 +2943,7 @@
       "versionNonce": 152716141,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2016",
@@ -2986,7 +2986,7 @@
           "id": "30UVaKHrZ1VQZWR6nkDw"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3013,7 +3013,7 @@
       "versionNonce": 1951123509,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "926",
@@ -3056,7 +3056,7 @@
           "id": "52JqCU1kJwyMNWV1mjYP"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3083,7 +3083,7 @@
       "versionNonce": 2050785733,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "81",
@@ -3126,7 +3126,7 @@
           "id": "YlTGLZx2hUjyXkWnsSKp"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3153,7 +3153,7 @@
       "versionNonce": 911602271,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -3196,7 +3196,7 @@
           "id": "x8zBmuZiEE0C08IY6adT"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3223,7 +3223,7 @@
       "versionNonce": 737757127,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -3266,7 +3266,7 @@
           "id": "P2UvXknJcyzLfxWkecss"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3293,7 +3293,7 @@
       "versionNonce": 769668481,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -3336,7 +3336,7 @@
           "id": "5JC0IcgSRzYkQmK8IXsj"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3363,7 +3363,7 @@
       "versionNonce": 692547858,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "39",
@@ -3406,7 +3406,7 @@
           "id": "j6UoFKuMbQLXJyG2oS10"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3433,7 +3433,7 @@
       "versionNonce": 820054358,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -3476,7 +3476,7 @@
           "id": "HVZ8YU7x3ydXdfPw9jnK"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3503,7 +3503,7 @@
       "versionNonce": 794025616,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -3546,7 +3546,7 @@
           "id": "U7HuFOLatsqD7QDlkFDD"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3573,7 +3573,7 @@
       "versionNonce": 2121929021,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -3616,7 +3616,7 @@
           "id": "SOrl3MSqQbh9nuycszYL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3643,7 +3643,7 @@
       "versionNonce": 1284086755,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -3686,7 +3686,7 @@
           "id": "pHH7ppjlgZWaT7IEayc3"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3713,7 +3713,7 @@
       "versionNonce": 544946530,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -3756,7 +3756,7 @@
           "id": "01nIrojiLPt3l4zL9fZo"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3783,7 +3783,7 @@
       "versionNonce": 1854076905,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -3826,7 +3826,7 @@
           "id": "3zBINh4tyHakbJmIIdj1"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3853,7 +3853,7 @@
       "versionNonce": 875689657,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "963",
@@ -3896,7 +3896,7 @@
           "id": "8ysATL2VW7Hs6wQ0PFxu"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3923,7 +3923,7 @@
       "versionNonce": 1236435662,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -3966,7 +3966,7 @@
           "id": "glMQm9YFa5dAH5qhMYuA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -3993,7 +3993,7 @@
       "versionNonce": 1644587355,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4036,7 +4036,7 @@
           "id": "QhFrtlyXWbPybnH5l1Gr"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4063,7 +4063,7 @@
       "versionNonce": 123575749,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2017",
@@ -4106,7 +4106,7 @@
           "id": "h0EugUPARHmphk3JDMnB"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4133,7 +4133,7 @@
       "versionNonce": 1079943738,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "963",
@@ -4176,7 +4176,7 @@
           "id": "yW3L9vNlSVarBvNNtDAP"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4203,7 +4203,7 @@
       "versionNonce": 1609891469,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "8",
@@ -4246,7 +4246,7 @@
           "id": "fR9CFL7VlGzDANqGRYgn"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4273,7 +4273,7 @@
       "versionNonce": 1768133277,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4316,7 +4316,7 @@
           "id": "MiKy8WEtCfMYZNIld9Sk"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4343,7 +4343,7 @@
       "versionNonce": 247398117,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4386,7 +4386,7 @@
           "id": "hOARRPVOWBzCj9Gp1BgX"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4413,7 +4413,7 @@
       "versionNonce": 1307223728,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4456,7 +4456,7 @@
           "id": "5hRcPi3tiuvaRmnB6pEu"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4483,7 +4483,7 @@
       "versionNonce": 914194423,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "43",
@@ -4526,7 +4526,7 @@
           "id": "GrH6v8E2qlCx8zRugmgh"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4553,7 +4553,7 @@
       "versionNonce": 1954468631,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -4596,7 +4596,7 @@
           "id": "u0ByjaviVFpSZGZ6a8zL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4623,7 +4623,7 @@
       "versionNonce": 424859984,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4666,7 +4666,7 @@
           "id": "RbuBre56nBIq6x13VqtN"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4693,7 +4693,7 @@
       "versionNonce": 862387582,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4736,7 +4736,7 @@
           "id": "e2EIrZMgu8XPTSVHIBvv"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4763,7 +4763,7 @@
       "versionNonce": 1460362291,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4806,7 +4806,7 @@
           "id": "FYNZ5fsNxg5936xkRyGc"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4833,7 +4833,7 @@
       "versionNonce": 1587574760,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4876,7 +4876,7 @@
           "id": "uD8PRTd1SrsYxRbvzHdA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4903,7 +4903,7 @@
       "versionNonce": 826548402,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -4946,7 +4946,7 @@
           "id": "tfgmO9OJVBcn9yyPNycH"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -4973,7 +4973,7 @@
       "versionNonce": 1144431310,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "926",
@@ -5016,7 +5016,7 @@
           "id": "9BXCTSTELu9Qlc4Ayfbz"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5043,7 +5043,7 @@
       "versionNonce": 1740110486,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5086,7 +5086,7 @@
           "id": "mcEZNkKgT8Ff3Ow7MdNr"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5113,7 +5113,7 @@
       "versionNonce": 514220703,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5156,7 +5156,7 @@
           "id": "45Czudk622GAwnqREHYz"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5183,7 +5183,7 @@
       "versionNonce": 1049071449,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2018",
@@ -5226,7 +5226,7 @@
           "id": "krj0scJaabT0x6OkPAed"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5253,7 +5253,7 @@
       "versionNonce": 108691843,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "926",
@@ -5296,7 +5296,7 @@
           "id": "M12REeuXi0Y60FyWDumg"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5323,7 +5323,7 @@
       "versionNonce": 615897512,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5366,7 +5366,7 @@
           "id": "cWqBAgs3rhKhXS66qb3Y"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5393,7 +5393,7 @@
       "versionNonce": 1446967189,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5436,7 +5436,7 @@
           "id": "0mDWR9OSFKLiWixNVB2K"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5463,7 +5463,7 @@
       "versionNonce": 1242187235,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5506,7 +5506,7 @@
           "id": "5MQI8mZPO3fw9PwBk2sF"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5533,7 +5533,7 @@
       "versionNonce": 840560810,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5576,7 +5576,7 @@
           "id": "lCG5Jl6AepDrvNS6CxVv"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5603,7 +5603,7 @@
       "versionNonce": 2019489355,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "45",
@@ -5646,7 +5646,7 @@
           "id": "l6hRBLzNo0SlLGv1pgt2"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5673,7 +5673,7 @@
       "versionNonce": 1994639723,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -5716,7 +5716,7 @@
           "id": "V346HHsQDXv5xpYdjG8x"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5743,7 +5743,7 @@
       "versionNonce": 419774192,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5786,7 +5786,7 @@
           "id": "UjCuv9zKJCgwNcW5KZw6"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5813,7 +5813,7 @@
       "versionNonce": 916873887,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5856,7 +5856,7 @@
           "id": "btaOQb9L2cKUuJk10p4I"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5883,7 +5883,7 @@
       "versionNonce": 1077704357,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -5926,7 +5926,7 @@
           "id": "9ecEtuWK9Cb28ColH6Aw"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -5953,7 +5953,7 @@
       "versionNonce": 1055757796,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -5996,7 +5996,7 @@
           "id": "VEcTYRzopsgSFaYuKQhi"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6023,7 +6023,7 @@
       "versionNonce": 1482834851,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6066,7 +6066,7 @@
           "id": "T1hdirQTVchJ9hJWHMoN"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6093,7 +6093,7 @@
       "versionNonce": 1142733835,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "877",
@@ -6136,7 +6136,7 @@
           "id": "oFyFp3H3sxuOSUN0LJZ5"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6163,7 +6163,7 @@
       "versionNonce": 1432093957,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6206,7 +6206,7 @@
           "id": "90sFewtJUKpxE9cHCno0"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6233,7 +6233,7 @@
       "versionNonce": 837137480,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -6276,7 +6276,7 @@
           "id": "2DHpemi8kLH7uEM64D8B"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6303,7 +6303,7 @@
       "versionNonce": 1469978517,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2019",
@@ -6346,7 +6346,7 @@
           "id": "AEwSKC3JBtHSBSJsMs6K"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6373,7 +6373,7 @@
       "versionNonce": 1685210540,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "877",
@@ -6416,7 +6416,7 @@
           "id": "SyFKbOqMfUaKW94Hrpqd"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6443,7 +6443,7 @@
       "versionNonce": 190706865,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6486,7 +6486,7 @@
           "id": "S3EyvusVtEXTMhjf15yA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6513,7 +6513,7 @@
       "versionNonce": 440762959,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6556,7 +6556,7 @@
           "id": "CJn31pvMPzbvuOhlRykd"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6583,7 +6583,7 @@
       "versionNonce": 1907050744,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6626,7 +6626,7 @@
           "id": "AZVganQshFNEGXeFa7ki"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6653,7 +6653,7 @@
       "versionNonce": 1282581620,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "84",
@@ -6696,7 +6696,7 @@
           "id": "6mJjPDcF9BOqbT4raMjj"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6723,7 +6723,7 @@
       "versionNonce": 85700356,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "35",
@@ -6766,7 +6766,7 @@
           "id": "3vSWseXMBZrrPyu9ZDay"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6793,7 +6793,7 @@
       "versionNonce": 1736719859,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -6836,7 +6836,7 @@
           "id": "fCnvK4K30hVZ9iJu91nl"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6863,7 +6863,7 @@
       "versionNonce": 1616992280,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6906,7 +6906,7 @@
           "id": "ZypLLyAvtWdzfKwyD2S5"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -6933,7 +6933,7 @@
       "versionNonce": 1437739741,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -6976,7 +6976,7 @@
           "id": "8ySaXkfFE7mMDYbmZOfT"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7003,7 +7003,7 @@
       "versionNonce": 2145216653,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -7046,7 +7046,7 @@
           "id": "armNDzE6FTBxlwfu0BzI"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7073,7 +7073,7 @@
       "versionNonce": 22111671,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -7116,7 +7116,7 @@
           "id": "f8dDzEHTVP0FdFiZq49B"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7143,7 +7143,7 @@
       "versionNonce": 1679720813,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -7186,7 +7186,7 @@
           "id": "MeGuw6QAkY8tRr9cftNV"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7213,7 +7213,7 @@
       "versionNonce": 1887894740,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "918",
@@ -7256,7 +7256,7 @@
           "id": "4XytO5vgI0kd7FTfUIBU"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7283,7 +7283,7 @@
       "versionNonce": 874378462,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -7326,7 +7326,7 @@
           "id": "z6rRDIwYqSNLEo6YA7gY"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7353,7 +7353,7 @@
       "versionNonce": 1189400109,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "4",
@@ -7396,7 +7396,7 @@
           "id": "b9OcDwVUOe2XdmIt7gF8"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7423,7 +7423,7 @@
       "versionNonce": 2057780641,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2020",
@@ -7466,7 +7466,7 @@
           "id": "yhnpj7CqBcchGhurSU67"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7493,7 +7493,7 @@
       "versionNonce": 1800861153,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "918",
@@ -7536,7 +7536,7 @@
           "id": "Ds8iMwhLgw3emfmacWYG"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7563,7 +7563,7 @@
       "versionNonce": 1533268321,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -7606,7 +7606,7 @@
           "id": "pCCvNpDw9kPT5n6SWK0O"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7633,7 +7633,7 @@
       "versionNonce": 142846728,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -7676,7 +7676,7 @@
           "id": "oSkZmiCGKIM6LkNMeJus"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7703,7 +7703,7 @@
       "versionNonce": 1509252737,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -7746,7 +7746,7 @@
           "id": "a4K85y0bZevSvvfMGTzo"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7773,7 +7773,7 @@
       "versionNonce": 1469549999,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -7816,7 +7816,7 @@
           "id": "1NjAJCyxI5r82zzkLDWx"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7843,7 +7843,7 @@
       "versionNonce": 749939276,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "43",
@@ -7886,7 +7886,7 @@
           "id": "TYRm4gQcMxKlhke3Y2zC"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7913,7 +7913,7 @@
       "versionNonce": 958106121,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "4",
@@ -7956,7 +7956,7 @@
           "id": "bMnKBlzFufPu5UquiaFT"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -7983,7 +7983,7 @@
       "versionNonce": 506104187,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8026,7 +8026,7 @@
           "id": "E6zeObGPtLnAdCaOknko"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8053,7 +8053,7 @@
       "versionNonce": 679061434,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8096,7 +8096,7 @@
           "id": "fRg0XzdUuXVZ146M5t80"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8123,7 +8123,7 @@
       "versionNonce": 1402908147,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "5",
@@ -8166,7 +8166,7 @@
           "id": "eclyUrFZqKHMcfjEwLGP"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8193,7 +8193,7 @@
       "versionNonce": 36378801,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8236,7 +8236,7 @@
           "id": "4CAGn1AaUeXNNGSkjtMv"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8263,7 +8263,7 @@
       "versionNonce": 1222541322,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8306,7 +8306,7 @@
           "id": "9QAQjTgk3jLPR4yN5FS5"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8333,7 +8333,7 @@
       "versionNonce": 359269503,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "869",
@@ -8376,7 +8376,7 @@
           "id": "VsNouHVZ4TnF4we9IRCN"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8403,7 +8403,7 @@
       "versionNonce": 1826853383,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8446,7 +8446,7 @@
           "id": "SHp74mFmQwf9ZkZWwCHn"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8473,7 +8473,7 @@
       "versionNonce": 742232737,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "6",
@@ -8516,7 +8516,7 @@
           "id": "GuOMFBDDaqi8HQIB9xRL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8543,7 +8543,7 @@
       "versionNonce": 473512554,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2021",
@@ -8586,7 +8586,7 @@
           "id": "5QZRkWUiybcWwrM76vje"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8613,7 +8613,7 @@
       "versionNonce": 1487660245,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "869",
@@ -8656,7 +8656,7 @@
           "id": "LcLHL4R6kwPij3DLl0dk"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8683,7 +8683,7 @@
       "versionNonce": 712769033,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8726,7 +8726,7 @@
           "id": "1yxzLD6SKn0PdbRX7XsE"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8753,7 +8753,7 @@
       "versionNonce": 1086645643,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -8796,7 +8796,7 @@
           "id": "3XgNZzk2WP5BLP85Vb7A"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8823,7 +8823,7 @@
       "versionNonce": 174780983,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8866,7 +8866,7 @@
           "id": "EmyaYMtH82JsG3uofaL0"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8893,7 +8893,7 @@
       "versionNonce": 1842112696,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -8936,7 +8936,7 @@
           "id": "bpJxKhB9dhNl7IT71TuH"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -8963,7 +8963,7 @@
       "versionNonce": 74175681,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "31",
@@ -9006,7 +9006,7 @@
           "id": "r6ssn95YAHoStxS7igfo"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9033,7 +9033,7 @@
       "versionNonce": 1823000067,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -9076,7 +9076,7 @@
           "id": "5xP1o1R4DZceAiLrC4NH"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9103,7 +9103,7 @@
       "versionNonce": 1739664906,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9146,7 +9146,7 @@
           "id": "CshnYThp7ar3jlRJ2kZi"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9173,7 +9173,7 @@
       "versionNonce": 428451190,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9216,7 +9216,7 @@
           "id": "kJ9hmHj7UjY9HUmIc40H"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9243,7 +9243,7 @@
       "versionNonce": 1393453504,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -9286,7 +9286,7 @@
           "id": "1PpI4E105WPwRM3mEHa5"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9313,7 +9313,7 @@
       "versionNonce": 1600901869,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9356,7 +9356,7 @@
           "id": "W02Zs0oUPgXsijwxVYrB"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9383,7 +9383,7 @@
       "versionNonce": 463152344,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -9426,7 +9426,7 @@
           "id": "V3NyDcZnKkBh7aRGtXag"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9453,7 +9453,7 @@
       "versionNonce": 1620239696,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "834",
@@ -9496,7 +9496,7 @@
           "id": "dMDXGqjK6yr9C1iuEwMl"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9523,7 +9523,7 @@
       "versionNonce": 1389504005,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9566,7 +9566,7 @@
           "id": "9DTlMBVa4x4HurMXaPaG"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9593,7 +9593,7 @@
       "versionNonce": 1462992717,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "7",
@@ -9636,7 +9636,7 @@
           "id": "6qtLQFRSS6xdya6BPOXg"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9663,7 +9663,7 @@
       "versionNonce": 460701047,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2022",
@@ -9706,7 +9706,7 @@
           "id": "Llc3RlVZnYfJZ48OeUMz"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9733,7 +9733,7 @@
       "versionNonce": 1267415644,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "834",
@@ -9776,7 +9776,7 @@
           "id": "crXl7VvStLcurghLrILs"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9803,7 +9803,7 @@
       "versionNonce": 2073033076,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9846,7 +9846,7 @@
           "id": "oBM5srzl88Yqy9OmHkAE"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9873,7 +9873,7 @@
       "versionNonce": 1414313850,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -9916,7 +9916,7 @@
           "id": "fGQ46XS3YGB9hJnuuaNA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -9943,7 +9943,7 @@
       "versionNonce": 172273343,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -9986,7 +9986,7 @@
           "id": "7KBl6ggyeiyWrp0n5Zz1"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10013,7 +10013,7 @@
       "versionNonce": 490660113,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -10056,7 +10056,7 @@
           "id": "o4pjXS1S3hYdKNCOLRYn"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10083,7 +10083,7 @@
       "versionNonce": 1562290225,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "26",
@@ -10126,7 +10126,7 @@
           "id": "zPZTkd2bangKGGudjUFM"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10153,7 +10153,7 @@
       "versionNonce": 1565109005,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -10196,7 +10196,7 @@
           "id": "Xvb3s7ITayW7WkURQ4Hc"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10223,7 +10223,7 @@
       "versionNonce": 1958032880,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -10266,7 +10266,7 @@
           "id": "7HutUVzP3o0yjNfJBlBD"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10293,7 +10293,7 @@
       "versionNonce": 4312288,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -10336,7 +10336,7 @@
           "id": "BtTvxH8k2UCx7eckCnDi"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10363,7 +10363,7 @@
       "versionNonce": 1479172377,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -10406,7 +10406,7 @@
           "id": "0xRYUr82YbgTfELI1hRu"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10433,7 +10433,7 @@
       "versionNonce": 969071398,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -10476,7 +10476,7 @@
           "id": "gh5ipeKVHN91tB289Xqp"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10503,7 +10503,7 @@
       "versionNonce": 1787800539,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -10546,7 +10546,7 @@
           "id": "hZocXlARs52LWTpWPT3p"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10573,7 +10573,7 @@
       "versionNonce": 858093354,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "806",
@@ -10616,7 +10616,7 @@
           "id": "DS0D2LogeSpQ2zPQ950n"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10643,7 +10643,7 @@
       "versionNonce": 84917039,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -10686,7 +10686,7 @@
           "id": "EPX6m2qAs8LiRYqD1X6p"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10713,7 +10713,7 @@
       "versionNonce": 1185518206,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "6",
@@ -10756,7 +10756,7 @@
           "id": "8c7iMVNEGI0DABUFYr4x"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10783,7 +10783,7 @@
       "versionNonce": 1227914230,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2023",
@@ -10826,7 +10826,7 @@
           "id": "M4kKCrTuN0MWbprHfqEQ"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10853,7 +10853,7 @@
       "versionNonce": 1516213670,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "806",
@@ -10896,7 +10896,7 @@
           "id": "arjtwIkuUXFAKoeeruEl"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10923,7 +10923,7 @@
       "versionNonce": 605487055,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -10966,7 +10966,7 @@
           "id": "KYZs6a0adrc9n7xKGbD3"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -10993,7 +10993,7 @@
       "versionNonce": 220227736,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "5",
@@ -11036,7 +11036,7 @@
           "id": "Z991Mrhl0XFX7SQ7CIiT"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11063,7 +11063,7 @@
       "versionNonce": 882767933,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -11106,7 +11106,7 @@
           "id": "rh7YmTlGXveEs3XRAm8i"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11133,7 +11133,7 @@
       "versionNonce": 18307458,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -11176,7 +11176,7 @@
           "id": "rbgueQXVy1eUDb4TpPZD"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11203,7 +11203,7 @@
       "versionNonce": 1875576229,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "32",
@@ -11246,7 +11246,7 @@
           "id": "p4BFv3n5cSSBJMuK7EeA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11273,7 +11273,7 @@
       "versionNonce": 763895507,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "5",
@@ -11316,7 +11316,7 @@
           "id": "sn4rBhpJBztOfhcybBsS"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11343,7 +11343,7 @@
       "versionNonce": 544725477,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -11386,7 +11386,7 @@
           "id": "vHfaXL0uQwVzN6pLju2f"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11413,7 +11413,7 @@
       "versionNonce": 303225482,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -11456,7 +11456,7 @@
           "id": "tBRM1PPmqfmY4y6F7Z3N"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11483,7 +11483,7 @@
       "versionNonce": 110101215,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "4",
@@ -11526,7 +11526,7 @@
           "id": "hUuzpmfYeuo184O2Jp3O"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11553,7 +11553,7 @@
       "versionNonce": 795494938,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -11596,7 +11596,7 @@
           "id": "3els6lcIPTDbYOzLuX3G"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11623,7 +11623,7 @@
       "versionNonce": 1420739088,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -11666,7 +11666,7 @@
           "id": "BQloTJaU8E9ULCDURR21"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11693,7 +11693,7 @@
       "versionNonce": 372882431,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "767",
@@ -11736,7 +11736,7 @@
           "id": "TA5IrWe4QXa31tDndqaP"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11763,7 +11763,7 @@
       "versionNonce": 1283365559,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -11806,7 +11806,7 @@
           "id": "Mhufa3PHLUAbbtsUE6P6"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11833,7 +11833,7 @@
       "versionNonce": 990957377,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "5",
@@ -11876,7 +11876,7 @@
           "id": "RSatLqH9m2wg7Dj5wEPM"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11903,7 +11903,7 @@
       "versionNonce": 773038597,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2024",
@@ -11946,7 +11946,7 @@
           "id": "4XJN4HHfXUmwn9mNOTjc"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -11973,7 +11973,7 @@
       "versionNonce": 1188598311,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "767",
@@ -12016,7 +12016,7 @@
           "id": "CPCHT1nQwytdg71CQU8I"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12043,7 +12043,7 @@
       "versionNonce": 242566909,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "104",
@@ -12086,7 +12086,7 @@
           "id": "IJUAG17lMB2jG0N1mC3Q"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12113,7 +12113,7 @@
       "versionNonce": 1901728668,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "6",
@@ -12156,7 +12156,7 @@
           "id": "MgfrH9aiBOwdRKg1ex3P"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12183,7 +12183,7 @@
       "versionNonce": 1114847025,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -12226,7 +12226,7 @@
           "id": "o4AsD4t0D1roUJTpBuJA"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12253,7 +12253,7 @@
       "versionNonce": 601491915,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -12296,7 +12296,7 @@
           "id": "LvuwYXtVjRUTEqExahQf"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12323,7 +12323,7 @@
       "versionNonce": 299899429,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "23",
@@ -12366,7 +12366,7 @@
           "id": "P7MOhzCsknGLVRgNim9W"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12393,7 +12393,7 @@
       "versionNonce": 1842562512,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3",
@@ -12436,7 +12436,7 @@
           "id": "NgTgCn70TRA0dGDh8P7s"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12463,7 +12463,7 @@
       "versionNonce": 225735284,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1",
@@ -12506,7 +12506,7 @@
           "id": "EIG76G9IDr7RPevAM1d0"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12533,7 +12533,7 @@
       "versionNonce": 1222650382,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2",
@@ -12576,7 +12576,7 @@
           "id": "pLDvCX8XYGY1hTkXZ42u"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12603,7 +12603,7 @@
       "versionNonce": 770993047,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "7",
@@ -12646,7 +12646,7 @@
           "id": "JtLiGdAhpgBtz3aG4yeC"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12673,7 +12673,7 @@
       "versionNonce": 72015562,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -12716,7 +12716,7 @@
           "id": "KaJHJDwRPVXySGSLj0r3"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12743,7 +12743,7 @@
       "versionNonce": 2014266373,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "84",
@@ -12786,7 +12786,7 @@
           "id": "DA5SE8ZjVUlUcULjyGwO"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12813,7 +12813,7 @@
       "versionNonce": 997170534,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "758",
@@ -12856,7 +12856,7 @@
           "id": "xLTFNZPtDWfXKmGFJRID"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12883,7 +12883,7 @@
       "versionNonce": 1900311800,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "0",
@@ -12926,7 +12926,7 @@
           "id": "NCaRPC7sYSKDYLzYXmiL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -12953,7 +12953,7 @@
       "versionNonce": 405137609,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "6",
@@ -12993,7 +12993,7 @@
       "versionNonce": 1760283831,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13022,7 +13022,7 @@
       "versionNonce": 1507263288,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1. Les colonnes",
@@ -13060,7 +13060,7 @@
       "versionNonce": 159072146,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "« Remise en activité » est rangée sous les entrées, « Disponibilité » sous\nles sorties, à côté du recrutement et de la retraite.",
@@ -13100,7 +13100,7 @@
       "versionNonce": 1043617628,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13129,7 +13129,7 @@
       "versionNonce": 1121065472,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2. L'effectif suit",
@@ -13167,7 +13167,7 @@
       "versionNonce": 152346383,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Chaque année, de 2015 à 2024 : début + entrées − sorties = fin (colonne\ncontrôle, calculée). L'effectif publié, 758 fin 2024, ne compte donc pas les\nagents en disponibilité : ils sont sortis.",
@@ -13207,7 +13207,7 @@
       "versionNonce": 959290099,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13236,7 +13236,7 @@
       "versionNonce": 1756889329,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3. Le même ordre de grandeur que la base",
@@ -13274,7 +13274,7 @@
       "versionNonce": 1295684821,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Disponibilités moins remises, cumulées depuis 2015 : +6 fin 2024, plus\nles agents déjà en disponibilité avant 2015 (au moins un : −1 en 2015). La\nbase trouve 6 agents en disponibilité au 31/12/2024 (décision 07 sans 18\naprès, lot 24).",
@@ -13314,7 +13314,7 @@
       "versionNonce": 1808550235,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13343,16 +13343,16 @@
       "versionNonce": 108162333,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
-      "text": "OUI, ÇA RÉPOND À QG6 (et à la question 2 de T60). Pour la CNSS, un agent mis en disponibilité sort de l'effectif ; il y rentre à sa remise en activité. L'interlocuteur de la CNSS l'avait dit à la réunion du 03/11\n(M11). Le recueil des besoins, l'atelier de Kaya et l'Annuaire CIPRES n'en disent rien : c'est la seule règle écrite par la CNSS sur ce point, et les décisions 07 et 18 de la base la suivent.\nChez nous : le réglage disponibilite passe à HORS_EFFECTIF, dans la CTE parametres des deux requêtes, T58 et T60 (pas encore fait : à ta demande).",
+      "text": "OUI, ÇA RÉPOND À QG6 (et à la question 2 de T60). Pour la CNSS, un agent mis en disponibilité sort de l'effectif ; il y rentre à sa remise en activité. L'interlocuteur de la CNSS l'avait dit à la réunion du 03/11\n(M11). Le recueil des besoins, l'atelier de Kaya et l'Annuaire CIPRES n'en disent rien : c'est la seule règle écrite par la CNSS sur ce point, et les décisions 07 et 18 de la base la suivent.\nChez nous : le réglage disponibilite passe à HORS_EFFECTIF, dans la CTE parametres des deux requêtes, T58 et T60 (fait le 08/11/2026, à ta demande).",
       "fontSize": 21,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "OUI, ÇA RÉPOND À QG6 (et à la question 2 de T60). Pour la CNSS, un agent mis en disponibilité sort de l'effectif ; il y rentre à sa remise en activité. L'interlocuteur de la CNSS l'avait dit à la réunion du 03/11\n(M11). Le recueil des besoins, l'atelier de Kaya et l'Annuaire CIPRES n'en disent rien : c'est la seule règle écrite par la CNSS sur ce point, et les décisions 07 et 18 de la base la suivent.\nChez nous : le réglage disponibilite passe à HORS_EFFECTIF, dans la CTE parametres des deux requêtes, T58 et T60 (pas encore fait : à ta demande).",
+      "originalText": "OUI, ÇA RÉPOND À QG6 (et à la question 2 de T60). Pour la CNSS, un agent mis en disponibilité sort de l'effectif ; il y rentre à sa remise en activité. L'interlocuteur de la CNSS l'avait dit à la réunion du 03/11\n(M11). Le recueil des besoins, l'atelier de Kaya et l'Annuaire CIPRES n'en disent rien : c'est la seule règle écrite par la CNSS sur ce point, et les décisions 07 et 18 de la base la suivent.\nChez nous : le réglage disponibilite passe à HORS_EFFECTIF, dans la CTE parametres des deux requêtes, T58 et T60 (fait le 08/11/2026, à ta demande).",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -13383,7 +13383,7 @@
       "versionNonce": 2029812350,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13412,7 +13412,7 @@
       "versionNonce": 114571049,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "CE QUE ÇA CHANGE DANS NOS CHIFFRES (2024, permanents)\n· Effectif fin 2024 : 741 au lieu de 747, les 6 agents en disponibilité sortent ; l'écart avec les 758 publiés passe de 11 à 17, à expliquer.\n· T60 2024 : environ 5 sorties « disponibilité » et 4 entrées « remise en activité » (décisions 07 et 18) ; l'annuaire en publie 7 et 6.\n· Les colonnes actifs et inactifs de l'effectif (G13) n'ont plus d'inactif : l'inactif était justement l'agent en disponibilité.",
@@ -13450,7 +13450,7 @@
       "versionNonce": 1894454262,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13477,7 +13477,7 @@
       "versionNonce": 1062976576,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2. Les autres règles, tableau par tableau",
@@ -13517,7 +13517,7 @@
       "versionNonce": 73707798,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13546,7 +13546,7 @@
       "versionNonce": 1771960093,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 119 · tout le personnel, par statut",
@@ -13591,7 +13591,7 @@
           "id": "2qgv1666HwIW5MEWqI1G"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -13620,7 +13620,7 @@
       "versionNonce": 765777585,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T58",
@@ -13658,7 +13658,7 @@
       "versionNonce": 1102274192,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -13696,7 +13696,7 @@
       "versionNonce": 1281793604,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "758 permanents et 46 contractuels, 804 en tout, au 31/12/2024. Chaque\ncontractuel a une catégorie : 18, 13, 10 et 5. Deux statuts seulement : ni agent\nde la fonction publique, ni agent affecté.",
@@ -13734,7 +13734,7 @@
       "versionNonce": 1359261532,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -13772,7 +13772,7 @@
       "versionNonce": 971281891,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -13810,7 +13810,7 @@
       "versionNonce": 223710246,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Le tableau des temporaires se fait avec les mêmes catégories ; le recueil\ndemande T58 par type d'employé (RH ligne 1).",
@@ -13848,7 +13848,7 @@
       "versionNonce": 519092557,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -13886,7 +13886,7 @@
       "versionNonce": 1209813147,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Qualité A seulement (G1).",
@@ -13924,7 +13924,7 @@
       "versionNonce": 192302161,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -13962,7 +13962,7 @@
       "versionNonce": 288314259,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "46 = les 46 de la base (lot 19) ; avec G7, sans durée de contrat, la requête de\nl'effectif peut en trouver plus : à comparer à l'exécution.",
@@ -14005,7 +14005,7 @@
           "id": "gT1WkO98QbwGPtK9iE4Z"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14032,7 +14032,7 @@
       "versionNonce": 745116574,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G1, G7",
@@ -14075,7 +14075,7 @@
           "id": "GTtmjgVFx2UmD9GG4xgE"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14102,7 +14102,7 @@
       "versionNonce": 1770173218,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G7 à vérifier",
@@ -14142,7 +14142,7 @@
       "versionNonce": 1828180277,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14171,7 +14171,7 @@
       "versionNonce": 1758432382,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 126 · les catégories détaillées",
@@ -14216,7 +14216,7 @@
           "id": "5In6JQS7ldYUlLNiqg1F"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14245,7 +14245,7 @@
       "versionNonce": 1180183798,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T58, T65",
@@ -14283,7 +14283,7 @@
       "versionNonce": 128625509,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -14321,7 +14321,7 @@
       "versionNonce": 1853367348,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Employés : 1re A 15 + 1re B 6 + 2e A 92 + 2e B 64 = 177\nAgents de maîtrise : 3e A 126 + 3e B 82 = 208\nCadres moyens : 4e A 27 + 4e B 175 + 4e C 23 + 5e A 59 + 5e B 27 = 311\nCadres supérieurs : 6e A 35 + 6e B 26 + HC 1 = 62\nLes quatre totaux sont ceux du tableau 119, à l'unité près.",
@@ -14359,7 +14359,7 @@
       "versionNonce": 699068617,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -14397,7 +14397,7 @@
       "versionNonce": 1258110938,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -14435,7 +14435,7 @@
       "versionNonce": 1299144490,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Les quatre groupes de la CNSS, exactement : 1re et 2e employés, 3e maîtrise,\n4e et 5e cadres moyens, 6e et HC cadres supérieurs.",
@@ -14473,7 +14473,7 @@
       "versionNonce": 1251595631,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -14511,7 +14511,7 @@
       "versionNonce": 997970498,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La 5e est bien « cadre moyen » (QG1, déjà tranchée par le recueil).",
@@ -14549,7 +14549,7 @@
       "versionNonce": 1849048661,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -14587,7 +14587,7 @@
       "versionNonce": 1460105868,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "HC compte en cadres supérieurs : c'était une proposition BI (G3), c'est\nconfirmé.",
@@ -14630,7 +14630,7 @@
           "id": "1xUNt5FNFhfoLH7QMsdQ"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14657,7 +14657,7 @@
       "versionNonce": 954963153,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "QG1, G3",
@@ -14700,7 +14700,7 @@
           "id": "nTDfjVZDNY1vQhgTSII7"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14727,7 +14727,7 @@
       "versionNonce": 1107241745,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "HC",
@@ -14767,7 +14767,7 @@
       "versionNonce": 756153801,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14796,7 +14796,7 @@
       "versionNonce": 1059316643,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 120 · catégorie, âge et sexe",
@@ -14841,7 +14841,7 @@
           "id": "J3VpYt8vOU2k4QBlP1pK"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -14870,7 +14870,7 @@
       "versionNonce": 568593123,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T58",
@@ -14908,7 +14908,7 @@
       "versionNonce": 477082829,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -14946,7 +14946,7 @@
       "versionNonce": 1111323888,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La grille d'âge de l'Annuaire CIPRES, de moins de 20 ans à 60 ans et plus.\nAucun permanent de 60 ans ou plus. 412 hommes et 346 femmes. La base (742, lot\n18) : 400 et 342.",
@@ -14984,7 +14984,7 @@
       "versionNonce": 540760847,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -15022,7 +15022,7 @@
       "versionNonce": 1281821273,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -15060,7 +15060,7 @@
       "versionNonce": 1873670411,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "L'âge au 31/12, en années pleines (G4).",
@@ -15098,7 +15098,7 @@
       "versionNonce": 925899464,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -15136,7 +15136,7 @@
       "versionNonce": 19383823,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Personne au-delà de 59 ans : sans doute l'âge de la retraite, à vérifier dans la\nbase.",
@@ -15179,7 +15179,7 @@
           "id": "tLrRW109OdsgAn2QupSq"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15206,7 +15206,7 @@
       "versionNonce": 636561243,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G4",
@@ -15246,7 +15246,7 @@
       "versionNonce": 381713414,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15275,7 +15275,7 @@
       "versionNonce": 1257420419,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 121 · le détail des « autres »",
@@ -15320,7 +15320,7 @@
           "id": "kfnneOfFNpreiyLxMlfJ"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15349,7 +15349,7 @@
       "versionNonce": 1889587118,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T60",
@@ -15387,7 +15387,7 @@
       "versionNonce": 1581304954,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -15425,7 +15425,7 @@
       "versionNonce": 1191436978,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Entrées : remise en activité, détachement, autres. Sorties : licenciement,\ndémission, disponibilité, fin de détachement, autres. Ni fin de contrat ni mise à\ndisposition pour les permanents.",
@@ -15463,7 +15463,7 @@
       "versionNonce": 1564134208,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -15501,7 +15501,7 @@
       "versionNonce": 1321542037,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -15539,7 +15539,7 @@
       "versionNonce": 908133482,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La liste des « autres » est celle de la CNSS (question 1 de T60) : confirmée.",
@@ -15577,7 +15577,7 @@
       "versionNonce": 701182980,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -15615,7 +15615,7 @@
       "versionNonce": 1360505868,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La mise à disposition n'apparaît pas comme une sortie (question 6) : notre\nproposition « non » se renforce.",
@@ -15653,7 +15653,7 @@
       "versionNonce": 1162390854,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -15691,7 +15691,7 @@
       "versionNonce": 1787489707,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Les détachements sont comptés (2 en 2023, 1 en 2024) : où sont-ils saisis ?\n(QG7, toujours ouverte).",
@@ -15734,7 +15734,7 @@
           "id": "1Al2ueYhLsdIHmZpnpDL"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15761,7 +15761,7 @@
       "versionNonce": 6847403,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "question 1",
@@ -15804,7 +15804,7 @@
           "id": "m58T6DUlQpyWbtshTEM8"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15831,7 +15831,7 @@
       "versionNonce": 329531675,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "questions 5, 6",
@@ -15871,7 +15871,7 @@
       "versionNonce": 508482240,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15900,7 +15900,7 @@
       "versionNonce": 1934433421,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 121 · le reste",
@@ -15945,7 +15945,7 @@
           "id": "VxmD7e5BS8iShqM6FPc7"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -15974,7 +15974,7 @@
       "versionNonce": 1667709648,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T60",
@@ -16012,7 +16012,7 @@
       "versionNonce": 1281669195,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -16050,7 +16050,7 @@
       "versionNonce": 230004240,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Le début d'une année est la fin de l'année d'avant, de 2015 à 2024. Le tableau\nne suit que les permanents. 104 recrutements en 2024, comme la base. Les 84 de\n2019 entrent en « autres », pas en recrutement, et sortent en « autres » en\n2024.",
@@ -16088,7 +16088,7 @@
       "versionNonce": 1850462685,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -16126,7 +16126,7 @@
       "versionNonce": 786998999,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -16164,7 +16164,7 @@
       "versionNonce": 1250500881,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Les deux photos de G14 : confirmées.",
@@ -16202,7 +16202,7 @@
       "versionNonce": 592387712,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -16240,7 +16240,7 @@
       "versionNonce": 1490581594,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Filtre de nature PERMANENT par défaut pour T60.",
@@ -16278,7 +16278,7 @@
       "versionNonce": 2027716323,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -16316,7 +16316,7 @@
       "versionNonce": 676973100,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "QG2 se précise : les 84 ne sont pas des recrutés ; par quel acte sont-ils\nentrés en 2019, et sortis en 2024 ?",
@@ -16359,7 +16359,7 @@
           "id": "CMVkdT1KdsggWzdwD5zC"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -16386,7 +16386,7 @@
       "versionNonce": 1749448023,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G14",
@@ -16429,7 +16429,7 @@
           "id": "9U4IDet4gcpmgZMELh9i"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -16456,7 +16456,7 @@
       "versionNonce": 666654294,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "QG2",
@@ -16496,7 +16496,7 @@
       "versionNonce": 35301478,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -16525,7 +16525,7 @@
       "versionNonce": 1442988511,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 122 · l'ancienneté",
@@ -16570,7 +16570,7 @@
           "id": "cqK3MqQRzlFH5T3MryW8"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -16599,7 +16599,7 @@
       "versionNonce": 260994165,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T61",
@@ -16637,7 +16637,7 @@
       "versionNonce": 1535693080,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -16675,7 +16675,7 @@
       "versionNonce": 1818044894,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "103 agents de moins d'un an, pour 104 recrutés en 2024 ; 1 seul de 1 à 4 ans,\ncar aucun recrutement de 2018 à 2023 (tableau 121). 232 de 10 à 14 ans. La\nbase (ancien calcul) : 101 et 224.",
@@ -16713,7 +16713,7 @@
       "versionNonce": 177213110,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -16751,7 +16751,7 @@
       "versionNonce": 539874728,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -16789,7 +16789,7 @@
       "versionNonce": 1616380001,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "L'ancienneté part de l'entrée : un recruté de 2024 a moins d'un an.",
@@ -16827,7 +16827,7 @@
       "versionNonce": 1276992416,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -16865,7 +16865,7 @@
       "versionNonce": 560055186,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La grille de l'Annuaire CIPRES (moins de 1 an … 40 ans et plus) ; G5 reste à\nrecalculer dans la base.",
@@ -16908,7 +16908,7 @@
           "id": "nV97YhwTAofKwTuu11ge"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -16935,7 +16935,7 @@
       "versionNonce": 134846777,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G5",
@@ -16975,7 +16975,7 @@
       "versionNonce": 345163252,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17004,7 +17004,7 @@
       "versionNonce": 1267809882,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 123 · les formés",
@@ -17049,7 +17049,7 @@
           "id": "tRoWRzxEJHDlpxCZQ1K3"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17078,7 +17078,7 @@
       "versionNonce": 1619355739,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T62",
@@ -17116,7 +17116,7 @@
       "versionNonce": 27074050,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -17154,7 +17154,7 @@
       "versionNonce": 1986898109,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "480 permanents en formation ou formés : 132, 142, 118, 88. Finalité : 6 avec\npromotion, 474 sans. Pas de sexe. Mais 88 cadres supérieurs formés pour 62\ncadres supérieurs en poste.",
@@ -17192,7 +17192,7 @@
       "versionNonce": 1114700571,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -17230,7 +17230,7 @@
       "versionNonce": 1812996538,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -17268,7 +17268,7 @@
       "versionNonce": 148866838,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T62 ne compte que les permanents : confirmé.",
@@ -17306,7 +17306,7 @@
       "versionNonce": 2140592237,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -17344,7 +17344,7 @@
       "versionNonce": 610874316,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La finalité avec ou sans promotion de l'Annuaire CIPRES : confirmée ; la\nbase en trouve 2 avec promotion.",
@@ -17382,7 +17382,7 @@
       "versionNonce": 1662162152,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -17420,7 +17420,7 @@
       "versionNonce": 1666557755,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Les 480 ne sont pas des agents distincts, au moins pour les cadres supérieurs\n: sans doute des participations. La base : 409 agents, 524 inscriptions (QG4).",
@@ -17463,7 +17463,7 @@
           "id": "uGc8Ox6ceFwn6U2tTYwS"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17490,7 +17490,7 @@
       "versionNonce": 1089678081,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "permanents",
@@ -17533,7 +17533,7 @@
           "id": "7SWajgapD8FN3otiFYmW"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17560,7 +17560,7 @@
       "versionNonce": 1434194671,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "QG4",
@@ -17600,7 +17600,7 @@
       "versionNonce": 170902936,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17629,7 +17629,7 @@
       "versionNonce": 1327907117,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableau 124 · le taux d'encadrement",
@@ -17674,7 +17674,7 @@
           "id": "htgzEtRHCUhfVq6DvRlM"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -17703,7 +17703,7 @@
       "versionNonce": 1408642575,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T65",
@@ -17741,7 +17741,7 @@
       "versionNonce": 2097775854,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -17779,7 +17779,7 @@
       "versionNonce": 70531396,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Cadres 373 = cadres moyens 311 + cadres supérieurs 62, sur 758 permanents : 49\n% en 2024 ; 41 % de 2020 à 2023. Le saut de 2024 (+57 cadres, −66 non cadres)\nsuit l'année des 104 recrutements et des 84 sorties.",
@@ -17817,7 +17817,7 @@
       "versionNonce": 1884745041,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -17855,7 +17855,7 @@
       "versionNonce": 138773615,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -17893,7 +17893,7 @@
       "versionNonce": 1939944857,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Cadres = catégories 4, 5, 6 et HC, sur l'effectif permanent (G6).",
@@ -17931,7 +17931,7 @@
       "versionNonce": 1715952904,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -17969,7 +17969,7 @@
       "versionNonce": 632321669,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La base : 48,8 % en 2024 (sur 742).",
@@ -18012,7 +18012,7 @@
           "id": "k6lEUdOrDcUUvafk87Az"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18039,7 +18039,7 @@
       "versionNonce": 511312008,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G6",
@@ -18079,7 +18079,7 @@
       "versionNonce": 882353918,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18108,7 +18108,7 @@
       "versionNonce": 1269547097,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Tableaux 125 et 126 · par direction",
@@ -18153,7 +18153,7 @@
           "id": "6eCzsdjz6kLrXmQyDUic"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18182,7 +18182,7 @@
       "versionNonce": 621373176,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T58, T59",
@@ -18220,7 +18220,7 @@
       "versionNonce": 1244712292,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que montre l'annuaire",
@@ -18258,7 +18258,7 @@
       "versionNonce": 888238695,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Les permanents par direction : 20 directions, du DG aux directions régionales\n(DRO 233, DRB 157…), par âge, sexe et catégorie. Aucun tableau par domaine\nd'activité (T59).",
@@ -18296,7 +18296,7 @@
       "versionNonce": 959639931,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Ce que j'en tire",
@@ -18334,7 +18334,7 @@
       "versionNonce": 1425851902,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -18372,7 +18372,7 @@
       "versionNonce": 922677540,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "La déclinaison par direction que demande le recueil (RH lignes 1 à 4).",
@@ -18410,7 +18410,7 @@
       "versionNonce": 288038645,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "•",
@@ -18448,7 +18448,7 @@
       "versionNonce": 6980153,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "T59 n'est pas publié par domaine : la correspondance unité → domaine reste à\ndemander (G12) ; elle peut partir de ces 20 directions.",
@@ -18491,7 +18491,7 @@
           "id": "9UOD63g9sAQdt6VRyGTC"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18518,7 +18518,7 @@
       "versionNonce": 1217922594,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "déclinaison",
@@ -18561,7 +18561,7 @@
           "id": "6sbZ8VQ4xP5FeaMRucV2"
         }
       ],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18588,7 +18588,7 @@
       "versionNonce": 91970426,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "G12",
@@ -18626,7 +18626,7 @@
       "versionNonce": 92917013,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18635,7 +18635,7 @@
       "type": "text",
       "x": 25,
       "y": 2807.25,
-      "width": 1368.3000000000002,
+      "width": 1216.5000000000002,
       "height": 37.5,
       "angle": 0,
       "strokeColor": "#1e1e1e",
@@ -18653,16 +18653,16 @@
       "versionNonce": 901436487,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
-      "text": "3. Ce que je propose d'intégrer dans nos règles (à ta demande), et ce qui reste ouvert",
+      "text": "3. Ce qui est intégré dans nos règles (08/11/2026), et ce qui reste ouvert",
       "fontSize": 30,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "3. Ce que je propose d'intégrer dans nos règles (à ta demande), et ce qui reste ouvert",
+      "originalText": "3. Ce qui est intégré dans nos règles (08/11/2026), et ce qui reste ouvert",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -18693,7 +18693,7 @@
       "versionNonce": 984876908,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -18722,7 +18722,7 @@
       "versionNonce": 613866592,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "1. QG6 tranchée : réglage disponibilite = HORS_EFFECTIF dans T58 et T60 ; la question 2 de T60 et la question Q4 de la fiche T58 se ferment.",
@@ -18760,7 +18760,7 @@
       "versionNonce": 113327271,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "2. G3 : HC en cadres supérieurs, confirmé par le tableau 126.",
@@ -18798,7 +18798,7 @@
       "versionNonce": 1775146609,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "3. Question 1 de T60 (la liste des « autres ») : confirmée par le tableau 121.",
@@ -18836,7 +18836,7 @@
       "versionNonce": 800725336,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "4. Question 6 de T60 (mise à disposition) : pas une sortie, aucune colonne dans le tableau 121.",
@@ -18874,7 +18874,7 @@
       "versionNonce": 943627084,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "5. QG4 (T62) : demander à la CNSS si les 480 sont des participations ; 88 cadres supérieurs formés pour 62 en poste.",
@@ -18912,7 +18912,7 @@
       "versionNonce": 1974295467,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "6. QG2 : les 84 de 2019 sont entrés en « autres », pas en recrutement : par quel acte ?",
@@ -18950,7 +18950,7 @@
       "versionNonce": 1103407052,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "7. G12 (T59) : partir des 20 directions des tableaux 125 et 126 pour la correspondance.",
@@ -18990,7 +18990,7 @@
       "versionNonce": 315995149,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false
     },
@@ -19019,7 +19019,7 @@
       "versionNonce": 1255453716,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794161626255,
+      "updated": 1794162952272,
       "link": null,
       "locked": false,
       "text": "Restent ouvertes : QG3 (date de décès), QG7 (où sont saisis les détachements), et les questions 4 (date d'entrée), 7 (entré et sorti la même année) et 8 (mutations dans une agence) de T60.\nSource : l'annuaire CNSS 2024 est produit par la CNSS (DPC). Il ne prime pas sur le recueil des besoins ; ici, il comble un silence du recueil, de Kaya et de l'Annuaire CIPRES.",

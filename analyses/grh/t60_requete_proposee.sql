@@ -78,8 +78,8 @@
 --   mutations nettes de l'unité.
 --
 -- CONTRÔLE dans SQL Developer (cliché 102026), en entourant la requête ; à
--- refaire avec disponibilite = 'HORS_EFFECTIF' dans la CTE parametres pour
--- voir la lecture de l'annuaire :
+-- refaire avec disponibilite = 'PRESENT' dans la CTE parametres pour voir
+-- l'effet des disponibilités :
 --   SELECT ID_TEMPS,
 --     SUM(CASE WHEN CODE_TYPE_MVT = 'DEBUT' THEN NB_AGENTS ELSE 0 END) AS debut,
 --     SUM(CASE WHEN CODE_TYPE_MVT = 'RECRU' THEN NB_AGENTS ELSE 0 END) AS recrut,
@@ -97,9 +97,15 @@
 --   WHERE QUALITE_EMPLOYE = 'A' AND NATURE_EMPLOI = 'PERMANENT'
 --     AND ID_TEMPS BETWEEN 20201231 AND 20251231
 --   GROUP BY ID_TEMPS ORDER BY 1;
--- Attendu, à quelques agents près (permanents, réglages par défaut ; lots
--- 17, 18 et 25) : début · recrut · autres_ent · retraite · deces ·
--- autres_sort · fin
+-- Attendu, à quelques agents près (permanents ; lots 17, 18, 20, 24 et 25) :
+-- début · recrut · autres_ent · retraite · deces · autres_sort · fin
+--   Avec les réglages actuels (disponibilite = 'HORS_EFFECTIF', 08/11/2026) :
+--   comme avec PRESENT ci-dessous, mais début et fin baissent des agents en
+--   disponibilité à chaque 31/12 (6 au 31/12/2024, lot 24), et les
+--   disponibilités (DISP) et remises en activité (REM) apparaissent.
+--   2024 : environ 672 · 104 · 4 · 25 · 5 · 9 · 741   (REM 4 ; 2 démissions,
+--          1 licenciement, 5 disponibilités, 1 sorti sans motif daté)
+--   Avec disponibilite = 'PRESENT' :
 --   2020 : 823 ·   1 · 0 · 39 · 3 · 0 · 782
 --   2021 : 782 ·   0 · 0 · 31 · 4 · 1 · 746   (1 licenciement)
 --   2022 : 746 ·   1 · 0 · 29 · 4 · 2 · 712   (2 licenciements)
@@ -109,13 +115,10 @@
 --   2025 : 747 ·   … · … ·  … · … · … · 886
 --   Annuaire CNSS 2024 (tableau 121) : 767 · 104 · 7 · 23 · 3 · 94 · 758.
 --   Les écarts : les 84 engagés de 2019, sans date de départ (G11) ; les
---   disponibilités et les remises en activité (réglage disponibilite) ; les
 --   décès, lus 8 mois plus tard dans la liquidation des droits (34).
---   Avec disponibilite = 'HORS_EFFECTIF' : disponibilités (DISP) et remises en activité
---   (REM) proches des décisions 07 et 18 des permanents, 2, 4, 2, 5, 5 et 4,
---   3, 6, 5, 4 de 2020 à 2024 (lot 20, Q117), pour 5, 3, 2, 4, 7 et 3, 2, 3,
---   5, 6 publiées ; début et fin baissent des agents en disponibilité (6 au
---   31/12/2024).
+--   Disponibilités (DISP) et remises en activité (REM) de la base : proches
+--   des décisions 07 et 18 des permanents, 2, 4, 2, 5, 5 et 4, 3, 6, 5, 4 de
+--   2020 à 2024 (lot 20, Q117), pour 5, 3, 2, 4, 7 et 3, 2, 3, 5, 6 publiées.
 -- Le détail des autres (B29), même filtre :
 --   SELECT ID_TEMPS, CODE_NAT_MVT, CODE_TYPE_MVT, MOTIF_MVT, SUM(NB_AGENTS)
 --   FROM ( …la requête… )
@@ -181,9 +184,13 @@
 --
 -- RÉGLAGES (partie 0, la CTE parametres) : chacun peut changer sans réécrire
 -- la requête.
---   · disponibilite         : PRESENT (dans l'effectif) ou HORS_EFFECTIF ;
---                             MÊME VALEUR que la requête de l'effectif, sinon
---                             la fin ne retombe plus sur T58 (QG6).
+--   · disponibilite         : HORS_EFFECTIF (retenu le 08/11/2026 : l'annuaire
+--                             CNSS 2024, tableau 121, range la disponibilité
+--                             en sortie et la remise en activité en entrée ;
+--                             la CNSS l'a dit le 03/11, M11 ; QG6) ou PRESENT
+--                             (dans l'effectif) ; MÊME VALEUR que la requête
+--                             de l'effectif, sinon la fin ne retombe plus sur
+--                             T58.
 --   · fin_contrat_inconnue  : PRESENT ou FICHE ; même valeur que l'effectif.
 --   · passages_annee        : NON (proposition de la fiche T60, Q7) ou OUI.
 --   · mouvements_internes   : COMME_AVANT ou AUCUN.
@@ -198,11 +205,12 @@ WITH
 -- ── 0. Les réglages ─────────────────────────────────────────────────────────
 parametres AS (
     SELECT -- QG6 : l'agent en disponibilité (décision 07, sans retour 18) au 31/12
-           --   'PRESENT'       reste dans l'effectif : ni sortie, ni retour ;
            --   'HORS_EFFECTIF' sort de l'effectif : une sortie DISP, puis une
-           --                   entrée REM au retour, comme l'annuaire CNSS 2024.
+           --                   entrée REM au retour, comme l'annuaire CNSS 2024
+           --                   (tableau 121) ; valeur retenue le 08/11/2026 ;
+           --   'PRESENT'       reste dans l'effectif : ni sortie, ni retour.
            -- Même valeur que dans la requête de l'effectif.
-           'PRESENT'               AS disponibilite,
+           'HORS_EFFECTIF'         AS disponibilite,
            -- G7 : sans fin de contrat, 'PRESENT' ou 'FICHE' (comme l'effectif)
            'PRESENT'               AS fin_contrat_inconnue,
            -- G16 : entré et sorti dans l'exercice, 'NON' (pas compté) ou 'OUI'

@@ -192,7 +192,8 @@ def main():
         except FileExistsError as e:
             print("IGNORÉ", e)
             continue
-        print(f"{len(d.elements)} éléments écrits dans {chemin}")
+        print(f"inchangé : {chemin}" if d.inchange
+              else f"{len(d.elements)} éléments écrits dans {chemin}")
         for warning in d.warnings:
             print("ATTENTION", warning)
 

@@ -181,7 +181,7 @@ ENTREES = [
          "WHEN 'NATURE'      THEN 'ETAIT_' || NVL(x.nature_debut, 'SANS_SITUATION')"),
      "Sur les deux photos, mais pas dans la même nature : il entre chez les permanents et sort "
      "des temporaires ([S6]). [E3] à [E6] sont faux : ni 37, ni embauche dans l'année, ni dispo."),
-    ("Revenu de disponibilité", "REM · DECISION_18\n(réglage HORS_EFFECTIF)", "reglage",
+    ("Revenu de disponibilité", "REM · DECISION_18", "entree",
      ou((9, "entrees, [E5]", branche(9, "THEN 'REMISE'")),
         (9, "entrees, po", ligne(9, "LEFT JOIN positions po")),
         (7, "base, WHERE", ligne(7, "AND NOT (pr.disponibilite = 'HORS_EFFECTIF'"))),
@@ -190,13 +190,14 @@ ENTREES = [
          "             > NVL(po.date_remise, DATE '1900-01-01')))   -- sur la photo\n"
          "…\n"
          "WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'\n"
-         " AND pr.disponibilite = 'HORS_EFFECTIF'               -- faux avec 'PRESENT'\n"
+         " AND pr.disponibilite = 'HORS_EFFECTIF'               -- vrai : valeur retenue\n"
          " AND NVL(po.date_dispo, DATE '1900-01-01')\n"
          "     > NVL(po.date_remise, DATE '1900-01-01')     THEN 'REMISE'\n"
          "…\n"
          "LEFT JOIN positions po ON po.date_arrete = f.d0       -- ses 07 et 18 au 31/12 d'avant"),
-     "Avec 'PRESENT' (réglage actuel), il est sur les deux photos : il n'arrive même pas au CASE. "
-     "Avec 'HORS_EFFECTIF', base l'écarte au 31/12 d'avant, où sa 07 est plus récente que sa 18."),
+     "Le réglage retenu, HORS_EFFECTIF (annuaire CNSS 2024, tableau 121), l'écarte de base au "
+     "31/12 d'avant, où sa 07 est plus récente que sa 18 : il revient en REM. Avec 'PRESENT', il "
+     "serait sur les deux photos, sans mouvement."),
     ("Détaché à la CNSS", "DETAC · DECISION_37", "absent",
      ou((8, "detaches_annee", cte("detaches_annee")),
         (9, "entrees, [E3]", branche(9, "THEN 'DETACHEMENT'"))),
@@ -302,20 +303,20 @@ SORTIES = [
          " AND dda.PERS_ID IS NOT NULL                     THEN 'DEPART_TEMPORAIRE'"),
      "Pour un temporaire, le dernier départ de l'année, pas le premier de sa vie. Une 35 en "
      "mars, un contrat en mai, une 52 en octobre : la sortie est DECISION_52 (vérifié)."),
-    ("Mis en disponibilité", "DISP · DECISION_07\n(réglage HORS_EFFECTIF)", "reglage",
+    ("Mis en disponibilité", "DISP · DECISION_07", "sortie",
      ou((10, "sorties, [S5]", branche(10, "THEN 'DISPONIBILITE'")),
         (10, "sorties, po", ligne(10, "LEFT JOIN positions po"))),
      sql("WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'\n"
-         " AND pr.disponibilite = 'HORS_EFFECTIF'               -- faux avec 'PRESENT'\n"
+         " AND pr.disponibilite = 'HORS_EFFECTIF'               -- vrai : valeur retenue\n"
          " AND NVL(po.date_dispo, DATE '1900-01-01')\n"
          "     > NVL(po.date_remise, DATE '1900-01-01')   THEN 'DISPONIBILITE'\n"
          "…\n"
          "LEFT JOIN positions po ON po.date_arrete = dbt.d1     -- ses 07 et 18 au 31/12\n"
          "…\n"
          "WHEN 'DISPONIBILITE'     THEN 'DECISION_' || x.code_dispo   -- '07'"),
-     "Avec 'HORS_EFFECTIF', base l'écarte au 31/12 de l'année ; sans départ daté, sa 07 sans 18 "
-     "donne DISP. Avec 'PRESENT', il reste sur les deux photos : aucune sortie. 2024 : 5 décisions "
-     "07."),
+     "Le réglage retenu l'écarte de base au 31/12 de l'année ; sans départ daté, sa 07 sans 18 "
+     "donne DISP, comme l'annuaire. Avec 'PRESENT', il resterait sur les deux photos. 2024 : 5 "
+     "décisions 07 (7 publiées)."),
     ("Titularisé, vu des temporaires", "AUTRE_SORT ·\nDEVIENT_PERMANENT", "sortie",
      ou((10, "sorties, WHERE [S2]",
          ligne(10, "OR NVL(fin.NATURE_EMPLOI, '-') <> NVL(dbt.NATURE_EMPLOI, '-')")),
@@ -401,17 +402,18 @@ SANS_MOUVEMENT = [
          "                  AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))"),
      "La 02 visée par une 40 n'entre pas dans decisions, donc ni dans departs ni dans "
      "premier_depart : l'agent reste présent, sans sortie."),
-    ("En disponibilité (réglage actuel)", "AUCUN MOUVEMENT\n(réglage PRESENT)", "reglage",
+    ("Toujours en disponibilité (aux deux 31/12)", "AUCUN MOUVEMENT", "rien",
      ou((0, "parametres", ligne(0, "AS disponibilite")),
         (7, "base, WHERE", (ligne(7, "AND NOT (pr.disponibilite = 'HORS_EFFECTIF'"),
                             ligne(7, "> NVL(po.date_remise, DATE '1900-01-01')))")))),
-     sql("'PRESENT'               AS disponibilite,           -- partie 0 : valeur actuelle\n"
+     sql("'HORS_EFFECTIF'         AS disponibilite,           -- partie 0 : valeur retenue\n"
          "…\n"
-         "AND NOT (pr.disponibilite = 'HORS_EFFECTIF'          -- faux : le NOT est vrai\n"
-         "         AND NVL(po.date_dispo, DATE '1900-01-01')\n"
-         "             > NVL(po.date_remise, DATE '1900-01-01')))"),
-     "Avec 'PRESENT', l'agent en disponibilité reste dans base : il est sur les deux photos, ni "
-     "sortie ni retour. Même valeur dans la requête de l'effectif (QG6, en attente de la DRH)."),
+         "AND NOT (pr.disponibilite = 'HORS_EFFECTIF'          -- vrai, et en dispo :\n"
+         "         AND NVL(po.date_dispo, DATE '1900-01-01')   -- le NOT est faux,\n"
+         "             > NVL(po.date_remise, DATE '1900-01-01')))  -- hors de base"),
+     "Absent des deux photos, ni sortie ni retour cette année-là : il est sorti l'année de sa mise "
+     "en disponibilité (DISP) et rentrera l'année de sa remise (REM). Même réglage dans la requête "
+     "de l'effectif (QG6, tranchée le 08/11)."),
     ("Entré et sorti la même année", "PAS COMPTÉ\n(passages_annee = NON)", "reglage",
      ou((11, "passages, permanents", (ligne(11, "WHERE pr.passages_annee = 'OUI'", 1),
                                       ligne(11, "AND fin.PERS_ID IS NULL", 1))),
@@ -596,7 +598,7 @@ NOTES_ENTREES = [
      "absent"),
     ("[E4] EMBAUCHE → RECRU · EMBAUCHE : permanent entré dans l'exercice.", "entree"),
     ("[E5] REMISE → REM · DECISION_18 : en disponibilité au 31/12 d'avant ; réglage "
-     "HORS_EFFECTIF seulement.", "reglage"),
+     "HORS_EFFECTIF, retenu le 08/11 (annuaire CNSS 2024).", "entree"),
     ("[E6] ENGAGEMENT → RECRU · ENGAGEMENT_50 : temporaire sans contrat au 31/12 d'avant.",
      "entree"),
     ("[E7] NATURE → AUTRE_ENT · ETAIT_ et la nature du début (TEMPORAIRE, PERMANENT, "
@@ -611,7 +613,7 @@ NOTES_SORTIES = [
     ("[S4] DEPART_TEMPORAIRE → le type et le motif du dernier départ de l'exercice (dda) : "
      "FIN_CTRAT · DECISION_35 ou 52…", "sortie"),
     ("[S5] DISPONIBILITE → DISP · DECISION_07 : en disponibilité au 31/12 de l'année ; réglage "
-     "HORS_EFFECTIF seulement.", "reglage"),
+     "HORS_EFFECTIF, retenu le 08/11 (annuaire CNSS 2024).", "sortie"),
     ("[S6] NATURE → AUTRE_SORT · DEVIENT_ et la nature de fin.", "sortie"),
     ("[S7] SANS_MOTIF → AUTRE_SORT · SANS_MOTIF : aucun départ daté ne l'explique.",
      "attention"),

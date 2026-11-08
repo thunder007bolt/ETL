@@ -9,7 +9,8 @@ la base ne permet pas de rejouer.
 
 Même modèle que « La requête de l'effectif, pas à pas » (requete_effectif_pas_a_pas.py).
 Les lignes de 2024 de la partie 4 sont celles que la requête donne pour les six agents,
-avec les réglages actuels (disponibilite = PRESENT, passages_annee = NON).
+avec les réglages actuels (disponibilite = HORS_EFFECTIF depuis le 08/11/2026,
+passages_annee = NON).
 
 Usage :
     python3 excalidraw/sources/grh/requete_mouvement_pas_a_pas.py [--force]
@@ -109,18 +110,16 @@ AGENTS = [
                      2024: [("SORTIE · AUTRE_SORT\ndevient permanent (temporaires)", SORTIE),
                             ("ENTRÉE · AUTRE_ENT\nétait temporaire (permanents)", ENTREE)]}),
     dict(recit="AGENT D : PERMANENT EN DISPONIBILITÉ\nmis en disponibilité (07)\n"
-               "le 01/03/2023\nde retour (18) le 01/06/2025\nréglage actuel : PRESENT",
+               "le 01/03/2023\nde retour (18) le 01/06/2025\nhors de l'effectif entre les deux",
          couleurs=(C["blanc"], C["encre"]),
          barres=[(DEBUT_AXE, FIN_DESSIN, ENTREE, "solid"),
                  (date(2023, 3, 1), date(2025, 6, 1), REGLAGE, "solid")],
          evenements=[(date(2023, 3, 1), "07 : dispo\n01/03/2023", C["jaune_bord"]),
                      (date(2025, 6, 1), "18 : retour\n01/06/2025", C["jaune_bord"])],
          photos={**{a: ("présent", PRESENT) for a in (2020, 2021, 2022, 2025)},
-                 2023: ("présent\nen dispo", DISPO), 2024: ("présent\nen dispo", DISPO)},
-         mouvements={2023: [("PRESENT : aucun mouvement\nHORS_EFFECTIF : SORTIE · DISP",
-                             REGLAGE)],
-                     2025: [("PRESENT : aucun mouvement\nHORS_EFFECTIF : ENTRÉE · REM",
-                             REGLAGE)]}),
+                 2023: ("absent\nen dispo", DISPO), 2024: ("absent\nen dispo", DISPO)},
+         mouvements={2023: [("SORTIE · DISP\ndécision 07", SORTIE)],
+                     2025: [("ENTRÉE · REM\ndécision 18", ENTREE)]}),
     dict(recit="AGENT E : PERMANENT, DÉCÉDÉ\ndécédé le 15/10/2023,\ndate jamais saisie\n"
                "liquidation des droits (34)\nle 01/07/2024",
          couleurs=(C["blanc"], C["encre"]),
@@ -144,7 +143,7 @@ AGENTS = [
 
 # les lignes de 2024 que la requête donne pour ces six agents (réglages actuels)
 LIGNES_2024 = [
-    ("DEBUT", "PERMANENT", "", "4", "A, B, D, E"),
+    ("DEBUT", "PERMANENT", "", "3", "A, B, E"),
     ("DEBUT", "TEMPORAIRE", "", "1", "C"),
     ("AUTRE_ENT", "PERMANENT", "ETAIT_TEMPORAIRE", "1", "C"),
     ("RET", "PERMANENT", "DECISION_02", "1", "A"),
@@ -293,7 +292,7 @@ def build():
     bloc(40, y13 + 290, 2520, 120,
          f"0. LES RÉGLAGES (CTE parametres, {lignes(0)}) : ils changent le résultat sans "
          "réécrire la requête ; valeur actuelle en premier\n"
-         "disponibilite : PRESENT ou HORS_EFFECTIF (même valeur que T58)  ·  "
+         "disponibilite : HORS_EFFECTIF ou PRESENT (même valeur que T58)  ·  "
          "fin_contrat_inconnue : PRESENT ou FICHE  ·  passages_annee : NON ou OUI  ·  "
          "mouvements_internes : COMME_AVANT ou AUCUN\n"
          "decisions_depart : le type de sortie de chaque décision (02 RET, 34 DEC, 35 et 52 "
@@ -373,20 +372,20 @@ def build():
         for (_, x), val in zip(colonnes, ligne):
             d.text(x, y, val or "(vide)", 17, groups=g, inside=cadre)
     d.text(62, s4 + 176 + len(LIGNES_2024) * 36 + 10,
-           "B et D ne bougent pas : présents aux deux photos, dans la même nature.\n"
-           "F n'a aucune ligne : passages_annee = NON. Les lignes DEBUT sont\n"
-           "additionnées ici : la table en a une par qualification, sexe, unité…", 17,
+           "B ne bouge pas : présent aux deux photos. D non plus : en disponibilité,\n"
+           "il est absent des deux (sorti en 2023, de retour en 2025). F n'a aucune\n"
+           "ligne : passages_annee = NON. Les lignes DEBUT sont additionnées ici.", 17,
            C["doux"], groups=g, inside=cadre)
 
     bloc(40, s4 + 530, 1220, 130,
          "LA LIGNE 2024 DE T60 DANS OBIEE (permanents)\n"
-         "début 4 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\n"
-         "fin 3 (B, C, D) = l'effectif de T58 au 31/12/2024", 20,
+         "début 3 · recrutement 0 · autres entrées 1 · retraite 1 · décès 1 · autres sorties 0\n"
+         "fin 2 (B, C) = l'effectif de T58 au 31/12/2024", 20,
          couleurs=(C["violet"], C["encre"]))
     bloc(40, s4 + 680, 1220, 170,
-         "ATTENDU AU CONTRÔLE (lots 17, 18 et 25 ; la requête reste à exécuter)\n"
-         "2024, permanents : 677 au début, 104 recrutements, 25 retraites,\n"
-         "5 décès, 4 autres sorties, 747 à la fin\n"
+         "ATTENDU AU CONTRÔLE (lots 17 à 25 ; la requête reste à exécuter)\n"
+         "2024, permanents : environ 672 au début, 104 recrutements, 4 remises,\n"
+         "25 retraites, 5 décès, 9 autres sorties, 741 à la fin\n"
          "annuaire CNSS 2024 : 767, 104, 23 retraites, 3 décès, 94 autres sorties\n"
          "(dont les 84 engagés de 2019), 758 à la fin", 20, couleurs=(C["vert_clair"], C["vert"]))
     bloc(1340, s4 + 80, 1220, 770,

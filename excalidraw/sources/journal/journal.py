@@ -1278,15 +1278,53 @@ JOURS = [
                              "de 747 (écart avec 758 : 17).",
                       fichiers="schemas/annuaire cnss/gestion_administrative_2024 ; "
                                "sources/annuaire_cnss/gestion_administrative_2024.py ; README. "
-                               "Règles, requêtes et questions GRH inchangées.",
+                               "Règles, requêtes et questions GRH inchangées à ce stade.",
+                      etat="fait"),
+             Chantier("Outil : le journal ne réécrit plus ses fiches inchangées", "Outils",
+                      demande="Pourquoi chaque modification réécrit tous les fichiers du "
+                              "journal, avec une nouvelle version pour chaque jour ?",
+                      fait="Cause : le constructeur met l'heure de génération sur chaque "
+                           "élément ; chaque génération donnait donc un fichier différent, même "
+                           "pour un dessin identique, et une version de plus pour chacune des "
+                           "23 fiches du journal (je lançais en plus la génération deux fois). "
+                           "Correction : write_with_history et Diagram.save comparent les "
+                           "dessins sans l'heure ; un schéma inchangé n'est ni réécrit ni "
+                           "versionné, et les générateurs l'affichent « inchangé ». Vérifié : "
+                           "23 fiches inchangées, aucune nouvelle version.",
+                      trouve="L'historique du journal compte 1 552 versions, dont 1 337 "
+                             "identiques à la précédente à l'heure près.",
+                      fichiers="lib/historique.py, lib/excalidraw_builder.py ; messages de "
+                               "sources/maitrise/fiches.py, fiche_de_lecture.py, "
+                               "points_a_valider.py, vues_cnss/vues_cnss.py.",
+                      etat="fait"),
+             Chantier("GRH : la disponibilité sort de l'effectif (annuaire intégré)", "GRH",
+                      demande="Intégrer les conclusions de l'annuaire CNSS 2024.",
+                      fait="Réglage disponibilite = HORS_EFFECTIF dans les deux requêtes (T58 "
+                           "et T60), commentaires et attendus à jour, sans changer le nombre de "
+                           "lignes de la requête de l'effectif. regles_t60, regles_effectif, "
+                           "README (G3, G8, G9, G12, G13, QG1, QG2, QG4, QG6, QG7) et TODO à "
+                           "jour. Fiches T58 (Q4) et T60, termes de T60 de la fiche de lecture "
+                           "(tes notes gardées), schémas de T60 et de l'effectif régénérés ; "
+                           "le schéma annoté des cas d'agents corrigé sur place, ses trois "
+                           "annotations gardées. Tests rejoués : 0 écart.",
+                      trouve="Fin 2024, environ 741 permanents (747 moins 6 en disponibilité) ; "
+                             "T60 2024 : environ 672 · 104 · 4 · 25 · 5 · 9 · 741. Dans les six "
+                             "agents du pas à pas, D sort en 2023 et revient en 2025.",
+                      decide="QG6 tranchée : l'agent en disponibilité sort de l'effectif et y "
+                             "rentre à sa remise en activité (annuaire CNSS 2024, tableau 121 ; "
+                             "réunion du 03/11, M11).",
+                      fichiers="analyses/grh : t58_t65_effectif et t60 requêtes, regles_t60, "
+                               "regles_effectif, README, TODO ; sources/grh : t60_mouvement, "
+                               "t58_effectif, lecture_grh, cas_mouvements_t60(_sql), "
+                               "requete_mouvement_pas_a_pas, cas_agents_effectif(_sql), "
+                               "requete_effectif_pas_a_pas ; schémas correspondants.",
                       etat="fait"),
          ],
-         reste=["Toi : dire si on intègre les conclusions de l'annuaire CNSS 2024 : "
-                "disponibilite = HORS_EFFECTIF dans T58 et T60 (QG6), HC confirmé, questions 1 "
-                "et 6 de T60, QG2 et QG4 précisées, les 20 directions pour G12.",
+         reste=["Toi : dire si je supprime les 1 337 versions en double de l'historique du "
+                "journal (identiques à la précédente, à l'heure près).",
                 "Toi : exécuter les deux requêtes de contrôle de T60 (en-tête du fichier, "
-                "cliché 102026 ; disponibilite à PRESENT, puis à HORS_EFFECTIF) et me coller le "
-                "résultat.",
+                "cliché 102026 ; disponibilite à HORS_EFFECTIF, puis à PRESENT pour comparer) et "
+                "me coller le résultat.",
                 "Claude : éclaircir les trois cas annotés « A MIEUX ECLAIRCIR » du schéma "
                 "cas_agents_effectif, si tu le veux.",
                 "Toi : vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT a les 18 codes de la CNSS, plus "
@@ -1295,16 +1333,15 @@ JOURS = [
                 "et la fiche T60.",
                 "Claude : mettre à jour la partie T58 de la fiche de lecture et la fiche T58 "
                 "(747 au 31/12/2024, contrats des temporaires), si tu le veux.",
-                "DRH : trancher la disponibilité (QG6), qui change T58 et T60 ensemble ; "
-                "répondre aux 8 questions de regles_t60.md.",
+                "DRH : répondre aux questions de regles_t60.md ; la disponibilité est tranchée "
+                "par l'annuaire (QG6), la DRH peut la revoir.",
                 "Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025.",
                 "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
-                "À commiter : la requête T60 et regles_t60.md, les schémas de T60 (cas, cas "
-                "SQL, pas à pas) et le rangement des schémas GRH en dossiers, la fiche T60 et "
-                "la fiche de lecture GRH avec leurs sources, le gabarit fiche_cipres, "
-                "les schémas vues cnss et leurs sources, les README, le TODO GRH et le "
-                "journal."]),
+                "À commiter (après ton commit de 18 h 18) : le correctif de l'outil (lib/"
+                "historique.py, lib/excalidraw_builder.py, messages des générateurs), "
+                "l'intégration de la disponibilité hors effectif (requêtes, règles, README, "
+                "TODO, fiches, schémas GRH, schéma de l'annuaire) et le journal."]),
 ]
 
 # =============================================================================================
@@ -1477,6 +1514,18 @@ DECISIONS = [
              "grh_mouvement.sql sera remplacée par t60_requete_proposee.sql, avec quatre "
              "colonnes de plus dans DTM_GRH_MOUVEMENT ; T60 se met en page dans OBIEE.",
              statut="proposé"),
+    Decision("2026-11-08", "GRH : l'agent en disponibilité sort de l'effectif",
+             "Un permanent en disponibilité au 31/12 (décision 07 sans retour 18) n'est pas "
+             "compté dans l'effectif (T58, T59, T61, T65) ; T60 compte une sortie DISP à sa "
+             "mise en disponibilité et une entrée REM à sa remise en activité. Réglage "
+             "disponibilite = HORS_EFFECTIF dans les deux requêtes (QG6).",
+             "L'annuaire CNSS 2024 (tableau 121) range la disponibilité dans les sorties et la "
+             "remise en activité dans les entrées, et son égalité début + entrées − sorties = "
+             "fin tient de 2015 à 2024 ; la CNSS l'a dit à la réunion du 03/11 (M11). Le "
+             "recueil, Kaya et l'Annuaire CIPRES n'en disent rien.",
+             "Toi, au vu de l'annuaire CNSS 2024 (la DRH peut la revoir)",
+             "Effectif fin 2024 : environ 741 au lieu de 747 ; les colonnes d'inactifs valent "
+             "0 ; T60 montre les disponibilités et les remises."),
 ]
 
 # =============================================================================================
@@ -1523,8 +1572,9 @@ ETAT = [
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
     ("Toi", "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
-            "disponibilite à PRESENT, puis à HORS_EFFECTIF) ; vérifier les "
-            "codes de DIM_GRH_TYPE_MOUVEMENT. "
+            "disponibilite à HORS_EFFECTIF, la valeur retenue, puis à PRESENT) ; vérifier les "
+            "codes de DIM_GRH_TYPE_MOUVEMENT ; dire si je supprime les versions en double de "
+            "l'historique du journal. "
             "Au point du 02/11 : la date des montants (R4). Exécuter les trois requêtes "
             "GRH proposées (102026, 2024) ; faire viser G1 à G11 et poser QG1 à QG7 ; A06 et A07 ; les requêtes proposées sur le cliché 092026 ; relancer "
             "A04 ; commiter le travail du 31/10 et du 01/11."),
@@ -1534,8 +1584,8 @@ EN_ATTENTE = [
                                      "R7, la limite de 25 ans des orphelins, le montant, la "
                                      "coordination et la règle de T41 (enfants payés)."),
     ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G17 ; répondre à "
-               "QG1 à QG7 et au questionnaire CIPRES ; trancher la disponibilité (QG6) et "
-               "les 8 questions de T60 (regles_t60.md)."),
+               "QG1 à QG7 et au questionnaire CIPRES ; les questions de T60 (regles_t60.md) ; "
+               "la disponibilité hors effectif (QG6), tranchée par l'annuaire, à confirmer."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet ; créer et "
                "alimenter les vues des schémas vues cnss : V_BI_BALANCE_COMPTABLE (depuis "
                "Oracle GL), V_BI_CONTROLE_POSTERIORI (avec la DAI), V_BI_RESERVE (avec la "
