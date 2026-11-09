@@ -1325,6 +1325,42 @@ JOURS = [
                                "requete_mouvement_pas_a_pas, cas_agents_effectif(_sql), "
                                "requete_effectif_pas_a_pas ; schémas correspondants.",
                       etat="fait"),
+             Chantier("Prestations à l'image du GRH", "Prestations",
+                      demande="Refaire pour les prestations (T25 à T57) le travail fait pour la "
+                              "GRH : d'abord toutes les demandes du recueil v7, puis l'annuaire "
+                              "CNSS 2024 pour valider ou contredire, des règles claires et les "
+                              "points ouverts ; sans toucher au travail déjà fait.",
+                      fait="Un gabarit commun des schémas. L'analyse des sources (12 analyses "
+                           "contre-vérifiées). Cinq documents de famille (T25-T27, le pilote, "
+                           "puis T28-T31, T32-T41, T42-T49, T50-T57), chacun avec son schéma et "
+                           "le même plan : en bref, le recueil v7 ligne par ligne avec son "
+                           "statut, les règles en clair et leurs sources, les cas, l'annuaire "
+                           "CNSS 2024, les réglages, les questions, les points d'attention. La "
+                           "liste de toutes les demandes du recueil v7 et l'annuaire CNSS 2024 "
+                           "face à T25-T57. Chaque document relu (chiffres recalculés), puis une "
+                           "critique d'ensemble a mis les sept d'accord. Affichage contrôlé : "
+                           "aucun débordement.",
+                      trouve="Recueil v7 : 102 demandes sur les prestations (130 lignes) : 34 "
+                             "prises en compte, 57 à intégrer, 28 questions, 10 hors base, 1 "
+                             "hors BI ; T26, T39, T40 et T56 n'y ont aucune ligne. L'annuaire "
+                             "CNSS 2024 confirme le comptage au 31/12, l'âge des orphelins, D4, "
+                             "R1 et A1 ; il tranche la saisie pour les nouveaux pensionnés, la "
+                             "coordination, la retraite anticipée à part et le rachat de rente ; "
+                             "il contredit seulement la fiche T27 (frais médicaux de maternité "
+                             "payés). Il ne publie ni dépôts, ni instance, ni délais, ni "
+                             "contrôles, ni indus. Écarts : paiements AT/MP (−20 %), veuves "
+                             "(−5 %), orphelins (−16 %). 108 questions, aucune bloquante.",
+                      decide="Rien de l'existant n'est modifié : les règles existantes gardent "
+                             "leur numéro, les nouvelles sont N1… dans chaque famille ; le "
+                             "report dans le README, le TODO et regles_prestations se propose.",
+                      fichiers="analyses/prestations : regles_t25_t27_dossiers, "
+                               "regles_t28_t31_controles_indus, regles_t32_t41_beneficiaires, "
+                               "regles_t42_t49_nouveaux, regles_t50_t57_evolution, "
+                               "besoins_v7_prestations, annuaire_cnss_2024_prestations ; "
+                               "sources/prestations : gabarit_famille, famille_*, "
+                               "besoins_v7_prestations ; sources/annuaire_cnss/prestations_2024 ; "
+                               "schémas correspondants ; style_grh/REPRISE.md.",
+                      etat="fait"),
          ],
          reste=["Toi : relancer la visionneuse que tu utilises (port 8765) : elle a été lancée "
                 "avant le correctif de l'historique.",
@@ -1344,10 +1380,59 @@ JOURS = [
                 "Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025.",
                 "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
-                "À commiter (après ton commit de 18 h 18) : le correctif de l'outil (lib/"
-                "historique.py, lib/excalidraw_builder.py, messages des générateurs), "
-                "l'intégration de la disponibilité hors effectif (requêtes, règles, README, "
-                "TODO, fiches, schémas GRH, schéma de l'annuaire) et le journal."]),
+                "Toi : lire les documents des prestations à l'image du GRH (commencer par "
+                "les « En bref ») et dire ce qu'on reporte dans le README, le TODO et "
+                "regles_prestations.",
+                "Toi, avec la CNSS : poser les 108 questions des prestations par direction "
+                "(besoins_v7_prestations, partie 8), les plus attendues d'abord : DPC 1 et 2, "
+                "DAI 1 à 3, DCP 26, DCP 1 et 2.",
+                "Commités par toi à 19 h 05 et 19 h 29 : le correctif de l'outil et "
+                "l'intégration de la disponibilité hors effectif. Reste à commiter : le "
+                "journal et les prestations à l'image du GRH (sept documents, leurs "
+                "générateurs et leurs schémas, le gabarit, la note style_grh/REPRISE.md, "
+                "trois lignes du README des schémas)."]),
+
+    Jour("2026-11-09", "La fiche des points à valider des prestations",
+         ["La fiche des points à valider des prestations mise à jour : 137 points, dont 69 "
+          "nouveaux, tirés du recueil v7 et de l'annuaire CNSS 2024.",
+          "Huit points à trancher en priorité, une ligne « À qui » par point et, à la fin, "
+          "les points de chaque direction.",
+          "La version Word refaite par un générateur gardé dans le projet."],
+         chantiers=[
+             Chantier("Prestations : la fiche des points à valider", "Prestations",
+                      demande="Mettre à jour la fiche des points à valider avec le travail du "
+                              "08/11.",
+                      fait="Les 68 points du 02/11 gardent leur numéro (les documents du 08/11 "
+                           "y renvoient) et sont mis à jour : chiffres du 08/11, ce que montre "
+                           "l'annuaire CNSS 2024, une seule question. Les 108 questions de la "
+                           "liste par direction sont toutes couvertes : 46 l'étaient déjà, les "
+                           "autres font les points 69 à 137. Sept rédacteurs relus, une "
+                           "critique d'ensemble, puis un resserrage à la densité du 01/11 "
+                           "(environ 620 caractères par point, contre 1 029 avant), contrôlé "
+                           "pour qu'aucun chiffre ne change. Schéma et version Word "
+                           "régénérés ; affichage contrôlé, aucun débordement.",
+                      trouve="Huit décisions sont les plus attendues : l'année d'un paiement "
+                             "(point 1), la copie de fin mars (2), les contrôles de la DAI (29, "
+                             "69, 70), qui compter pour un survivant (71), l'année de chaque "
+                             "étape (14) et les demandes qui traînent (21). La liste des points "
+                             "de chaque direction est à la fin de la fiche.",
+                      decide="Les numéros ne changent jamais ; un point nouveau prend le numéro "
+                             "suivant. La version Word est faite à partir du .md par "
+                             "sources/points_a_valider_word.js.",
+                      fichiers="analyses/prestations/points_a_valider.md et .docx ; "
+                               "schemas/prestations/points_a_valider ; "
+                               "sources/points_a_valider_word.js ; travail dans "
+                               "style_grh/travail/pav (ignoré par git).",
+                      etat="fait"),
+         ],
+         reste=["Toi : relire la fiche (les 8 points prioritaires d'abord), puis l'envoyer aux "
+                "directions avec la liste des points de chaque direction.",
+                "Toi, avec la CNSS : faire préciser les sigles DP et DES du recueil.",
+                "Toi : lire les documents des prestations à l'image du GRH et dire ce qu'on "
+                "reporte dans le README, le TODO et regles_prestations.",
+                "Commité le 09/11 sur la branche fix/presta : les prestations à l'image du "
+                "GRH, la fiche (md, docx, schéma), le générateur Word, le journal, la ligne du "
+                "README des schémas et tes pastilles de 8 h 52 sur le schéma T25-T27."]),
 ]
 
 # =============================================================================================
@@ -1538,7 +1623,7 @@ DECISIONS = [
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-08"
+MISE_A_JOUR = "2026-11-09"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
@@ -1548,7 +1633,11 @@ ETAT = [
      "l'annuaire de la CNSS (T41 tranché) ; requête commune et fiche T32 ajustées.",
      "Famille 3 (T42 à T49) : lot 7 exécuté, fiche pilote T42. Famille 4 (T50 à T57) : "
      "lot 8 exécuté, fiche pilote faite. T31 : lot 9 exécuté (indus 0,39 %), fiche faite. "
-     "Restent T28 à T30 (DSI). R4 posée au point du 02/11."),
+     "Restent T28 à T30 (DSI). R4 posée au point du 02/11. Le 08/11 : le domaine refait à "
+     "l'image du GRH, sans toucher à l'existant : cinq documents de famille, la liste du "
+     "recueil v7 (130 lignes, 108 questions) et l'annuaire CNSS 2024 face à T25-T57 ; à "
+     "relire, puis à reporter. Le 09/11 : la fiche des points à valider mise à jour (137 "
+     "points, dont 8 à trancher en priorité)."),
     ("GRH (T58 à T65)", "en cours",
      "Quatre requêtes DTM corrigées et testées (885 agents en 2025) ; questionnaire CIPRES "
      "pour la DRH. Plan sur le modèle des prestations ; lot 17 exécuté : 742 permanents "
@@ -1577,7 +1666,10 @@ ETAT = [
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
+    ("Toi", "Relire la fiche des points à valider des prestations (137 points) et l'envoyer "
+            "aux directions. Lire les documents des prestations à l'image du GRH et dire ce "
+            "qu'on reporte dans l'existant. "
+            "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
             "disponibilite à HORS_EFFECTIF, la valeur retenue, puis à PRESENT) ; vérifier les "
             "codes de DIM_GRH_TYPE_MOUVEMENT ; relancer la visionneuse (correctif de "
             "l'historique). "
@@ -1588,11 +1680,21 @@ EN_ATTENTE = [
                                      "T31, T32, T41, T42 et T50-T57 (5 chacune) ; confirmer "
                                      "R6, "
                                      "R7, la limite de 25 ans des orphelins, le montant, la "
-                                     "coordination et la règle de T41 (enfants payés)."),
+                                     "coordination et la règle de T41 (enfants payés). "
+                                     "Depuis le 08/11 : les 45 questions DCP de "
+                                     "besoins_v7_prestations (partie 8.1)."),
+    ("La DPC", "Dire comment l'annuaire range un paiement (le mois payé, la saisie ou le "
+               "versement : DPC 1) et quelle copie de la base il prend (DPC 2) ; en tout 17 "
+               "questions (besoins_v7_prestations, partie 8.6)."),
+    ("La DP, la DES, les DR et la DCR", "Les questions des accidents du travail (DP et DR : "
+                                        "12), des prestations familiales (DES : 5) et du "
+                                        "recouvrement (DCR : 1) : besoins_v7_prestations, "
+                                        "parties 8.2, 8.3 et 8.7."),
     ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G17 ; répondre à "
                "QG1 à QG7 et au questionnaire CIPRES ; les questions de T60 (regles_t60.md) ; "
                "la disponibilité hors effectif (QG6), tranchée par l'annuaire, à confirmer."),
-    ("La DSI", "Le sens des statuts, le circuit des paiements sans effet ; créer et "
+    ("La DSI", "Le sens des statuts, le circuit des paiements sans effet (les 12 questions "
+               "DSI de besoins_v7_prestations, partie 8.5) ; créer et "
                "alimenter les vues des schémas vues cnss : V_BI_BALANCE_COMPTABLE (depuis "
                "Oracle GL), V_BI_CONTROLE_POSTERIORI (avec la DAI), V_BI_RESERVE (avec la "
                "DFC)."),
@@ -1600,13 +1702,20 @@ EN_ATTENTE = [
                "des écritures, types de placement, réalisé du budget, comptes de formation et "
                "de masse salariale, réserves."),
     ("La DAI", "Dire où sont les contrôles a posteriori depuis juillet 2025 ; alimenter "
-               "V_BI_CONTROLE_POSTERIORI ; comparer son fichier des indus à la base (T31)."),
+               "V_BI_CONTROLE_POSTERIORI ; comparer son fichier des indus à la base (T31) ; "
+               "les 16 questions DAI de besoins_v7_prestations (partie 8.4)."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
 ]
 
 # la suite, dans l'ordre
 SUITE = [
-    ("T60", "Reporter le résultat des contrôles ; voir en réunion avec la CNSS la fiche T60 et "
+    ("Prestations à l'image du GRH", "Relire avec toi les cinq documents de famille ; "
+                                     "reporter ce que tu valides dans le README, le TODO et "
+                                     "regles_prestations ; poser les questions par direction "
+                                     "(fiche points_a_valider, à jour le 09/11) ; écrire les contrôles "
+                                     "proposés : A06 à A08 ; P107 à P114 (lot 10, T42-T49) ; "
+                                     "P115 à P119 (T50-T57) ; P120 et suivantes (T28-T31)."),
+    ("T60","Reporter le résultat des contrôles ; voir en réunion avec la CNSS la fiche T60 et "
             "ses termes de la fiche de lecture (à jour le 08/11) ; puis T62."),
     ("Les requêtes GRH", "Reporter l'exécution des trois requêtes proposées ; ajuster les "
                          "fiches T58, T60, T62 si les chiffres bougent ; puis les fiches de "
@@ -1635,7 +1744,13 @@ SUITE = [
 LIVRABLES = [
     ("Les analyses (requêtes et constats)", [
         ("Prestations", "analyses/prestations", "lots 1 à 9 (P01 à P106), README (constats, "
-                                                "règles, questions), TODO, resultats/"),
+                                                "règles, questions), TODO, resultats/ ; "
+                                                "depuis le 08/11, à l'image du GRH : "
+                                                "regles_t25_t27_dossiers à "
+                                                "regles_t50_t57_evolution (cinq familles), "
+                                                "besoins_v7_prestations, "
+                                                "annuaire_cnss_2024_prestations ; "
+                                                "points_a_valider (137 points, 09/11)"),
         ("GRH", "analyses/grh", "lots 1 à 25 (Q01 à Q142), règles G1 à G17, requêtes "
                                 "proposées (effectif, T60, T62), regles_effectif.md, "
                                 "regles_t60.md, README, TODO"),
@@ -1662,8 +1777,11 @@ LIVRABLES = [
         ("Maîtrise", "schemas/maitrise", "les fiches de révision, par domaine"),
         ("Prestations", "schemas/prestations", "toutes les règles, les tables, le parcours d'un "
                                                "dossier, les fiches de validation T25 à T27, "
-                                               "T31, T32, T41, T42 et T50-T57"),
-        ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024"),
+                                               "T31, T32, T41, T42 et T50-T57 ; un dossier "
+                                               "par famille (T25 T27 dossiers à T50 T57 "
+                                               "evolution) et besoins_v7_prestations"),
+        ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024 ; "
+                                                         "prestations_2024 (T25 à T57)"),
         ("Vues CNSS", "schemas/vues cnss", "les vues à demander à la CNSS : sommaire, balance "
                                           "comptable, contrôles a posteriori, réserves"),
         ("GRH", "schemas/grh", "rangé par famille : T58 effectif, T60 mouvements, T63 T64 "
