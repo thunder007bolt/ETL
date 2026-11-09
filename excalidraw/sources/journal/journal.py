@@ -1397,7 +1397,8 @@ JOURS = [
           "nouveaux, tirés du recueil v7 et de l'annuaire CNSS 2024.",
           "Huit points à trancher en priorité, une ligne « À qui » par point et, à la fin, "
           "les points de chaque direction.",
-          "La version Word refaite par un générateur gardé dans le projet."],
+          "La version Word refaite par un générateur gardé dans le projet.",
+          "La fiche des règles : 99 règles imposées à la CNSS, par domaine et par tableau."],
          chantiers=[
              Chantier("Prestations : la fiche des points à valider", "Prestations",
                       demande="Mettre à jour la fiche des points à valider avec le travail du "
@@ -1424,8 +1425,33 @@ JOURS = [
                                "sources/points_a_valider_word.js ; travail dans "
                                "style_grh/travail/pav (ignoré par git).",
                       etat="fait"),
+             Chantier("La fiche des règles imposées", "Projet",
+                      demande="Après le point 2 (la date d'arrêt) : imposer des règles à la "
+                              "CNSS plutôt que lui poser 137 questions ; une fiche concise, "
+                              "toutes les règles, rangées par domaine et par tableau.",
+                      fait="99 règles d'une ligne, tirées des cinq familles des prestations, de "
+                           "regles_effectif, de regles_t60 et du README de la GRH, chacune avec "
+                           "son origine entre parenthèses ; 9 lignes « À faire » pour la CNSS. "
+                           "Chaque réglage prend sa valeur retenue. Schéma (aucun débordement) "
+                           "et version Word.",
+                      trouve="Relancer le chargement en janvier remplace la photo du 1er janvier "
+                             "(même nom, 012025 pour 2024). Deux défauts du chargement gênent "
+                             "cette relance : le cliché pris table par table, et le nettoyage de "
+                             "l'ODS des faits, qui vise le mois chargé et non le mois archivé.",
+                      decide="La date d'arrêt est un choix de la CNSS ; la règle imposée : "
+                             "corrections avant la fin de janvier N+1, puis photo reprise, qui "
+                             "fait foi pour l'année N.",
+                      fichiers="analyses/regles_cipres/fiche_regles.md et .docx ; "
+                               "schemas/regles cipres/fiche_regles ; sources/fiche_regles.py et "
+                               "fiche_regles_word.js.",
+                      etat="fait"),
          ],
-         reste=["Toi : relire la fiche (les 8 points prioritaires d'abord), puis l'envoyer aux "
+         reste=["Toi : relire la fiche des règles, surtout trois choix : la photo de fin "
+                "janvier (règles 1 et 2), le mois payé pour les montants (8), les années "
+                "passées de T50 à T57 reprises de leur photo officielle (77).",
+                "Toi : dire si je corrige les deux défauts du chargement (cliché table par "
+                "table, nettoyage de l'ODS des faits).",
+                "Toi : relire la fiche (les 8 points prioritaires d'abord), puis l'envoyer aux "
                 "directions avec la liste des points de chaque direction.",
                 "Toi, avec la CNSS : faire préciser les sigles DP et DES du recueil.",
                 "Toi : lire les documents des prestations à l'image du GRH et dire ce qu'on "
@@ -1617,6 +1643,18 @@ DECISIONS = [
              "Toi, au vu de l'annuaire CNSS 2024 (la DRH peut la revoir)",
              "Effectif fin 2024 : environ 741 au lieu de 747 ; les colonnes d'inactifs valent "
              "0 ; T60 montre les disponibilités et les remises."),
+    Decision("2026-11-09", "La photo officielle de l'année : fin janvier N+1",
+             "Les directions corrigent l'année N dans l'application avant la fin de janvier "
+             "N+1 ; la BI reprend alors la photo de la base, qui fait foi pour l'année N. Elle "
+             "remplace R13 (la copie de fin mars), qui n'était qu'une estimation de "
+             "l'annuaire 2024.",
+             "Avec un chargement par mois, la date d'arrêt est un choix de la CNSS ; mieux vaut "
+             "lui imposer une règle que lui poser la question. Une relance en janvier garde le "
+             "nom de la photo du 1er janvier et la remplace.",
+             "Toi, le 09/11 (« on va leur imposer certaines règles »)",
+             "Règles 1 et 2 de la fiche des règles ; les requêtes ne changent pas (la photo est "
+             "donnée au lancement). Une déclaration tardive n'entre que dans les photos "
+             "suivantes."),
 ]
 
 # =============================================================================================
@@ -1751,6 +1789,9 @@ LIVRABLES = [
                                                 "besoins_v7_prestations, "
                                                 "annuaire_cnss_2024_prestations ; "
                                                 "points_a_valider (137 points, 09/11)"),
+        ("Les règles imposées", "analyses/regles_cipres",
+         "fiche_regles : 99 règles de T25 à T65, par domaine et par tableau, et ce que la "
+         "CNSS doit faire (md et Word, 09/11)"),
         ("GRH", "analyses/grh", "lots 1 à 25 (Q01 à Q142), règles G1 à G17, requêtes "
                                 "proposées (effectif, T60, T62), regles_effectif.md, "
                                 "regles_t60.md, README, TODO"),

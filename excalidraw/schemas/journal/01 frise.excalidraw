@@ -26,7 +26,7 @@
       "versionNonce": 1176985612,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "La frise : tous les jours de la mission",
@@ -62,7 +62,7 @@
       "versionNonce": 1410122559,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Journal de bord · semaine par semaine, de gauche à droite · chaque jour a sa fiche dans le dossier jours",
@@ -102,7 +102,7 @@
       "versionNonce": 946599057,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -131,7 +131,7 @@
       "versionNonce": 1753630874,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "À la fin de cette fiche, tu sauras",
@@ -169,7 +169,7 @@
       "versionNonce": 973773208,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "ce qui s'est passé chaque jour depuis le début de la mission, en trois ou quatre faits, pour retrouver vite le jour qui t'intéresse.",
@@ -209,7 +209,7 @@
       "versionNonce": 1172410007,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -238,7 +238,7 @@
       "versionNonce": 2016423889,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Comment lire cette fiche",
@@ -278,7 +278,7 @@
       "versionNonce": 879031452,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -307,7 +307,7 @@
       "versionNonce": 1228079853,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "une notion à connaître",
@@ -343,7 +343,7 @@
       "versionNonce": 1068081044,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "1. Avant la mission",
@@ -381,7 +381,7 @@
       "versionNonce": 1995351060,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -428,7 +428,7 @@
       "versionNonce": 686576518,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -459,7 +459,7 @@
       "versionNonce": 518724526,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -495,7 +495,7 @@
           "id": "rncrN8Omvaous3VfzwkY"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -524,7 +524,7 @@
       "versionNonce": 1529005221,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "avant",
@@ -562,7 +562,7 @@
       "versionNonce": 968045430,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Mai à juillet 2026",
@@ -600,7 +600,7 @@
       "versionNonce": 1887292083,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Avant la mission, de mai à juillet 2026 : la chaîne ETL (faits du DWH, clichés multiples), les premières tables DTM et les indicateurs CIPRES des prestations et de la GRH, d'après l'historique git.",
@@ -636,7 +636,7 @@
       "versionNonce": 184809395,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "2. Semaine du 19 au 25 octobre 2026",
@@ -674,7 +674,7 @@
       "versionNonce": 231653447,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -726,7 +726,7 @@
           "id": "rGC1jKZpigFJcAKnowGB"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -757,7 +757,7 @@
       "versionNonce": 1420543774,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -793,7 +793,7 @@
           "id": "xo4HMDPOmbH6uFHpPdoY"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -822,7 +822,7 @@
       "versionNonce": 1887061384,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "19/10",
@@ -860,7 +860,7 @@
       "versionNonce": 293026720,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Arrivée sur le terrain",
@@ -898,7 +898,7 @@
       "versionNonce": 71142205,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Début de la mission à la CNSS, au Burkina.\n• Règle : pas de refonte du modèle DTM.\n• Artefact « Roadmap métier » : les questions au\nmétier.",
@@ -936,7 +936,7 @@
       "versionNonce": 13728627,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-10-19 · reconstitué",
@@ -985,7 +985,7 @@
           "id": "UKwKchzxPRZh2kFfOJOV"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1016,7 +1016,7 @@
       "versionNonce": 58583158,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1052,7 +1052,7 @@
           "id": "5ZrC3MoMtwE0fqIeRrUG"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1081,7 +1081,7 @@
       "versionNonce": 432276172,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "20/10",
@@ -1119,7 +1119,7 @@
       "versionNonce": 271873622,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Les vues simples de la DSI",
@@ -1157,7 +1157,7 @@
       "versionNonce": 177073766,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Décision : la DSI fournit des vues simples, l'équipe\nBI fait les calculs CIPRES.\n• Doc « Spécification des vues BI CIPRES » pour la\nDSI, domaines 1 à 4.",
@@ -1195,7 +1195,7 @@
       "versionNonce": 1364796671,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-10-20 · reconstitué",
@@ -1244,7 +1244,7 @@
           "id": "5QFYcplsolR9LoLrlBHc"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1275,7 +1275,7 @@
       "versionNonce": 1021468669,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1311,7 +1311,7 @@
           "id": "uZUKLTCUuN2RZzB4Ux1U"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1340,7 +1340,7 @@
       "versionNonce": 1513351905,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "21/10",
@@ -1378,7 +1378,7 @@
       "versionNonce": 188440284,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "GRH : le profilage des mouvements",
@@ -1416,7 +1416,7 @@
       "versionNonce": 1851462312,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Lots 1 à 9 de la GRH (Q01 à Q69).\n• GRH_MOUVEMENT n'a ni recrutements ni départs :\npiste GRH_DECISION.\n• Règle : historiser chaque requête dans\nanalyses/<domaine>.",
@@ -1454,7 +1454,7 @@
       "versionNonce": 1860192489,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "mercredi · fiche jours/2026-10-21 · reconstitué",
@@ -1499,7 +1499,7 @@
           "id": "5QFYcplsolR9LoLrlBHc"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1530,7 +1530,7 @@
       "versionNonce": 251407360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1566,7 +1566,7 @@
           "id": "2URAilDHoNU31cpzVLAL"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1595,7 +1595,7 @@
       "versionNonce": 734128014,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "22/10",
@@ -1633,7 +1633,7 @@
       "versionNonce": 245403222,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "GRH : les requêtes DTM corrigées",
@@ -1671,7 +1671,7 @@
       "versionNonce": 681664158,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Effectif, ratio, indicateurs et formation corrigés\n(commit 1b44a0c).\n• Le DWH ne garde qu'un cliché (102026).\n• Validées par le lot 12 : 885 agents en 2025.",
@@ -1709,7 +1709,7 @@
       "versionNonce": 1635534525,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "jeudi · fiche jours/2026-10-22 · reconstitué",
@@ -1747,7 +1747,7 @@
       "versionNonce": 1868496187,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -1800,7 +1800,7 @@
       "versionNonce": 1730924645,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -1853,7 +1853,7 @@
       "versionNonce": 486689787,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -1913,7 +1913,7 @@
           "id": "Dgva2h59r2rpEBBzfadF"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1944,7 +1944,7 @@
       "versionNonce": 162581393,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -1980,7 +1980,7 @@
           "id": "BQxYQTrXDFMV2yM9KFP0"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2009,7 +2009,7 @@
       "versionNonce": 511214231,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "23/10",
@@ -2047,7 +2047,7 @@
       "versionNonce": 789458010,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "GRH : un questionnaire simple pour la\nCNSS",
@@ -2085,7 +2085,7 @@
       "versionNonce": 1115035595,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Le doc technique jugé trop complexe pour la CNSS.\n• Questionnaire CIPRES GRH : 33 questions sur T58 à\nT65.",
@@ -2123,7 +2123,7 @@
       "versionNonce": 569968069,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "vendredi · fiche jours/2026-10-23 · reconstitué",
@@ -2172,7 +2172,7 @@
           "id": "BRShSy14qTDWCxuR8iV0"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2203,7 +2203,7 @@
       "versionNonce": 1375015950,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2239,7 +2239,7 @@
           "id": "mjn1GH0gNMF8AIbNtXgB"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2268,7 +2268,7 @@
       "versionNonce": 29407431,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "24/10",
@@ -2306,7 +2306,7 @@
       "versionNonce": 1519688644,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "GRH : les agents temporaires",
@@ -2344,7 +2344,7 @@
       "versionNonce": 349907372,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Lot 13 : temporaires et agents de la fonction\npublique.\n• Questionnaire complété (question 13, glossaire).",
@@ -2382,7 +2382,7 @@
       "versionNonce": 794270025,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "samedi · fiche jours/2026-10-24 · reconstitué",
@@ -2427,7 +2427,7 @@
           "id": "BRShSy14qTDWCxuR8iV0"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2458,7 +2458,7 @@
       "versionNonce": 2060004898,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2494,7 +2494,7 @@
           "id": "CwsoHLlYSuGRlzsuqG13"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2523,7 +2523,7 @@
       "versionNonce": 766202976,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "25/10",
@@ -2561,7 +2561,7 @@
       "versionNonce": 188292170,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "GRH : l'Annuaire CIPRES devient\nlisible",
@@ -2599,7 +2599,7 @@
       "versionNonce": 1323689086,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Poppler installé : l'Annuaire se lit avec pdftotext.\n• Lots 14 et 15 : les types d'agents.\n• Encadrant = cadre de T58, d'après l'Annuaire.",
@@ -2637,7 +2637,7 @@
       "versionNonce": 1252438937,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "dimanche · fiche jours/2026-10-25 · reconstitué",
@@ -2675,7 +2675,7 @@
       "versionNonce": 1778752681,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -2728,7 +2728,7 @@
       "versionNonce": 502369597,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -2779,7 +2779,7 @@
       "versionNonce": 1280914316,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "3. Semaine du 26 octobre au 1 novembre 2026",
@@ -2817,7 +2817,7 @@
       "versionNonce": 243965576,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -2869,7 +2869,7 @@
           "id": "J2gPk9mJWroOInpzWKbd"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2900,7 +2900,7 @@
       "versionNonce": 370204195,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2936,7 +2936,7 @@
           "id": "OWBIwoSiunoFjwCGrjy1"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -2965,7 +2965,7 @@
       "versionNonce": 459949616,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "26/10",
@@ -3003,7 +3003,7 @@
       "versionNonce": 1640384609,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Prestations : le lancement",
@@ -3041,7 +3041,7 @@
       "versionNonce": 881662275,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Lots 1 et 2 des prestations exécutés ; règles R1 à\nR12.\n• Atelier de Kaya 2017 déposé.\n• Décision : le contenu des DTM n'est pas fiable.",
@@ -3079,7 +3079,7 @@
       "versionNonce": 728653021,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-10-26 · reconstitué",
@@ -3128,7 +3128,7 @@
           "id": "dggbdaxxqqdX9gHO8smD"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3159,7 +3159,7 @@
       "versionNonce": 1015232360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3195,7 +3195,7 @@
           "id": "7rx2sVNfwzZuEKMDmPty"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3224,7 +3224,7 @@
       "versionNonce": 1416881242,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "27/10",
@@ -3262,7 +3262,7 @@
       "versionNonce": 1760231369,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Prestations : T25 et le guide du\nmétier",
@@ -3300,7 +3300,7 @@
       "versionNonce": 1317097736,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Première requête T25 proposée.\n• Doc « Guide du métier » : CNSS, CIPRES, lexique.\n• Doc « Règles de calcul » : T25 à valider.",
@@ -3338,7 +3338,7 @@
       "versionNonce": 1646832221,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-10-27 · reconstitué",
@@ -3387,7 +3387,7 @@
           "id": "EFfNbiTtW0L2eEGNxySz"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3418,7 +3418,7 @@
       "versionNonce": 2165762,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3454,7 +3454,7 @@
           "id": "uRgMUkjoUmhpZu3S62tk"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3483,7 +3483,7 @@
       "versionNonce": 1323454454,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "29/10",
@@ -3521,7 +3521,7 @@
       "versionNonce": 811442592,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Tout en Excalidraw",
@@ -3559,7 +3559,7 @@
       "versionNonce": 1793220882,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Décision : documents et explications en schémas\nExcalidraw.\n• Revue des DTM_PRESTATION et DTM_DOSSIER ;\nDTM_DOSSIER proposée.\n• Lot 3 A : toutes les listes de codes.",
@@ -3597,7 +3597,7 @@
       "versionNonce": 1392303919,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "jeudi · fiche jours/2026-10-29 · reconstitué",
@@ -3642,7 +3642,7 @@
           "id": "EFfNbiTtW0L2eEGNxySz"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3673,7 +3673,7 @@
       "versionNonce": 1730603575,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3709,7 +3709,7 @@
           "id": "p3oLi2UIgajsGhexWgK2"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -3738,7 +3738,7 @@
       "versionNonce": 63462440,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "30/10",
@@ -3776,7 +3776,7 @@
       "versionNonce": 1343300405,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Prestations : T25 à T27, l'annuaire,\nla maîtrise",
@@ -3814,7 +3814,7 @@
       "versionNonce": 1794078927,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Lot 3 B et lot 4 : on compte des demandes ; T25, T26,\nT27 prêts.\n• Comparaison avec l'annuaire de la CNSS 2024 : 2 à 3\n% d'écart.\n• Règles R6 et R7 revues ; fiches de maîtrise par\ndomaine.",
@@ -3852,7 +3852,7 @@
       "versionNonce": 400193395,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "vendredi · fiche jours/2026-10-30",
@@ -3890,7 +3890,7 @@
       "versionNonce": 1699155477,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -3943,7 +3943,7 @@
       "versionNonce": 1030492732,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -3996,7 +3996,7 @@
       "versionNonce": 1926088181,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -4056,7 +4056,7 @@
           "id": "CqhswALuStATeR7DkM9j"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4087,7 +4087,7 @@
       "versionNonce": 2131272281,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4123,7 +4123,7 @@
           "id": "dhA4DwrtbUlPFaJQheOg"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4152,7 +4152,7 @@
       "versionNonce": 1465265369,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "31/10",
@@ -4190,7 +4190,7 @@
       "versionNonce": 1696170667,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Visionneuse hors ligne, journal de\nbord, T32 à T41",
@@ -4228,7 +4228,7 @@
       "versionNonce": 1932325927,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• La visionneuse marche sans Internet.\n• Le journal de bord : la mémoire du travail, jour par\njour.\n• T32 à T41 : lot 5 exécuté, règles à moins de 1 % de\nl'annuaire de la CNSS pour T32.\n• Lot 6 rédigé pour les écarts qui restent : T41, dates\npar défaut, suspensions.",
@@ -4266,7 +4266,7 @@
       "versionNonce": 1051389799,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "samedi · fiche jours/2026-10-31",
@@ -4311,7 +4311,7 @@
           "id": "CqhswALuStATeR7DkM9j"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4342,7 +4342,7 @@
       "versionNonce": 1875920130,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4378,7 +4378,7 @@
           "id": "udJhBmkfWYN40IDjTN6f"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4407,7 +4407,7 @@
       "versionNonce": 1324113769,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "01/11",
@@ -4445,7 +4445,7 @@
       "versionNonce": 1008440574,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Le lot 6 : T41 tranché",
@@ -4483,7 +4483,7 @@
       "versionNonce": 2146272896,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• T41 : seuls les enfants payés dans l'année comptent\n(+0,7 % de l'annuaire).\n• L'année 1900 est une date de naissance par défaut\n(503 bénéficiaires).\n• Les suspensions n'expliquent pas l'écart des veuves :\nreste A06, A07.\n• La fiche T41, sur le gabarit de T32.\n• T42 à T49 : lot 7 exécuté, la première saisie retombe\nsur l'annuaire à 1 %.\n• La fiche pilote T42.\n• T50 à T57 : lot 8 exécuté ; liquidées = annuaire,\nmontant à la saisie du paiement.\n• L'annuaire de la CNSS est arrêté fin mars : règle\nR13.\n• La fiche pilote de T50 à T57 ; la date des montants\nne bloque plus rien.\n• T31 (indus) : lot 9 exécuté, taux d'indus 0,39 % en\n2024, norme 2 %.\n• La fiche T31.\n• GRH : la méthode des prestations ; l'annuaire de la\nCNSS publie T58 à T65.\n• GRH, lot 17 : 742 permanents pour 758 ; âge et\nancienneté retrouvés ; lot 18.\n• GRH, Q99 : 104 recrutements en 2024 comme\nl'annuaire ; les 84 de 2019 retrouvés.\n• GRH, lot 18 : la catégorie de la CNSS est celle de la\nsituation ; lot 19.\n• GRH, lot 19 : T58 et T65 retrouvés ; 46 contractuels\n= engagés de l'année.\n• GRH : retraites à la date de la décision 02 ; lot 20\npour les autres mouvements.\n• GRH : disponibilités (07) et remises (18) retrouvées\n; règles G1 à G11 écrites.\n• GRH : le schéma des règles (regles_grh) en\nExcalidraw.\n• GRH : trois requêtes proposées (effectif, T60, T62),\navec leurs réglages.\n• GRH : le dossier « tableaux cipres » et les fiches\nT58, T60, T62.\n• Réunion du 02/11 : un doc des points à valider par\ndomaine.\n• Fiches CIPRES : des requêtes courtes sur les vraies\ntables, à la place des extraits.",
@@ -4521,7 +4521,7 @@
       "versionNonce": 1119249360,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "dimanche · fiche jours/2026-11-01",
@@ -4559,7 +4559,7 @@
       "versionNonce": 1484019424,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -4610,7 +4610,7 @@
       "versionNonce": 688121769,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "4. Semaine du 2 au 8 novembre 2026",
@@ -4648,7 +4648,7 @@
       "versionNonce": 1785575764,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -4700,7 +4700,7 @@
           "id": "2LfB0PF4hWULHbGUnwuh"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4731,7 +4731,7 @@
       "versionNonce": 1254340605,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4767,7 +4767,7 @@
           "id": "Q9QVVoqTmXAHN0HnPigS"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4796,7 +4796,7 @@
       "versionNonce": 1161758327,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "02/11",
@@ -4834,7 +4834,7 @@
       "versionNonce": 2008159536,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "La fiche de lecture, terme par terme",
@@ -4872,7 +4872,7 @@
       "versionNonce": 179109055,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Fiche de lecture des prestations, à lire à côté de\nl'Annuaire CIPRES.\n• Exemple sur T25 : onze termes, chacun compris, situé\ndans la base, vérifiable.\n• Forme validée : tous les tableaux, T25 à T57, et la\nfiche de la GRH, T58 à T65.",
@@ -4910,7 +4910,7 @@
       "versionNonce": 1594991230,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-11-02",
@@ -4959,7 +4959,7 @@
           "id": "kLbTgBiGWUVVJTxtGqcx"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -4990,7 +4990,7 @@
       "versionNonce": 114444145,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5026,7 +5026,7 @@
           "id": "CCS7RzzX5Hb2xzrflNmq"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5055,7 +5055,7 @@
       "versionNonce": 409679557,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "03/11",
@@ -5093,7 +5093,7 @@
       "versionNonce": 1679752401,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Le cheminement d'une rente dans la\nbase",
@@ -5131,7 +5131,7 @@
       "versionNonce": 596722255,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Le terme « dossiers déposés » de T26, les IJ et les\nrentes, expliqués simplement.\n• Le chemin d'une rente AT/MP dans la base, de la\ndéclaration au paiement.\n• Ce chemin mis en schéma, sur une feuille à part.",
@@ -5169,7 +5169,7 @@
       "versionNonce": 1519642501,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "mardi · fiche jours/2026-11-03",
@@ -5218,7 +5218,7 @@
           "id": "uhmzNXwx65T1Wok5o91P"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5249,7 +5249,7 @@
       "versionNonce": 1663289992,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5285,7 +5285,7 @@
           "id": "BKkUquo9WSmYlw5I9nHv"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5314,7 +5314,7 @@
       "versionNonce": 1910191864,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "04/11",
@@ -5352,7 +5352,7 @@
       "versionNonce": 868414932,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Le recueil des besoins de la CNSS",
@@ -5390,7 +5390,7 @@
       "versionNonce": 1945488560,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• Un nouveau document de la CNSS : le recueil des\nbesoins (v7), ateliers de janvier 2026.\n• Ses remarques, B01 à B41, sur une fiche à part, face à\nnos règles.",
@@ -5428,7 +5428,7 @@
       "versionNonce": 951276953,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "mercredi · fiche jours/2026-11-04",
@@ -5473,7 +5473,7 @@
           "id": "uhmzNXwx65T1Wok5o91P"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5504,7 +5504,7 @@
       "versionNonce": 1112344515,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5540,7 +5540,7 @@
           "id": "Eriu9bloTG7RivGjDICp"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5569,7 +5569,7 @@
       "versionNonce": 540092526,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "05/11",
@@ -5607,7 +5607,7 @@
       "versionNonce": 938354404,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "Les décisions face aux situations",
@@ -5645,7 +5645,7 @@
       "versionNonce": 1033128758,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• D'où vient chaque information de l'effectif : la fiche\nde l'agent, les décisions, la situation.\n• Lot 24 rédigé pour vérifier que les trois tables\nracontent la même histoire.",
@@ -5683,7 +5683,7 @@
       "versionNonce": 1341562496,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "jeudi · fiche jours/2026-11-05",
@@ -5721,7 +5721,7 @@
       "versionNonce": 589530880,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -5774,7 +5774,7 @@
       "versionNonce": 441402862,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -5827,7 +5827,7 @@
       "versionNonce": 798824380,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -5887,7 +5887,7 @@
           "id": "DmrlfS6EP0nk241CaJOW"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5918,7 +5918,7 @@
       "versionNonce": 1081465957,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5954,7 +5954,7 @@
           "id": "QChI7nQLb6pVsk3jN9KG"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -5983,7 +5983,7 @@
       "versionNonce": 866505831,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "07/11",
@@ -6021,7 +6021,7 @@
       "versionNonce": 251869073,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "La requête de l'effectif expliquée, et\nle lot 25",
@@ -6059,7 +6059,7 @@
       "versionNonce": 543394311,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• La requête de l'effectif en schéma : une seule photo,\nmais des dates, et trois agents fictifs rejoués au\n31/12 de 2018 à 2025.\n• Lot 25 : les agents partis puis revenus sont tous des\ntemporaires. G2 tient, la requête ne change pas.\n• Tous les cas d'agents de l'effectif en un schéma :\ncompté, inactif ou pas compté ; puis la version\ntechnique, reliée au SQL.\n• T63 et T64 : la structure simple à envoyer à la DSI\net à la DFC, sans SQL.\n• Prestations et Finance : trois vues à demander à la\nCNSS, dont une balance comptable commune.",
@@ -6097,7 +6097,7 @@
       "versionNonce": 1947317631,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "samedi · fiche jours/2026-11-07",
@@ -6142,7 +6142,7 @@
           "id": "DmrlfS6EP0nk241CaJOW"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6173,7 +6173,7 @@
       "versionNonce": 331710180,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6209,7 +6209,7 @@
           "id": "yBilS7rY6RXaJumzdBhQ"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6238,7 +6238,7 @@
       "versionNonce": 1323468228,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "08/11",
@@ -6276,7 +6276,7 @@
       "versionNonce": 2105542955,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "T60, le mouvement du personnel",
@@ -6314,7 +6314,7 @@
       "versionNonce": 242980238,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "• T60 réécrite sur la structure de\nDTM_GRH_MOUVEMENT : deux photos de l'effectif de\nT58, d'un 31/12 à l'autre.\n• Le détail des « autres » demandé par le recueil v7 :\nles codes de mouvement de la CNSS, déjà dans\nl'application GRH.\n• Les règles G14 à G17, et trois schémas de T60 : les\ncas, les mêmes reliés au SQL, la requête pas à pas.",
@@ -6352,7 +6352,7 @@
       "versionNonce": 6604418,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "dimanche · fiche jours/2026-11-08",
@@ -6390,7 +6390,7 @@
       "versionNonce": 610409213,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -6441,7 +6441,7 @@
       "versionNonce": 1009190963,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "5. Semaine du 9 au 15 novembre 2026",
@@ -6479,7 +6479,7 @@
       "versionNonce": 440372543,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "points": [
@@ -6505,7 +6505,7 @@
       "x": 25.0,
       "y": 3837.0,
       "width": 600.0,
-      "height": 308.5,
+      "height": 353.5,
       "angle": 0,
       "strokeColor": "#1971c2",
       "backgroundColor": "#ffffff",
@@ -6526,7 +6526,7 @@
       "versionNonce": 1048732596,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6557,7 +6557,7 @@
       "versionNonce": 427793117,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6593,7 +6593,7 @@
           "id": "bKm02vnSAwBOuqMBSt0W"
         }
       ],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false
     },
@@ -6622,7 +6622,7 @@
       "versionNonce": 1605220555,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "09/11",
@@ -6660,7 +6660,7 @@
       "versionNonce": 223307739,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "La fiche des points à valider des\nprestations",
@@ -6679,7 +6679,7 @@
       "x": 45.0,
       "y": 3934.0,
       "width": 539.28,
-      "height": 157.5,
+      "height": 202.5,
       "angle": 0,
       "strokeColor": "#1e1e1e",
       "backgroundColor": "transparent",
@@ -6698,16 +6698,16 @@
       "versionNonce": 28033251,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
-      "text": "• La fiche des points à valider des prestations mise à\njour : 137 points, dont 69 nouveaux, tirés du recueil v7\net de l'annuaire CNSS 2024.\n• Huit points à trancher en priorité, une ligne « À qui\n» par point et, à la fin, les points de chaque direction.\n• La version Word refaite par un générateur gardé dans\nle projet.",
+      "text": "• La fiche des points à valider des prestations mise à\njour : 137 points, dont 69 nouveaux, tirés du recueil v7\net de l'annuaire CNSS 2024.\n• Huit points à trancher en priorité, une ligne « À qui\n» par point et, à la fin, les points de chaque direction.\n• La version Word refaite par un générateur gardé dans\nle projet.\n• La fiche des règles : 99 règles imposées à la CNSS,\npar domaine et par tableau.",
       "fontSize": 18,
       "fontFamily": 5,
       "textAlign": "left",
       "verticalAlign": "top",
       "containerId": null,
-      "originalText": "• La fiche des points à valider des prestations mise à\njour : 137 points, dont 69 nouveaux, tirés du recueil v7\net de l'annuaire CNSS 2024.\n• Huit points à trancher en priorité, une ligne « À qui\n» par point et, à la fin, les points de chaque direction.\n• La version Word refaite par un générateur gardé dans\nle projet.",
+      "originalText": "• La fiche des points à valider des prestations mise à\njour : 137 points, dont 69 nouveaux, tirés du recueil v7\net de l'annuaire CNSS 2024.\n• Huit points à trancher en priorité, une ligne « À qui\n» par point et, à la fin, les points de chaque direction.\n• La version Word refaite par un générateur gardé dans\nle projet.\n• La fiche des règles : 99 règles imposées à la CNSS,\npar domaine et par tableau.",
       "autoResize": true,
       "lineHeight": 1.25
     },
@@ -6715,7 +6715,7 @@
       "id": "zduAFV5x7v0JfyNt40Fi",
       "type": "text",
       "x": 45.0,
-      "y": 4107.5,
+      "y": 4152.5,
       "width": 274.40000000000003,
       "height": 20.0,
       "angle": 0,
@@ -6736,7 +6736,7 @@
       "versionNonce": 1635924306,
       "isDeleted": false,
       "boundElements": [],
-      "updated": 1794218310893,
+      "updated": 1794236057504,
       "link": null,
       "locked": false,
       "text": "lundi · fiche jours/2026-11-09",
