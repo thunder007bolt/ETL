@@ -1655,6 +1655,20 @@ DECISIONS = [
              "Règles 1 et 2 de la fiche des règles ; les requêtes ne changent pas (la photo est "
              "donnée au lancement). Une déclaration tardive n'entre que dans les photos "
              "suivantes."),
+    Decision("2026-11-09", "Survivants : on compte l'ayant droit",
+             "Pour T32 à T38 et T43 à T49, on compte l'ayant droit (la veuve, l'orphelin, le "
+             "parent), à son âge, et non l'assuré décédé titulaire du dossier. « Idem. Tab 41 » "
+             "du recueil v7 se lit « même périodicité » ; « allocataire = titulaire du "
+             "dossier » ne vaut que pour T41.",
+             "Dans le recueil, chaque tableau a sa périodicité écrite ou un seul renvoi, jamais "
+             "les deux ; « allocataire » est un mot des prestations familiales (glossaire "
+             "CIPRES) ; T35 sans la tranche « 25 ans et plus » n'a de sens qu'avec l'âge de "
+             "l'orphelin ; l'annuaire CNSS 2024 compte le survivant (tableau 77 : 44 "
+             "orphelins de rente pour 44).",
+             "Toi, le 09/11 (« on maintient ton analyse »)",
+             "Règles 10 et 63 de la fiche des règles ; les requêtes ne changent pas. Point 71 "
+             "à présenter à la DCP avec ces arguments, en proposant d'écrire la périodicité "
+             "à la place du renvoi dans la prochaine version du recueil."),
 ]
 
 # =============================================================================================
