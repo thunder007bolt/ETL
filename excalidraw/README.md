@@ -16,6 +16,7 @@ Les documents et les explications du projet sont faits sous forme de schémas Ex
 | `sources/<domaine>/*.py` | Scripts qui ont produit le premier jet de chaque schéma |
 | `historique/<dossier>/<schéma>/` | Les versions gardées de chaque schéma (pas suivi par git) |
 | `historique/deplacements.json` | L'ancien et le nouveau chemin des schémas déplacés dans la visionneuse |
+| `espaces.json` | Les espaces de travail de la visionneuse : pour chacun, son nom et la liste de ses dossiers et schémas |
 
 ## Ouvrir la visionneuse
 
@@ -41,6 +42,7 @@ cd excalidraw/viewer/build && npm install && npm run build
 ## Utiliser la visionneuse
 
 - **Ouvrir** : cliquer sur un schéma dans l'arborescence de gauche. Le bouton « Liste » la masque pour avoir tout l'écran.
+- **Espaces de travail** : le bouton en tête de la liste (« Tous les schémas ») ouvre le menu des espaces. Un espace est une vue par thème, par exemple « Réunion CNSS » : il n'affiche que les dossiers et les schémas qu'on y a mis. Rien n'est déplacé sur le disque, et un même dossier peut être dans plusieurs espaces. Pour en remplir un : au survol d'un dossier ou d'un schéma, le signet l'ajoute à un espace ; dans l'espace, la croix l'en retire, après une confirmation. Le menu crée, renomme et supprime un espace (supprimer un espace ne supprime aucun schéma). La visionneuse retient l'espace affiché. Un dossier déplacé ou renommé dans la visionneuse reste dans ses espaces ; un déplacement fait hors de la visionneuse (Finder, script) demande de corriger `espaces.json`.
 - **Dossiers** : un clic sur un dossier le replie ou le déplie ; replié, il affiche son nombre de schémas. La visionneuse retient les dossiers repliés.
 - **Modifier** : comme sur excalidraw.com. La barre du haut indique « Modifications non enregistrées » dès qu'on change quelque chose.
 - **Enregistrer** : bouton « Enregistrer » ou Cmd+S. Le fichier `.excalidraw` est mis à jour sur le disque.

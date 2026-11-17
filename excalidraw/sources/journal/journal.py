@@ -1807,8 +1807,55 @@ JOURS = [
                                "schemas/grh/points_a_valider_v2.excalidraw ; "
                                "regles_tableaux_donnees/grh_effectif.py, grh_autres.py",
                       etat="fait"),
+             Chantier("Des espaces de travail dans la visionneuse", "Outils",
+                      demande="La liste des schémas est trop désorganisée : des espaces de "
+                              "travail par thème, entre lesquels on passe facilement, comme sur "
+                              "les grandes plateformes.",
+                      fait="Un sélecteur en tête de la liste : « Tous les schémas » ou un espace. "
+                           "Un espace est une vue (un nom, une liste de dossiers et de schémas) : "
+                           "rien n'est déplacé sur le disque, un dossier peut être dans plusieurs "
+                           "espaces. Le signet au survol ajoute à un espace, la croix en retire ; "
+                           "le menu crée, renomme, supprime. Le retrait demande une confirmation "
+                           "(ta demande : un clic par mégarde est vite arrivé). Les espaces "
+                           "suivent un déplacement "
+                           "fait dans la visionneuse. Cinq espaces de départ : Réunion CNSS, "
+                           "Prestations, GRH, Suivi du projet, Réviser. Testé dans la visionneuse.",
+                      trouve="Un serveur lancé avant ne connaît pas les espaces : ta visionneuse "
+                             "répondait « Adresse inconnue » à la création d'un espace, alors "
+                             "que le test passait sur un serveur neuf. Corrigé : la visionneuse "
+                             "dit maintenant de relancer server.py ; serveur relancé par toi, "
+                             "lecture et enregistrement vérifiés sur le port 8765.",
+                      fichiers="server.py, viewer/app.js, viewer/style.css, viewer/vendor, "
+                               "espaces.json, README",
+                      etat="fait"),
+             Chantier("La proposition de rangement des schémas", "Outils",
+                      demande="Proposer une meilleure structure, évolutive, et repérer les "
+                              "documents qui ne sont plus pertinents, pour les déplacer sans les "
+                              "supprimer.",
+                      fait="Inventaire des 137 schémas (28 dossiers) : générateur de chacun, "
+                           "schémas annotés à la main, documents périmés, incohérences de noms. "
+                           "Proposition dans schemas/rangement : le même squelette par domaine "
+                           "(1 pour la cnss, 2 regles, 3 comprendre), un dossier commun, un "
+                           "dossier archives. Réexaminée à ta demande, les espaces une fois en "
+                           "place : une seule passe, 6 dossiers à la racine au lieu de 13 "
+                           "entrées, plus de dossier pour un seul schéma, les fiches « tableaux "
+                           "cipres » gardées dans « 1 pour la cnss/fiches de validation », 6 "
+                           "schémas en archives. Rien n'est déplacé.",
+                      trouve="4 archives sûres (3 essais vides, points GRH v1) ; 3 probables "
+                             "(regles_grh, regles_prestations, prestation_esp) ; 5 à demander "
+                             "(11 fiches tableaux cipres, maitrise, pensions_2024, remarques "
+                             "besoins v7, fiche de lecture prestations). 5 schémas annotés à ne "
+                             "jamais écraser. 11 schémas citent encore la photo de fin mars. "
+                             "La décision du 01/11 sur le cliché de fin mars est encore "
+                             "« proposé » dans le journal.",
+                      fichiers="sources/rangement/proposition_rangement.py ; "
+                               "schemas/rangement/proposition de rangement.excalidraw",
+                      etat="en cours"),
          ],
-         reste=["Toi : lancer les requêtes de l'effectif, de T60 et de T62 et vérifier "
+         reste=["Toi : relancer la visionneuse, recharger la page, essayer les espaces.",
+                "Toi : valider le rangement proposé (schemas/rangement) ; je range alors tout "
+                "en une passe.",
+                "Toi : lancer les requêtes de l'effectif, de T60 et de T62 et vérifier "
                 "DIM_GRH_TYPE_MOUVEMENT, avant d'envoyer la v2.",
                 "Toi : relire la v2 (63 points, 47 ouverts) et l'envoyer à la DRH, à la DFC, à "
                 "la DSI et à la DPC.",
@@ -2105,6 +2152,15 @@ DECISIONS = [
              "Toi, le 15/11 (« c'est parfait, enchaîne pour les autres tableaux »)",
              "Les fiches suivent la fiche des règles ; les requêtes proposées en retard sont "
              "corrigées dans la passe unique."),
+    Decision("2026-11-17", "Des espaces de travail dans la visionneuse",
+             "La visionneuse a des espaces de travail : des vues par thème sur les dossiers et "
+             "les schémas, choisies dans un menu en tête de la liste. Un espace ne déplace rien "
+             "sur le disque (espaces.json).",
+             "137 schémas dans une seule arborescence : on ne s'y retrouve plus. Un espace montre "
+             "seulement ce qui sert à un sujet, par exemple la réunion avec la CNSS.",
+             "Toi, le 17/11",
+             "Le rangement des dossiers eux-mêmes reste à valider (schemas/rangement). Tout "
+             "déplacement passe par la visionneuse, pour que l'historique et les espaces suivent."),
 ]
 
 # =============================================================================================
@@ -2158,7 +2214,9 @@ ETAT = [
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Relire les fiches « règles par tableau » (33 prestations, 8 GRH) et les envoyer "
+    ("Toi", "Valider la proposition de rangement des schémas (schemas/rangement) : une seule "
+            "passe, 6 dossiers à la racine. "
+            "Relire les fiches « règles par tableau » (33 prestations, 8 GRH) et les envoyer "
             "aux directions. "
             "Lancer les requêtes de preuve pas encore exécutées (14 fichiers, points 14, "
             "15, 21, 39, 70, 71, 76, 79, 81, 90, 98, 114, 117, 134) et me donner leurs "

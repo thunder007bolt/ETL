@@ -1,5 +1,6 @@
 // Visionneuse des schémas Excalidraw : arborescence des dossiers et des schémas (glisser-déposer
-// pour les ranger), édition et enregistrement sur le disque, à la main ou automatique.
+// pour les ranger), espaces de travail (des vues par thème sur ces dossiers), édition et
+// enregistrement sur le disque, à la main ou automatique.
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import htm from "htm";
@@ -11,8 +12,14 @@ const TREE_API = "/api/arbre";
 const FOLDERS_API = "/api/dossiers";
 const MOVE_API = "/api/deplacer";
 const HISTORY_API = "/api/historique";
+const SPACES_API = "/api/espaces";
 const POLL_MS = 3000;
 const CLOSED_KEY = "schemas.dossiers-fermes";
+// espace de travail affiché ("" : tous les schémas), retenu dans ce navigateur
+const SPACE_KEY = "schemas.espace";
+const NEW_SPACE = "\u0000nouveau";
+// un serveur lancé avant les espaces de travail ne les connaît pas : il faut le relancer
+const OLD_SERVER = "Relancez la visionneuse (server.py) : son serveur a été lancé avant les espaces de travail.";
 const DRAG_TYPE = "application/x-visionneuse-schemas";
 const OPEN_ON_HOVER_MS = 700;
 // enregistrement automatique : toutes les N secondes si le schéma ouvert a changé (0 : désactivé) ;
@@ -49,6 +56,12 @@ const formatDelay = (seconds) => {
 const versionSum = (elements) => elements.reduce((sum, e) => sum + e.version, 0);
 const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
 const isWithin = (path, folder) => path === folder || path.startsWith(`${folder}/`);
+
+// identifiant d'un espace de travail, tiré de son nom : « À valider (CNSS) » → a-valider-cnss
+const slug = (name) => name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
+  .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "espace";
+// un espace contient un schéma ou un dossier s'il le liste, ou s'il liste un dossier au-dessus
+const inSpace = (space, path) => space.chemins.some((c) => isWithin(path, c));
 
 async function request(url, options) {
   const response = await fetch(url, options);
@@ -121,6 +134,14 @@ function buildTree(folders, schemas) {
   schemas.forEach((s) => node(s.dossier).schemas.push(s));
   return root;
 }
+const findNode = (root, path) => {
+  let current = root;
+  for (const part of path.split("/")) {
+    current = current.dossiers.get(part);
+    if (!current) return null;
+  }
+  return current;
+};
 const countSchemas = (node) =>
   node.schemas.length + [...node.dossiers.values()].reduce((sum, f) => sum + countSchemas(f), 0);
 const sortedFolders = (node) => [...node.dossiers.values()].sort((a, b) => a.nom.localeCompare(b.nom, "fr"));
@@ -138,6 +159,21 @@ function saveClosed(closed) {
     localStorage.setItem(CLOSED_KEY, JSON.stringify([...closed]));
   } catch {
     // stockage indisponible (navigation privée) : le repli ne sera pas retenu
+  }
+}
+
+function loadSpace() {
+  try {
+    return localStorage.getItem(SPACE_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+function storeSpace(id) {
+  try {
+    localStorage.setItem(SPACE_KEY, id);
+  } catch {
+    // stockage indisponible : la visionneuse rouvrira sur tous les schémas
   }
 }
 
@@ -208,6 +244,11 @@ const ICONS = {
   schemaPlus: html`<g><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M9 15h6" /><path d="M12 18v-6" /></g>`,
   corbeille: html`<g><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></g>`,
   marqueur: html`<g><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></g>`,
+  espace: html`<g><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z" /><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65" /><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65" /></g>`,
+  espacePlus: html`<g><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" /><path d="M12 7v6" /><path d="M15 10H9" /></g>`,
+  retirer: html`<g><path d="M18 6 6 18" /><path d="m6 6 12 12" /></g>`,
+  coche: html`<path d="M20 6 9 17l-5-5" />`,
+  bas: html`<path d="m6 9 6 6 6-6" />`,
 };
 const Icon = ({ name }) => html`<svg class="icone" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -233,8 +274,8 @@ function Dialog({ dialog, onClose }) {
         ${dialog.message ? html`<p>${dialog.message}</p>` : null}
         ${dialog.texte ? html`<input ref=${focusRef} value=${value} spellCheck="false"
           onInput=${(e) => setValue(e.target.value)} />` : null}
-        <div class="dialogue-boutons">
-          <button type="button" class="bouton" onClick=${() => onClose(null)}>Annuler</button>
+        <div class=${dialog.colonne ? "dialogue-boutons colonne" : "dialogue-boutons"}>
+          <button type="button" class="bouton annuler" onClick=${() => onClose(null)}>Annuler</button>
           ${dialog.choices.map((c) => html`
             <button key=${c.label} type=${c === main ? "submit" : "button"} class=${c.fort ? "bouton fort" : "bouton"}
               ref=${!dialog.texte && c === main ? focusRef : null}
@@ -248,6 +289,10 @@ function App() {
   const [schemas, setSchemas] = useState([]);
   const [folders, setFolders] = useState([]);
   const [closed, setClosed] = useState(loadClosed);
+  const [spaces, setSpaces] = useState([]); // espaces de travail : [{ id, nom, chemins }]
+  const [spaceId, setSpaceId] = useState(loadSpace); // espace affiché ("" : tous les schémas)
+  const [spaceMenu, setSpaceMenu] = useState(false);
+  const [oldServer, setOldServer] = useState(false); // le serveur ne connaît pas les espaces
   const [dragging, setDragging] = useState(false);
   const [dropTarget, setDropTarget] = useState(null); // dossier survolé pendant un glisser ("" : la racine)
   const [scene, setScene] = useState(null); // { path, key, initial }
@@ -291,6 +336,10 @@ function App() {
   const [dialog, setDialog] = useState(null); // fenêtre de question ouverte
   const dialogRef = useRef(null); // sa fonction de réponse
   const saveRef = useRef(null);
+  const spacesRef = useRef([]);
+  const spaceIdRef = useRef(spaceId);
+  const spaceMenuRef = useRef(null);
+  const oldServerRef = useRef(false);
 
   const markDirty = (value) => {
     dirtyRef.current = value;
@@ -359,8 +408,12 @@ function App() {
       listJsonRef.current = json;
       setSchemas(tree.schemas);
       setFolders(tree.dossiers);
+      spacesRef.current = tree.espaces || [];
+      setSpaces(spacesRef.current);
+      oldServerRef.current = tree.espaces === undefined;
+      setOldServer(oldServerRef.current);
     }
-    return tree.schemas;
+    return tree;
   }, []);
 
   const updateClosed = (change) => setClosed((prev) => {
@@ -547,43 +600,174 @@ function App() {
     setVersionsOpen(versionsOpenRef.current);
   };
 
+  // --- espaces de travail : des vues par thème ; rien n'est déplacé sur le disque
+  const chooseSpace = (id) => {
+    spaceIdRef.current = id;
+    setSpaceId(id);
+    storeSpace(id);
+    setSpaceMenu(false);
+  };
+  const saveSpaces = useCallback(async (next) => {
+    if (oldServerRef.current) {
+      flash(OLD_SERVER, "erreur");
+      return false;
+    }
+    try {
+      const result = await request(SPACES_API, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ espaces: next }),
+      });
+      spacesRef.current = result.espaces;
+      setSpaces(result.espaces);
+      refreshList();
+      return true;
+    } catch (e) {
+      flash(e.message === "Adresse inconnue" ? OLD_SERVER : `Espaces non enregistrés : ${e.message}`,
+        "erreur");
+      return false;
+    }
+  }, [flash, refreshList]);
+  // crée un espace (avec, au besoin, un premier dossier ou schéma) ; répond son identifiant
+  const createSpace = useCallback(async (first) => {
+    setSpaceMenu(false);
+    if (oldServerRef.current) {
+      flash(OLD_SERVER, "erreur");
+      return null;
+    }
+    const answer = await askText({
+      title: "Nouvel espace de travail",
+      message: "Un espace est une vue sur vos dossiers, par thème : « Réunion CNSS », « GRH »… "
+        + "Rien n'est déplacé sur le disque.",
+      confirmLabel: "Créer",
+    });
+    const name = answer && answer.trim().slice(0, 60);
+    if (!name) return null;
+    const taken = new Set(spacesRef.current.map((e) => e.id));
+    let id = slug(name);
+    for (let n = 2; taken.has(id); n += 1) id = `${slug(name).slice(0, 28)}-${n}`;
+    const ok = await saveSpaces([...spacesRef.current, { id, nom: name, chemins: first ? [first] : [] }]);
+    return ok ? id : null;
+  }, [askText, saveSpaces]);
+  const renameSpace = useCallback(async (space) => {
+    setSpaceMenu(false);
+    const answer = await askText({ title: "Renommer l'espace", value: space.nom, confirmLabel: "Renommer" });
+    const name = answer && answer.trim().slice(0, 60);
+    if (!name || name === space.nom) return;
+    if (await saveSpaces(spacesRef.current.map((e) => (e.id === space.id ? { ...e, nom: name } : e)))) {
+      flash("Espace renommé");
+    }
+  }, [askText, flash, saveSpaces]);
+  const deleteSpace = useCallback(async (space) => {
+    setSpaceMenu(false);
+    if (!(await ask({
+      title: `Supprimer l'espace « ${space.nom} » ?`,
+      message: "Seule la vue disparaît : les dossiers et les schémas restent à leur place.",
+      choices: [{ label: "Supprimer l'espace", value: true, fort: true }],
+    }))) return;
+    if (await saveSpaces(spacesRef.current.filter((e) => e.id !== space.id))) {
+      if (spaceIdRef.current === space.id) chooseSpace("");
+      flash("Espace supprimé");
+    }
+  }, [ask, flash, saveSpaces]);
+  const addToSpace = useCallback(async (path) => {
+    if (oldServerRef.current) {
+      flash(OLD_SERVER, "erreur");
+      return;
+    }
+    const all = spacesRef.current;
+    const picked = all.length === 0 ? NEW_SPACE : await ask({
+      title: "Ajouter à un espace de travail",
+      message: `« ${label(path)} » apparaîtra dans l'espace choisi. Il reste à sa place sur le disque.`,
+      colonne: true,
+      choices: [
+        ...all.map((e) => ({ label: inSpace(e, path) ? `${e.nom} (déjà dedans)` : e.nom, value: e.id })),
+        { label: "+ Nouvel espace…", value: NEW_SPACE, fort: true },
+      ],
+    });
+    if (!picked) return;
+    if (picked === NEW_SPACE) {
+      if (await createSpace(path)) flash("Espace créé");
+      return;
+    }
+    const space = all.find((e) => e.id === picked);
+    if (!space || inSpace(space, path)) return;
+    // un dossier ajouté remplace ce qu'il contient déjà dans l'espace
+    const kept = space.chemins.filter((c) => !isWithin(c, path));
+    if (await saveSpaces(all.map((e) => (e.id === picked ? { ...e, chemins: [...kept, path] } : e)))) {
+      flash(`Ajouté à « ${space.nom} »`);
+    }
+  }, [ask, createSpace, flash, saveSpaces]);
+  // la croix est vite cliquée par mégarde : on demande avant de retirer
+  const removeFromSpace = useCallback(async (path) => {
+    const id = spaceIdRef.current;
+    const space = spacesRef.current.find((e) => e.id === id);
+    if (!space) return;
+    if (!(await ask({
+      title: `Retirer « ${label(path)} » de l'espace « ${space.nom} » ?`,
+      message: "Il disparaît seulement de cet espace. Il reste à sa place sur le disque, et dans "
+        + "« Tous les schémas ».",
+      choices: [{ label: "Retirer de l'espace", value: true, fort: true }],
+    }))) return;
+    const next = spacesRef.current.map((e) =>
+      (e.id === id ? { ...e, chemins: e.chemins.filter((c) => c !== path) } : e));
+    if (await saveSpaces(next)) flash("Retiré de l'espace");
+  }, [ask, flash, saveSpaces]);
+  // ce qu'on crée depuis un espace y apparaît, même rangé hors de ses dossiers
+  const showInSpace = useCallback(async (path) => {
+    const space = spacesRef.current.find((e) => e.id === spaceIdRef.current);
+    if (!space || inSpace(space, path)) return;
+    await saveSpaces(spacesRef.current.map((e) =>
+      (e.id === space.id ? { ...e, chemins: [...e.chemins, path] } : e)));
+  }, [saveSpaces]);
+  // dossier proposé pour un nouveau schéma : celui de l'espace, s'il n'en a qu'un
+  const spaceFolder = () => {
+    const space = spacesRef.current.find((e) => e.id === spaceIdRef.current);
+    const own = space ? space.chemins.filter((c) => !c.endsWith(".excalidraw")) : [];
+    return own.length === 1 ? own[0] : "";
+  };
+
   const createSchema = useCallback(async (folder = "") => {
+    const base = folder || spaceFolder();
     const answer = await askText({
       title: "Nouveau schéma",
       message: "Son nom, précédé de son dossier : par exemple grh/effectif.",
-      value: folder ? `${folder}/` : "",
+      value: base ? `${base}/` : "",
       confirmLabel: "Créer",
     });
     if (!answer || !answer.trim()) return;
     const path = `${answer.trim().replace(/^\/+/, "").replace(/\.excalidraw$/, "")}.excalidraw`;
     try {
       await writeSchema(path, emptyScene(), { create: true });
+      await showInSpace(path);
       await refreshList();
       open(path);
     } catch (e) {
       flash(e.code === "existe" ? "Un schéma porte déjà ce nom." : `Création impossible : ${e.message}`,
         "erreur");
     }
-  }, [askText, flash, open, refreshList]);
+  }, [askText, flash, open, refreshList, showInSpace]);
 
   const createFolder = useCallback(async (parent = "") => {
+    const base = parent || spaceFolder();
     const answer = await askText({
       title: "Nouveau dossier",
       message: "Son nom, précédé de son dossier parent : par exemple prestations/archives.",
-      value: parent ? `${parent}/` : "",
+      value: base ? `${base}/` : "",
       confirmLabel: "Créer",
     });
     if (!answer || !answer.trim()) return;
     const path = answer.trim().replace(/^\/+|\/+$/g, "");
     try {
       await postJson(FOLDERS_API, { chemin: path });
+      await showInSpace(path);
       reveal(path);
       await refreshList();
       flash("Dossier créé");
     } catch (e) {
       flash(e.code === "existe" ? "Ce dossier existe déjà." : `Création impossible : ${e.message}`, "erreur");
     }
-  }, [askText, flash, refreshList]);
+  }, [askText, flash, refreshList, showInSpace]);
 
   const removeFolder = useCallback(async (folder) => {
     try {
@@ -626,6 +810,7 @@ function App() {
   // (il rejoint son dossier) ou sur la zone « racine »
   const canDrop = (folder) => {
     const item = dragRef.current;
+    if (folder === "" && spaceIdRef.current) return false; // pas de racine dans un espace
     return !!item && parentOf(item.chemin) !== folder
       && !(item.type === "dossier" && isWithin(folder, item.chemin));
   };
@@ -848,9 +1033,14 @@ function App() {
   // premier chargement : le schéma de l'adresse (#dossier/nom.excalidraw) ou le premier de la liste
   useEffect(() => {
     refreshList()
-      .then((list) => {
+      .then((tree) => {
         const wanted = decodeURIComponent(location.hash.slice(1));
-        const first = list.find((s) => s.chemin === wanted) || list[0];
+        const space = (tree.espaces || []).find((e) => e.id === spaceIdRef.current);
+        // l'espace retenu n'existe plus, ou le schéma demandé par l'adresse n'y est pas : tout afficher
+        const asked = tree.schemas.find((s) => s.chemin === wanted);
+        if (spaceIdRef.current && (!space || (asked && !inSpace(space, asked.chemin)))) chooseSpace("");
+        const visible = space && !asked ? tree.schemas.filter((s) => inSpace(space, s.chemin)) : tree.schemas;
+        const first = asked || visible[0] || tree.schemas[0];
         if (first) open(first.chemin, { force: true });
       })
       .catch((e) => flash(`Serveur injoignable : ${e.message}`, "erreur"));
@@ -870,7 +1060,7 @@ function App() {
     const timer = setInterval(async () => {
       let list;
       try {
-        list = await refreshList();
+        list = (await refreshList()).schemas;
       } catch {
         return;
       }
@@ -899,6 +1089,23 @@ function App() {
     if (versionsOpen) refreshVersions();
   }, [versionsOpen, scene?.key, refreshVersions]);
 
+  // le menu des espaces se ferme au clic ailleurs et à Échap
+  useEffect(() => {
+    if (!spaceMenu) return undefined;
+    const onDown = (e) => {
+      if (!spaceMenuRef.current?.contains(e.target)) setSpaceMenu(false);
+    };
+    const onKey = (e) => {
+      if (e.key === "Escape") setSpaceMenu(false);
+    };
+    addEventListener("mousedown", onDown);
+    addEventListener("keydown", onKey);
+    return () => {
+      removeEventListener("mousedown", onDown);
+      removeEventListener("keydown", onKey);
+    };
+  }, [spaceMenu]);
+
   useEffect(() => {
     const onKey = (e) => {
       if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === "s") {
@@ -924,7 +1131,14 @@ function App() {
   const current = scene?.path;
   const indent = (depth) => ({ paddingLeft: `${8 + depth * 16}px` });
 
-  const renderFolder = (node, depth) => {
+  // pinned : le dossier ou le schéma est listé par l'espace affiché (il en est une entrée)
+  const spaceActions = (path, pinned) => html`
+    <button class="icone-bouton" title="Ajouter à un espace de travail"
+      onClick=${() => addToSpace(path)}><${Icon} name="espacePlus" /></button>
+    ${pinned ? html`<button class="icone-bouton" title="Retirer de cet espace (rien n'est supprimé)"
+      onClick=${() => removeFromSpace(path)}><${Icon} name="retirer" /></button>` : null}`;
+
+  const renderFolder = (node, depth, pinned = false) => {
     const isClosed = closed.has(node.chemin);
     const isEmpty = node.dossiers.size === 0 && node.schemas.length === 0;
     return html`
@@ -939,8 +1153,11 @@ function App() {
           <span class=${isClosed ? "chevron" : "chevron ouvert"}><${Icon} name="chevron" /></span>
           <${Icon} name="dossier" />
           <span class="nom">${node.nom}</span>
+          ${pinned && parentOf(node.chemin)
+            ? html`<span class="origine" title=${node.chemin}>${parentOf(node.chemin)}</span>` : null}
           ${isClosed ? html`<span class="compte">${countSchemas(node)}</span>` : null}
           <span class="actions" onClick=${(e) => e.stopPropagation()}>
+            ${spaceActions(node.chemin, pinned)}
             <button class="icone-bouton" title="Nouveau schéma dans ce dossier"
               onClick=${() => createSchema(node.chemin)}><${Icon} name="schemaPlus" /></button>
             <button class="icone-bouton" title="Nouveau sous-dossier"
@@ -953,29 +1170,81 @@ function App() {
       </li>`;
   };
 
+  const renderSchema = (s, depth, pinned = false) => html`
+    <li key=${s.chemin}>
+      <div class=${s.chemin === current ? "ligne schema actif" : "ligne schema"} style=${indent(depth + 1)}
+        role="button" tabIndex="0" draggable="true" title=${s.chemin}
+        onClick=${() => open(s.chemin)} onKeyDown=${(e) => e.key === "Enter" && open(s.chemin)}
+        onDragStart=${(e) => startDrag(e, { type: "schema", chemin: s.chemin })} onDragEnd=${endDrag}
+        onDragOver=${(e) => dragOver(e, s.dossier)} onDrop=${(e) => dropOn(e, s.dossier)}>
+        <${Icon} name="schema" />
+        <span class="nom">${label(s.chemin)}</span>
+        ${pinned && s.dossier ? html`<span class="origine" title=${s.chemin}>${s.dossier}</span>` : null}
+        <span class="actions" onClick=${(e) => e.stopPropagation()}>${spaceActions(s.chemin, pinned)}</span>
+      </div>
+    </li>`;
+
   const renderChildren = (node, depth) => [
     ...sortedFolders(node).map((f) => renderFolder(f, depth)),
-    ...node.schemas.map((s) => html`
-      <li key=${s.chemin}>
-        <div class=${s.chemin === current ? "ligne schema actif" : "ligne schema"} style=${indent(depth + 1)}
-          role="button" tabIndex="0" draggable="true" title=${s.chemin}
-          onClick=${() => open(s.chemin)} onKeyDown=${(e) => e.key === "Enter" && open(s.chemin)}
-          onDragStart=${(e) => startDrag(e, { type: "schema", chemin: s.chemin })} onDragEnd=${endDrag}
-          onDragOver=${(e) => dragOver(e, s.dossier)} onDrop=${(e) => dropOn(e, s.dossier)}>
-          <${Icon} name="schema" />
-          <span class="nom">${label(s.chemin)}</span>
-        </div>
-      </li>`),
+    ...node.schemas.map((s) => renderSchema(s, depth)),
   ];
 
   const tree = buildTree(folders, schemas);
+  const space = spaces.find((e) => e.id === spaceId) || null;
+  // les entrées de l'espace affiché : ses dossiers puis ses schémas, ceux qui existent encore
+  const spaceItems = () => {
+    const nodes = space.chemins.filter((c) => !c.endsWith(".excalidraw"))
+      .map((c) => findNode(tree, c)).filter(Boolean)
+      .sort((a, b) => a.nom.localeCompare(b.nom, "fr") || a.chemin.localeCompare(b.chemin, "fr"));
+    const files = space.chemins.filter((c) => c.endsWith(".excalidraw"))
+      .map((c) => schemas.find((s) => s.chemin === c)).filter(Boolean)
+      .sort((a, b) => label(a.chemin).localeCompare(label(b.chemin), "fr"));
+    return [...nodes.map((n) => renderFolder(n, 0, true)), ...files.map((f) => renderSchema(f, -1, true))];
+  };
+  const items = space ? spaceItems() : null;
+  const countIn = (e) => schemas.filter((sch) => inSpace(e, sch.chemin)).length;
   const autoOptions = [...new Set([...AUTO_CHOICES, autoSeconds])].sort((a, b) => a - b);
   const savedLabel = lastSave?.auto ? `Enregistré (auto, ${formatTime(lastSave.at)})` : "Enregistré";
   return html`
     <div class=${sidebar ? "app" : "app sans-barre"}>
       <aside class="barre">
         <div class="barre-tete">
-          <strong>Schémas</strong>
+          <div class="espaces" ref=${spaceMenuRef}>
+            <button class=${spaceMenu ? "espace-bouton ouvert" : "espace-bouton"} aria-haspopup="menu"
+              aria-expanded=${spaceMenu} title="Changer d'espace de travail"
+              onClick=${() => setSpaceMenu((v) => !v)}>
+              <${Icon} name="espace" />
+              <span class="nom">${space ? space.nom : "Tous les schémas"}</span>
+              <${Icon} name="bas" />
+            </button>
+            ${spaceMenu ? html`
+              <div class="espace-menu" role="menu">
+                <button role="menuitem" class=${space ? "" : "actif"} onClick=${() => chooseSpace("")}>
+                  <span class="marque">${space ? null : html`<${Icon} name="coche" />`}</span>
+                  <span class="nom">Tous les schémas</span>
+                  <span class="compte">${schemas.length}</span>
+                </button>
+                ${spaces.length ? html`<div class="espace-titre">Espaces de travail</div>` : null}
+                ${spaces.map((e) => html`
+                  <button key=${e.id} role="menuitem" class=${e.id === spaceId ? "actif" : ""}
+                    onClick=${() => chooseSpace(e.id)}>
+                    <span class="marque">${e.id === spaceId ? html`<${Icon} name="coche" />` : null}</span>
+                    <span class="nom">${e.nom}</span>
+                    <span class="compte">${countIn(e)}</span>
+                  </button>`)}
+                <div class="espace-trait"></div>
+                ${oldServer ? html`<p class="espace-alerte">${OLD_SERVER}</p>` : null}
+                <button role="menuitem" onClick=${async () => {
+                  const id = await createSpace();
+                  if (id) chooseSpace(id);
+                }}><span class="marque">+</span><span class="nom">Nouvel espace…</span></button>
+                ${space ? html`
+                  <button role="menuitem" onClick=${() => renameSpace(space)}>
+                    <span class="marque"></span><span class="nom">Renommer « ${space.nom} »…</span></button>
+                  <button role="menuitem" onClick=${() => deleteSpace(space)}>
+                    <span class="marque"></span><span class="nom">Supprimer « ${space.nom} »…</span></button>` : null}
+              </div>` : null}
+          </div>
           <span class="boutons">
             <button class="bouton petit" title="Nouveau schéma" onClick=${() => createSchema()}>+ Schéma</button>
             <button class="bouton petit" title="Nouveau dossier" onClick=${() => createFolder()}>+ Dossier</button>
@@ -985,12 +1254,17 @@ function App() {
           onDragOver=${(e) => dragOver(e, "")} onDrop=${(e) => dropOn(e, "")} onDragLeave=${leaveTree}>
           ${schemas.length === 0 && folders.length === 0
             ? html`<p class="vide-liste">Aucun schéma pour l'instant.</p>` : null}
-          <ul>${renderChildren(tree, 0)}</ul>
-          ${dragging ? html`
+          ${space && items.length === 0 ? html`<p class="vide-liste">Cet espace est vide. Passez sur
+            « Tous les schémas », survolez un dossier ou un schéma, puis cliquez sur le signet pour
+            l'ajouter ici.</p>` : null}
+          <ul>${space ? items : renderChildren(tree, 0)}</ul>
+          ${dragging && !space ? html`
             <div class=${dropTarget === "" ? "zone-racine cible" : "zone-racine"}>
               Déposer ici pour ranger à la racine</div>` : null}
         </nav>
-        <p class="aide-arbre">Glissez un schéma ou un dossier sur un dossier pour l'y ranger.</p>
+        <p class="aide-arbre">${space
+          ? "Un espace est une vue : y ajouter ou en retirer un dossier ne déplace rien sur le disque."
+          : "Glissez un schéma ou un dossier sur un dossier pour l'y ranger. Le signet l'ajoute à un espace de travail."}</p>
       </aside>
       <main class="zone">
         <header class="entete">

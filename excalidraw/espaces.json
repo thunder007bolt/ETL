@@ -1,0 +1,56 @@
+{
+  "espaces": [
+    {
+      "id": "reunion-cnss",
+      "nom": "Réunion CNSS",
+      "chemins": [
+        "prestations/regles par tableau",
+        "grh/regles par tableau",
+        "prestations/points_a_valider.excalidraw",
+        "prestations/points_a_valider_v3.excalidraw",
+        "grh/points_a_valider_v2.excalidraw",
+        "regles cipres",
+        "vues cnss"
+      ]
+    },
+    {
+      "id": "prestations",
+      "nom": "Prestations",
+      "chemins": [
+        "prestations",
+        "annuaire cnss/prestations_2024.excalidraw",
+        "annuaire cnss/pensions_2024.excalidraw"
+      ]
+    },
+    {
+      "id": "grh",
+      "nom": "GRH",
+      "chemins": [
+        "grh",
+        "annuaire cnss/gestion_administrative_2024.excalidraw",
+        "reunions"
+      ]
+    },
+    {
+      "id": "suivi-du-projet",
+      "nom": "Suivi du projet",
+      "chemins": [
+        "journal",
+        "rangement"
+      ]
+    },
+    {
+      "id": "reviser",
+      "nom": "Réviser",
+      "chemins": [
+        "maitrise",
+        "lexique"
+      ]
+    },
+    {
+      "id": "test",
+      "nom": "TEST",
+      "chemins": []
+    }
+  ]
+}
