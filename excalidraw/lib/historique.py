@@ -9,6 +9,11 @@ write_with_history() :
     3. il est gardé à son tour, sauf s'il est identique à la dernière version.
 On peut donc revenir à tout état enregistré, même après un --force du builder.
 
+L'enregistrement automatique de la visionneuse (source « auto ») garde au plus une version par
+tranche de 10 minutes : une version auto remplace la précédente si elle est aussi auto et de la
+même tranche (14 h 20 à 14 h 29, par exemple). Sinon, un enregistrement toutes les 30 secondes
+pendant une heure de retouches laisserait 120 versions.
+
 Rangement : historique/<dossier>/<nom>/<AAAAMMJJ-HHMMSS-micro>__<source>.excalidraw
 Le dossier historique/ n'est pas suivi par git : git garde les étapes, l'historique le reste.
 
@@ -27,9 +32,11 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCHEMAS_DIR = ROOT / "schemas"
 HISTORY_DIR = ROOT / "historique"
-# d'où vient une version : visionneuse, restauration et script écrivent ; disque est un état
-# trouvé sur le disque avant une écriture, qui n'était pas encore dans l'historique
-SOURCES = ("visionneuse", "restauration", "script", "disque")
+# d'où vient une version : visionneuse, auto (enregistrement automatique de la visionneuse),
+# restauration et script écrivent ; disque est un état trouvé sur le disque avant une écriture,
+# qui n'était pas encore dans l'historique
+SOURCES = ("visionneuse", "auto", "restauration", "script", "disque")
+AUTO_SLOT_MINUTES = 10
 MOVES_FILE = HISTORY_DIR / "deplacements.json"
 _VERSION = re.compile(r"^(\d{8}-\d{6}-\d{6})__(" + "|".join(SOURCES) + r")$")
 
@@ -78,6 +85,23 @@ def _keep(folder, content, source):
     write_atomic(target, content)
 
 
+def _slot(when):
+    """Tranche de AUTO_SLOT_MINUTES minutes d'une date (14 h 27 : la tranche de 14 h 20)."""
+    return when.date(), when.hour, when.minute // AUTO_SLOT_MINUTES
+
+
+def _drop_recent_auto(folder):
+    """Retire la dernière version si c'est un enregistrement automatique de la tranche en cours :
+    la nouvelle version auto la remplace."""
+    entries = _entries(folder)
+    if not entries:
+        return
+    stamp, source = _VERSION.match(entries[0].stem).groups()
+    kept_at = datetime.strptime(stamp, "%Y%m%d-%H%M%S-%f")
+    if source == "auto" and _slot(kept_at) == _slot(datetime.now()):
+        entries[0].unlink()
+
+
 def meme_dessin(a, b):
     """Vrai si deux contenus de schéma ne diffèrent que par le champ « updated » des éléments,
     l'heure que le builder pose à chaque génération. Réécrire ou garder une telle version ne
@@ -119,6 +143,8 @@ def write_with_history(path, content, source):
         latest = current
     write_atomic(path, content)
     if not meme_dessin(content, latest):
+        if source == "auto":
+            _drop_recent_auto(folder)
         _keep(folder, content, source)
     return True
 

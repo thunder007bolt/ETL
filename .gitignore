@@ -4,5 +4,6 @@ staging
 instantclient*
 logs
 .claude
+sessions-claude
 excalidraw/historique
 excalidraw/viewer/build/node_modules

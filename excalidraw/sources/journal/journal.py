@@ -1459,6 +1459,360 @@ JOURS = [
                 "Commité le 09/11 sur la branche fix/presta : les prestations à l'image du "
                 "GRH, la fiche (md, docx, schéma), le générateur Word, le journal, la ligne du "
                 "README des schémas et tes pastilles de 8 h 52 sur le schéma T25-T27."]),
+    Jour("2026-11-10", "Une requête pour chaque point à valider",
+         ["La relecture des points à valider : 17, 72, 73 et 5, puis 19, 24, 26 et 75 ; le "
+          "recueil passe avant la grille des ratios.",
+          "Une version 2 de la fiche des points à valider : sous chaque point, la requête "
+          "qui le refait et l'endroit où la règle est codée.",
+          "Les 137 points faits : 116 fichiers SQL, avec en bas le résultat déjà "
+          "obtenu.",
+          "Pour les 21 points sans requête à eux, une ligne « Source » : le document "
+          "d'origine, l'endroit exact et la phrase."],
+         chantiers=[
+             Chantier("Prestations : la relecture des points à valider", "Prestations",
+                      demande="Expliquer les points que tu relis : 17 (indus), 72 (ligne "
+                              "Total), 73 (crédirentiers), 5 (réversion).",
+                      fait="Chaque point expliqué et vérifié dans les fichiers : lots, "
+                           "requêtes proposées, recueil v7, Kaya 2017, annuaire CNSS 2024. "
+                           "Rien n'est modifié.",
+                      trouve="Un indu est un trop-perçu (Kaya 2017) ; l'Annuaire CIPRES et la "
+                             "grille des ratios de la CNSS ajoutent les moins-perçus dans un "
+                             "taux global, le recueil ne tranche pas. Une demande rejetée n'a "
+                             "pas de prestation, donc pas de "
+                             "ligne : la colonne des rejetés n'est juste qu'au Total, et "
+                             "t25 à t27 rangent un rejet sur la ligne d'une autre prestation "
+                             "du dossier (non corrigé). « Crédirentiers : rentiers » ne change "
+                             "que le mot. La réversion compte pareil, qu'elle soit dans un "
+                             "nouveau dossier ou dans celui du défunt ; la ligne Q4 du README "
+                             "(« la requête T25 proposée les perd ») n'est plus à jour.",
+                      decide="Ta conclusion : dans T25 à T27, la colonne des rejetés n'a de "
+                             "sens qu'au Total. Les requêtes ne sont pas corrigées.",
+                      etat="fait"),
+             Chantier("Une requête pour chaque point", "Prestations",
+                      demande="Pour chaque point, la requête qui refait ce qu'on a trouvé, "
+                              "rangée dans le code et pas dans le document, avec en bas les "
+                              "chiffres obtenus. La fiche actuelle reste telle quelle ; une "
+                              "version 2 ajoute les références. Essai sur 8 points, puis « fais "
+                              "le reste », fait ici famille par famille.",
+                      fait="points_a_valider_v2.md : la v1 plus deux lignes par point "
+                           "(« Requête », « Appliqué dans ») pour les 137 points. 116 fichiers "
+                           "SQL dans points_a_valider_requetes, le SQL des lots recopié à "
+                           "l'identique par un outil, le résultat du lot sous chaque requête ; "
+                           "21 points sans rien à mesurer donnent leur source. Contrôlé : règles "
+                           "Oracle, alias, parenthèses, chaque chiffre du point dans son "
+                           "fichier, avertissement quand une requête lit DEBOURS, la v1 contenue "
+                           "telle quelle dans la v2.",
+                      trouve="14 fichiers ont une requête pas encore lancée (points 14, 15, 21, "
+                             "39, 70, 71, 76, 79, 81, 90, 98, 114, 117, 134). Écarts entre les "
+                             "points et les requêtes proposées : t25 calcule le taux restant à "
+                             "traiter avec l'ancienne formule ; t32_t41 range les 120 ans et "
+                             "plus en « Âge inconnu » (point 9), garde RPRA dans T32 sans ligne "
+                             "à part (34) et ne calcule que l'année (96, 99) ; t42_t49 n'a ni la "
+                             "colonne du rappel (45) ni la période à cheval (107) ; t50_t57 n'a "
+                             "pas les rachats dans T56 (52) ni le montant liquidé (117), et "
+                             "recalcule les années passées contre la règle 77 (122) ; les "
+                             "réglages de T31 proposés ne sont pas dans t31 ; l'agence n'est que "
+                             "dans dtm_dossier (132). Le chargement des faits copie DC_REMARQUE, "
+                             "DC_RECOMMANDE et AJ_REMARQUE (point 85). Point 91 : citation "
+                             "inexacte et « affiché à côté » faux. P99 dit « six mois exacts » : "
+                             "il y en a cinq. Rien n'est corrigé.",
+                      decide="Un fichier SQL par point, nommé par son numéro, le résultat sous "
+                             "chaque requête ; la v1 de la fiche ne change pas.",
+                      fichiers="analyses/prestations/points_a_valider_v2.md ; "
+                               "analyses/prestations/points_a_valider_requetes/ (116 fichiers).",
+                      etat="fait"),
+             Chantier("Une source précise pour les points sans requête", "Prestations",
+                      demande="Pour les points qui ne reposent que sur des documents : dire "
+                              "quelle partie du document, quel texte et quelle phrase ont "
+                              "donné la règle. Fait pour les 21 points sans requête à eux.",
+                      fait="Une ligne « Source » sous la ligne « Requête » des 21 points (17 "
+                           "sans rien à mesurer, 4 qui renvoient au fichier d'un autre point) : "
+                           "le document d'origine (recueil v7, Kaya 2017, Annuaire CIPRES, "
+                           "annuaire CNSS 2024, grille des ratios), l'endroit (partie, ligne du "
+                           "tableau et colonne pour un Word ; page pour un PDF ; feuille et "
+                           "cellule pour la grille) et la phrase entre guillemets ; « proposition "
+                           "BI » quand aucun document ne dit la règle. Nos fichiers de travail "
+                           "passent dans « Détail ». Chaque citation retrouvée mot pour mot dans "
+                           "le document d'origine par un script ; la v1 reste contenue telle "
+                           "quelle dans la v2.",
+                      trouve="Le Word du recueil a 109 équations, que notre copie texte a "
+                             "perdues : le point 126 dit à tort que le recueil ne donne pas la "
+                             "formule des nouvelles prestations promues (elle y est : promues ÷ "
+                             "nouvelles × 100) ; même erreur dans regles_t50_t57_evolution.md "
+                             "(Q24) et besoins_v7_prestations.md (DCP 45). Le taux d'indus a deux "
+                             "lignes dans le recueil comme dans Kaya 2017 : sous les prestations, "
+                             "sans structure responsable ; sous le recouvrement, « DCR, DR ». "
+                             "Pour le ratio des prestations sur les cotisations (point 125), "
+                             "l'Annuaire CIPRES définit un ratio voisin sur les seules prestations "
+                             "en espèces (glossaire p. 65). Rien n'est corrigé.",
+                      decide="Citer le document d'origine par un endroit que la CNSS peut "
+                             "ouvrir, jamais par un numéro de ligne de nos copies texte.",
+                      fichiers="analyses/prestations/points_a_valider_v2.md (21 lignes "
+                               "« Source », intro précisée).",
+                      etat="fait"),
+             Chantier("La relecture des points, suite", "Prestations",
+                      demande="Expliquer les points que tu relis : 5 (les deux rangements de "
+                              "la réversion), 19 (la coordination), 24 (les soins), 26 "
+                              "(l'attente des IJ), 28 (l'indicateur de délai des PF), 75 (la "
+                              "première demande), 76 (les départs à la retraite), 77 (la "
+                              "maquette CIPRES).",
+                      fait="Chaque point expliqué et vérifié dans les fichiers : requêtes "
+                           "proposées, lots, recueil v7, Kaya 2017, feuille 03 de la grille des "
+                           "ratios (relue, libellés seulement). Rien n'est modifié.",
+                      trouve="La réversion compte pareil dans un nouveau dossier ou dans celui "
+                             "du défunt : les deux cas sont gérés. Point 19 : ni le recueil ni "
+                             "Kaya ne répondent directement ; leurs remarques sur T32 et T42 "
+                             "(« uniquement la partie CNSS ») et l'annuaire CNSS 2024 l'appuient. "
+                             "Les soins sont des débours RB avec un TPN_CODE, sans prestation ni "
+                             "réception au guichet ; la base n'a que 13,5 % du montant publié ; "
+                             "t26 pourrait compter comme soins des débours d'enquête, de constat, "
+                             "de TVA ou funéraires (non mesuré). Point 26 : la fin du délai (la "
+                             "notification) est réglée, la question porte sur son début ; le "
+                             "certificat de guérison n'est saisi que 14 fois sur 226. Point 75 : "
+                             "la feuille 03 est un modèle vide de 100 dossiers par bloc, titré "
+                             "« 1ère demande » ; le recueil n'a aucun délai pour les IJ des "
+                             "accidents du travail (seulement les soins et les rentes de "
+                             "survivants), et fait partir le délai des PF d'un dossier reçu au "
+                             "guichet, ce que l'enfant ajouté ne fait pas. Point 76 : un point de "
+                             "contrôle, sans règle ; la « lecture attendue » de sa requête est mal "
+                             "dite. Point 77 : t25 a bien la ligne de retraite anticipée, mais t27 "
+                             "garde « Autres prestations de la branche » au lieu de « Frais "
+                             "médicaux de maternité », T57 garde une colonne AUTRES (toujours 0) "
+                             "à côté du TOTAL, et T28 à T30 n'ont pas encore de requête.",
+                      decide="Le recueil passe avant la grille des ratios : le point 75 est "
+                             "répondu (pas de limite à la première demande) ; l'enfant ajouté "
+                             "reste au point 27. Point 77 : les remarques du recueil "
+                             "s'appliquent, la maquette CIPRES n'est pas suivie à la lettre.",
+                      etat="fait"),
+             Chantier("La relecture des points : le rachat et les contrôles", "Prestations",
+                      demande="Expliquer les points 78 (le rachat de rente dans T26) et 79 (ce "
+                              "que vise un contrôle), et dire si un document écrit que les "
+                              "contrôles viennent de l'extérieur.",
+                      fait="Les deux points expliqués et vérifiés dans les fichiers : la requête "
+                           "t26 proposée, les lots (lot 3, P13, P104), le recueil v7, Kaya "
+                           "2017, l'Annuaire CIPRES et l'annuaire CNSS 2024 (tableaux 90, 96 et "
+                           "97). Rien n'est modifié.",
+                      trouve="Point 78 : aucun document ne compte de dossiers de rachat. Dans la "
+                             "base, un rachat est un ajustement RR payé par un débours AJ, sans "
+                             "prestation ni notification (11 en 2024) : il ne compte pas dans "
+                             "T26 aujourd'hui, et mon avis est de garder ce « non » (les points "
+                             "52 et 86 portent sur le même rachat). Point 79 : c'est écrit, le "
+                             "recueil donne « Fichiers Excel (DAI) » comme source de T28 et de "
+                             "T31, et Kaya 2017 fait produire ces rapports à la main par la "
+                             "DAI ; pour T29 et T30, c'est nous qui étendons cette source. Le "
+                             "point 79 ne parle que de la colonne TPE_CODE de la base : la vraie "
+                             "question pour la DAI est de savoir si une ligne de son fichier "
+                             "donne la prestation contrôlée ou seulement le dossier, à reprendre "
+                             "dans la passe unique.",
+                      etat="fait"),
+         ],
+         reste=["Toi : lancer les requêtes pas encore exécutées (14 fichiers, listés sur "
+                "leur ligne « Requête » de la v2) et me donner leurs résultats.",
+                "Moi, après les réponses de la CNSS : corriger les requêtes proposées en une "
+                "seule passe (t25, t27, t31, t32_t41, t42_t49, t50_t57), comme tu l'as choisi.",
+                "Toi : dire si je corrige le point 126 (la formule existe) dans la v1, la v2 "
+                "et les deux documents de famille.",
+                "Rien n'est commité aujourd'hui."]),
+    Jour("2026-11-11", "Le taux de contrôle, sur les dossiers payés",
+         ["Le point 81 répondu : le taux de contrôle divise par les dossiers payés dans la "
+          "période, comme le veut le recueil ; pas de question à la DAI.",
+          "Seule la grille des ratios dit « liquidés ou en portefeuille » ; le recueil, "
+          "l'Annuaire CIPRES et Kaya 2017 disent « payés ».",
+          "Règle de toute la BI : sans donnée, la case reste vide, jamais 0."],
+         chantiers=[
+             Chantier("La relecture des points : le taux de contrôle", "Prestations",
+                      demande="Expliquer le point 81 : divise-t-on le taux de contrôle par les "
+                              "dossiers payés dans la période, ou par les dossiers liquidés ou "
+                              "en portefeuille ?",
+                      fait="Le point expliqué et vérifié dans les fichiers : la formule des "
+                           "trois taux dans le Word du recueil v7, les maquettes et le "
+                           "glossaire de l'Annuaire CIPRES, Kaya 2017, la feuille 05 de la "
+                           "grille des ratios (libellés et formules seulement), la requête du "
+                           "point 81 et les lots (P13, P78). Rien n'est modifié.",
+                      trouve="Seule la grille des ratios divise par les dossiers « liquidés ou "
+                             "en portefeuille », par branche, avec une norme de 5 % au moins. "
+                             "Le recueil dit « liquidés et payés », l'Annuaire CIPRES "
+                             "« dossiers payés » (glossaire p. 64), Kaya 2017 « prestations "
+                             "payées ». L'écart, ce sont les dossiers gardés sans paiement : "
+                             "surtout les 2 901 pensions de coordination payées par une autre "
+                             "caisse (P78), et les dossiers suspendus (non mesurés). Avec le "
+                             "portefeuille, le nombre de dossiers de pension sous la barre "
+                             "grossirait de 6 % au plus (47 732 dossiers de pension avec un "
+                             "débours en 2025, P13).",
+                      decide="Point 81 répondu par la décision du 10/11 (le recueil passe "
+                             "avant la grille) : on divise par les dossiers payés dans la "
+                             "période. Pas de question à la DAI.",
+                      etat="fait"),
+             Chantier("La relecture des points : payé ou liquidé, le trimestre", "Prestations",
+                      demande="Expliquer les points 82 (le dossier payé ou liquidé) et 83 (les "
+                              "dossiers payés au trimestre) ; dire si « payé » veut dire "
+                              "« liquidé » à la CNSS.",
+                      fait="Les deux points expliqués et vérifiés dans les fichiers : règles N4, "
+                           "N5, N6, Q7 et Q8 de T28 à T31, requête du point 82 (P93), texte de "
+                           "l'annuaire CNSS 2024, maquette de l'Annuaire CIPRES, périodicités du "
+                           "recueil v7. Rien n'est modifié.",
+                      trouve="Point 82 : il porte sur T28 à T30 ; son chiffre vient des tableaux "
+                             "35 et 39 de l'annuaire CNSS (indemnités de maternité, soit T27 et "
+                             "T54), qui ne publie aucun contrôle. Le mot « payé » n'apparaît nulle "
+                             "part dans l'annuaire 2024 (il dit liquidées, bénéficiaires, "
+                             "servies) : la personne y compte l'année de la liquidation (3 890 "
+                             "liquidées pour 3 893, contre 4 881 payées), l'argent apparemment au "
+                             "versement. Point 83 : la maquette n'a qu'une colonne de dossiers "
+                             "payés pour quatre trimestres de contrôles ; avec le cumul, le 1er "
+                             "semestre égale le 2e trimestre et le 2e semestre l'année.",
+                      decide="Point 83 : le cumul depuis le 1er janvier est gardé par défaut ; "
+                             "les colonnes des trimestres pas encore arrivés restent vides. "
+                             "Partout : sans donnée, une case vide, jamais 0.",
+                      etat="fait"),
+             Chantier("La visionneuse s'enregistre seule", "Outils",
+                      demande="Un enregistrement automatique dans la visionneuse Excalidraw, "
+                              "toutes les 30 secondes, à fréquence réglable, pour ne plus "
+                              "perdre de retouches.",
+                      fait="Réglage « Auto » dans l'en-tête : désactivé, 10 s à 10 min, ou "
+                           "« Autre… » (5 à 3600 s), 30 s par défaut, retenu par le navigateur. "
+                           "Le schéma ouvert est enregistré à cette fréquence s'il a changé. "
+                           "Testé sur un schéma d'essai, supprimé ensuite.",
+                      trouve="Sans garde-fou, l'historique garderait une version toutes les "
+                             "30 secondes (120 par heure de retouches).",
+                      decide="Une version auto par tranche de 10 minutes dans l'historique. "
+                             "Si le fichier change sur le disque, l'enregistrement auto "
+                             "s'arrête et la visionneuse propose de recharger.",
+                      fichiers="viewer/app.js, viewer/style.css, lib/historique.py, server.py, "
+                               "README",
+                      etat="fait"),
+         ],
+         reste=["Toi : continuer la relecture des points à valider.",
+                "Moi, dans la passe unique : appliquer la case vide à toutes les requêtes "
+                "proposées ; 52 mises à 0 (NVL ou COALESCE) dans 11 requêtes, prestations et "
+                "GRH, à trier entre vrais zéros et cases sans donnée.",
+                "Toi : lancer les requêtes pas encore exécutées (14 fichiers, listés sur "
+                "leur ligne « Requête » de la v2) et me donner leurs résultats.",
+                "Moi, après les réponses de la CNSS : corriger les requêtes proposées en une "
+                "seule passe, comme tu l'as choisi ; dans la même passe, marquer répondus les "
+                "points 75, 77 et 81, et reformuler la question du point 79 (le fichier de la "
+                "DAI).",
+                "Toi : dire si je corrige le point 126 (la formule existe) dans la v1, la v2 "
+                "et les deux documents de famille.",
+                "Rien n'est commité aujourd'hui."]),
+    Jour("2026-11-15", "Les règles de chaque tableau, en un tableau",
+         ["Une fiche « règles par tableau » pour chacun des 33 tableaux T25 à T57, en "
+          "Excalidraw : # | Règle | Dans la base | Votre remarque.",
+          "730 règles ; 150 encore en question, en orange avec le n° de leur point.",
+          "Le pilote T32 validé par toi (« c'est parfait »)."],
+         chantiers=[
+             Chantier("Les règles par tableau, pour la CNSS", "Prestations",
+                      demande="Documenter chaque tableau des prestations par un tableau compact "
+                              "des règles appliquées, pour que les directions voient clairement "
+                              "les règles et écrivent leurs remarques ; en Excalidraw.",
+                      fait="Pilote T32 (23 règles en 7 groupes), validé ; puis les 32 autres "
+                           "tableaux sur le même modèle, chaque règle prise dans la fiche des "
+                           "règles, les documents de famille et les requêtes proposées ; un "
+                           "encadré vert avec les chiffres 2024 face à l'annuaire CNSS. "
+                           "Générés sans alerte, vus dans la visionneuse.",
+                      trouve="Les requêtes proposées sont en retard sur la fiche des règles : "
+                             "photo de fin mars au lieu de fin janvier ; ancienne formule du "
+                             "taux restant à traiter (T25-T27) ; CNSS_AC gardés dans T26-T27 ; "
+                             "limite de 25 ans encore appliquée à T39 ; dates 1900 en âge "
+                             "inconnu dans T32-T41 ; rachats absents de T56 ; colonne AUTRES "
+                             "à 0 dans T56 et T57 ; mois, DR et agence absents de plusieurs "
+                             "requêtes. Le point 90 dit encore « nulle part ».",
+                      decide="Les fiches suivent la fiche des règles, pas les requêtes ; les "
+                             "écarts vont dans la passe unique.",
+                      fichiers="sources/prestations/regles_par_tableau.py, "
+                               "sources/prestations/regles_tableaux_donnees/ (5 modules), "
+                               "schemas/prestations/regles par tableau/ (33 fichiers)",
+                      etat="fait"),
+         ],
+         reste=["Toi : relire les 33 fiches et les envoyer aux directions.",
+                "Moi, dans la passe unique : aligner les requêtes proposées sur la fiche des "
+                "règles (écarts listés ci-dessus) ; T39 : la règle 50 de la fiche et le point "
+                "102 à aligner sur la maquette.",
+                "Rien n'est commité."]),
+    Jour("2026-11-16", "Les règles de chaque tableau GRH, en un tableau",
+         ["Les 8 tableaux GRH T58 à T65 ont aussi leur fiche « règles par tableau », sur le "
+          "modèle des prestations : 170 règles, 35 en orange.",
+          "Les règles de présence dans l'effectif sont les mêmes, mot pour mot, dans T58, "
+          "T59, T61 et T65."],
+         chantiers=[
+             Chantier("Les règles par tableau de la GRH", "GRH",
+                      demande="Faire pour la GRH les mêmes fiches que pour les prestations.",
+                      fait="Huit fiches Excalidraw, chaque règle prise dans la fiche des "
+                           "règles (78 à 99), regles_effectif, regles_t60 et les requêtes "
+                           "proposées ; points GRH en orange (5 disponibilité, 14 absences "
+                           "non datées, 3 date de décès, 2 les 84 de 2019…). T59, T63 et T64 "
+                           "sans encadré de chiffres : aucun chiffre sûr. Vues dans la "
+                           "visionneuse.",
+                      trouve="Écarts des requêtes face à la fiche : T63-T64 lit encore "
+                             "FAIT_GRH_SOLDE_COMPTABLE (copie de STG_GL) et les comptes de la "
+                             "grille des ratios, au lieu de V_BI_BALANCE_COMPTABLE et des "
+                             "comptes de la fiche ; T62 range HC en « sans catégorie » ; la "
+                             "date de départ prend la plus ancienne de la décision et du décès ; "
+                             "T60 et T65 recalculent les cinq ans sur une seule photo.",
+                      decide="Les fiches suivent la fiche des règles ; les écarts vont dans la "
+                             "passe unique.",
+                      fichiers="sources/prestations/regles_tableaux_donnees/grh_effectif.py, "
+                               "grh_autres.py ; schemas/grh/regles par tableau/ (8 fichiers)",
+                      etat="fait"),
+         ],
+         reste=["Toi : relire les 8 fiches GRH et les envoyer à la DRH et à la DFC.",
+                "Rien n'est commité."]),
+    Jour("2026-11-17", "Les points GRH remis à jour (version 2)",
+         ["La fiche des points à valider GRH du 01/11 datait d'avant le recueil v7 et la "
+          "réunion du 03/11 : une version 2 la remplace, sans toucher la v1.",
+          "63 points : 47 ouverts, dont 19 nouveaux (45 à 63), et 16 déjà répondus, avec leur "
+          "réponse et leur source.",
+          "Les fiches « règles par tableau » GRH suivent la v2."],
+         chantiers=[
+             Chantier("Les points à valider GRH, version 2", "GRH",
+                      demande="Voir si la fiche des points GRH est à jour (faite avant le recueil "
+                              "des besoins), puis en faire une version 2.",
+                      fait="Bilan point par point face au recueil v7 (RH lignes 1 à 8), à la "
+                           "réunion du 03/11, aux règles du 05/11 et à la décision du 08/11. "
+                           "points_a_valider_v2.md : même forme que la v3 des prestations "
+                           "(Objectif, À qui), « Pour lire ce document » refait, rubrique "
+                           "« Déjà répondu », points de chaque direction ; schéma "
+                           "points_a_valider_v2 ; fiches T58 à T65 réalignées (oranges 5, 33, "
+                           "35, 40 retirés ; 45, 47, 48, 49 à 52 ajoutés).",
+                      trouve="Déjà répondus : 1, 5 à 11, 16, 18, 19, 30, 33 à 35, 40. Le recueil "
+                             "donne les comptes de T63-T64, mais 29 (gestion des charges de "
+                             "fonctionnement) et 31 (sens de « 63, 86 et 87 ») restent à poser "
+                             "à la DFC. Nouveaux : fiche sans état, inactifs, HC, fichier des "
+                             "unités, détail des autres, date d'entrée, mise à disposition, "
+                             "mutations, formation des externes, section analytique, vue de la "
+                             "comptabilité.",
+                      fichiers="analyses/grh/points_a_valider_v2.md ; "
+                               "schemas/grh/points_a_valider_v2.excalidraw ; "
+                               "sources/points_a_valider.py (--seul grh_v2) ; "
+                               "regles_tableaux_donnees/grh_effectif.py, grh_autres.py",
+                      etat="fait"),
+             Chantier("La v2 GRH, complète pour finir le domaine", "GRH",
+                      demande="Vérifier qu'une fois toutes les questions répondues, le domaine GRH "
+                              "peut être fini sans autre aller-retour avec la CNSS ; puis compléter "
+                              "la v2.",
+                      fait="Huit points ajoutés (56 agence, bureau et direction régionale d'une "
+                           "unité ; 57 les années passées ; 58 T59 au jour près ; 59 T65 sur les "
+                           "permanents ; 60 la formation longue ; 61 les temporaires sans "
+                           "engagement ; 62 les agents d'une unité fermée ; 63 la gestion de la "
+                           "masse salariale) ; points 2, 4, 25, 37 et 55 reformulés ; DPC ajoutée "
+                           "aux directions ; schéma et fiches T58 à T65 régénérés (56, 57, 63 en "
+                           "orange).",
+                      trouve="Les questions sur les dates de départ demandaient un registre à "
+                             "côté, alors que seul ce qui est saisi dans l'application compte "
+                             "(règle 3). Les unités n'ont que deux natures : agences et bureaux "
+                             "ne se reconnaissent qu'au libellé. Aucune photo de fin janvier "
+                             "pour 2021 à 2024.",
+                      decide="Avant d'envoyer la v2 : lancer les requêtes de l'effectif, de T60 "
+                             "et de T62, pour poser toutes les questions en une fois.",
+                      fichiers="analyses/grh/points_a_valider_v2.md ; "
+                               "schemas/grh/points_a_valider_v2.excalidraw ; "
+                               "regles_tableaux_donnees/grh_effectif.py, grh_autres.py",
+                      etat="fait"),
+         ],
+         reste=["Toi : lancer les requêtes de l'effectif, de T60 et de T62 et vérifier "
+                "DIM_GRH_TYPE_MOUVEMENT, avant d'envoyer la v2.",
+                "Toi : relire la v2 (63 points, 47 ouverts) et l'envoyer à la DRH, à la DFC, à "
+                "la DSI et à la DPC.",
+                "Rien n'est commité."]),
 ]
 
 # =============================================================================================
@@ -1669,13 +2023,95 @@ DECISIONS = [
              "Règles 10 et 63 de la fiche des règles ; les requêtes ne changent pas. Point 71 "
              "à présenter à la DCP avec ces arguments, en proposant d'écrire la périodicité "
              "à la place du renvoi dans la prochaine version du recueil."),
+    Decision("2026-11-10", "Une requête de preuve pour chaque point",
+             "Chaque point à valider renvoie à un fichier SQL qui refait ce qu'il dit, avec en "
+             "bas le résultat déjà obtenu. Les requêtes sont dans le code "
+             "(analyses/prestations/points_a_valider_requetes), pas dans le document. La "
+             "fiche points_a_valider.md reste telle quelle ; points_a_valider_v2.md ajoute les "
+             "références.",
+             "Si la CNSS demande une preuve, on lance la requête et on montre la réponse.",
+             "Toi, le 10/11",
+             "points_a_valider_v2.md : 137 points, 116 fichiers SQL, 21 sources de documents."),
+    Decision("2026-11-10", "Les requêtes proposées se corrigent après la CNSS",
+             "Les écarts entre les points et les requêtes proposées se corrigent une fois les "
+             "réponses de la CNSS reçues, en une seule passe : chaque réponse devient un "
+             "réglage de la CTE parametres, puis les écarts, puis les requêtes lancées et "
+             "comparées aux fichiers de preuve.",
+             "Beaucoup de points attendent une réponse : corriger avant, c'est risquer de "
+             "refaire.",
+             "Toi, le 10/11",
+             "Aucune requête proposée ne change en attendant ; la réunion s'appuie sur la v2 "
+             "et ses fichiers de preuve."),
+    Decision("2026-11-10", "Une source précise pour chaque point sans requête",
+             "Un point qui ne repose que sur des documents cite le document d'origine, "
+             "l'endroit exact et la phrase ; quand aucun document ne dit la règle, la ligne "
+             "écrit que c'est une proposition BI.",
+             "Pouvoir montrer à la CNSS d'où vient chaque règle.",
+             "Toi, le 10/11",
+             "21 lignes « Source » dans points_a_valider_v2.md."),
+    Decision("2026-11-10", "Le recueil passe avant la grille des ratios",
+             "Quand la grille « Evaluation des Ratios CIPRES 2025 » ne dit pas comme le recueil "
+             "des besoins v7, on suit le recueil. Point 75 : les indicateurs de délai ne se "
+             "limitent pas à la « 1ère demande » de la feuille 03 ; chacun suit sa définition "
+             "dans le recueil.",
+             "Le recueil est le document des besoins de la CNSS (ateliers de janvier 2026) ; la "
+             "grille est un modèle vide, à remplir à la main sur 100 dossiers par branche.",
+             "Toi, le 10/11 (« la priorité c'est le recueil »)",
+             "Pas de réglage premiere_demande à créer ; les requêtes ne changent pas. Les "
+             "points 15, 81 et 90, où la grille contredit aussi le recueil, suivent déjà le "
+             "recueil. L'enfant ajouté reste une question (point 27)."),
+    Decision("2026-11-10", "Les tableaux suivent les remarques du recueil",
+             "Les tableaux CIPRES prennent les changements que demande le recueil des besoins "
+             "v7 (lignes ajoutées, renommées ou remplacées), même s'ils s'écartent de la "
+             "maquette de l'Annuaire CIPRES. On ne garde pas en plus une copie exacte de la "
+             "maquette (point 77).",
+             "Le recueil passe avant l'Annuaire CIPRES (ordre du 04/11) : ses remarques disent "
+             "ce que la CNSS attend.",
+             "Toi, le 10/11 (« on ne sera pas fidèle à 100 % à la maquette »)",
+             "Point 77 répondu, sans question à la CNSS. À corriger dans la passe unique : le "
+             "libellé « Frais médicaux de maternité » dans t27 et la colonne AUTRES de T57 dans "
+             "t50_t57. T28 à T30 suivront le recueil et Kaya 2017 quand leur requête sera "
+             "écrite."),
+    Decision("2026-11-11", "Le taux de contrôle divise par les dossiers payés",
+             "Le taux de contrôle a posteriori divise les dossiers contrôlés par les dossiers "
+             "payés dans la période, comme le disent le recueil v7 (« liquidés et payés »), "
+             "l'Annuaire CIPRES (« dossiers payés ») et Kaya 2017 (« prestations payées »). On "
+             "ne suit pas les dossiers « liquidés ou en portefeuille » de la grille des ratios "
+             "(feuille 05).",
+             "Le recueil passe avant la grille (décision du 10/11), et les trois autres "
+             "documents disent tous « payés ».",
+             "Toi, le 11/11 (« Oui, répondu »)",
+             "Point 81 répondu, sans question à la DAI (DAI 6 de besoins_v7_prestations, Q6 "
+             "de regles_t28_t31). Le réglage denominateur_controle n'est plus à créer ; les "
+             "requêtes ne changent pas (T28 à T30 n'en ont pas encore). Si la DAI calcule son "
+             "taux sur le portefeuille, ses chiffres et ceux de la BI ne seront pas égaux."),
+    Decision("2026-11-11", "Sans donnée, une case vide, jamais 0",
+             "Dans tous les tableaux de la BI, une case sans donnée reste vide : jamais 0. "
+             "Exemples : les trimestres pas encore arrivés de T28 à T30, une ligne dont la "
+             "source n'est pas dans la base (frais médicaux de maternité, colonne AUTRES de "
+             "T57), des contrôles sans le fichier de la DAI.",
+             "Un 0 se lit « il n'y a rien eu » ; une case vide dit « on ne sait pas » ou « pas "
+             "encore ». Les confondre fausse la lecture des tableaux.",
+             "Toi, le 11/11 (« très ultra importante »)",
+             "À appliquer à toutes les requêtes proposées dans la passe unique : 52 mises à 0 "
+             "(NVL ou COALESCE) dans 11 requêtes, prestations et GRH, sont à trier. Reste à "
+             "dire si un vrai zéro (données présentes, rien à compter) reste 0."),
+    Decision("2026-11-15", "Une fiche de règles par tableau, pour la CNSS",
+             "Chaque tableau T25 à T57 a sa fiche Excalidraw : les règles appliquées en "
+             "groupes, le champ de la base, une colonne vide pour la remarque de la direction ; "
+             "en orange, les règles encore en question avec leur point à valider.",
+             "Les directions voient d'un coup d'œil les règles de chaque tableau et disent ce "
+             "qui ne va pas, sans lire les documents de famille.",
+             "Toi, le 15/11 (« c'est parfait, enchaîne pour les autres tableaux »)",
+             "Les fiches suivent la fiche des règles ; les requêtes proposées en retard sont "
+             "corrigées dans la passe unique."),
 ]
 
 # =============================================================================================
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-09"
+MISE_A_JOUR = "2026-11-17"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
@@ -1689,7 +2125,11 @@ ETAT = [
      "l'image du GRH, sans toucher à l'existant : cinq documents de famille, la liste du "
      "recueil v7 (130 lignes, 108 questions) et l'annuaire CNSS 2024 face à T25-T57 ; à "
      "relire, puis à reporter. Le 09/11 : la fiche des points à valider mise à jour (137 "
-     "points, dont 8 à trancher en priorité)."),
+     "points, dont 8 à trancher en priorité). Le 10/11 : sa version 2, avec une requête "
+     "de preuve par point pour les 137 points (116 fichiers SQL) et une source précise "
+     "pour les 21 points sans requête. Le 11/11 : le point 81 répondu (le taux de contrôle "
+     "divise par les dossiers payés). Le 15/11 : une fiche de règles par tableau (33 "
+     "fiches, schemas/prestations/regles par tableau), à envoyer aux directions."),
     ("GRH (T58 à T65)", "en cours",
      "Quatre requêtes DTM corrigées et testées (885 agents en 2025) ; questionnaire CIPRES "
      "pour la DRH. Plan sur le modèle des prestations ; lot 17 exécuté : 742 permanents "
@@ -1718,7 +2158,12 @@ ETAT = [
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Relire la fiche des points à valider des prestations (137 points) et l'envoyer "
+    ("Toi", "Relire les fiches « règles par tableau » (33 prestations, 8 GRH) et les envoyer "
+            "aux directions. "
+            "Lancer les requêtes de preuve pas encore exécutées (14 fichiers, points 14, "
+            "15, 21, 39, 70, 71, 76, 79, 81, 90, 98, 114, 117, 134) et me donner leurs "
+            "résultats. Dire si je corrige le point 126 (le recueil donne bien la formule). "
+            "Relire la fiche des points à valider des prestations (137 points) et l'envoyer "
             "aux directions. Lire les documents des prestations à l'image du GRH et dire ce "
             "qu'on reporte dans l'existant. "
             "Exécuter les contrôles de T60 et de l'effectif (cliché 102026 ; "
@@ -1742,7 +2187,9 @@ EN_ATTENTE = [
                                         "12), des prestations familiales (DES : 5) et du "
                                         "recouvrement (DCR : 1) : besoins_v7_prestations, "
                                         "parties 8.2, 8.3 et 8.7."),
-    ("La DRH", "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G17 ; répondre à "
+    ("La DRH", "Répondre aux points de la version 2 de la fiche GRH (points_a_valider_v2, "
+               "17/11), d'abord 2, 3, 4, 20, 25 et 48 (le fichier des unités). "
+               "Remplir les fiches T58, T60, T62 ; viser les règles G1 à G17 ; répondre à "
                "QG1 à QG7 et au questionnaire CIPRES ; les questions de T60 (regles_t60.md) ; "
                "la disponibilité hors effectif (QG6), tranchée par l'annuaire, à confirmer."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet (les 12 questions "
@@ -1755,12 +2202,16 @@ EN_ATTENTE = [
                "de masse salariale, réserves."),
     ("La DAI", "Dire où sont les contrôles a posteriori depuis juillet 2025 ; alimenter "
                "V_BI_CONTROLE_POSTERIORI ; comparer son fichier des indus à la base (T31) ; "
-               "les 16 questions DAI de besoins_v7_prestations (partie 8.4)."),
+               "les 16 questions DAI de besoins_v7_prestations (partie 8.4), dont la DAI 6 (le "
+               "dénominateur du taux de contrôle), répondue le 11/11."),
     ("Oracle Analytics", "Accepter le changement de sens des colonnes de DTM_DOSSIER."),
 ]
 
 # la suite, dans l'ordre
 SUITE = [
+    ("Une requête pour chaque point", "Reporter dans les fichiers les résultats des requêtes "
+                                      "que tu lances ; après les réponses de la CNSS, "
+                                      "corriger les requêtes proposées en une seule passe."),
     ("Prestations à l'image du GRH", "Relire avec toi les cinq documents de famille ; "
                                      "reporter ce que tu valides dans le README, le TODO et "
                                      "regles_prestations ; poser les questions par direction "
@@ -1802,7 +2253,12 @@ LIVRABLES = [
                                                 "regles_t50_t57_evolution (cinq familles), "
                                                 "besoins_v7_prestations, "
                                                 "annuaire_cnss_2024_prestations ; "
-                                                "points_a_valider (137 points, 09/11)"),
+                                                "points_a_valider (137 points, 09/11) ; "
+                                                "points_a_valider_v2 et "
+                                                "points_a_valider_requetes (une requête "
+                                                "de preuve par point, et une source "
+                                                "précise pour les 21 points sans requête, "
+                                                "10/11)"),
         ("Les règles imposées", "analyses/regles_cipres",
          "fiche_regles : 99 règles de T25 à T65, par domaine et par tableau, et ce que la "
          "CNSS doit faire (md et Word, 09/11)"),

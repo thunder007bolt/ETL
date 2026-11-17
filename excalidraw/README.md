@@ -44,18 +44,20 @@ cd excalidraw/viewer/build && npm install && npm run build
 - **Dossiers** : un clic sur un dossier le replie ou le déplie ; replié, il affiche son nombre de schémas. La visionneuse retient les dossiers repliés.
 - **Modifier** : comme sur excalidraw.com. La barre du haut indique « Modifications non enregistrées » dès qu'on change quelque chose.
 - **Enregistrer** : bouton « Enregistrer » ou Cmd+S. Le fichier `.excalidraw` est mis à jour sur le disque.
+- **Enregistrement automatique** : le réglage « Auto » de l'en-tête enregistre le schéma ouvert à intervalle régulier, s'il a changé : 30 s par défaut, de 10 s à 10 min, « Autre… » pour une valeur libre (5 à 3600 s), ou désactivé. La fréquence choisie est retenue par le navigateur. La barre du haut indique l'heure du dernier enregistrement automatique. Si le fichier a changé sur le disque, l'enregistrement automatique s'arrête : recharger le schéma, ou enregistrer à la main pour l'écraser.
 - **Nouveau schéma** : « + Schéma », puis un nom avec son dossier, par exemple `grh/effectif`. Au survol d'un dossier, l'icône de fichier crée un schéma dedans.
 - **Nouveau dossier** : « + Dossier », puis un nom avec son dossier parent, par exemple `prestations/archives`. Au survol d'un dossier, l'icône de dossier crée un sous-dossier ; la corbeille supprime un dossier vide (un dossier qui contient quelque chose ne se supprime pas).
 - **Ranger** : glisser un schéma ou un dossier sur un autre dossier, ou sur un schéma pour rejoindre son dossier. Pendant le glisser, une zone « racine » apparaît en bas de la liste. Un dossier replié s'ouvre si on le survole un instant. Les versions du schéma le suivent, et un schéma ouvert reste ouvert, même avec des modifications non enregistrées.
 - **Exporter** : menu ☰ d'Excalidraw, puis « Exporter l'image » (PNG ou SVG), par exemple pour un courriel ou une présentation.
 - **Suivi du disque** : quand Claude régénère le schéma ouvert, la visionneuse le recharge seule. Si des modifications ne sont pas enregistrées, elle affiche « Modifié sur le disque » et ne recharge qu'à la demande. À l'enregistrement, elle prévient si le fichier a changé entre-temps.
 - **Versions** : le bouton « Versions » ouvre l'historique du schéma (voir ci-dessous).
+- **Marqueur de lecture** : clic droit sur le schéma — les options marqueur apparaissent au-dessus du menu natif Excalidraw (Coller, Copier, etc.). « Poser / Déplacer le marqueur ici », puis « Aller… » / « Retirer… ». Un marqueur par schéma, retenu dans ce navigateur (pas dans le fichier).
 
 Les fichiers s'ouvrent aussi sans la visionneuse : en les glissant sur excalidraw.com, ou dans VS Code avec l'extension Excalidraw. Une modification faite par ce chemin est gardée dans l'historique à la prochaine écriture par la visionneuse ou par un script.
 
 ## Historique des versions
 
-Chaque écriture d'un schéma garde une version dans `historique/<domaine>/<schéma>/` : un enregistrement dans la visionneuse, une restauration, ou une régénération par un script (y compris avec `--force`). Avant d'écrire, l'état trouvé sur le disque est aussi gardé s'il n'était pas encore dans l'historique. Un enregistrement identique à la dernière version n'en crée pas de nouvelle.
+Chaque écriture d'un schéma garde une version dans `historique/<domaine>/<schéma>/` : un enregistrement dans la visionneuse, une restauration, ou une régénération par un script (y compris avec `--force`). Avant d'écrire, l'état trouvé sur le disque est aussi gardé s'il n'était pas encore dans l'historique. Un enregistrement identique à la dernière version n'en crée pas de nouvelle. L'enregistrement automatique garde au plus une version par tranche de 10 minutes (de 14 h 20 à 14 h 29, par exemple) : chaque enregistrement automatique remplace le précédent de la même tranche.
 
 Dans la visionneuse, le panneau « Versions » liste les versions, de la plus récente à la plus ancienne, avec leur date et leur origine (visionneuse, script, restauration, trouvée sur le disque). La version identique au fichier porte la pastille « actuelle ».
 

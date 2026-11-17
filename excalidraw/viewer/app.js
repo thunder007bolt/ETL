@@ -1,5 +1,5 @@
 // Visionneuse des schémas Excalidraw : arborescence des dossiers et des schémas (glisser-déposer
-// pour les ranger), édition et enregistrement sur le disque.
+// pour les ranger), édition et enregistrement sur le disque, à la main ou automatique.
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import htm from "htm";
@@ -15,9 +15,20 @@ const POLL_MS = 3000;
 const CLOSED_KEY = "schemas.dossiers-fermes";
 const DRAG_TYPE = "application/x-visionneuse-schemas";
 const OPEN_ON_HOVER_MS = 700;
+// enregistrement automatique : toutes les N secondes si le schéma ouvert a changé (0 : désactivé) ;
+// la fréquence choisie est retenue dans ce navigateur
+const AUTO_KEY = "schemas.enregistrement-auto";
+const AUTO_DEFAULT = 30;
+const AUTO_CHOICES = [0, 10, 15, 30, 60, 120, 300, 600];
+const AUTO_MIN = 5;
+const AUTO_MAX = 3600;
+const AUTO_LABEL = "Enregistrement auto";
+// marqueur de lecture : une position par schéma, retenue dans ce navigateur (pas dans le fichier)
+const MARKER_KEY = "schemas.marqueurs-lecture";
 const UI_OPTIONS = { canvasActions: { loadScene: false, saveToActiveFile: false } };
 const SOURCE_LABELS = {
   visionneuse: "Enregistrée dans la visionneuse",
+  auto: "Enregistrement automatique",
   restauration: "Restauration d'une version",
   script: "Générée par un script",
   disque: "Trouvée sur le disque",
@@ -26,6 +37,14 @@ const SOURCE_LABELS = {
 const encodePath = (path) => path.split("/").map(encodeURIComponent).join("/");
 const label = (path) => path.split("/").pop().replace(/\.excalidraw$/, "").replace(/_/g, " ");
 const formatDate = (iso) => new Date(iso).toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "medium" });
+const formatTime = (date) => date.toLocaleTimeString("fr-FR");
+// 30 → « 30 s », 120 → « 2 min », 90 → « 1 min 30 s »
+const formatDelay = (seconds) => {
+  const minutes = Math.floor(seconds / 60);
+  const rest = seconds % 60;
+  if (!minutes) return `${rest} s`;
+  return rest ? `${minutes} min ${rest} s` : `${minutes} min`;
+};
 // Excalidraw incrémente la version d'un élément à chaque modification
 const versionSum = (elements) => elements.reduce((sum, e) => sum + e.version, 0);
 const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
@@ -122,6 +141,65 @@ function saveClosed(closed) {
   }
 }
 
+function loadAuto() {
+  try {
+    const stored = localStorage.getItem(AUTO_KEY);
+    const seconds = stored === null ? AUTO_DEFAULT : Number(stored);
+    return seconds === 0 || (seconds >= AUTO_MIN && seconds <= AUTO_MAX) ? seconds : AUTO_DEFAULT;
+  } catch {
+    return AUTO_DEFAULT;
+  }
+}
+function storeAuto(seconds) {
+  try {
+    localStorage.setItem(AUTO_KEY, String(seconds));
+  } catch {
+    // stockage indisponible : la fréquence reviendra à 30 s au prochain chargement
+  }
+}
+
+function loadMarkers() {
+  try {
+    const data = JSON.parse(localStorage.getItem(MARKER_KEY) || "{}");
+    return data && typeof data === "object" ? data : {};
+  } catch {
+    return {};
+  }
+}
+function storeMarkers(markers) {
+  try {
+    localStorage.setItem(MARKER_KEY, JSON.stringify(markers));
+  } catch {
+    // stockage indisponible : le marqueur ne sera pas retenu
+  }
+}
+function markerFor(path) {
+  const entry = loadMarkers()[path];
+  if (!entry || !Number.isFinite(entry.x) || !Number.isFinite(entry.y)) return null;
+  return { x: entry.x, y: entry.y };
+}
+function saveMarker(path, point) {
+  const markers = loadMarkers();
+  if (point) markers[path] = { x: point.x, y: point.y };
+  else delete markers[path];
+  storeMarkers(markers);
+}
+// coordonnées du schéma ↔ pixels de l'écran (formules d'Excalidraw)
+function sceneToScreen(sceneX, sceneY, view) {
+  const zoom = view.zoom || 1;
+  return {
+    x: (sceneX + view.scrollX) * zoom + (view.offsetLeft || 0),
+    y: (sceneY + view.scrollY) * zoom + (view.offsetTop || 0),
+  };
+}
+function screenToScene(clientX, clientY, view) {
+  const zoom = view.zoom || 1;
+  return {
+    x: (clientX - (view.offsetLeft || 0)) / zoom - view.scrollX,
+    y: (clientY - (view.offsetTop || 0)) / zoom - view.scrollY,
+  };
+}
+
 const ICONS = {
   chevron: html`<path d="m9 18 6-6-6-6" />`,
   dossier: html`<path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z" />`,
@@ -129,6 +207,7 @@ const ICONS = {
   schema: html`<g><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /></g>`,
   schemaPlus: html`<g><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z" /><path d="M14 2v4a2 2 0 0 0 2 2h4" /><path d="M9 15h6" /><path d="M12 18v-6" /></g>`,
   corbeille: html`<g><path d="M3 6h18" /><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6" /><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" /></g>`,
+  marqueur: html`<g><path d="M12 21s-7-5.3-7-11a7 7 0 0 1 14 0c0 5.7-7 11-7 11Z" /><circle cx="12" cy="10" r="2.5" /></g>`,
 };
 const Icon = ({ name }) => html`<svg class="icone" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -179,8 +258,20 @@ function App() {
   const [versionsOpen, setVersionsOpen] = useState(false);
   const [versions, setVersions] = useState(null); // { versions, actuelle } du schéma ouvert
   const [preview, setPreview] = useState(null); // version affichée en lecture seule
+  const [autoSeconds, setAutoSeconds] = useState(loadAuto); // fréquence de l'enregistrement auto
+  const [lastSave, setLastSave] = useState(null); // { at, auto } : dernier enregistrement du schéma
+  const [marker, setMarker] = useState(null); // { x, y } dans le schéma ouvert, ou null
+  const [view, setView] = useState(null); // cadrage Excalidraw pour afficher le marqueur
 
   const apiRef = useRef(null);
+  const canevasRef = useRef(null);
+  const markerRef = useRef(null);
+  const lastCtxRef = useRef({ clientX: 0, clientY: 0 }); // dernier clic droit sur le canevas
+  // bandeau marqueur en DOM (pas de setState : un re-render refermerait le menu natif)
+  const markerDockRef = useRef(null);
+  const placeMarkerAtRef = useRef(null);
+  const goToMarkerRef = useRef(null);
+  const clearMarkerRef = useRef(null);
   const previewRef = useRef(null);
   const versionsOpenRef = useRef(false);
   const pathRef = useRef(null);
@@ -190,6 +281,7 @@ function App() {
   // ne comptent pas comme des modifications tant que la personne n'a pas touché au schéma
   const interactedRef = useRef(false);
   const dirtyRef = useRef(false);
+  const diskChangedRef = useRef(false);
   const savingRef = useRef(false);
   const fitPendingRef = useRef(false);
   const listJsonRef = useRef("");
@@ -203,6 +295,10 @@ function App() {
   const markDirty = (value) => {
     dirtyRef.current = value;
     setDirty(value);
+  };
+  const markDiskChanged = (value) => {
+    diskChangedRef.current = value;
+    setDiskChanged(value);
   };
 
   // pose une question dans la page ; choices : [{ label, value, fort }], « Annuler » répond null
@@ -295,8 +391,12 @@ function App() {
       interactedRef.current = false;
       fitPendingRef.current = !view;
       markDirty(false);
-      setDiskChanged(false);
+      markDiskChanged(false);
       setShownVersion(null);
+      markerDockRef.current?.remove();
+      markerDockRef.current = null;
+      setMarker(markerFor(path));
+      if (!view) setLastSave(null);
       if (!view) setVersions(null); // autre schéma : l'historique affiché n'est plus le sien
       loadCountRef.current += 1;
       setScene({
@@ -316,27 +416,42 @@ function App() {
     }
   }, [flash, leaveDirty]);
 
-  // enregistre le schéma ouvert ; répond true si c'est fait
-  const save = useCallback(async ({ force = false } = {}) => {
+  // enregistre le schéma ouvert ; répond true si c'est fait. auto : enregistrement automatique,
+  // sans message ni question (un conflit avec le disque le suspend jusqu'au rechargement)
+  const save = useCallback(async ({ force = false, auto = false } = {}) => {
     const api = apiRef.current;
     const path = pathRef.current;
     // une version affichée de l'historique est en lecture seule : on la restaure, on ne l'enregistre pas
     if (!api || !path || savingRef.current || previewRef.current) return false;
     savingRef.current = true;
-    const elements = api.getSceneElementsIncludingDeleted();
+    // Excalidraw modifie les éléments sur place : la somme se prend avant l'envoi
+    const sentSum = versionSum(api.getSceneElementsIncludingDeleted());
     const body = serializeAsJSON(api.getSceneElements(), api.getAppState(), api.getFiles(), "local");
     try {
-      const result = await writeSchema(path, body, { mtime: mtimeRef.current, force });
+      const result = await writeSchema(path, body,
+        { mtime: mtimeRef.current, force, source: auto ? "auto" : undefined });
       mtimeRef.current = result.modifie;
-      baselineRef.current = versionSum(elements);
-      markDirty(false);
-      setDiskChanged(false);
-      flash("Enregistré");
+      baselineRef.current = sentSum;
+      // une retouche faite pendant l'envoi reste à enregistrer
+      const stillChanged = apiRef.current === api && pathRef.current === path
+        && versionSum(api.getSceneElementsIncludingDeleted()) !== sentSum;
+      markDirty(stillChanged);
+      markDiskChanged(false);
+      setLastSave({ at: new Date(), auto });
+      if (auto) setNotice((n) => (n?.text.startsWith(AUTO_LABEL) ? null : n));
+      else flash("Enregistré");
       refreshList();
       refreshVersions();
       return true;
     } catch (e) {
       savingRef.current = false;
+      if (auto) {
+        if (e.code === "conflit") markDiskChanged(true);
+        // en cas de conflit, « Modifié sur le disque » propose de recharger ; « Enregistrer » d'écraser
+        flash(e.code === "conflit" ? `${AUTO_LABEL} suspendu` : `${AUTO_LABEL} impossible : ${e.message}`,
+          "erreur");
+        return false;
+      }
       if (e.code === "conflit" && await ask({
         title: "Le schéma a changé sur le disque",
         message: "Il a été modifié depuis son ouverture (par Claude ou dans un autre onglet). "
@@ -405,6 +520,27 @@ function App() {
       savingRef.current = false;
     }
   }, [ask, flash, leaveDirty, open, refreshList, refreshVersions]);
+
+  const chooseAuto = useCallback(async (value) => {
+    let seconds = Number(value);
+    if (value === "autre") {
+      const answer = await askText({
+        title: "Enregistrement automatique",
+        message: `Toutes les combien de secondes ? Entre ${AUTO_MIN} et ${AUTO_MAX} (une heure).`,
+        value: String(autoSeconds || AUTO_DEFAULT),
+        confirmLabel: "Valider",
+      });
+      if (answer === null || !answer.trim()) return;
+      seconds = Math.round(Number(answer.trim().replace(",", ".")));
+      if (!Number.isFinite(seconds) || seconds < AUTO_MIN || seconds > AUTO_MAX) {
+        flash(`Fréquence refusée (${AUTO_MIN} à ${AUTO_MAX} s)`, "erreur");
+        return;
+      }
+    }
+    setAutoSeconds(seconds);
+    storeAuto(seconds);
+    flash(seconds ? `${AUTO_LABEL} : ${formatDelay(seconds)}` : `${AUTO_LABEL} désactivé`);
+  }, [askText, autoSeconds, flash]);
 
   const toggleVersions = () => {
     versionsOpenRef.current = !versionsOpenRef.current;
@@ -543,10 +679,27 @@ function App() {
     if (!e.currentTarget.contains(e.relatedTarget)) setDropTarget(null);
   };
 
-  const onChange = useCallback((elements) => {
+  const onChange = useCallback((elements, appState) => {
     if (fitPendingRef.current && apiRef.current) {
       fitPendingRef.current = false;
       fitView(apiRef.current, elements);
+    }
+    if (appState) {
+      const next = {
+        scrollX: appState.scrollX,
+        scrollY: appState.scrollY,
+        zoom: appState.zoom?.value ?? 1,
+        offsetLeft: appState.offsetLeft || 0,
+        offsetTop: appState.offsetTop || 0,
+        width: appState.width,
+        height: appState.height,
+      };
+      setView((prev) => (prev
+        && prev.scrollX === next.scrollX && prev.scrollY === next.scrollY
+        && prev.zoom === next.zoom && prev.offsetLeft === next.offsetLeft
+        && prev.offsetTop === next.offsetTop
+        && prev.width === next.width && prev.height === next.height
+        ? prev : next));
     }
     const sum = versionSum(elements);
     if (baselineRef.current === null || !interactedRef.current) {
@@ -559,6 +712,138 @@ function App() {
 
   const onApi = useCallback((api) => { apiRef.current = api; }, []);
   const markInteraction = () => { interactedRef.current = true; };
+
+  markerRef.current = marker;
+
+  const closeNativeContextMenu = () => {
+    markerDockRef.current?.remove();
+    markerDockRef.current = null;
+    // Excalidraw ferme son menu au Escape
+    dispatchEvent(new KeyboardEvent("keydown", { key: "Escape", bubbles: true }));
+  };
+
+  const placeMarkerAt = useCallback((clientX, clientY) => {
+    const path = pathRef.current;
+    const api = apiRef.current;
+    if (!path || !api) return;
+    const state = api.getAppState();
+    const point = screenToScene(clientX, clientY, {
+      scrollX: state.scrollX,
+      scrollY: state.scrollY,
+      zoom: state.zoom?.value ?? 1,
+      offsetLeft: state.offsetLeft || 0,
+      offsetTop: state.offsetTop || 0,
+    });
+    saveMarker(path, point);
+    setMarker(point);
+    closeNativeContextMenu();
+    flash("Marqueur posé");
+  }, [flash]);
+
+  const goToMarker = useCallback(() => {
+    const api = apiRef.current;
+    const point = markerRef.current;
+    if (!api || !point) return;
+    const state = api.getAppState();
+    const zoom = state.zoom?.value ?? 1;
+    api.updateScene({
+      appState: {
+        scrollX: (state.width / 2) / zoom - point.x,
+        scrollY: (state.height / 2) / zoom - point.y,
+      },
+    });
+    closeNativeContextMenu();
+  }, []);
+
+  const clearMarker = useCallback(() => {
+    const path = pathRef.current;
+    if (!path) return;
+    saveMarker(path, null);
+    setMarker(null);
+    closeNativeContextMenu();
+    flash("Marqueur retiré");
+  }, [flash]);
+
+  placeMarkerAtRef.current = placeMarkerAt;
+  goToMarkerRef.current = goToMarker;
+  clearMarkerRef.current = clearMarker;
+
+  // retient la position du clic droit sans bloquer le menu natif Excalidraw
+  const noteContextCoords = useCallback((e) => {
+    lastCtxRef.current = { clientX: e.clientX, clientY: e.clientY };
+  }, []);
+
+  // colle les options marqueur au-dessus du menu natif, en DOM pur (évite de refermer le menu)
+  useEffect(() => {
+    const root = canevasRef.current;
+    if (!root) return undefined;
+
+    const makeBtn = (label, onClick) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.setAttribute("role", "menuitem");
+      btn.textContent = label;
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        onClick();
+      });
+      return btn;
+    };
+
+    const removeDock = () => {
+      markerDockRef.current?.remove();
+      markerDockRef.current = null;
+    };
+
+    const syncDock = () => {
+      const menu = root.querySelector(".context-menu");
+      const rect = root.getBoundingClientRect();
+      if (!menu || !pathRef.current || previewRef.current) {
+        removeDock();
+        return;
+      }
+      const box = menu.getBoundingClientRect();
+      let dock = markerDockRef.current;
+      if (!dock) {
+        dock = document.createElement("div");
+        dock.className = "menu-marqueur";
+        dock.setAttribute("role", "menu");
+        dock.setAttribute("aria-label", "Marqueur de lecture");
+        dock.addEventListener("pointerdown", (e) => e.stopPropagation());
+        root.appendChild(dock);
+        markerDockRef.current = dock;
+      }
+      dock.style.left = `${box.left - rect.left}px`;
+      dock.style.top = `${box.top - rect.top}px`;
+      dock.style.width = `${Math.max(box.width, 200)}px`;
+
+      const has = !!markerRef.current;
+      const wanted = has
+        ? ["Déplacer le marqueur ici", "Aller au marqueur", "Retirer le marqueur"]
+        : ["Poser le marqueur ici"];
+      const current = [...dock.querySelectorAll("button")].map((b) => b.textContent);
+      if (current.join("|") === wanted.join("|")) return;
+
+      dock.replaceChildren();
+      dock.appendChild(makeBtn(wanted[0], () => {
+        const { clientX, clientY } = lastCtxRef.current;
+        placeMarkerAtRef.current?.(clientX, clientY);
+      }));
+      if (has) {
+        dock.appendChild(makeBtn("Aller au marqueur", () => goToMarkerRef.current?.()));
+        dock.appendChild(makeBtn("Retirer le marqueur", () => clearMarkerRef.current?.()));
+      }
+    };
+
+    const obs = new MutationObserver(syncDock);
+    obs.observe(root, { childList: true, subtree: true });
+    syncDock();
+    return () => {
+      obs.disconnect();
+      removeDock();
+    };
+  }, []);
 
   // premier chargement : le schéma de l'adresse (#dossier/nom.excalidraw) ou le premier de la liste
   useEffect(() => {
@@ -592,11 +877,23 @@ function App() {
       const path = pathRef.current;
       const entry = path && list.find((s) => s.chemin === path);
       if (!entry || savingRef.current || entry.modifie === mtimeRef.current) return;
-      if (dirtyRef.current || previewRef.current) setDiskChanged(true);
+      if (dirtyRef.current || previewRef.current) markDiskChanged(true);
       else open(path, { force: true });
     }, POLL_MS);
     return () => clearInterval(timer);
   }, [open, refreshList]);
+
+  // enregistrement automatique : à chaque tour, le schéma ouvert est enregistré s'il a changé,
+  // sauf pendant une question, une version affichée en lecture seule ou un conflit avec le disque
+  useEffect(() => {
+    if (!autoSeconds) return undefined;
+    const timer = setInterval(() => {
+      if (!dirtyRef.current || savingRef.current || previewRef.current || dialogRef.current
+        || diskChangedRef.current) return;
+      saveRef.current({ auto: true });
+    }, autoSeconds * 1000);
+    return () => clearInterval(timer);
+  }, [autoSeconds]);
 
   useEffect(() => {
     if (versionsOpen) refreshVersions();
@@ -672,6 +969,8 @@ function App() {
   ];
 
   const tree = buildTree(folders, schemas);
+  const autoOptions = [...new Set([...AUTO_CHOICES, autoSeconds])].sort((a, b) => a - b);
+  const savedLabel = lastSave?.auto ? `Enregistré (auto, ${formatTime(lastSave.at)})` : "Enregistré";
   return html`
     <div class=${sidebar ? "app" : "app sans-barre"}>
       <aside class="barre">
@@ -700,13 +999,21 @@ function App() {
           <span class="titre">${current ? label(current) : "Aucun schéma ouvert"}</span>
           ${preview ? html`<span class="apercu">Ancienne version</span>`
             : current ? html`<span class=${dirty ? "etat modifie" : "etat"}>
-                ${dirty ? "Modifications non enregistrées" : "Enregistré"}</span>` : null}
+                ${dirty ? "Modifications non enregistrées" : savedLabel}</span>` : null}
           <span class="espace"></span>
           ${diskChanged ? html`<span class="alerte">Modifié sur le disque
             <button class="bouton" onClick=${() => open(current, { force: true })}>Recharger</button></span>` : null}
           ${notice ? html`<span class=${`avis ${notice.kind}`}>${notice.text}</span>` : null}
           <button class=${versionsOpen ? "bouton actif" : "bouton"} disabled=${!current}
             title="Afficher ou masquer l'historique des versions" onClick=${toggleVersions}>Versions</button>
+          <label class="auto" title="Enregistrement automatique : le schéma ouvert est enregistré à cette fréquence s'il a changé">
+            Auto
+            <select value=${autoSeconds} onChange=${(e) => chooseAuto(e.target.value)}>
+              ${autoOptions.map((sec) => html`
+                <option key=${sec} value=${sec}>${sec ? formatDelay(sec) : "désactivé"}</option>`)}
+              <option value="autre">Autre…</option>
+            </select>
+          </label>
           <button class="bouton fort" title="Enregistrer (Cmd+S)" disabled=${!current || !dirty || !!preview}
             onClick=${() => save()}>Enregistrer</button>
         </header>
@@ -720,13 +1027,27 @@ function App() {
             </span>
           </div>` : null}
         <div class="corps">
-          <div class="canevas" onPointerDownCapture=${markInteraction} onKeyDownCapture=${markInteraction}
-            onDropCapture=${markInteraction}>
+          <div class="canevas" ref=${canevasRef}
+            onPointerDownCapture=${markInteraction} onKeyDownCapture=${markInteraction}
+            onDropCapture=${markInteraction} onContextMenuCapture=${noteContextCoords}>
             ${scene
               ? html`<div class="cadre"><${Excalidraw} key=${scene.key} initialData=${scene.initial}
                   excalidrawAPI=${onApi} onChange=${onChange} langCode="fr-FR" UIOptions=${UI_OPTIONS}
                   viewModeEnabled=${!!scene.readOnly} /></div>`
               : html`<div class="vide">Choisissez un schéma dans la liste, ou créez-en un.</div>`}
+            ${marker && view ? (() => {
+              const screen = sceneToScreen(marker.x, marker.y, view);
+              const rect = canevasRef.current?.getBoundingClientRect();
+              if (!rect) return null;
+              const left = screen.x - rect.left;
+              const top = screen.y - rect.top;
+              return html`
+                <div class="curseur-lecture" style=${{ left: `${left}px`, top: `${top}px` }}
+                  title="Marqueur de lecture — où vous en étiez" aria-label="Marqueur de lecture">
+                  <${Icon} name="marqueur" />
+                  <span>Ici</span>
+                </div>`;
+            })() : null}
           </div>
           ${versionsOpen && current ? html`
             <aside class="versions" aria-label="Historique des versions">
@@ -735,7 +1056,8 @@ function App() {
                 <button class="bouton" onClick=${toggleVersions}>Fermer</button>
               </div>
               <p class="versions-aide">Une version est gardée à chaque enregistrement, à chaque restauration
-                et à chaque régénération par un script.</p>
+                et à chaque régénération par un script. L'enregistrement automatique en garde une par
+                tranche de 10 minutes.</p>
               ${versions === null ? html`<p class="versions-aide">Chargement…</p>`
                 : versions.versions.length === 0
                   ? html`<p class="versions-aide">Aucune version gardée pour l'instant. L'état actuel le sera

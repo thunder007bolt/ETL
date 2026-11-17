@@ -14,6 +14,8 @@ Sert la visionneuse (viewer/) et une petite API sur les fichiers de schemas/ :
                                  en-tête X-Expected-Mtime : refuse si le fichier a changé
                                  depuis son ouverture, sauf avec ?force=1
                                  ?source=restauration : l'écriture restaure une version
+                                 ?source=auto : enregistrement automatique (une version
+                                 gardée par tranche de 10 minutes)
     GET  /api/historique/<chemin>                versions gardées d'un schéma
     GET  /api/historique/<chemin>?version=<id>   contenu d'une version
     POST /api/dossiers           crée un dossier : {"chemin": "prestations/archives"}
@@ -50,7 +52,7 @@ MOVE_API = "/api/deplacer"
 HISTORY_API = "/api/historique"
 # nom d'un nouveau dossier : lettres (accents compris), chiffres, espaces, - et _
 FOLDER_NAME = re.compile(r"\w[\w\- ]{0,79}")
-WRITE_SOURCES = ("visionneuse", "restauration")
+WRITE_SOURCES = ("visionneuse", "auto", "restauration")
 MAX_SIZE = 50 * 1024 * 1024
 
 

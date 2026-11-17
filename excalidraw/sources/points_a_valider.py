@@ -8,8 +8,12 @@ Pas d'accord / À discuter et la place pour la réponse. Les points à trancher 
 cadre orange. La rubrique « Pour lire ce document » devient un encadré, et la liste finale une
 carte par tableau CIPRES.
 
+La ligne « Objectif » (ce que le point permet de faire dans le tableau), quand elle existe, est
+en vert.
+
 Usage :
-    python3 excalidraw/sources/points_a_valider.py [--force]
+    python3 excalidraw/sources/points_a_valider.py [--force] [--seul NOM]
+    (NOM : prestations, grh, prestations_v3 ou grh_v2 ; sans --seul, tous les domaines)
 """
 
 import argparse
@@ -30,7 +34,12 @@ DOMAINES = {
                     ROOT / "schemas" / "prestations" / "points_a_valider.excalidraw"),
     "grh": (ETL / "analyses" / "grh" / "points_a_valider.md",
             ROOT / "schemas" / "grh" / "points_a_valider.excalidraw"),
+    "prestations_v3": (ETL / "analyses" / "prestations" / "points_a_valider_v3.md",
+                       ROOT / "schemas" / "prestations" / "points_a_valider_v3.excalidraw"),
+    "grh_v2": (ETL / "analyses" / "grh" / "points_a_valider_v2.md",
+               ROOT / "schemas" / "grh" / "points_a_valider_v2.excalidraw"),
 }
+COULEURS = {"Question": "bleu", "Objectif": "vert", "Réponse donnée": "bleu"}
 INNER = WIDTH - 50
 CONSIGNE = ("Dans chaque carte : coche D'accord, Pas d'accord ou À discuter, et note la réponse en "
             "dessous. Cmd+S pour enregistrer, chaque version est gardée dans l'historique.")
@@ -75,7 +84,7 @@ def _carte(w, point, prioritaire):
     lignes = []
     for label, texte in point["details"]:
         corps = wrap(f"{label} : {texte}" if label else texte, 16, w - 28)
-        lignes.append((y, corps, label == "Question"))
+        lignes.append((y, corps, COULEURS.get(label, "encre")))
         y += height_of(corps, 16) + 8
     cases = y + 6
     reponse = cases + 30 + 10
@@ -89,9 +98,8 @@ def carte(d, x, y, w, h, point, prioritaire):
                   groups=g)
     badge(d, x + 14, y + 12, point["n"], groups=g)
     d.text(x + 14 + badge_width(point["n"]) + 14, y + 18, titre, 20, groups=g, inside=cadre)
-    for ly, corps, question in lignes:
-        d.text(x + 14, y + ly, corps, 16, C["bleu"] if question else C["encre"], groups=g,
-               inside=cadre)
+    for ly, corps, couleur in lignes:
+        d.text(x + 14, y + ly, corps, 16, C[couleur], groups=g, inside=cadre)
     ax = x + 14
     for label in ANSWERS:
         d.box(ax, y + cases + 2, 22, 22, bg=C["blanc"], stroke=C["encre"], groups=g)
@@ -184,8 +192,11 @@ def build(md):
 def main():
     parser = argparse.ArgumentParser(description="Génère les schémas des points à valider.")
     parser.add_argument("--force", action="store_true", help="écraser les schémas existants")
+    parser.add_argument("--seul", choices=sorted(DOMAINES), help="ne générer que ce domaine")
     args = parser.parse_args()
-    for md, sortie in DOMAINES.values():
+    for nom, (md, sortie) in DOMAINES.items():
+        if args.seul and nom != args.seul:
+            continue
         d = build(md)
         try:
             chemin = d.save(sortie, force=args.force)
