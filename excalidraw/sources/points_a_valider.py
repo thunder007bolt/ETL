@@ -31,13 +31,13 @@ from fiche_cipres import ANSWERS, BADGE_H, WIDTH, badge, badge_width, height_of,
 ETL = ROOT.parent
 DOMAINES = {
     "prestations": (ETL / "analyses" / "prestations" / "points_a_valider.md",
-                    ROOT / "schemas" / "prestations" / "points_a_valider.excalidraw"),
+                    ROOT / "schemas" / "prestations" / "1 pour la cnss" / "points_a_valider.excalidraw"),
     "grh": (ETL / "analyses" / "grh" / "points_a_valider.md",
-            ROOT / "schemas" / "grh" / "points_a_valider.excalidraw"),
+            ROOT / "schemas" / "archives" / "grh" / "points_a_valider.excalidraw"),
     "prestations_v3": (ETL / "analyses" / "prestations" / "points_a_valider_v3.md",
-                       ROOT / "schemas" / "prestations" / "points_a_valider_v3.excalidraw"),
+                       ROOT / "schemas" / "prestations" / "1 pour la cnss" / "points_a_valider_v3.excalidraw"),
     "grh_v2": (ETL / "analyses" / "grh" / "points_a_valider_v2.md",
-               ROOT / "schemas" / "grh" / "points_a_valider_v2.excalidraw"),
+               ROOT / "schemas" / "grh" / "1 pour la cnss" / "points_a_valider_v2.excalidraw"),
 }
 COULEURS = {"Question": "bleu", "Objectif": "vert", "Réponse donnée": "bleu"}
 INNER = WIDTH - 50

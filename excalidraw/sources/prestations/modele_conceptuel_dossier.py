@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, LINE_HEIGHT, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "vie_dossier" / "modele_conceptuel_dossier.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "3 comprendre" / "vie_dossier" / "modele_conceptuel_dossier.excalidraw"
 
 # Grille : 6 colonnes pour le parcours principal, une association entre deux colonnes
 ENT_W, PITCH, X0 = 340, 620, 40

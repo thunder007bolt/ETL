@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, LINE_HEIGHT, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "tables_prestations.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "3 comprendre" / "tables_prestations.excalidraw"
 RESULTS = ROOT.parent / "analyses" / "prestations" / "resultats"
 
 # Listes courtes du lot 3 : (code, libellé, nombre de lignes ; None si jamais utilisé)

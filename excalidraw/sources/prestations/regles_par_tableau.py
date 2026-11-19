@@ -12,7 +12,7 @@ Pilote : T32 (15/11/2026), validé par l'utilisateur. Les autres tableaux sont d
 regles_tableaux_donnees, un module par famille (t25_t27, t28_t31, t33_t41, t42_t49, t50_t57),
 chacun avec son dictionnaire TABLEAUX au même format que T32.
 GRH (16/11/2026) : modules grh_effectif (T58, T59, T61, T65) et grh_autres (T60, T62, T63, T64),
-sortie dans schemas/grh/regles par tableau.
+sortie dans schemas/grh/1 pour la cnss/regles par tableau.
 
 Usage :
     python3 excalidraw/sources/prestations/regles_par_tableau.py [--tableau T32 | --tous] [--force]
@@ -29,8 +29,8 @@ sys.path.insert(0, str(ROOT / "sources" / "prestations"))
 from excalidraw_builder import C, Diagram, text_size  # noqa: E402
 from fiche_cipres import height_of, wrap  # noqa: E402
 
-DOSSIER = ROOT / "schemas" / "prestations" / "regles par tableau"
-DOSSIER_GRH = ROOT / "schemas" / "grh" / "regles par tableau"
+DOSSIER = ROOT / "schemas" / "prestations" / "1 pour la cnss" / "regles par tableau"
+DOSSIER_GRH = ROOT / "schemas" / "grh" / "1 pour la cnss" / "regles par tableau"
 
 
 def dossier_de(cle):

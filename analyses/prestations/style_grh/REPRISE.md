@@ -91,8 +91,8 @@ Elles suivent le format de `analyses/grh/regles_t60.md` :
 
 **Les schémas :**
 - un dossier par famille dans `excalidraw/schemas/prestations/` : « T25 T27 dossiers », « T28 T31 controles indus », « T32 T41 beneficiaires », « T42 T49 nouveaux », « T50 T57 evolution ». Chaque schéma est fait par `sources/prestations/famille_*.py`, qui appelle `gabarit_famille.construire(DATA)` ;
-- `schemas/prestations/besoins_v7_prestations.excalidraw` ;
-- `schemas/annuaire cnss/prestations_2024.excalidraw`, fait par `sources/annuaire_cnss/prestations_2024.py`, sur le modèle de `gestion_administrative_2024.py`. Il contient :
+- `schemas/prestations/2 regles et sources/besoins_v7_prestations.excalidraw` ;
+- `schemas/prestations/2 regles et sources/annuaire_cnss_2024_prestations.excalidraw`, fait par `sources/annuaire_cnss/prestations_2024.py`, sur le modèle de `gestion_administrative_2024.py`. Il contient :
   - l'inventaire des tableaux, avec leur tableau CIPRES ;
   - les contrôles internes ;
   - des cartes de verdict ;
@@ -292,7 +292,7 @@ Elles sont dans `analyses/comparaison_annuaire_cnss_2024/README.md`, qu'on ne mo
 - **Famille pilote T25–T27 lancée** : workflow `wf_a8cc0a4f-199`, en trois passes (rédaction, exactitude, clarté). Ses livrables :
   - `analyses/prestations/regles_t25_t27_dossiers.md` ;
   - `excalidraw/sources/prestations/famille_t25_t27_dossiers.py` ;
-  - `excalidraw/schemas/prestations/T25 T27 dossiers/regles_t25_t27_dossiers.excalidraw`.
+  - `excalidraw/schemas/prestations/2 regles et sources/regles_t25_t27_dossiers.excalidraw`.
 
   Script : `~/.claude/projects/-Users-APPLE-Documents-optiwares-ETL/629a91a6-2e84-4ac4-8fc6-93ac41fadaad/workflows/scripts/prestations-famille-pilote-wf_a8cc0a4f-199.js`. Il sert de base pour les autres familles : changer l'objet `F`.
 - **Pilote terminé (08/11, vers 22 h).**
@@ -302,7 +302,7 @@ Elles sont dans `analyses/comparaison_annuaire_cnss_2024/README.md`, qu'on ne mo
 - **Gabarit :** `en_bref` (encadré en tête, `DATA["en_bref"]`) et `titre=` sur recueil, questions, attention et fin. Le pilote se reconstruit à l'identique.
 - **Suite lancée : workflow `wf_648f022f-92b`.** Trois étapes :
   1. F2 à F5 (rédaction puis vérification), avec en parallèle l'« En bref » du pilote ;
-  2. la liste du recueil v7 (`besoins_v7_prestations.md`, `.py` et schéma) et l'annuaire (`annuaire_cnss_2024_prestations.md` ; `sources/annuaire_cnss/prestations_2024.py` vers `schemas/annuaire cnss/prestations_2024.excalidraw`) ;
+  2. la liste du recueil v7 (`besoins_v7_prestations.md`, `.py` et schéma) et l'annuaire (`annuaire_cnss_2024_prestations.md` ; `sources/annuaire_cnss/prestations_2024.py` vers `schemas/prestations/2 regles et sources/annuaire_cnss_2024_prestations.excalidraw`) ;
   3. une critique d'exhaustivité.
 
   Script : `~/.claude/projects/-Users-APPLE-Documents-optiwares-ETL/629a91a6-2e84-4ac4-8fc6-93ac41fadaad/workflows/scripts/prestations-familles-et-syntheses-wf_648f022f-92b.js`. En cas de coupure, dans la même session : `Workflow({scriptPath, resumeFromRunId: "wf_648f022f-92b"})`. Sinon, regarder quels fichiers existent déjà et relancer seulement ce qui manque.

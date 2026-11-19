@@ -598,7 +598,7 @@ JOURS = [
              Chantier("Les fiches de validation de la GRH", "GRH",
                       demande="Dans Excalidraw, pas de dossier « tableaux » pour la GRH comme "
                               "pour les prestations.",
-                      fait="Dossier grh/tableaux cipres : fiche pilote T58 (T58, T59, T61, "
+                      fait="Dossier grh/1 pour la cnss/fiches de validation : fiche pilote T58 (T58, T59, T61, "
                            "T65 ; neuf règles), T60 (huit règles), T62 (huit règles), sur le "
                            "gabarit des prestations : maquette, chiffres de l'annuaire de la "
                            "CNSS face à la base, six agents fictifs, règles avec leur SQL, "
@@ -608,7 +608,7 @@ JOURS = [
                       decide="T63 et T64 sans fiche tant que la paie et la comptabilité "
                              "manquent.",
                       fichiers="excalidraw/sources/grh (fiche_grh, t58_effectif, t60_mouvement, "
-                               "t62_formation) ; schemas/grh/tableaux cipres.",
+                               "t62_formation) ; schemas/grh/1 pour la cnss/fiches de validation.",
                       etat="fait"),
              Chantier("Les points à valider, pour la réunion du 02/11", "Projet",
                       demande="Un doc concis par domaine, qui regroupe les règles et les "
@@ -723,7 +723,7 @@ JOURS = [
                               "T26, puis ce que sont les IJ et une rente ; montrer comment une "
                               "rente est enregistrée dans la base, étape par étape ; enfin le "
                               "mettre en Excalidraw, sur une feuille à part.",
-                      fait="Schéma prestations/vie_dossier/cheminement_rente : le parcours en "
+                      fait="Schéma prestations/3 comprendre/vie_dossier/cheminement_rente : le parcours en "
                            "7 étapes (accident, demande au guichet, calcul, notification, "
                            "paiement, vie de la rente, rentes de survivants), ce que chaque "
                            "étape écrit (tables, colonnes, chiffres du lot 4, pièges), les clés "
@@ -737,7 +737,7 @@ JOURS = [
                       decide="Une feuille à part : les fiches, les règles et les README des "
                              "prestations ne changent pas.",
                       fichiers="excalidraw/sources/prestations/cheminement_rente.py ; "
-                               "schemas/prestations/vie_dossier/cheminement_rente.excalidraw.",
+                               "schemas/prestations/3 comprendre/vie_dossier/cheminement_rente.excalidraw.",
                       etat="fait"),
              Chantier("T26 : la question des dossiers déposés, en clair", "Prestations",
                       demande="Dire ce que la question du terme « dossiers déposés » doit "
@@ -805,7 +805,7 @@ JOURS = [
                       decide="Rien n'est reporté dans les règles, fiches ou requêtes : la fiche "
                              "sert à choisir ce qu'on reprend.",
                       fichiers="excalidraw/sources/besoins_cnss/remarques_besoins_v7.py ; "
-                               "schemas/besoins cnss/remarques_besoins_v7.excalidraw.",
+                               "schemas/commun/remarques_besoins_v7.excalidraw.",
                       etat="fait"),
              Chantier("Les deux enregistrements de la réunion GRH du 03/11", "GRH",
                       demande="Extraire les informations utiles de deux audios de notre réunion "
@@ -1083,7 +1083,7 @@ JOURS = [
                               "la dit non valide.",
                       fait="Recueil v7 relu (Prestation, Finance), maquettes de l'Annuaire "
                            "(T28 à T30, T63 à T76), Kaya, nos lots. Quatre schémas dans "
-                           "schemas/vues cnss : le sommaire, et trois vues. "
+                           "schemas/commun/vues cnss : le sommaire, et trois vues. "
                            "V_BI_BALANCE_COMPTABLE est la balance d'Oracle GL, mois par mois, "
                            "avec le budget : T63, T64, T66 à T76, SP1, SP2. "
                            "V_BI_CONTROLE_POSTERIORI couvre T28 à T30, V_BI_RESERVE couvre "
@@ -1095,7 +1095,7 @@ JOURS = [
                              "calculées à la main par la DFC.",
                       decide="Trois vues au lieu d'une par tableau ; noms en V_BI_ ; la BI "
                              "regroupe les comptes par réglage. Lot 22 abandonné.",
-                      fichiers="schemas/vues cnss (00 à 03) ; sources/vues_cnss "
+                      fichiers="schemas/commun/vues cnss (00 à 03) ; sources/vues_cnss "
                                "(vues_cnss.py, commun.py) ; schéma t63_t64_donnees_a_fournir "
                                "aligné.",
                       etat="fait"),
@@ -1109,13 +1109,13 @@ JOURS = [
                 "CNSS : remplir le fichier unité → domaine.",
                 "Question à poser : au retour d'un agent, retirer le temps d'absence de "
                 "l'ancienneté, ou repartir de zéro ?",
-                "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
+                "Toi : soumettre les schémas « commun/vues cnss » à la CNSS (DSI, DFC, DAI).",
                 "DSI, DFC, DAI : créer et alimenter les trois vues, répondre aux questions des "
                 "schémas ; ensuite, la BI écrit les requêtes (T28 à T30, T63 à T76).",
                 "À commiter : le lot 25, la structure de T63-T64, le schéma "
                 "requete_effectif_pas_a_pas, les schémas cas_agents_effectif (simple et SQL), "
                 "la requête et le déploiement de T63-T64, le schéma t63_t64_donnees_a_fournir, "
-                "les schémas vues cnss et leurs sources, "
+                "les schémas commun/vues cnss et leurs sources, "
                 "le README des "
                 "analyses GRH, et les retouches de la requête de l'effectif.",
                 "Compter les agents sans situation à chaque 31/12 (comptés, mais dans aucun "
@@ -1206,7 +1206,7 @@ JOURS = [
                            "déplacés avec leur historique comme le fait la visionneuse.",
                       trouve="Les six agents donnent bien les lignes du schéma, avec PRESENT comme "
                              "avec HORS_EFFECTIF (DISP en 2023, REM en 2025).",
-                      fichiers="schemas/grh/T60 mouvements/requete_mouvement_pas_a_pas ; "
+                      fichiers="schemas/grh/3 comprendre/T60 mouvements/requete_mouvement_pas_a_pas ; "
                                "sources/grh/requete_mouvement_pas_a_pas.py ; dossiers schemas/grh/"
                                "T58 effectif, T60 mouvements, T63 T64 finances ; README.",
                       etat="fait"),
@@ -1227,7 +1227,7 @@ JOURS = [
                              "(AUTRE_ENT · SANS_MOTIF) et sorti sans départ daté (AUTRE_SORT · "
                              "SANS_MOTIF). Sans le NVL qui compare les natures, l'agent sans "
                              "situation ne bougerait jamais.",
-                      fichiers="schemas/grh/T60 mouvements/cas_mouvements_t60_sql ; "
+                      fichiers="schemas/grh/3 comprendre/T60 mouvements/cas_mouvements_t60_sql ; "
                                "sources/grh/cas_mouvements_t60_sql.py ; README ; regles_t60.md "
                                "(point 8).",
                       etat="fait"),
@@ -1276,7 +1276,7 @@ JOURS = [
                              "participations ?) ; aucun T59 par domaine, mais 20 directions. "
                              "Avec HORS_EFFECTIF, la base compte 741 permanents fin 2024 au lieu "
                              "de 747 (écart avec 758 : 17).",
-                      fichiers="schemas/annuaire cnss/gestion_administrative_2024 ; "
+                      fichiers="schemas/grh/2 regles et sources/annuaire_cnss_2024_gestion_administrative ; "
                                "sources/annuaire_cnss/gestion_administrative_2024.py ; README. "
                                "Règles, requêtes et questions GRH inchangées à ce stade.",
                       etat="fait"),
@@ -1379,7 +1379,7 @@ JOURS = [
                 "par l'annuaire (QG6), la DRH peut la revoir.",
                 "Toi : exécuter les deux requêtes de contrôle de l'effectif (DWH, cliché "
                 "102026), jusqu'au 31/12/2025.",
-                "Toi : soumettre les schémas « vues cnss » à la CNSS (DSI, DFC, DAI).",
+                "Toi : soumettre les schémas « commun/vues cnss » à la CNSS (DSI, DFC, DAI).",
                 "Toi : lire les documents des prestations à l'image du GRH (commencer par "
                 "les « En bref ») et dire ce qu'on reporte dans le README, le TODO et "
                 "regles_prestations.",
@@ -1421,7 +1421,7 @@ JOURS = [
                              "suivant. La version Word est faite à partir du .md par "
                              "sources/points_a_valider_word.js.",
                       fichiers="analyses/prestations/points_a_valider.md et .docx ; "
-                               "schemas/prestations/points_a_valider ; "
+                               "schemas/prestations/1 pour la cnss/points_a_valider ; "
                                "sources/points_a_valider_word.js ; travail dans "
                                "style_grh/travail/pav (ignoré par git).",
                       etat="fait"),
@@ -1442,7 +1442,7 @@ JOURS = [
                              "corrections avant la fin de janvier N+1, puis photo reprise, qui "
                              "fait foi pour l'année N.",
                       fichiers="analyses/regles_cipres/fiche_regles.md et .docx ; "
-                               "schemas/regles cipres/fiche_regles ; sources/fiche_regles.py et "
+                               "schemas/commun/fiche_regles ; sources/fiche_regles.py et "
                                "fiche_regles_word.js.",
                       etat="fait"),
          ],
@@ -1720,7 +1720,7 @@ JOURS = [
                              "écarts vont dans la passe unique.",
                       fichiers="sources/prestations/regles_par_tableau.py, "
                                "sources/prestations/regles_tableaux_donnees/ (5 modules), "
-                               "schemas/prestations/regles par tableau/ (33 fichiers)",
+                               "schemas/prestations/1 pour la cnss/regles par tableau/ (33 fichiers)",
                       etat="fait"),
          ],
          reste=["Toi : relire les 33 fiches et les envoyer aux directions.",
@@ -1751,7 +1751,7 @@ JOURS = [
                       decide="Les fiches suivent la fiche des règles ; les écarts vont dans la "
                              "passe unique.",
                       fichiers="sources/prestations/regles_tableaux_donnees/grh_effectif.py, "
-                               "grh_autres.py ; schemas/grh/regles par tableau/ (8 fichiers)",
+                               "grh_autres.py ; schemas/grh/1 pour la cnss/regles par tableau/ (8 fichiers)",
                       etat="fait"),
          ],
          reste=["Toi : relire les 8 fiches GRH et les envoyer à la DRH et à la DFC.",
@@ -1781,7 +1781,7 @@ JOURS = [
                              "mutations, formation des externes, section analytique, vue de la "
                              "comptabilité.",
                       fichiers="analyses/grh/points_a_valider_v2.md ; "
-                               "schemas/grh/points_a_valider_v2.excalidraw ; "
+                               "schemas/grh/1 pour la cnss/points_a_valider_v2.excalidraw ; "
                                "sources/points_a_valider.py (--seul grh_v2) ; "
                                "regles_tableaux_donnees/grh_effectif.py, grh_autres.py",
                       etat="fait"),
@@ -1804,7 +1804,7 @@ JOURS = [
                       decide="Avant d'envoyer la v2 : lancer les requêtes de l'effectif, de T60 "
                              "et de T62, pour poser toutes les questions en une fois.",
                       fichiers="analyses/grh/points_a_valider_v2.md ; "
-                               "schemas/grh/points_a_valider_v2.excalidraw ; "
+                               "schemas/grh/1 pour la cnss/points_a_valider_v2.excalidraw ; "
                                "regles_tableaux_donnees/grh_effectif.py, grh_autres.py",
                       etat="fait"),
              Chantier("Des espaces de travail dans la visionneuse", "Outils",
@@ -1819,7 +1819,10 @@ JOURS = [
                            "(ta demande : un clic par mégarde est vite arrivé). Les espaces "
                            "suivent un déplacement "
                            "fait dans la visionneuse. Cinq espaces de départ : Réunion CNSS, "
-                           "Prestations, GRH, Suivi du projet, Réviser. Testé dans la visionneuse.",
+                           "Prestations, GRH, Suivi du projet, Réviser. Testé dans la visionneuse. "
+                           "À ta demande aussi : la liste s'étire en glissant son bord droit "
+                           "(200 à 720 pixels, double-clic pour la largeur d'origine), et la "
+                           "largeur est retenue.",
                       trouve="Un serveur lancé avant ne connaît pas les espaces : ta visionneuse "
                              "répondait « Adresse inconnue » à la création d'un espace, alors "
                              "que le test passait sur un serveur neuf. Corrigé : la visionneuse "
@@ -1828,37 +1831,174 @@ JOURS = [
                       fichiers="server.py, viewer/app.js, viewer/style.css, viewer/vendor, "
                                "espaces.json, README",
                       etat="fait"),
-             Chantier("La proposition de rangement des schémas", "Outils",
-                      demande="Proposer une meilleure structure, évolutive, et repérer les "
-                              "documents qui ne sont plus pertinents, pour les déplacer sans les "
-                              "supprimer.",
-                      fait="Inventaire des 137 schémas (28 dossiers) : générateur de chacun, "
-                           "schémas annotés à la main, documents périmés, incohérences de noms. "
-                           "Proposition dans schemas/rangement : le même squelette par domaine "
-                           "(1 pour la cnss, 2 regles, 3 comprendre), un dossier commun, un "
-                           "dossier archives. Réexaminée à ta demande, les espaces une fois en "
-                           "place : une seule passe, 6 dossiers à la racine au lieu de 13 "
-                           "entrées, plus de dossier pour un seul schéma, les fiches « tableaux "
-                           "cipres » gardées dans « 1 pour la cnss/fiches de validation », 6 "
-                           "schémas en archives. Rien n'est déplacé.",
-                      trouve="4 archives sûres (3 essais vides, points GRH v1) ; 3 probables "
-                             "(regles_grh, regles_prestations, prestation_esp) ; 5 à demander "
-                             "(11 fiches tableaux cipres, maitrise, pensions_2024, remarques "
-                             "besoins v7, fiche de lecture prestations). 5 schémas annotés à ne "
-                             "jamais écraser. 11 schémas citent encore la photo de fin mars. "
-                             "La décision du 01/11 sur le cliché de fin mars est encore "
-                             "« proposé » dans le journal.",
-                      fichiers="sources/rangement/proposition_rangement.py ; "
-                               "schemas/rangement/proposition de rangement.excalidraw",
+             Chantier("Le rangement des schémas", "Outils",
+                      demande="Proposer une meilleure structure, évolutive, repérer les documents "
+                              "qui ne sont plus pertinents et les déplacer sans les supprimer ; "
+                              "puis, la proposition réexaminée et validée : « Oui, range tout ».",
+                      fait="Inventaire des 138 schémas (générateur de chacun, schémas annotés, "
+                           "documents périmés). Rangement en une passe par "
+                           "sources/rangement/ranger.py, par le même chemin que la visionneuse : "
+                           "37 déplacements, 100 schémas environ, l'historique et les espaces "
+                           "de travail suivent, aucun schéma régénéré ni modifié. Sorties de 45 "
+                           "scripts corrigées et vérifiées (chaque script retrouve son schéma, "
+                           "rien d'écrit) ; 145 liens mis à jour dans le README, le journal et "
+                           "les analyses. Sauvegarde faite avant.",
+                      trouve="5 schémas annotés à ne jamais écraser (points à valider des "
+                             "prestations, fiche de lecture GRH, cas_agents_effectif, "
+                             "regles_t25_t27_dossiers, cheminement_rente). 11 schémas des "
+                             "prestations citent encore la photo de fin mars. La décision du "
+                             "01/11 sur le cliché de fin mars est encore « proposé » dans le "
+                             "journal.",
+                      decide="6 dossiers à la racine : journal, commun, prestations, grh, "
+                             "maitrise, archives. Dans chaque domaine : 1 pour la cnss, 2 regles "
+                             "et sources, 3 comprendre. Pas de dossier pour un seul schéma. Une "
+                             "version remplacée part en archives. 6 schémas archivés : 3 essais, "
+                             "points GRH v1, regles_grh, regles_prestations.",
+                      fichiers="sources/rangement/ranger.py, proposition_rangement.py ; "
+                               "schemas/archives/rangement ; README (Rangement)",
+                      etat="fait"),
+             Chantier("Tout lancer avant la réunion GRH", "GRH",
+                      demande="Préparer toutes les requêtes à lancer ce soir, pour que la fiche "
+                              "des points soit exhaustive et qu'il n'y ait pas d'aller-retour "
+                              "après la réunion de demain.",
+                      fait="Lot 26 (Q143 à Q152) : les comptages qui manquaient à sept points de "
+                           "la v2 (HC, date d'entrée, mises à disposition, entrés et partis la "
+                           "même année, décès après la retraite, formations longues) et trois "
+                           "vérifications (formés de 2024 par qualité et par date, temporaires "
+                           "sans engagement, codes de mouvement). Trois fichiers de contrôle "
+                           "prêts à lancer, sans rien saisir, pour les requêtes de l'effectif, "
+                           "de T60 et de T62 (analyses/grh/controles, construits par "
+                           "construire.py). À ta remarque, les contrôles lisent la source "
+                           "(USER_GRH) et non l'entrepôt, qui n'est pas encore chargé : mêmes "
+                           "tables, mêmes colonnes, sans cliché ; les tranches CIPRES sont "
+                           "écrites dans la copie.",
+                      trouve="Lancés par toi le soir même, sans erreur. Les permanents sont "
+                             "justes : 741 au 31/12/2024, l'égalité de T60 tient chaque année, "
+                             "T61 est à quelques agents de l'annuaire. Les temporaires ne le "
+                             "sont pas : 299 pour 46 publiés, faute de fins de contrat. T62 : "
+                             "407 formés pour 480 publiés, quelle que soit la date. Sans objet "
+                             "désormais : le décès d'un retraité (aucun cas) et la formation "
+                             "longue (aucune). À creuser (lot 27) : 88 embauchés de 2019 à la "
+                             "prise de service décalée, que l'annuaire entre en 2019 et sort "
+                             "en 2024 ; 0 à 1 disponibilité par an pour 2 à 7 publiées ; 4 "
+                             "agents sans situation ; 5 permanents de 60 ans et plus. Lot 27, "
+                             "lancé dans la foulée : 47 temporaires fin 2024 en ne gardant que "
+                             "les fiches non inactives (46 publiés) ; les 84 de 2019 sont en "
+                             "service depuis 2018, sans autre fiche plus récente (l'hypothèse "
+                             "d'un réenregistrement en 2024 tombe) ; les décisions de "
+                             "disponibilité existent (2 à 6 par an) mais T60 ne les montre "
+                             "pas ; les 5 permanents de 60 ans et plus sont des fiches sans "
+                             "état de 69 à 80 ans. Lot 28 : 12 agents mis en disponibilité de "
+                             "2021 à 2025 ont une fiche inactive sans départ daté ; la règle "
+                             "les efface de toutes les années (12 permanents de moins fin 2020, "
+                             "3 fin 2024) et T60 ne voit pas leur sortie : une fiche inactive "
+                             "n'est pas toujours un départ.",
+                      decide="La v2 des points est mise à jour en une passe : 64 points, 45 "
+                             "ouverts, 19 répondus ; le point 20 (temporaires) passe en tête ; "
+                             "12, 60 et 61 sans objet ; 64 nouveau (l'agent en disponibilité "
+                             "qui ne revient pas). À corriger dans la requête de l'effectif, "
+                             "dans la passe unique : une fiche sans état ancienne ne compte "
+                             "pas ; fin_contrat_inconnue = FICHE si la DRH l'accepte ; pour une "
+                             "fiche inactive sans départ daté, la mise en disponibilité sans "
+                             "retour sert de date de sortie (effectif et T60). Les trois fiches de "
+                             "validation GRH (T58, T60, T62) sont refaites avec les chiffres "
+                             "réels et les questions de la v2.",
+                      fichiers="analyses/grh/lot26_comptages_avant_reunion.sql, "
+                               "lot27_suites_des_controles.sql, lot28_disponibilites_sans_retour.sql, "
+                               "points_a_valider_v2.md ; analyses/grh/controles/ "
+                               "(construire.py, 3 contrôles, resultats_2026-11-17.md) ; README",
                       etat="en cours"),
          ],
-         reste=["Toi : relancer la visionneuse, recharger la page, essayer les espaces.",
-                "Toi : valider le rangement proposé (schemas/rangement) ; je range alors tout "
-                "en une passe.",
-                "Toi : lancer les requêtes de l'effectif, de T60 et de T62 et vérifier "
-                "DIM_GRH_TYPE_MOUVEMENT, avant d'envoyer la v2.",
+         reste=["Toi, demain : la v2 des points GRH (64 points, 45 ouverts), les temporaires "
+                "d'abord.",
+                "Moi, dans la passe unique : écarter les fiches sans état anciennes de "
+                "l'effectif ; régler fin_contrat_inconnue selon la réponse de la DRH ; faire "
+                "de la mise en disponibilité sans retour une date de sortie.",
+                "Toi : recharger la visionneuse ; reposer tes marqueurs de lecture sur les "
+                "schémas déplacés.",
                 "Toi : relire la v2 (63 points, 47 ouverts) et l'envoyer à la DRH, à la DFC, à "
                 "la DSI et à la DPC.",
+                "Rien n'est commité."]),
+    Jour("2026-11-18", "Les fiches de révision du domaine GRH",
+         ["Le dossier « 4 gestion administrative » des fiches de maîtrise est fait : 11 fiches, "
+          "sur le plan des prestations.",
+          "Elles portent les chiffres mesurés le 17/11, pas ceux des anciens lots.",
+          "Les documents de travail du domaine (README, regles_t60, TODO) gardent encore les "
+          "chiffres d'avant l'exécution."],
+         chantiers=[
+             Chantier("Les fiches de maîtrise de la GRH", "GRH",
+                      demande="Assimiler tout le travail du domaine avant la réunion : des "
+                              "fiches de révision, comme pour les prestations.",
+                      fait="11 fiches dans schemas/maitrise/4 gestion administrative : 01 le "
+                           "domaine en bref, 02 le vocabulaire (44 mots), 03 les données "
+                           "(9 tables, les codes), 04 la démarche (28 lots en 6 étapes), 05 "
+                           "les découvertes (25 constats), 06 les règles qui comptent les "
+                           "agents, 07 les règles des mouvements et de la formation, 08 les "
+                           "erreurs des DTM (13), 09 les questions ouvertes, 10 où on en est, "
+                           "11 se préparer aux questions (16 chiffres, 12 questions-réponses). "
+                           "Sommaire mis à jour. Rendu vérifié, aucune alerte.",
+                      trouve="Les documents de travail gardent les chiffres d'avant le 17/11 : "
+                             "742 permanents au lieu de 741, 104 recrutements au lieu de 101, "
+                             "48,8 % au lieu de 48,3 %, 409 formés et 524 inscriptions au lieu "
+                             "de 407 et 522 ; regles_t60.md attend encore 672 au début de 2024 "
+                             "et 4 autres sorties ; le README et le TODO disent que les "
+                             "requêtes proposées ne sont pas exécutées. Deux lectures se "
+                             "contredisent sur les codes REC, RET et DIS (situations ou "
+                             "mouvements) ; un recrutement de 2024 sur trois manquants reste "
+                             "inexpliqué.",
+                      fichiers="sources/maitrise/grh.py, grh_commun.py, grh_fiches_01_03.py, "
+                               "grh_fiches_04_05_08.py, grh_fiches_06_07.py, "
+                               "grh_fiches_09_11.py ; generer.py, projet.py ; "
+                               "schemas/maitrise/4 gestion administrative (11 fiches)",
+                      etat="fait"),
+             Chantier("Les documents du domaine GRH alignés sur les mesures", "GRH",
+                      demande="Aligner le README, le TODO et regles_t60.md sur les chiffres "
+                              "mesurés le 17/11.",
+                      fait="README : constats et règles G1, G5, G6, G7, G8, G9, G10, G14, G16 "
+                           "remis aux chiffres du 17/11 ; les trois requêtes proposées passent "
+                           "de « pas encore exécutée » à « lancée le 17/11 », avec leur "
+                           "résultat. regles_t60.md : la partie 5 donne les chiffres mesurés "
+                           "au lieu des chiffres attendus, avec les écarts expliqués ; les "
+                           "tâches 1 et 2 sont faites, une tâche de correction est ajoutée. "
+                           "TODO : familles 1 et 3, tâches 4 b, 2 et 7 à jour, tâche 4 e "
+                           "ajoutée (les trois règles à corriger).",
+                      trouve="Les anciens chiffres ne restent que là où ils sont datés et "
+                             "attribués à leur lot (742 au lot 17, 747 au lot 25). Le README "
+                             "plaçait les codes REC, RET et DIS dans les situations : ils sont "
+                             "dans GRH_MOUVEMENT, c'est corrigé.",
+                      fichiers="analyses/grh/README.md, TODO.md, regles_t60.md",
+                      etat="fait"),
+         ],
+         reste=["Toi : lire les fiches, en commençant par 01, puis 11 avant la réunion.",
+                "Moi, après la réunion : la passe unique (les trois règles à corriger, "
+                "tâche 4 e du TODO).",
+                "Rien n'est commité."]),
+    Jour("2026-11-19", "La revue des points GRH : les années passées se recalculent",
+         ["Revue des points GRH à trancher en priorité : 20 (temporaires), 2 (les 84 "
+          "engagés de 2019), 4 (T62, 88 cadres supérieurs formés pour 62 en poste), 57 "
+          "(les années passées).",
+          "Décision sur le point 57 : les années passées se recalculent sur la base ; la "
+          "cohérence de la base est l'affaire de la CNSS."],
+         chantiers=[
+             Chantier("La revue des points GRH", "GRH",
+                      demande="Expliquer chaque point de points_a_valider_v2.md (GRH) et "
+                              "reformuler sa question.",
+                      fait="Points 20, 2, 4 et 57 expliqués ; note présentable sur T62 "
+                           "(anomalies de l'annuaire, problème actuel, 4 questions à la DRH).",
+                      trouve="Point 4 : la répartition par catégorie est juste (effectif = "
+                             "tableau 119 à quelques agents près) ; le problème est propre au "
+                             "comptage des formés de l'annuaire (480 contre 407). Point 57 : "
+                             "T63 et T64 viennent de la comptabilité et ne dérivent pas comme "
+                             "T60 et T65.",
+                      decide="Point 57 : les années passées de T60, T63, T64 et T65 sont "
+                             "recalculées sur la base, pas reprises de l'annuaire. Point 58 : "
+                             "T59 se produit au mois (fins de mois), pas à la journée.",
+                      fichiers="Aucun document modifié (corrections pour la passe unique).",
+                      etat="en cours"),
+         ],
+         reste=["Toi : la suite de la revue des points GRH.",
+                "Toi : dire si la décision du point 57 vaut aussi pour les prestations, où "
+                "la règle 77 reprend les années d'avant de leur photo officielle.",
                 "Rien n'est commité."]),
 ]
 
@@ -2159,15 +2299,52 @@ DECISIONS = [
              "137 schémas dans une seule arborescence : on ne s'y retrouve plus. Un espace montre "
              "seulement ce qui sert à un sujet, par exemple la réunion avec la CNSS.",
              "Toi, le 17/11",
-             "Le rangement des dossiers eux-mêmes reste à valider (schemas/rangement). Tout "
-             "déplacement passe par la visionneuse, pour que l'historique et les espaces suivent."),
+             "Tout déplacement passe par la visionneuse, pour que l'historique et les espaces "
+             "suivent."),
+    Decision("2026-11-17", "Le rangement des schémas : six dossiers, le même squelette par domaine",
+             "schemas/ a six dossiers : journal, commun, prestations, grh, maitrise, archives. "
+             "Chaque domaine a les mêmes trois dossiers : 1 pour la cnss, 2 regles et sources, "
+             "3 comprendre. Pas de dossier pour un seul schéma. Une version remplacée part dans "
+             "archives, jamais supprimée.",
+             "13 entrées à la racine, 11 dossiers d'un seul schéma, prestations et GRH rangés "
+             "différemment : on ne s'y retrouvait plus. Un nouveau domaine se crée sur le "
+             "même modèle.",
+             "Toi, le 17/11 (« Oui, range tout »)",
+             "Un nouveau schéma va à sa place dans ce squelette ; un thème qui traverse les "
+             "dossiers se fait avec un espace de travail. Détail dans le README (Rangement)."),
+    Decision("2026-11-19", "GRH : les années passées se recalculent sur la base",
+             "Dans T60, T63, T64 et T65, les années d'avant sont recalculées sur la base "
+             "source du moment, pas reprises des chiffres publiés dans l'annuaire CNSS. "
+             "C'est à la CNSS de rendre sa base cohérente (départs et décès à saisir, "
+             "points 2, 25 et 64).",
+             "La BI produit ses chiffres à partir de la base, et seulement d'elle (règle 3) ; "
+             "reprendre des chiffres publiés cacherait les défauts de saisie au lieu de les "
+             "faire corriger.",
+             "Toi, le 19/11 (« il faudra reconstruire les données à partir de la base de "
+             "données tout simplement »)",
+             "Point 57 tranché pour la GRH : tant que les départs ne sont pas saisis, les "
+             "années 2020 à 2023 restent environ 100 permanents sous l'annuaire (les 84 "
+             "engagés de 2019). La règle 77 des prestations (années reprises de leur photo "
+             "officielle) n'est pas touchée : à confirmer si la même décision s'y applique."),
+    Decision("2026-11-19", "T59 au mois, pas à la journée",
+             "L'effectif par domaine (T59) se produit à chaque fin de mois (réglage "
+             "periodicite = MENSUELLE dans la CTE parametres) ; les trimestres et l'année se "
+             "lisent sur les fins de mois. La périodicité « Journalière » du recueil v7 n'est "
+             "pas retenue.",
+             "Le chargement de l'entrepôt se lance une fois par mois : un chiffre à la journée "
+             "est impossible. T58, dont T59 est le découpage par domaine, n'est demandé qu'au "
+             "mois dans le recueil.",
+             "Toi, le 19/11 (« le script se lance de façon mensuelle ; on va observer la "
+             "mensuelle »)",
+             "Point 58 tranché côté BI : à présenter à la DRH comme une information. Avant "
+             "MENSUELLE, NB_AGENTS en « dernière valeur » dans OBIEE (Jules)."),
 ]
 
 # =============================================================================================
 # L'état aujourd'hui
 # =============================================================================================
 
-MISE_A_JOUR = "2026-11-17"
+MISE_A_JOUR = "2026-11-19"
 
 # (domaine, état, ce qui est fait, ce qui vient)
 ETAT = [
@@ -2185,7 +2362,7 @@ ETAT = [
      "de preuve par point pour les 137 points (116 fichiers SQL) et une source précise "
      "pour les 21 points sans requête. Le 11/11 : le point 81 répondu (le taux de contrôle "
      "divise par les dossiers payés). Le 15/11 : une fiche de règles par tableau (33 "
-     "fiches, schemas/prestations/regles par tableau), à envoyer aux directions."),
+     "fiches, schemas/prestations/1 pour la cnss/regles par tableau), à envoyer aux directions."),
     ("GRH (T58 à T65)", "en cours",
      "Quatre requêtes DTM corrigées et testées (885 agents en 2025) ; questionnaire CIPRES "
      "pour la DRH. Plan sur le modèle des prestations ; lot 17 exécuté : 742 permanents "
@@ -2203,19 +2380,21 @@ ETAT = [
      "Les vues simples sont spécifiées pour la DSI (20/10).",
      "Pas encore d'analyse."),
     ("Gestion financière (T66 à T76)", "en cours",
-     "Vues proposées le 07/11 (schemas/vues cnss) : la balance comptable commune "
+     "Vues proposées le 07/11 (schemas/commun/vues cnss) : la balance comptable commune "
      "(T66 à T76, SP1, SP2) et les réserves (T75). La comptabilité de la copie n'est pas "
      "lue : la CNSS la dit non valide.",
      "Soumettre les vues à la CNSS ; requêtes à écrire quand elles seront créées."),
     ("Outils", "fait",
-     "Visionneuse hors ligne, fiches de maîtrise, journal de bord, schémas de travail.",
-     "Tenir le journal et les fiches à jour."),
+     "Visionneuse hors ligne (espaces de travail, liste étirable), journal de bord, schémas "
+     "rangés en six dossiers.",
+     "Fiches de maîtrise : « 0 projet », « 3 prestations » et, depuis le 18/11, "
+     "« 4 gestion administrative » (11 fiches). Tenir le journal et les fiches à jour."),
 ]
 
 # (qui, ce qu'on attend)
 EN_ATTENTE = [
-    ("Toi", "Valider la proposition de rangement des schémas (schemas/rangement) : une seule "
-            "passe, 6 dossiers à la racine. "
+    ("Toi", "Réunion GRH : la v2 des points (64 points, 45 ouverts), le point 20 d'abord. "
+            
             "Relire les fiches « règles par tableau » (33 prestations, 8 GRH) et les envoyer "
             "aux directions. "
             "Lancer les requêtes de preuve pas encore exécutées (14 fichiers, points 14, "
@@ -2252,10 +2431,10 @@ EN_ATTENTE = [
                "la disponibilité hors effectif (QG6), tranchée par l'annuaire, à confirmer."),
     ("La DSI", "Le sens des statuts, le circuit des paiements sans effet (les 12 questions "
                "DSI de besoins_v7_prestations, partie 8.5) ; créer et "
-               "alimenter les vues des schémas vues cnss : V_BI_BALANCE_COMPTABLE (depuis "
+               "alimenter les vues des schémas commun/vues cnss : V_BI_BALANCE_COMPTABLE (depuis "
                "Oracle GL), V_BI_CONTROLE_POSTERIORI (avec la DAI), V_BI_RESERVE (avec la "
                "DFC)."),
-    ("La DFC", "Répondre aux questions des schémas vues cnss 01 et 03 et T63-T64 : branche "
+    ("La DFC", "Répondre aux questions des schémas commun/vues cnss 01 et 03 et T63-T64 : branche "
                "des écritures, types de placement, réalisé du budget, comptes de formation et "
                "de masse salariale, réserves."),
     ("La DAI", "Dire où sont les contrôles a posteriori depuis juillet 2025 ; alimenter "
@@ -2351,7 +2530,7 @@ LIVRABLES = [
                                                "evolution) et besoins_v7_prestations"),
         ("Annuaire de la CNSS", "schemas/annuaire cnss", "la comparaison des pensions 2024 ; "
                                                          "prestations_2024 (T25 à T57)"),
-        ("Vues CNSS", "schemas/vues cnss", "les vues à demander à la CNSS : sommaire, balance "
+        ("Vues CNSS", "schemas/commun/vues cnss", "les vues à demander à la CNSS : sommaire, balance "
                                           "comptable, contrôles a posteriori, réserves"),
         ("GRH", "schemas/grh", "rangé par famille : T58 effectif, T60 mouvements, T63 T64 "
                                "finances ; regles_grh (règles G1 à G11) ; requete_effectif_pas_a_pas "

@@ -78,4 +78,4 @@ Autre remarque : nos 8 447 pensions d'orphelin actives sans paiement (P25) sont 
 
 D'autres chiffres de l'annuaire pourraient tester d'autres règles de la même façon : rentes AT/MP (2 232 bénéficiaires), victimes d'AT/MP déclarées (1 171), enfants d'allocataires (268 481), bénéficiaires d'IJ (3 893).
 
-Schéma Excalidraw de la comparaison : `excalidraw/schemas/annuaire cnss/pensions_2024.excalidraw`.
+Schéma Excalidraw de la comparaison : `excalidraw/schemas/prestations/2 regles et sources/annuaire_cnss_2024_pensions.excalidraw`.

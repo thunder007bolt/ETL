@@ -18,9 +18,9 @@
 
 **D'où viennent les règles.** Dans l'ordre de force : une décision de réunion (aucune ici), le recueil des besoins v7, l'atelier de Kaya (2017), l'Annuaire CIPRES. L'annuaire statistique de la CNSS 2024 sert à comparer les chiffres, et tranche la pratique quand les sources plus fortes se taisent. Les modèles de ratios de la CNSS (classeur « Evaluation des Ratios CIPRES 2025 », feuilles 05 et 06) montrent comment la CNSS calcule elle-même ces deux ratios.
 
-**Ce qui existe déjà, laissé tel quel.** Requête [t31_requete_proposee.sql](t31_requete_proposee.sql) ; règles R1, R3, R4, R13, I1 du [README](README.md) ; cartes I1, C1 et A1 du schéma `regles_prestations` ; hypothèses H11 et H12 de [reference_cipres_T25_T57.md](reference_cipres_T25_T57.md) ; fiche de validation T31 (8 règles, 5 questions, `excalidraw/schemas/prestations/tableaux cipres/`) ; fiche de lecture, termes de T28 à T30 et de T31 ; [points_a_valider](points_a_valider.md) ; schéma « vues cnss », planche 02 (vue `V_BI_CONTROLE_POSTERIORI` proposée le 07/11/2026). Ce document les reprend avec leurs identifiants, et **propose** les règles nouvelles N1 à N14 sans rien modifier.
+**Ce qui existe déjà, laissé tel quel.** Requête [t31_requete_proposee.sql](t31_requete_proposee.sql) ; règles R1, R3, R4, R13, I1 du [README](README.md) ; cartes I1, C1 et A1 du schéma `regles_prestations` ; hypothèses H11 et H12 de [reference_cipres_T25_T57.md](reference_cipres_T25_T57.md) ; fiche de validation T31 (8 règles, 5 questions, `excalidraw/schemas/prestations/1 pour la cnss/fiches de validation/`) ; fiche de lecture, termes de T28 à T30 et de T31 ; [points_a_valider](points_a_valider.md) ; schéma « commun/vues cnss », planche 02 (vue `V_BI_CONTROLE_POSTERIORI` proposée le 07/11/2026). Ce document les reprend avec leurs identifiants, et **propose** les règles nouvelles N1 à N14 sans rien modifier.
 
-**Le schéma associé :** `excalidraw/schemas/prestations/T28 T31 controles indus/regles_t28_t31_controles_indus.excalidraw`, fait par `excalidraw/sources/prestations/famille_t28_t31_controles_indus.py`. Il dit la même chose en plus court, avec les mêmes identifiants.
+**Le schéma associé :** `excalidraw/schemas/prestations/2 regles et sources/regles_t28_t31_controles_indus.excalidraw`, fait par `excalidraw/sources/prestations/famille_t28_t31_controles_indus.py`. Il dit la même chose en plus court, avec les mêmes identifiants.
 
 **Les mots de ce document.** *Contrôle a posteriori* : une vérification d'un dossier faite après le paiement, pour voir si ce qui est payé correspond au dossier. *Dossier payé* : un dossier dont les droits ont été payés au bénéficiaire. *Liquider* : calculer les droits d'un assuré et les lui notifier. *Débours* : une ligne de paiement due à une personne pour un mois ; un débours de paiement a le type PM ; son statut D veut dire payé par un titre de paiement (un effet), P payé sans effet (sens lu dans les données, à confirmer par la DSI). *Ajustement* : une correction de paiement enregistrée à part (table `AJUSTEMENT`) ; elle est *établie* à une date. *Trop-perçu* : une somme payée en trop, que la CNSS doit reprendre. *Moins-perçu* : une somme payée en moins, que la CNSS rattrape par un *rappel*. *Indu* : une prestation versée à tort ; pour Kaya 2017, seuls les trop-perçus en sont. *Payées* : les sommes versées dans le mois. *Convention* ou *coordination* : un dossier partagé entre la CNSS et la caisse d'un autre pays. *Rachat de rente* : un capital versé une fois à la place d'une rente d'accident. *Branche* : PVID (pensions), AT/MP (accidents du travail et maladies professionnelles, que la CNSS appelle aussi risques professionnels, RP), PF (prestations familiales). Le *cliché* : la copie de la base sur laquelle on calcule. Les *réglages* : les choix écrits dans le bloc `parametres` en tête de chaque requête (une « CTE » en langage SQL) ; on les change sans réécrire la requête. *Pnn*, *lot n* : le résultat numéroté d'une requête de contrôle déjà lancée sur la base. *Écart moyen* : la moyenne des écarts mois par mois, sans tenir compte du signe. *Corrélation* : un chiffre entre −1 et 1 qui dit si deux séries de mois montent et descendent ensemble (1 : exactement ensemble ; 0 : aucun lien). *Vue* : une table de lecture que la DSI prépare pour la BI. *DTM* : les tables de résultats du projet BI actuel, jugées fausses ; on n'en cite que le code, jamais les chiffres. Les sigles des directions sont expliqués en partie 6.
 
@@ -49,7 +49,7 @@
 | T30 | La même grille pour les prestations familiales, maternité comprise ; la première colonne s'appelle « nombre de bénéficiaires payés ». Lignes : allocations prénatales, indemnité journalière de maternité, allocations familiales, autres prestations de la branche, TOTAL | p. 13 ; maquette p. 36 | Pas de requête ; fiche de lecture ; P13, P79 |
 | T31 | Une ligne par mois et une ligne TOTAL. Pour chaque branche (PVID, AT/MP, PF), puis pour le total : payées, trop perçus, moins perçus. Sert au ratio des prestations indues | p. 13 ; maquette p. 36 ; glossaire p. 64 à 66 | `t31_requete_proposee.sql` (01/11, pas exécutée) ; fiche T31 (8 règles, 5 questions) ; lot 9 |
 
-La table des contrôles de l'application (`DOSSIERS_CONTROLES`) a 1 542 lignes en tout, la dernière saisie le 09/07/2025 (P01) : bien trop peu, puisqu'il faudrait environ 7 760 contrôles dans la seule année 2025 pour atteindre 5 % des 155 206 dossiers payés (P13). La vue `V_BI_CONTROLE_POSTERIORI` (une ligne par contrôle : dossier, branche, prestation contrôlée, date, résultat, montant de l'indu trouvé) est proposée à la DSI dans le schéma « vues cnss », planche 02.
+La table des contrôles de l'application (`DOSSIERS_CONTROLES`) a 1 542 lignes en tout, la dernière saisie le 09/07/2025 (P01) : bien trop peu, puisqu'il faudrait environ 7 760 contrôles dans la seule année 2025 pour atteindre 5 % des 155 206 dossiers payés (P13). La vue `V_BI_CONTROLE_POSTERIORI` (une ligne par contrôle : dossier, branche, prestation contrôlée, date, résultat, montant de l'indu trouvé) est proposée à la DSI dans le schéma « commun/vues cnss », planche 02.
 
 ---
 
@@ -71,7 +71,7 @@ Toutes les lignes du recueil qui touchent T28 à T31. Les numéros de ligne sont
 | Prestation #19 (T28), l. 257 (renvoie à l. 135) | Bénéficiaires payés = dossiers payés | Pour T28 aussi, on compte des dossiers payés | N4 | à intégrer |
 | Prestation #19 (T28), l. 257 (renvoie à l. 136) | Périodicité trimestrielle, semestrielle, annuelle | T28 au trimestre, au semestre, à l'année | N6 | à intégrer |
 | Prestation #3 (T31), l. 142 à 144 | « PVID : … (Branche pension) ; AT/MP : … (RP) ; PF : Prestation familiale » | Les trois branches de T31. La maternité n'y est pas citée | R1 (la maternité va avec les PF, comme dans l'annuaire CNSS 2024, tableaux 40 et 41) ; t31 le fait déjà | pris en compte |
-| Prestation #3 (T31), l. 145 | « Source : Fichiers Excel (DAI) » | Aujourd'hui, la CNSS tire T31 des fichiers de la DAI. Sa grille (feuille 06) laisse penser que la DAI ne compte que les indus trouvés par ses contrôles | N10 : la base par défaut, le fichier de la DAI pour comparer ; remarque B13 du recueil ; question 4 de la planche 02 « vues cnss » | question (Q14) |
+| Prestation #3 (T31), l. 145 | « Source : Fichiers Excel (DAI) » | Aujourd'hui, la CNSS tire T31 des fichiers de la DAI. Sa grille (feuille 06) laisse penser que la DAI ne compte que les indus trouvés par ses contrôles | N10 : la base par défaut, le fichier de la DAI pour comparer ; remarque B13 du recueil ; question 4 de la planche 02 « commun/vues cnss » | question (Q14) |
 | Prestation #3 (T31), l. 146 | « Périodicité : Mensuelle, Trimestrielle, Annuelle » | T31 sort pour un mois, un trimestre ou une année | N6. La requête t31 ne tourne que sur une année entière et ne donne pas le taux d'un trimestre : réglage `periode` à créer | à intégrer |
 | Prestation #29 (T51), l. 326 | « Allocation de survivants : veufs/veuves, orphelins et ascendants » | La CNSS met l'ascendant dans l'allocation de survivant ; Kaya 2017 ne regroupait que veuf/veuve et orphelin | N1 : la ligne « allocation de survivant » de T28 prend aussi l'allocation d'ascendant (RASA). Aucune requête T28 | à intégrer |
 | Prestation #1 (T27), l. 127 | « Autres prestations de la branche : Renommer par “Frais médicaux de maternité” » | Écrit pour T27 ; T30 a la même dernière ligne pour la même branche | N3, par analogie seulement ; la ligne reste vide, faute de ces frais dans la base | question (Q12) |
@@ -333,7 +333,7 @@ Toutes les lignes du recueil qui touchent T28 à T31. Les numéros de ligne sont
 
 **Exemple.** On compare le total 2024 de la DAI aux 684 trop-perçus (229 484 759 FCFA) de la base avant de choisir.
 
-**Sources.** Recueil v7, l. 145 ; l. 28, 34 et 75 (peu de saisie manuelle, restitutions automatisées) ; planche 02 « vues cnss », question 4 ; remarque B13 du recueil ; Données P102 à P106.
+**Sources.** Recueil v7, l. 145 ; l. 28, 34 et 75 (peu de saisie manuelle, restitutions automatisées) ; planche 02 « commun/vues cnss », question 4 ; remarque B13 du recueil ; Données P102 à P106.
 
 **État.** Nouvelle (proposée) ; écart à une source plus forte (le recueil), gardé en attendant la DAI. Question Q14 ; réglage `source_indus`.
 
@@ -343,7 +343,7 @@ Toutes les lignes du recueil qui touchent T28 à T31. Les numéros de ligne sont
 
 **Exemple.** Un contrôle de 2026 noté dans le fichier de la DAI arrive dans T28 par la vue, sans passer par l'application.
 
-**Sources.** Recueil v7, l. 256, et l. 53 à 55 et 60 (charger des fichiers) ; Kaya 2017, tableau 1 (T28 et T30 : la DAI produit les rapports à la main) ; planche 02 « vues cnss » (07/11/2026) ; Données P01 (1 542 lignes en tout, dernière saisie le 09/07/2025), P13 (de 1 à 212 contrôles par an et par branche ; pour 5 % des 155 206 dossiers payés de 2025, il en faudrait environ 7 760 dans l'année ; 212 contrôles de pensions ne feraient que 0,44 % des 47 732 dossiers de pension payés en 2025).
+**Sources.** Recueil v7, l. 256, et l. 53 à 55 et 60 (charger des fichiers) ; Kaya 2017, tableau 1 (T28 et T30 : la DAI produit les rapports à la main) ; planche 02 « commun/vues cnss » (07/11/2026) ; Données P01 (1 542 lignes en tout, dernière saisie le 09/07/2025), P13 (de 1 à 212 contrôles par an et par branche ; pour 5 % des 155 206 dossiers payés de 2025, il en faudrait environ 7 760 dans l'année ; 212 contrôles de pensions ne feraient que 0,44 % des 47 732 dossiers de pension payés en 2025).
 
 **État.** Nouvelle (proposée). Questions Q1 à Q3 ; réglage `source_controles`.
 
@@ -363,7 +363,7 @@ Toutes les lignes du recueil qui touchent T28 à T31. Les numéros de ligne sont
 
 **Exemple.** Les 684 trop-perçus de 2024 se listent un à un, mois par mois.
 
-**Sources.** Recueil v7, l. 51 et 68 (et l. 29) ; planche 02 « vues cnss » (une ligne par contrôle).
+**Sources.** Recueil v7, l. 51 et 68 (et l. 29) ; planche 02 « commun/vues cnss » (une ligne par contrôle).
 
 **État.** Nouvelle ; la requête t31 part des ajustements et des débours un par un, mais ne sort que des totaux.
 
@@ -373,7 +373,7 @@ Toutes les lignes du recueil qui touchent T28 à T31. Les numéros de ligne sont
 
 **Exemple.** Un agent d'une direction régionale voit le taux de contrôle de sa direction, pas l'anomalie trouvée sur un dossier précis.
 
-**Sources.** Recueil v7, l. 72 ; planche 02 « vues cnss ».
+**Sources.** Recueil v7, l. 72 ; planche 02 « commun/vues cnss ».
 
 **État.** Nouvelle (proposée). Question Q10.
 
@@ -477,7 +477,7 @@ Chaque question a une valeur par défaut dans la requête : la réponse change u
 **À qui :** DAI, avec la DSI.
 **En attendant :** T28 à T30 ne sont pas produits.
 **Pourquoi on la pose :** la table des contrôles n'a plus de saisie depuis le 09/07/2025 : 115 contrôles en 2025 pour 155 206 dossiers payés (0,07 %, norme 5 %). Le recueil v7 cite les fichiers Excel de la DAI.
-**Déjà posée :** README (questions à la DSI) ; points_a_valider n° 29 ; planche 02 « vues cnss », question 1 ; carte C1.
+**Déjà posée :** README (questions à la DSI) ; points_a_valider n° 29 ; planche 02 « commun/vues cnss », question 1 ; carte C1.
 
 ### Q2 — La table des contrôles de l'application a-t-elle un jour contenu tous vos contrôles ?
 **À qui :** DAI.
@@ -489,19 +489,19 @@ Chaque question a une valeur par défaut dans la requête : la réponse change u
 **À qui :** DAI, avec la DSI.
 **En attendant :** rien : la vue `V_BI_CONTROLE_POSTERIORI` est seulement proposée.
 **Pourquoi on la pose :** c'est la seule façon de remplir T28 à T30 et les trois ratios de contrôle du recueil.
-**Déjà posée :** planche 02 « vues cnss » (proposition du 07/11/2026), étendue ici à cinq exercices.
+**Déjà posée :** planche 02 « commun/vues cnss » (proposition du 07/11/2026), étendue ici à cinq exercices.
 
 ### Q4 — Un contrôle porte-t-il sur tout le dossier, ou sur une seule prestation du dossier ?
 **À qui :** DAI.
 **En attendant :** la ligne du tableau est celle de la prestation contrôlée.
 **Pourquoi on la pose :** un dossier peut porter plusieurs prestations, par exemple la pension du défunt et celle de sa veuve (62 231 pensions au 31/12/2024 pour 47 732 dossiers de pension payés en 2025). La table des contrôles a une colonne de code de prestation, jamais mesurée.
-**Déjà posée :** planche 02 « vues cnss », question 2.
+**Déjà posée :** planche 02 « commun/vues cnss », question 2.
 
 ### Q5 — Quels résultats peut avoir un contrôle (conforme, anomalie, en cours…) ?
 **À qui :** DAI.
 **En attendant :** tout contrôle enregistré compte, quel que soit son résultat.
 **Pourquoi on la pose :** le taux de contrôle compte des contrôles ; le résultat sert à la grille des indus (feuille 06) et à comparer avec T31.
-**Déjà posée :** planche 02 « vues cnss », question 3.
+**Déjà posée :** planche 02 « commun/vues cnss », question 3.
 
 ### Q6 — Pour le taux de contrôle, divise-t-on par les dossiers payés dans la période, ou par les dossiers « liquidés ou en portefeuille » de votre grille de 2025 ?
 **À qui :** DAI, avec la DCP et les DR.
@@ -555,7 +555,7 @@ Chaque question a une valeur par défaut dans la requête : la réponse change u
 **À qui :** DAI, avec la DCP.
 **En attendant :** tous les trop-perçus de l'application (`source_indus` = 'BASE' ; 0,39 % d'indus en 2024).
 **Pourquoi on la pose :** le recueil donne les fichiers Excel de la DAI comme source de T31 ; la base a pourtant tous les trop-perçus, mois par mois et par branche.
-**Déjà posée :** planche 02 « vues cnss », question 4 ; remarque B13 du recueil.
+**Déjà posée :** planche 02 « commun/vues cnss », question 4 ; remarque B13 du recueil.
 
 ### Q15 — Le taux d'indus se calcule-t-il sur toutes les prestations payées de la période, ou sur le seul montant des dossiers contrôlés ?
 **À qui :** DAI.
@@ -679,7 +679,7 @@ Chaque question a une valeur par défaut dans la requête : la réponse change u
 
 ## 8. Comment c'est vérifié
 
-- **Sources relues pour ce document :** `besoins_v7.txt`, l. 4 à 10, 24 à 35, 51 à 78, 125 à 146, 178 à 184, 252 à 258, 326, 333, 1065, 1108 à 1128, 1188 à 1212, 1267 à 1286, 1357 à 1376, 1560 à 1614, 1978 à 2000 ; `kaya.txt`, l. 89 à 110, 164 à 177, 273 à 284, 875 à 884, 1340 à 1350 ; `annuaire_cipres.txt` (descriptions et glossaire) ; l'annuaire CNSS 2024, tableau 8, liste des tableaux 107 à 113 et méthodologie (p. xiii et xiv) ; `t31_requete_proposee.sql` (en-tête, CTE `parametres`, arrondi) ; fiche T31, fiche de lecture (T28 à T31), cartes I1, C1, A1, H11, H12 de `regles_prestations` ; `reference_cipres_T25_T57.md` (H11, H12) ; points_a_valider n° 1, 17, 29 à 33, 52, 58, 61 ; planche 02 « vues cnss ».
+- **Sources relues pour ce document :** `besoins_v7.txt`, l. 4 à 10, 24 à 35, 51 à 78, 125 à 146, 178 à 184, 252 à 258, 326, 333, 1065, 1108 à 1128, 1188 à 1212, 1267 à 1286, 1357 à 1376, 1560 à 1614, 1978 à 2000 ; `kaya.txt`, l. 89 à 110, 164 à 177, 273 à 284, 875 à 884, 1340 à 1350 ; `annuaire_cipres.txt` (descriptions et glossaire) ; l'annuaire CNSS 2024, tableau 8, liste des tableaux 107 à 113 et méthodologie (p. xiii et xiv) ; `t31_requete_proposee.sql` (en-tête, CTE `parametres`, arrondi) ; fiche T31, fiche de lecture (T28 à T31), cartes I1, C1, A1, H11, H12 de `regles_prestations` ; `reference_cipres_T25_T57.md` (H11, H12) ; points_a_valider n° 1, 17, 29 à 33, 52, 58, 61 ; planche 02 « commun/vues cnss ».
 - **Recalculs depuis les résultats des lots :** P105 (payées, trop-perçus, moins-perçus et taux de chaque branche ; taux AT/MP sur les espèces et sur l'ensemble publiés : 0,38 % et 0,33 % ; taux global 1,10 %) ; P102 (684 trop-perçus, 229 484 759 FCFA ; 414 442 709 de moins-perçus ; 13 024 760 de remboursements ; trop-perçus sur convention 2025) ; P104 (rappels 408 312 511, avances 373 206 605) ; P93 (3 890 indemnités de maternité liquidées, 4 881 payées ; 832 allocations de vieillesse liquidées, 753 payées) ; P79 (104 611 et 98 048 allocataires) ; P98 (écarts ligne par ligne des PF) ; P78 (2 901 pensions de coordination) ; comparaison A01 (retraite anticipée, 2020 à 2024). Les autres chiffres de l'annuaire et des lots viennent du dossier de la famille, recalculés par sa contre-vérification (sommes, totaux et écarts justes).
 - **Lots utilisés :** 1 (P01, P06, P07, P11, P13), 3 (P34, P35, P41, P45 à P47), 5 (P78), 6 (P79), 8 (P93, P95, P98, P99), 9 (P102 à P106) ; comparaison A01. Aucune requête nouvelle n'a été lancée ; aucune table DTM n'a été lue (seul leur code est cité).
 - **Corrections reprises de la contre-vérification :**

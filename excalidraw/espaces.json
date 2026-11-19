@@ -4,31 +4,27 @@
       "id": "reunion-cnss",
       "nom": "Réunion CNSS",
       "chemins": [
-        "prestations/regles par tableau",
-        "grh/regles par tableau",
-        "prestations/points_a_valider.excalidraw",
-        "prestations/points_a_valider_v3.excalidraw",
-        "grh/points_a_valider_v2.excalidraw",
-        "regles cipres",
-        "vues cnss"
+        "prestations/1 pour la cnss/regles par tableau",
+        "grh/1 pour la cnss/regles par tableau",
+        "prestations/1 pour la cnss/points_a_valider.excalidraw",
+        "prestations/1 pour la cnss/points_a_valider_v3.excalidraw",
+        "grh/1 pour la cnss/points_a_valider_v2.excalidraw",
+        "commun/fiche_regles.excalidraw",
+        "commun/vues cnss"
       ]
     },
     {
       "id": "prestations",
       "nom": "Prestations",
       "chemins": [
-        "prestations",
-        "annuaire cnss/prestations_2024.excalidraw",
-        "annuaire cnss/pensions_2024.excalidraw"
+        "prestations"
       ]
     },
     {
       "id": "grh",
       "nom": "GRH",
       "chemins": [
-        "grh",
-        "annuaire cnss/gestion_administrative_2024.excalidraw",
-        "reunions"
+        "grh"
       ]
     },
     {
@@ -36,7 +32,7 @@
       "nom": "Suivi du projet",
       "chemins": [
         "journal",
-        "rangement"
+        "archives/rangement/proposition de rangement.excalidraw"
       ]
     },
     {
@@ -44,7 +40,7 @@
       "nom": "Réviser",
       "chemins": [
         "maitrise",
-        "lexique"
+        "commun/lexique.excalidraw"
       ]
     },
     {

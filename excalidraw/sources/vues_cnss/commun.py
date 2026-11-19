@@ -5,7 +5,7 @@ La CNSS crée ces vues dans la base source ; la BI les lit comme les autres
 tables de la base source. Ce module garde :
 - les outils de mise en page (cadres, tableaux, lignes d'exemple) ;
 - la définition de la vue commune de la comptabilité, V_BI_BALANCE_COMPTABLE,
-  reprise par schemas/vues cnss/01 et par schemas/grh/T63 T64 finances/t63_t64_donnees_a_fournir,
+  reprise par schemas/commun/vues cnss/01 et par schemas/grh/3 comprendre/t63_t64_donnees_a_fournir,
   pour que les deux schémas disent toujours la même chose.
 """
 

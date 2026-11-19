@@ -74,7 +74,7 @@ Chaque point dit de quoi on parle, où on le voit dans la base, ce qu'on fait au
    Dans la base : la vue proposée à la DSI, V_BI_CONTROLE_POSTERIORI : une ligne par contrôle, avec le dossier, la branche, la prestation contrôlée, la date, le résultat et le montant de l'indu trouvé. Ni nom ni numéro bancaire.
    Aujourd'hui : rien, la vue est seulement proposée.
    Requête : [point_070_controles_des_cinq_dernieres_annees.sql](points_a_valider_requetes/point_070_controles_des_cinq_dernieres_annees.sql) (pas encore exécutée)
-   Appliqué dans : aucune requête ; la vue est décrite dans le schéma « vues cnss », planche 02 controles a posteriori.
+   Appliqué dans : aucune requête ; la vue est décrite dans le schéma « commun/vues cnss », planche 02 controles a posteriori.
    À qui : DAI, avec la DSI
    Question : pouvez-vous nous donner vos contrôles des cinq dernières années, un par ligne, sous cette forme ?
    Réponse :

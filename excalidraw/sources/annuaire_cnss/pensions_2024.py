@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "sources" / "prestations"))
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 from fiche_cipres import WIDTH, height_of, wrap  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "annuaire cnss" / "pensions_2024.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "2 regles et sources" / "annuaire_cnss_2024_pensions.excalidraw"
 INNER = WIDTH - 50
 
 KEY_POINTS = [

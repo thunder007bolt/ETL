@@ -22,6 +22,7 @@ body { background: var(--fond); color: var(--texte); }
 
 .barre {
   width: 270px;
+  max-width: calc(100vw - 320px);
   flex: none;
   display: flex;
   flex-direction: column;
@@ -110,6 +111,29 @@ body { background: var(--fond); color: var(--texte); }
 }
 .ligne:hover .origine, .ligne:focus-within .origine { display: none; } /* la place va aux boutons */
 .vide-liste { padding: 12px; color: var(--doux); }
+
+/* bord droit de la liste : on le glisse pour l'élargir ou la rétrécir */
+.poignee {
+  position: relative;
+  z-index: 30;
+  flex: none;
+  width: 9px;
+  margin: 0 -4px;
+  cursor: col-resize;
+  touch-action: none;
+}
+.poignee::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 3px;
+  width: 3px;
+  background: transparent;
+  transition: background 0.12s;
+}
+.poignee:hover::after, .poignee.active::after, .poignee:focus-visible::after { background: var(--accent); }
+.poignee:focus-visible { outline: none; }
 
 /* arborescence : dossiers repliables, glisser-déposer */
 .arbre { flex: 1; min-height: 0; overflow-y: auto; padding: 6px 0 16px; }

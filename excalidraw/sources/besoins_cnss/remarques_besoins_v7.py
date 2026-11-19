@@ -20,7 +20,7 @@ sys.path.insert(0, str(ROOT / "sources" / "prestations"))
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 from fiche_cipres import WIDTH, badge, height_of, wrap  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "besoins cnss" / "remarques_besoins_v7.excalidraw"
+OUTPUT = ROOT / "schemas" / "commun" / "remarques_besoins_v7.excalidraw"
 INNER = WIDTH - 50
 SIZE = 18
 

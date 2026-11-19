@@ -18,6 +18,11 @@ const CLOSED_KEY = "schemas.dossiers-fermes";
 // espace de travail affiché ("" : tous les schémas), retenu dans ce navigateur
 const SPACE_KEY = "schemas.espace";
 const NEW_SPACE = "\u0000nouveau";
+// largeur de la liste, réglée en glissant son bord droit et retenue dans ce navigateur
+const BAR_KEY = "schemas.largeur-liste";
+const BAR_DEFAULT = 270;
+const BAR_MIN = 200;
+const BAR_MAX = 720;
 // un serveur lancé avant les espaces de travail ne les connaît pas : il faut le relancer
 const OLD_SERVER = "Relancez la visionneuse (server.py) : son serveur a été lancé avant les espaces de travail.";
 const DRAG_TYPE = "application/x-visionneuse-schemas";
@@ -177,6 +182,22 @@ function storeSpace(id) {
   }
 }
 
+function loadBarWidth() {
+  try {
+    const width = Number(localStorage.getItem(BAR_KEY));
+    return width >= BAR_MIN && width <= BAR_MAX ? width : BAR_DEFAULT;
+  } catch {
+    return BAR_DEFAULT;
+  }
+}
+function storeBarWidth(width) {
+  try {
+    localStorage.setItem(BAR_KEY, String(width));
+  } catch {
+    // stockage indisponible : la liste reprendra sa largeur d'origine
+  }
+}
+
 function loadAuto() {
   try {
     const stored = localStorage.getItem(AUTO_KEY);
@@ -300,6 +321,8 @@ function App() {
   const [diskChanged, setDiskChanged] = useState(false);
   const [notice, setNotice] = useState(null); // { text, kind }
   const [sidebar, setSidebar] = useState(true);
+  const [barWidth, setBarWidth] = useState(loadBarWidth); // largeur de la liste, en pixels
+  const [resizing, setResizing] = useState(false); // on glisse le bord de la liste
   const [versionsOpen, setVersionsOpen] = useState(false);
   const [versions, setVersions] = useState(null); // { versions, actuelle } du schéma ouvert
   const [preview, setPreview] = useState(null); // version affichée en lecture seule
@@ -1128,6 +1151,36 @@ function App() {
     };
   }, [save]);
 
+  // la liste s'étire en glissant son bord droit ; elle laisse toujours de la place au schéma
+  const clampBar = (width) => Math.round(Math.max(BAR_MIN, Math.min(width, BAR_MAX, innerWidth - 320)));
+  const startResize = (e) => {
+    e.preventDefault();
+    e.currentTarget.setPointerCapture(e.pointerId);
+    setResizing(true);
+  };
+  const moveResize = (e) => {
+    if (resizing) setBarWidth(clampBar(e.clientX));
+  };
+  const endResize = (e) => {
+    if (!resizing) return;
+    setResizing(false);
+    const width = clampBar(e.clientX);
+    setBarWidth(width);
+    storeBarWidth(width);
+  };
+  const keyResize = (e) => {
+    const step = { ArrowLeft: -16, ArrowRight: 16 }[e.key];
+    if (!step) return;
+    e.preventDefault();
+    const width = clampBar(barWidth + step);
+    setBarWidth(width);
+    storeBarWidth(width);
+  };
+  const resetBar = () => {
+    setBarWidth(BAR_DEFAULT);
+    storeBarWidth(BAR_DEFAULT);
+  };
+
   const current = scene?.path;
   const indent = (depth) => ({ paddingLeft: `${8 + depth * 16}px` });
 
@@ -1207,7 +1260,7 @@ function App() {
   const savedLabel = lastSave?.auto ? `Enregistré (auto, ${formatTime(lastSave.at)})` : "Enregistré";
   return html`
     <div class=${sidebar ? "app" : "app sans-barre"}>
-      <aside class="barre">
+      <aside class="barre" style=${{ width: `${barWidth}px` }}>
         <div class="barre-tete">
           <div class="espaces" ref=${spaceMenuRef}>
             <button class=${spaceMenu ? "espace-bouton ouvert" : "espace-bouton"} aria-haspopup="menu"
@@ -1266,6 +1319,11 @@ function App() {
           ? "Un espace est une vue : y ajouter ou en retirer un dossier ne déplace rien sur le disque."
           : "Glissez un schéma ou un dossier sur un dossier pour l'y ranger. Le signet l'ajoute à un espace de travail."}</p>
       </aside>
+      ${sidebar ? html`<div class=${resizing ? "poignee active" : "poignee"} role="separator"
+        aria-orientation="vertical" aria-label="Largeur de la liste" tabIndex="0"
+        title="Glisser pour élargir ou rétrécir la liste (double-clic : largeur d'origine)"
+        onPointerDown=${startResize} onPointerMove=${moveResize} onPointerUp=${endResize}
+        onPointerCancel=${endResize} onDoubleClick=${resetBar} onKeyDown=${keyResize}></div>` : null}
       <main class="zone">
         <header class="entete">
           <button class="bouton" title="Afficher ou masquer la liste des schémas"

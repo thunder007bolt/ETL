@@ -25,7 +25,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from excalidraw_builder import main  # noqa: E402
 from gabarit_famille import construire  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "T50 T57 evolution" / "regles_t50_t57_evolution.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "2 regles et sources" / "regles_t50_t57_evolution.excalidraw"
 
 RV7 = "Recueil v7"
 REU = "Réunion"

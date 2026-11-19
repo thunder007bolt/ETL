@@ -14,7 +14,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, LINE_HEIGHT, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "lexique" / "définitions.excalidraw"
+OUTPUT = ROOT / "schemas" / "commun" / "lexique.excalidraw"
 
 COLS = 3
 CARD_W = 760

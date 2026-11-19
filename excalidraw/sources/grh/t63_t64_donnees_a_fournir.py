@@ -8,7 +8,7 @@ dans la base source et l'alimente depuis Oracle GL.
 
 Depuis le 07/11/2026 au soir, la structure est la vue commune de la
 comptabilité, V_BI_BALANCE_COMPTABLE, qui sert aussi à la gestion financière
-(schemas/vues cnss/01 balance comptable). Ses colonnes et ses règles viennent
+(schemas/commun/vues cnss/01 balance comptable). Ses colonnes et ses règles viennent
 de sources/vues_cnss/commun.py : les deux schémas disent la même chose.
 
 Usage :
@@ -27,7 +27,7 @@ from commun import (BALANCE_COLONNES, BALANCE_EXEMPLE_LARGEURS,  # noqa: E402
                     BALANCE_EXEMPLE_NOMS, BALANCE_LIGNE, BALANCE_NOM, BALANCE_REGLES,
                     WIDTH, bloc, entete, exemple, rangee, tableau_colonnes)
 
-OUTPUT = ROOT / "schemas" / "grh" / "T63 T64 finances" / "t63_t64_donnees_a_fournir.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "3 comprendre" / "t63_t64_donnees_a_fournir.excalidraw"
 
 BLEU = (C["bleu_clair"], C["bleu"])
 JAUNE = (C["jaune_clair"], C["jaune_bord"])
@@ -60,7 +60,7 @@ def build():
     s = entete(d, "T63 et T64 : les données à fournir par la CNSS",
                f"Ces montants viendront de la vue commune de la comptabilité, {BALANCE_NOM}, que "
                "la CNSS crée dans la base source et alimente depuis Oracle GL. Elle sert aussi "
-               "à la gestion financière (schéma « vues cnss / 01 balance comptable ») · état au "
+               "à la gestion financière (schéma « commun/vues cnss / 01 balance comptable ») · état au "
                "07/11/2026")
 
     # ------------------------------------------------------------------ 1. pourquoi

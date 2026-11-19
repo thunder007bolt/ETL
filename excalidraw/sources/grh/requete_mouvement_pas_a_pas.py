@@ -26,7 +26,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "grh" / "T60 mouvements" / "requete_mouvement_pas_a_pas.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "3 comprendre" / "T60 mouvements" / "requete_mouvement_pas_a_pas.excalidraw"
 SQL = ROOT.parent / "analyses" / "grh" / "t60_requete_proposee.sql"
 
 WIDTH = 2600

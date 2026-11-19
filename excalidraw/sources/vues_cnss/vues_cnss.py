@@ -6,7 +6,7 @@ sources, d'après le recueil des besoins v7, l'Annuaire CIPRES et l'atelier de
 Kaya (2017). La CNSS crée les vues dans la base source, la BI les lit comme les
 autres tables. Pas de SQL : des structures simples (colonnes, types, grain).
 
-Quatre schémas, dans schemas/vues cnss/ :
+Quatre schémas, dans schemas/commun/vues cnss/ :
   00 sommaire                 le principe, les trois vues, ce qui est déjà là
   01 balance comptable        V_BI_BALANCE_COMPTABLE (DSI, DFC) : T63, T64,
                               T66 à T76, SP1, SP2
@@ -33,7 +33,7 @@ from commun import (BALANCE_COLONNES, BALANCE_EXEMPLE_LARGEURS,  # noqa: E402
                     BALANCE_EXEMPLE_NOMS, BALANCE_LIGNE, BALANCE_NOM, BALANCE_REGLES,
                     WIDTH, bloc, entete, exemple, rangee, tableau, tableau_colonnes)
 
-OUT_DIR = ROOT / "schemas" / "vues cnss"
+OUT_DIR = ROOT / "schemas" / "commun" / "commun/vues cnss"
 
 BLEU = (C["bleu_clair"], C["bleu"])
 JAUNE = (C["jaune_clair"], C["jaune_bord"])

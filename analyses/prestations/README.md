@@ -17,7 +17,7 @@ Suite du travail : [TODO.md](TODO.md) liste les tâches à reprendre, avec leurs
 - Exécution en mode script (F5) dans SQL Developer.
 - Une fois un lot exécuté, ses résultats sont reportés dans les en-têtes « Résultat ». Une liste trop longue pour un en-tête (plus d'une vingtaine de lignes) est gardée telle quelle dans [resultats/](resultats/), un fichier TSV par requête, nommé `lotN_Pnn_<sujet>.tsv`.
 
-Vue d'ensemble pour s'approprier le travail : le schéma Excalidraw [regles_prestations](../../excalidraw/schemas/prestations/regles_prestations.excalidraw) reprend toutes les règles et tous les constats avec les requêtes qui les prouvent (à régénérer par `excalidraw/sources/prestations/regles_prestations.py` quand une règle change).
+Vue d'ensemble pour s'approprier le travail : le schéma Excalidraw [regles_prestations](../../excalidraw/schemas/archives/prestations/regles_prestations.excalidraw) reprend toutes les règles et tous les constats avec les requêtes qui les prouvent (à régénérer par `excalidraw/sources/prestations/regles_prestations.py` quand une règle change).
 
 ## Lots
 
@@ -125,7 +125,7 @@ Le détail, hypothèse par hypothèse, est dans [reference_cipres_T25_T57.md](re
 - **L'allocation prénatale est notifiée.** L'atelier de Kaya 2017 disait qu'elle n'avait ni réception ni notification. C'est vrai de l'ancien code FAP (33 en 2025), plus de la MAP de la branche maternité, notifiée 15 jours après la demande (P66).
 - **Refus et stock.** Le module des rejets sert aussi peu qu'en T25 ; en PF et en maternité, presque tous les dossiers ouverts donnent une prestation : les règles D6 et D7 de T25 s'appliquent (P68).
 
-**Ce que T26 et T27 reprennent de T25, et ce qui change** (cartes D9 à D14 du schéma [regles_prestations](../../excalidraw/schemas/prestations/regles_prestations.excalidraw))
+**Ce que T26 et T27 reprennent de T25, et ce qui change** (cartes D9 à D14 du schéma [regles_prestations](../../excalidraw/schemas/archives/prestations/regles_prestations.excalidraw))
 
 | Règle de T25 | T26 | T27 |
 | --- | --- | --- |

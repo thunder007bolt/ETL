@@ -29,7 +29,7 @@ sys.path.insert(0, str(ROOT / "sources" / "prestations"))
 from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
 from fiche_cipres import WIDTH, height_of, wrap  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "annuaire cnss" / "gestion_administrative_2024.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "2 regles et sources" / "annuaire_cnss_2024_gestion_administrative.excalidraw"
 INNER = WIDTH - 50
 
 # ---------------------------------------------------------------- le tableau 121 (p. 91)

@@ -27,7 +27,7 @@ from excalidraw_builder import C, Diagram, main  # noqa: E402
 from fiche_cipres import (WIDTH, banner, cards_grid, cards_with_sql, chip, height_of,  # noqa: E402
                           line_cards, mockup, timeline, wrap)
 
-OUTPUT = ROOT / "schemas" / "prestations" / "tableaux cipres" / "T41_allocataires.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "1 pour la cnss" / "fiches de validation" / "T41_allocataires.excalidraw"
 
 HOW_TO = ("Pour chaque règle (partie 4) et chaque question (partie 5), dessine une croix dans une "
           "case : D'accord, Pas d'accord ou À discuter, et écris ta remarque sous la carte si "

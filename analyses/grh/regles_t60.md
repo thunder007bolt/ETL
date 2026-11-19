@@ -1,6 +1,6 @@
 # Le mouvement du personnel (T60) : règles proposées
 
-État au 08/11/2026. Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Ces règles sont des propositions, à faire viser par la DRH. Le 08/11, l'annuaire CNSS 2024 (tableaux 119 à 126, schéma `annuaire cnss/gestion_administrative_2024`) a tranché la disponibilité : elle sort de l'effectif (réglage HORS_EFFECTIF).
+État au 17/11/2026 : la requête a été lancée sur la base source le 17/11 (partie 5). Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Ces règles sont des propositions, à faire viser par la DRH. Le 08/11, l'annuaire CNSS 2024 (tableaux 119 à 126, schéma `annuaire cnss/gestion_administrative_2024`) a tranché la disponibilité : elle sort de l'effectif (réglage HORS_EFFECTIF).
 
 La requête qui applique ces règles : [t60_requete_proposee.sql](t60_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête, dans la CTE `parametres` (partie 0), comme dans la requête de l'effectif. Changer un réglage ne demande pas de réécrire la requête.
 
@@ -87,7 +87,7 @@ Puis, pour tous :
 
 *Exemple : temporaire engagé le 01/06/2023, devenu permanent le 01/07/2024. Dans le tableau des temporaires, il entre en 2023 (RECRU) et sort en 2024 (AUTRE_SORT, DEVIENT_PERMANENT). Dans celui des permanents, il entre en 2024 (AUTRE_ENT, ETAIT_TEMPORAIRE). Il n'est compté qu'une fois en recrutement.*
 
-*Sources : Annuaire CIPRES, p. 51 ; atelier de Kaya pour la prise de service ; recrutements de 2024 retrouvés à l'unité près (104, lot 17, Q99).*
+*Sources : Annuaire CIPRES, p. 51 ; atelier de Kaya pour la prise de service ; recrutements de 2024 : 101 dans T60 pour 104 publiés (lancement du 17/11/2026 ; lot 26, Q146).*
 
 ### G9. Les sorties
 
@@ -203,35 +203,33 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 
 ---
 
-## 5. Les chiffres attendus, face à l'annuaire CNSS 2024
+## 5. Les chiffres, face à l'annuaire CNSS 2024
 
-Permanents (agents A), avec le réglage disponibilité PRESENT. « Base » : ce que la requête devrait donner, d'après les lots 17, 18 et 25, à quelques agents près. « Annuaire » : tableau 121 de l'annuaire CNSS 2024.
-
-Avec le réglage retenu (HORS_EFFECTIF), le début et la fin baissent des agents en disponibilité à chaque 31/12 (6 au 31/12/2024, lot 24), et les disponibilités et remises en activité apparaissent. 2024 : environ 672 au début, 104 recrutements, 4 autres entrées (remises), 25 retraites, 5 décès, 9 autres sorties (2 démissions, 1 licenciement, 5 disponibilités, 1 sans départ daté), 741 à la fin. L'écart avec les 758 publiés passe de 11 à 17.
+Requête lancée sur la base source le 17/11/2026 (analyses/grh/controles/controle_2_t60.sql), avec le réglage retenu `disponibilite` = HORS_EFFECTIF. « Base » : ce que la requête donne. « Annuaire » : tableau 121 de l'annuaire CNSS 2024. Permanents (agents de qualité A).
 
 | Année | | Début | Recrutement | Autres entrées | Retraite | Décès | Autres sorties | Fin |
 |---|---|---|---|---|---|---|---|---|
-| 2020 | Base | 823 | 1 | 0 | 39 | 3 | 0 | 782 |
+| 2020 | Base | 809 | 1 | 2 | 39 | 3 | 1 | 769 |
 | | Annuaire | 918 | 0 | 3 | 43 | 4 | 5 | 869 |
-| 2021 | Base | 782 | 0 | 0 | 31 | 4 | 1 | 746 |
+| 2021 | Base | 769 | 0 | 1 | 31 | 4 | 1 | 734 |
 | | Annuaire | 869 | 0 | 2 | 31 | 2 | 4 | 834 |
-| 2022 | Base | 746 | 1 | 0 | 29 | 4 | 2 | 712 |
+| 2022 | Base | 734 | 1 | 2 | 29 | 4 | 1 | 703 |
 | | Annuaire | 834 | 0 | 5 | 26 | 3 | 4 | 806 |
-| 2023 | Base | 712 | 0 | 0 | 30 | 3 | 2 | 677 |
+| 2023 | Base | 703 | 0 | 3 | 30 | 3 | 3 | 670 |
 | | Annuaire | 806 | 0 | 7 | 32 | 5 | 9 | 767 |
-| 2024 | Base | 677 | 104 | 0 | 25 | 5 | 4 | 747 |
+| 2024 | Base | 670 | 101 | 0 | 24 | 5 | 1 | 741 |
 | | Annuaire | 767 | 104 | 7 | 23 | 3 | 94 | 758 |
+| 2025 | Base | 741 | 159 | 3 | 20 | 0 | 0 | 883 |
 
-Le détail de la base : 2021, 1 licenciement ; 2022, 2 licenciements ; 2023, 1 démission et 1 fin de contrat ; 2024, 2 démissions, 1 licenciement et 1 agent sorti sans départ daté.
+**Ce qui tient.** Chaque année, début + entrées − sorties = fin, et la fin d'une année est le début de la suivante. Les temporaires suivent la même mécanique : 248 fin 2019, 338 fin 2025, mais 1 à 5 sorties par an seulement, faute de fin de contrat saisie.
 
-Le détail de l'annuaire, autres entrées : remises en activité 3, 2, 3, 5, 6 ; détachements 2 en 2023, 1 en 2024 ; 2 autres en 2022. Autres sorties : disponibilités 5, 3, 2, 4, 7 ; démissions 1 en 2023, 2 en 2024 ; licenciements 1 en 2022, 1 en 2024 ; fins de détachement 2 en 2023 ; autres 1, 1, 2 et 84.
+**Les écarts, et ce qu'ils disent.**
 
-Les écarts s'expliquent :
-
-- **Début et fin** : les 84 agents engagés en 2019, sans date de départ, que la base ne compte jamais (G11). L'annuaire les sort tous en 2024 (les 84 « autres »). Sans eux, l'écart tombe à 8 à 16 agents par an.
-- **Disponibilités et remises en activité** : la base les a (décisions 07 et 18, à 1 à 3 près par an). Avec le réglage retenu (HORS_EFFECTIF), elles apparaissent en DISP et REM, comme dans l'annuaire.
-- **Décès** : lus dans la liquidation des droits, environ 8 mois après le décès. Un décès de fin d'année glisse sur l'année suivante (19 sorties pour 17 décès de 2020 à 2024).
-- **Recrutements, retraites, démissions, licenciements** : retrouvés à l'unité ou à quelques unités près.
+- **Début et fin** : les 84 agents engagés en 2019, sans date de départ, que la base ne compte jamais (G11). L'annuaire les sort tous en 2024 (les 84 « autres »). Sans eux, l'écart tombe à une quinzaine d'agents par an.
+- **Disponibilités** : la base a bien 3, 4, 2, 5 et 6 décisions 07 de 2020 à 2024, comme l'annuaire (5, 3, 2, 4, 7), mais T60 n'en montre que 1, 1, 0, 1 et 0. La cause est de notre côté : 12 agents mis en disponibilité de 2021 à 2025 ne sont pas revenus et ont une fiche inactive sans départ daté ; la règle G2 ne les compte à aucune date, même avant leur disponibilité (lot 28, Q159). À corriger : leur mise en disponibilité servira de date de sortie (point 64).
+- **Recrutements 2024** : 101 pour 104 publiés. Deux des trois manquants sont entrés et partis dans l'année (lot 26, Q146) ; le troisième reste inexpliqué.
+- **Décès** : lus dans la liquidation des droits, environ 8 mois après le décès. Un décès de fin d'année glisse sur l'année suivante (19 sorties pour 17 décès de 2020 à 2024), et aucun décès n'est encore visible pour 2025.
+- **Retraites, démissions, licenciements** : retrouvés à l'unité ou à quelques unités près.
 
 ---
 
@@ -265,7 +263,7 @@ Chacune a une valeur par défaut dans la requête ; la réponse change un régla
 
 La question M09 (un temporaire compte-t-il comme recrutement ?) est réglée par le filtre de nature. Le tableau des permanents compte les permanents embauchés, celui des temporaires les nouveaux contrats. Un temporaire devenu permanent est une « autre entrée » des permanents.
 
-La fiche de validation T60 (`excalidraw/schemas/grh/tableaux cipres/T60_mouvement_personnel`) pose ces huit questions avec les mêmes numéros, Q1 à Q8, plus Q9 : les 84 engagés de 2019.
+La fiche de validation T60 (`excalidraw/schemas/grh/1 pour la cnss/fiches de validation/T60_mouvement_personnel`) pose ces huit questions avec les mêmes numéros, Q1 à Q8, plus Q9 : les 84 engagés de 2019.
 
 ---
 
@@ -285,9 +283,10 @@ Pas encore exécutée sur la base de la CNSS : c'est la tâche 1.
 
 | N° | Tâche | Qui | État |
 |---|---|---|---|
-| 1 | Exécuter les deux requêtes de contrôle de l'en-tête (cliché 102026), de 2020 à 2025, avec le réglage retenu (`disponibilite` = HORS_EFFECTIF), puis avec PRESENT, et comparer au point 5 | toi, puis Claude | à faire |
-| 2 | Vérifier que DTM.DIM_GRH_TYPE_MOUVEMENT contient les 18 codes de la CNSS, plus NOM (`SELECT CODE_TYPE_MVT, CODE_NAT_MVT FROM DTM.DIM_GRH_TYPE_MOUVEMENT ORDER BY 2, 1`) | toi | à faire |
+| 1 | Exécuter la requête et comparer au point 5 | toi, puis Claude | fait le 17/11/2026, sur la base source (analyses/grh/controles/controle_2_t60.sql) : chiffres et écarts reportés au point 5 |
+| 2 | Vérifier que la table des types de mouvement contient les 18 codes de la CNSS, plus NOM | toi | fait le 17/11/2026 (lot 26, Q152) : les 18 codes y sont, aucun en double ; **NOM manque**, sa nature reste donc vide dans T60 |
 | 3 | Mettre à jour les termes de T60 de la fiche de lecture GRH et la fiche de validation T60 avec ces règles, puis les voir en réunion avec la CNSS | Claude, puis toi avec la CNSS | mises à jour le 08/11/2026 (9 termes ; 9 règles et 9 questions) ; réunion à faire |
 | 4 | Faire trancher les questions du point 7 ; la disponibilité est tranchée le 08/11/2026 par l'annuaire CNSS 2024 (HORS_EFFECTIF, T58 et T60) | DRH | en cours |
-| 5 | Script d'ajout des quatre colonnes dans DTM et ODS.DTM_GRH_MOUVEMENT, puis remplacement de grh_mouvement.sql par cette requête | Claude, après le visa de la DRH | à faire |
-| 6 | Dans OBIEE : la maquette de T60 (point 2), les filtres qualité A et nature, le détail des autres, la fin par unité lue dans T58 | toi, avec Jules | à faire |
+| 5 | Corriger la requête : pour une fiche inactive sans départ daté, la dernière mise en disponibilité sans retour sert de date de sortie (point 64, lot 28) | Claude, dans la passe unique | à faire |
+| 6 | Script d'ajout des quatre colonnes dans DTM et ODS.DTM_GRH_MOUVEMENT, puis remplacement de grh_mouvement.sql par cette requête | Claude, après le visa de la DRH | à faire |
+| 7 | Dans OBIEE : la maquette de T60 (point 2), les filtres qualité A et nature, le détail des autres, la fin par unité lue dans T58 | toi, avec Jules | à faire |

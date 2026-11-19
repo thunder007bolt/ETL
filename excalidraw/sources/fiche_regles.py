@@ -25,7 +25,7 @@ from fiche_cipres import WIDTH, height_of, wrap  # noqa: E402
 
 ETL = ROOT.parent
 SOURCE = ETL / "analyses" / "regles_cipres" / "fiche_regles.md"
-OUTPUT = ROOT / "schemas" / "regles cipres" / "fiche_regles.excalidraw"
+OUTPUT = ROOT / "schemas" / "commun" / "fiche_regles.excalidraw"
 INNER = WIDTH - 50
 TAILLE, TITRE, ECART = 18, 22, 10      # taille d'une règle, d'un titre de carte, écart entre lignes
 NUM_W = 46                             # place du numéro, devant le texte de la règle

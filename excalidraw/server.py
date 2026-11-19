@@ -2,8 +2,9 @@
 Visionneuse locale des schémas Excalidraw du projet.
 
 Usage :
-    python3 excalidraw/server.py              # http://localhost:8765
+    python3 excalidraw/server.py              # http://localhost:8765 (et accessible par IP)
     python3 excalidraw/server.py --port 8800
+    python3 excalidraw/server.py --host 127.0.0.1   # local seulement
 
 Sert la visionneuse (viewer/) et une petite API sur les fichiers de schemas/ :
     GET  /api/arbre              dossiers (même vides) et schémas, pour l'arborescence
@@ -29,13 +30,16 @@ Rien n'est déplacé sur le disque ; la liste est dans espaces.json, à côté d
 déplacement ou une suppression de dossier met les espaces à jour.
 Chaque enregistrement garde l'état précédent et le nouveau dans historique/ (lib/historique.py) ;
 un déplacement emmène les versions du schéma avec lui.
-N'écoute que sur 127.0.0.1.
+Par défaut écoute sur 0.0.0.0 : accessible depuis un autre ordinateur du réseau
+via l'IP de cette machine (http://<ip>:8765). Passer --host 127.0.0.1 pour
+rester en local seulement.
 """
 
 import argparse
 import json
 import os
 import re
+import socket
 import sys
 from http import HTTPStatus
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
@@ -371,14 +375,44 @@ class Handler(SimpleHTTPRequestHandler):
         return self._send_json(HTTPStatus.OK, {"chemin": gone})
 
 
+def local_ips():
+    """Adresses IPv4 de cette machine, hors loopback, pour l'accès distant."""
+    ips = []
+    try:
+        for info in socket.getaddrinfo(socket.gethostname(), None, socket.AF_INET):
+            ip = info[4][0]
+            if not ip.startswith("127.") and ip not in ips:
+                ips.append(ip)
+    except OSError:
+        pass
+    if not ips:
+        try:
+            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as s:
+                s.connect(("8.8.8.8", 80))
+                ip = s.getsockname()[0]
+                if not ip.startswith("127."):
+                    ips.append(ip)
+        except OSError:
+            pass
+    return ips
+
+
 def main():
-    parser = argparse.ArgumentParser(description="Visionneuse locale des schémas Excalidraw.")
+    parser = argparse.ArgumentParser(description="Visionneuse des schémas Excalidraw.")
     parser.add_argument("--port", type=int, default=8765)
+    parser.add_argument("--host", default="0.0.0.0",
+                        help="adresse d'écoute (défaut 0.0.0.0 = réseau local ; "
+                             "127.0.0.1 = cette machine seulement)")
     args = parser.parse_args()
 
     SCHEMAS_DIR.mkdir(exist_ok=True)
-    server = ThreadingHTTPServer(("127.0.0.1", args.port), Handler)
+    server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"Visionneuse Excalidraw : http://localhost:{args.port}  (schémas : {SCHEMAS_DIR})")
+    if args.host in ("0.0.0.0", ""):
+        for ip in local_ips():
+            print(f"  Accès distant    : http://{ip}:{args.port}")
+    else:
+        print(f"  Écoute           : {args.host}:{args.port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:

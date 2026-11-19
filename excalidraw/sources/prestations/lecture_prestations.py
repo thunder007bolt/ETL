@@ -1,6 +1,6 @@
 """
 Contenu de la fiche de lecture des prestations sociales (T25 à T57), générée par
-sources/fiche_de_lecture.py dans schemas/prestations/fiche_de_lecture.excalidraw.
+sources/fiche_de_lecture.py dans schemas/prestations/3 comprendre/fiche_de_lecture.excalidraw.
 
 Chaque tableau a ses termes, dans l'ordre où on les lit dans l'Annuaire CIPRES ; chaque terme : ce que
 dit l'Annuaire CIPRES (avec la page), ce que j'en ai compris, un exemple, la question à valider, où je le

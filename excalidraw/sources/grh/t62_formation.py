@@ -1,6 +1,7 @@
 """
 Fiche de validation de T62 « Travailleurs en formation ou formés, par catégorie
-professionnelle, sexe et finalité de la formation » (état au 01/11/2026).
+professionnelle, sexe et finalité de la formation » (état au 17/11/2026 : requête lancée sur la
+base, chiffres réels).
 
 Même gabarit que les fiches des prestations : la maquette, six agents fictifs sur un calendrier,
 les lignes, huit règles avec leur SQL et cinq questions. Les chiffres de la base ne retombent pas
@@ -28,7 +29,7 @@ from fiche_cipres import (WIDTH, banner, cards_grid, cards_with_sql, chip, heigh
 OUTPUT = OUTPUT_DIR / "T62_personnel_forme.excalidraw"
 
 HOW_TO = HOW_TO_DEBUT + (
-    "Attention : les chiffres de la base ne retombent pas sur l'annuaire de la CNSS 2024 (409 "
+    "Attention : les chiffres de la base ne retombent pas sur l'annuaire de la CNSS 2024 (407 "
     "formés pour 480). La question Q1 demande d'où viennent les chiffres publiés ; la règle 1 "
     "en dépend.")
 
@@ -58,11 +59,11 @@ LINES = [
     (1, "Employés", "catégories 1 et 2 de la grille", "132 publiés en 2024, 81 dans la base",
      "Données"),
     (2, "Agents de maîtrise", "catégorie 3", "142 publiés, 96 dans la base", "Données"),
-    (3, "Cadres moyens", "catégories 4 et 5 (la 5e : question Q1 de la fiche T58)",
-     "118 publiés, 181 dans la base", "Données"),
+    (3, "Cadres moyens", "catégories 4 et 5",
+     "118 publiés, 179 dans la base", "Données"),
     (4, "Cadres supérieurs", "catégorie 6", "88 publiés, 51 dans la base", "Données"),
     (5, "TOTAL", "la somme des catégories, et le détail des inscriptions",
-     "480 publiés, 409 dans la base", "Données"),
+     "480 publiés, 407 dans la base", "Données"),
 ]
 
 RULES = [
@@ -70,7 +71,7 @@ RULES = [
          regle="Un agent inscrit à au moins une formation dans l'année, compté une fois, quel "
                "que soit le nombre de ses formations.",
          sources=[("Annuaire", "p. 17 : « travailleurs en formation ou formés »"),
-                  ("Données", "en 2024 : 410 agents et 525 inscriptions, aucune en double (lot "
+                  ("Données", "en 2024 : 408 personnes et 523 inscriptions, aucune en double (lot "
                               "18, Q108)"),
                   ("Proposition BI", "compter des agents, pas des inscriptions ; questions Q1 "
                                      "et Q3")]),
@@ -87,15 +88,18 @@ RULES = [
     dict(n="4", titre="Le personnel permanent",
          regle="Un agent de la CNSS de nature permanente au 31 décembre. Il n'a pas à être "
                "encore en poste : un agent formé puis retraité dans l'année compte.",
-         sources=[("Données", "l'annuaire publie les permanents formés ; 409 des 410 agents "
-                              "formés en 2024 sont permanents (lot 18, Q108)"),
-                  ("Proposition BI", "les contractuels formés à part ; question Q4")]),
+         sources=[("Données", "en 2024, les 408 personnes formées sont toutes permanentes : "
+                              "407 agents de la CNSS et 1 agent de la fonction publique ; aucun "
+                              "temporaire (lot 26, Q149)"),
+                  ("Proposition BI", "les temporaires et la fonction publique à part ; question "
+                                     "Q4")]),
     dict(n="5", titre="La catégorie",
          regle="La catégorie de la situation de l'agent au 31 décembre, comme dans T58 : 1re et "
-               "2e employés, 3e agents de maîtrise, 4e et 5e cadres moyens, 6e cadres "
-               "supérieurs.",
-         sources=[("Données", "81, 96, 181, 51 pour 132, 142, 118, 88 publiés : deux fois plus "
-                              "de cadres moyens formés que dans l'annuaire (lot 19, Q113)"),
+               "2e employés, 3e agents de maîtrise, 4e et 5e cadres moyens, 6e et hors "
+               "catégorie cadres supérieurs.",
+         sources=[("Données", "81, 96, 179, 51 pour 132, 142, 118, 88 publiés : plus de cadres "
+                              "moyens formés que dans l'annuaire (requête lancée le "
+                              "17/11/2026)"),
                   ("Proposition BI", "la même catégorie que T58")]),
     dict(n="6", titre="Le sexe",
          regle="Hommes et femmes d'après la fiche de l'agent.",
@@ -104,9 +108,9 @@ RULES = [
          regle="Avec promotion : le classement de l'agent a changé après une formation de "
                "l'année (classement avant et après, sur l'inscription). Sinon, sans promotion.",
          sources=[("Annuaire", "p. 51 : la finalité, « avec promotion » ou « sans promotion »"),
-                  ("Données", "le classement n'est rempli que pour les formations diplômantes : "
-                              "2 changements en 2024 pour 6 promotions publiées (lot 19, "
-                              "Q113)"),
+                  ("Données", "avec la date de début, aucun formé avec promotion en 2024, pour "
+                              "6 publiés : les 2 changements de classement connus sont sur une "
+                              "formation commencée en 2023 (lot 26, Q148, Q150)"),
                   ("Proposition BI", "question Q2")]),
     dict(n="8", titre="Le Total et le détail",
          regle="Le Total est la somme des catégories. Le détail donne les inscriptions, et les "
@@ -128,7 +132,7 @@ JOIN   USER_GRH.GRH_FORMATION f
        ON f.FORM_NO = i.FORM_NO
 WHERE  f.DATE_DEBUT BETWEEN DATE '2024-01-01'
                         AND DATE '2024-12-31'
--- 2024 : 410 agents, 525 inscriptions
+-- 2024 : 408 personnes, 523 inscriptions
 -- (l'annuaire : 480 formés)""",
     "2": """-- une formation compte l'année de sa
 -- date de début, même si elle finit
@@ -177,8 +181,8 @@ WITH formes_2024 AS (
            AND    x.DATE_DEBUT
                   <= DATE '2024-12-31'))
 SELECT COUNT(DISTINCT PERS_ID) FROM formes_2024
--- 2024 : 409 (un des 410 formés n'est pas
--- permanent)""",
+-- 2024 : 407 (l'autre formé est un agent
+-- de la fonction publique)""",
     "5": """-- à coller sous la règle 4, à la place
 -- de sa dernière ligne
 SELECT CATEGORIE, COUNT(DISTINCT PERS_ID)
@@ -187,7 +191,7 @@ GROUP  BY CATEGORIE
 ORDER  BY CATEGORIE
 -- 2024 : 01 + 02 employés       81
 --        03      maîtrise       96
---        04 + 05 cadres moyens 181
+--        04 + 05 cadres moyens 179
 --        06      cadres sup.    51
 -- (l'annuaire : 132, 142, 118, 88)""",
     "6": """SELECT SEXE, COUNT(DISTINCT PERS_ID)
@@ -200,7 +204,7 @@ GROUP  BY SEXE
 SELECT COUNT(DISTINCT PERS_ID)
 FROM   formes_2024
 WHERE  CLA_APRES <> CLA_AVANT
--- 2024 : 2 (l'annuaire : 6 promotions) ;
+-- 2024 : 0 (l'annuaire : 6 promotions) ;
 -- les autres formés sont sans promotion""",
     "8": """SELECT COUNT(DISTINCT PERS_ID) AS total,
        COUNT(*)                AS inscriptions,
@@ -209,8 +213,8 @@ WHERE  CLA_APRES <> CLA_AVANT
        COUNT(DISTINCT CASE WHEN finalite = 'DIPLO'
              THEN PERS_ID END) AS diplomante
 FROM   formes_2024
--- 2024 : 409 formés, 524 inscriptions, dont
--- 521 en perfectionnement, 2 diplômantes""",
+-- 2024 : 407 formés, 522 inscriptions ;
+-- 406 en perfectionnement, 0 diplômante""",
 }
 
 SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tables de l'application "
@@ -223,14 +227,17 @@ SQL_NOTE = ("À droite de chaque règle, une requête courte sur les vraies tabl
 
 QUESTIONS = [
     dict(n="Q1", titre="D'où viennent les 480 formés ?",
-         regle="L'annuaire de la CNSS publie 480 permanents formés en 2024 ; la base en compte "
-               "409 (524 inscriptions), avec une autre répartition par catégorie. D'où viennent "
-               "les chiffres publiés ?",
+         regle="L'annuaire de la CNSS publie 480 permanents formés en 2024. La base en compte "
+               "407 avec la date de début des formations, 409 avec la date de fin (522 "
+               "inscriptions), sans temporaire ni personne externe. D'où viennent les chiffres "
+               "publiés ? Si c'est un autre fichier, pouvez-vous nous le donner, avec ses "
+               "colonnes ?",
          cas=[("Du module formation de l'application",
                "il faut trouver ce qui manque dans la base (formations non saisies ?)."),
               ("D'un autre registre (plan de formation…)",
                "T62 devra le lire, ou l'application devra être complétée.")],
-         sources=[("Données", "lots 17 à 19, Q101, Q108, Q113"),
+         sources=[("Données", "requête lancée le 17/11/2026 ; lot 26, Q149 et Q150 : ni la date "
+                              "ni le type d'agent n'expliquent l'écart"),
                   ("Proposition BI", "les agents distincts de la base, en attendant")]),
     dict(n="Q2", titre="La promotion",
          regle="Une formation « avec promotion » est-elle une formation suivie d'un changement "
@@ -240,33 +247,35 @@ QUESTIONS = [
                   ("Proposition BI", "le classement de l'inscription")]),
     dict(n="Q3", titre="Agents ou inscriptions",
          regle="Un agent formé deux fois dans l'année compte-t-il une ou deux fois ?",
-         cas=[("Une fois (proposition)", "409 permanents formés en 2024."),
-              ("Deux fois", "524 inscriptions.")],
+         cas=[("Une fois (proposition)", "407 permanents formés en 2024."),
+              ("Deux fois", "522 inscriptions.")],
          sources=[("Annuaire", "p. 17 : on compte des « travailleurs »")]),
-    dict(n="Q4", titre="Les contractuels formés",
-         regle="Faut-il compter aussi les contractuels formés, comme pour T58 ?",
-         cas=[("Non (proposition, comme l'annuaire)", "les permanents seulement."),
-              ("Oui", "un agent de plus en 2024.")],
-         sources=[("Données", "lot 18, Q108")]),
+    dict(n="Q4", titre="Les temporaires et la fonction publique",
+         regle="Faut-il compter aussi les temporaires et les agents de la fonction publique "
+               "formés ?",
+         cas=[("Non (proposition, comme l'annuaire)", "les permanents de la CNSS seulement."),
+              ("Oui", "un agent de la fonction publique de plus en 2024 ; aucun temporaire.")],
+         sources=[("Données", "lot 26, Q149")]),
     dict(n="Q5", titre="Une formation à cheval sur deux années",
          regle="Une formation commencée en décembre et finie en janvier compte-t-elle l'année "
                "de son début ?",
          cas=[("L'année du début (Kaya 2017)", "la proposition."),
               ("L'année de la fin", "la règle de la requête DTM actuelle.")],
-         sources=[("Données", "presque aucune formation n'est dans ce cas (lot 9, Q67)")]),
+         sources=[("Données", "de 2019 à 2025, une seule formation est dans ce cas (2023-2024), "
+                              "avec 2 agents ; aucune ne dure plus d'un an (lot 26, Q148)")]),
 ]
 
-BI_CHECKS = ("En 2024, la base compte 410 agents formés (409 permanents) et 525 inscriptions ; "
-             "aucune inscription en double.\n"
+BI_CHECKS = ("La requête de T62 a été lancée le 17/11/2026 : 407 permanents formés en 2024 et "
+             "522 inscriptions ; 409 avec la date de fin des formations.\n"
              "Par catégorie, la base a deux fois plus de cadres moyens formés que l'annuaire, et "
              "moins d'employés et d'agents de maîtrise : les chiffres publiés viennent sans doute "
              "d'un autre registre.\n"
              "Toutes les formations ont le statut N : la requête DTM d'origine, qui ne gardait "
              "que le statut T, ne publiait rien.\n"
-             "La dépense de formation de T64 se calcule déjà (frais des inscriptions) ; la masse "
-             "salariale et le budget manquent.")
+             "La dépense de formation de T64 viendra de la comptabilité (recueil v7), pas des "
+             "frais saisis sur les inscriptions.")
 
-FORMES_2024 = [("Employés", 132, 81), ("Maîtrise", 142, 96), ("Cadres moyens", 118, 181),
+FORMES_2024 = [("Employés", 132, 81), ("Maîtrise", 142, 96), ("Cadres moyens", 118, 179),
                ("Cadres sup.", 88, 51)]
 
 
@@ -277,7 +286,7 @@ def build():
     d.text(0, 0, "T62 · Le personnel permanent formé dans l'année", 48)
     d.text(0, 66, "« Travailleurs en formation ou formés, par catégorie professionnelle, sexe et "
                   "finalité de la formation » · ce que l'équipe BI a compris, à valider · état "
-                  "au 01/11/2026", 22, C["doux"])
+                  "au 17/11/2026", 22, C["doux"])
     y = banner(d, 120, HOW_TO) + 40
 
     # ------------------------------------------------------------------ 1. coup d'œil
@@ -300,10 +309,10 @@ def build():
         cy += 36
     fbottom = figures(
         d, 25, top + about_h + 20, 760, "En 2024 : la base face à l'annuaire de la CNSS",
-        "480 permanents formés dans l'annuaire, dont 6 avec promotion ; la base compte 409 "
-        "agents permanents formés et 524 inscriptions, dont 2 avec un classement changé.",
+        "480 permanents formés dans l'annuaire, dont 6 avec promotion ; la base compte 407 "
+        "agents permanents formés et 522 inscriptions, aucun avec un classement changé en 2024.",
         "Permanents formés en 2024, par catégorie :", FORMES_2024,
-        "annuaire CNSS 2024, tableau 123 ; lot 19, Q113")
+        "annuaire CNSS 2024, tableau 123 ; requête lancée le 17/11/2026")
 
     bottom = mockup(
         d, 830, top, 300, (WIDTH - 25 - 830 - 300) / 7, "Catégorie", "5",
@@ -353,7 +362,7 @@ def build():
     bottom = cards_grid(d, 25, y + 70, inner, 3, QUESTIONS)
     g = d.group()
     checks = d.box(25, bottom + 20, inner, 170, bg=C["gris"], stroke=C["gris_bord"], groups=g)
-    d.text(45, bottom + 36, "Ce que l'équipe BI a vérifié dans les données (01/11/2026) : pas de "
+    d.text(45, bottom + 36, "Ce que l'équipe BI a vérifié dans les données (17/11/2026) : pas de "
                             "réponse attendue", 20, groups=g, inside=checks)
     d.text(45, bottom + 70, BI_CHECKS, 16, groups=g, inside=checks)
     sec["height"] = bottom + 20 + 170 + 30 - sec["y"]

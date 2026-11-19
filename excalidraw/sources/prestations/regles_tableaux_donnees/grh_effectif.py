@@ -57,7 +57,7 @@ _PRESENT = ("Qui est présent à la date d'arrêté", [
      "GRH_DECISION.CDEC_CODE = 50, DATE_VIGUEUR", None),
     ("Le contrat finit au premier départ saisi après son début, sinon la veille du contrat suivant. "
      "Sans fin connue, l'agent reste compté : la BI ne fixe pas de durée de contrat.",
-     "départ après le début, sinon la 50 suivante ;\nsinon aucune fin", None),
+     "départ après le début, sinon la 50 suivante ;\nsinon aucune fin", "20"),
     ("Un agent en disponibilité à la date d'arrêté sort de l'effectif : sa dernière mise en "
      "disponibilité n'est pas suivie d'une remise en activité. Il revient à sa remise en activité, "
      "comme dans l'annuaire CNSS 2024.",
@@ -141,12 +141,12 @@ TABLEAUX = {
             ("Le découpage et le contrôle", [_DECOUPE, _CONTROLE]),
         ],
         "chiffres": (
-            "Avec les règles du 01/11 (lots 17 et 19), au 31/12/2024 : 742 permanents pour 758 dans "
-            "l'annuaire CNSS 2024 (−2 %) ; employés 129 hommes et 44 femmes (133 et 44 publiés), agents "
-            "de maîtrise 92 et 115 (94 et 114), cadres moyens 139 et 165 (143 et 168), cadres "
-            "supérieurs 40 et 18 (42 et 20). Les tranches d'âge sont retrouvées à quelques agents près. "
-            "Avec les règles d'aujourd'hui, environ 741 permanents attendus (requête pas encore "
-            "exécutée) ; plus de 46 contractuels, car les fins de contrat ne sont pas saisies."
+            "Requête lancée le 17/11/2026 sur la base : 741 permanents au 31/12/2024, pour 758 dans l'annuaire "
+            "CNSS 2024. Employés 133 hommes et 44 femmes (133 et 44 publiés), agents de maîtrise 92 et 114 "
+            "(94 et 114), cadres moyens 138 et 163 (143 et 168), cadres supérieurs 39 et 18 (42 et 20). Les "
+            "tranches d'âge sont retrouvées à quelques agents près, sauf 5 fiches sans état de 69 à 80 ans, à "
+            "écarter (point 45). Temporaires : 299, pour 46 contractuels publiés, car les fins de contrat ne "
+            "sont pas saisies ; 47 en ne gardant que les fiches non inactives (point 20)."
         ),
     },
     "T59": {
@@ -204,10 +204,10 @@ TABLEAUX = {
             ("Le découpage et le contrôle", [_DECOUPE, _CONTROLE]),
         ],
         "chiffres": (
-            "Avec l'ancien calcul (embauche d'abord, sans retirer les absences), au 31/12/2024 : chaque "
-            "tranche à 8 agents près de l'annuaire CNSS 2024, la plupart à 2 près (moins d'un an : 101 "
-            "pour 103 ; 10-14 ans : 224 pour 232) ; 400 hommes et 342 femmes pour 412 et 346. Avec les "
-            "règles d'aujourd'hui, à recalculer."
+            "Requête lancée le 17/11/2026 sur la base, avec la nouvelle règle : au 31/12/2024, chaque tranche "
+            "est à 4 agents près de l'annuaire CNSS 2024 (moins d'un an : 102 pour 103 ; 5 à 9 ans : 120 pour "
+            "122 ; 10 à 14 ans : 225 pour 232 ; 20 à 24 ans : 117 pour 120). Seule la tranche « 40 ans et "
+            "plus » s'écarte : 6 pour 1, à cause de 5 fiches sans état anciennes, à écarter (point 45)."
         ),
     },
     "T65": {
@@ -241,9 +241,9 @@ TABLEAUX = {
             ]),
         ],
         "chiffres": (
-            "Avec les règles du 01/11 (lot 19), en 2024 : 48,8 % (362 cadres sur 742 permanents), pour "
-            "49,2 % dans l'annuaire CNSS 2024 (373 sur 758). De 2020 à 2023, environ 42 % dans la base "
-            "pour 41 % publiés ; à 0,3 point près en comptant les 84 engagés de 2019 comme l'annuaire."
+            "Requête lancée le 17/11/2026 sur la base : 48,3 % en 2024 (358 cadres sur 741 permanents), pour "
+            "49,2 % dans l'annuaire CNSS 2024 (373 sur 758). De 2020 à 2023 : 41,9 %, 42,2 %, 42,4 % et "
+            "41,9 %, pour environ 41 % publiés. En 2025 : 50,1 % (442 sur 883)."
         ),
     },
 }

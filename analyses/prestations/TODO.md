@@ -141,7 +141,7 @@ Ordre proposé : 7 (exécuter T25, T26, T27), puis 6 et 8 (famille 2 : bénéfic
 ### 11. Mettre à jour l'artefact et les schémas
 
 - **Artefact** : « Tables des prestations CNSS », https://claude.ai/artifact/UEtDg8Wa5xiEhGu999krDR.
-- **Schémas** : `excalidraw/schemas/prestations/tables_prestations.excalidraw` et `domaine_prestations.excalidraw`. Si le fichier a été retouché dans la visionneuse, modifier le fichier lui-même plutôt que de régénérer avec `--force` (l'état écrasé resterait dans l'historique des versions, mais les retouches seraient à refaire).
+- **Schémas** : `excalidraw/schemas/prestations/3 comprendre/tables_prestations.excalidraw` et `domaine_prestations.excalidraw`. Si le fichier a été retouché dans la visionneuse, modifier le fichier lui-même plutôt que de régénérer avec `--force` (l'état écrasé resterait dans l'historique des versions, mais les retouches seraient à refaire).
 - **Quand** : après les tâches 2 et 4 (volumes, codes), et à chaque réponse sur les statuts.
 - **Déjà prêt pour l'artefact** : les listes complètes du lot 3 (libellés exacts des 28 codes, prestations en nature, effets, modes, étapes, ajustements, pièces, directions, services, lieux de paiement), déjà reportées dans le schéma le 29/10/2026.
 

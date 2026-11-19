@@ -10,7 +10,7 @@ SOMMAIRE = Fiche(
     titre="Maîtriser le projet BI de la CNSS : par où commencer",
     sous_titre="Le dossier « maitrise » rassemble des fiches de révision, domaine par domaine, "
                "pour s'approprier tout le travail fait et pouvoir le défendre · état au "
-               "30/10/2026",
+               "17/11/2026",
     objectif="dans quel ordre lire les fiches, ce que contient chaque dossier, comment chaque "
              "bloc se lit, et comment le dossier grandira quand on attaquera les autres domaines.",
     parties=[
@@ -55,11 +55,14 @@ SOMMAIRE = Fiche(
                 ("À lire", "le domaine sur lequel on travaille depuis le 26/10/2026."),
             ], genre="etape", etat="fait"),
             Bloc("4 gestion administrative (T58 à T65)", [
-                ("Ce qui existe", "le travail sur le personnel fait en octobre : effectif, "
-                                  "mouvements, formation, masse salariale, requêtes DTM "
-                                  "corrigées (analyses/grh)."),
-                ("À faire", "rédiger ses fiches sur le même plan que les prestations."),
-            ], genre="etape", etat="à faire"),
+                ("Les fiches", "01 Le domaine en bref · 02 Le vocabulaire · 03 Les données · "
+                               "04 La démarche · 05 Les découvertes · 06 Les règles qui "
+                               "comptent les agents · 07 Les règles des mouvements et de la "
+                               "formation · 08 Les erreurs des DTM actuels · 09 Les questions "
+                               "ouvertes · 10 Où on en est · 11 Se préparer aux questions"),
+                ("À lire", "le personnel de la CNSS : l'effectif, les mouvements, la formation "
+                           "et les deux ratios de finances. Travail du 21/10 au 17/11/2026."),
+            ], genre="etape", etat="fait"),
             Bloc("1 immatriculation (T1 à T10)", [
                 ("Ce que c'est", "les employeurs et les travailleurs immatriculés, leurs "
                                  "mouvements."),

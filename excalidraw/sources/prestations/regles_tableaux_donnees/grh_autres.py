@@ -115,7 +115,7 @@ TABLEAUX = {
                  "motif (la décision qui a servi).",
                  "GRH_TYPE_MOUVEMENT.CODE_TYPE_MVT,\npuis MOTIF_MVT", "49"),
                 ("La mise en disponibilité est une sortie, la remise en activité une entrée, comme dans "
-                 "l'annuaire CNSS 2024.", "CDEC_CODE = 07 → DISP ;\n18 → REM", None),
+                 "l'annuaire CNSS 2024.", "CDEC_CODE = 07 → DISP ;\n18 → REM", "64"),
                 ("Un agent détaché accueilli à la CNSS est une autre entrée. Aucun n'est saisi chez les "
                  "permanents ; les fins de détachement ne sont pas lues.",
                  "CDEC_CODE = 37 → DETAC", "23"),
@@ -145,10 +145,12 @@ TABLEAUX = {
             ]),
         ],
         "chiffres": (
-            "Ce que la requête devrait donner pour les permanents en 2024 (d'après les lots 17 à 25, avant "
-            "son exécution) : environ 672 au début, 104 recrutements, 4 autres entrées, 25 retraites, 5 décès, "
-            "9 autres sorties, 741 à la fin. Annuaire CNSS 2024 : 767, 104, 7, 23, 3, 94 et 758. L'écart vient "
-            "surtout des 84 agents engagés en 2019, que l'annuaire sort en 2024."
+            "Requête lancée le 17/11/2026 sur la base, permanents : chaque année, début + entrées − sorties = "
+            "fin. 2024 : 670 au début, 101 recrutements, 0 autre entrée, 24 retraites, 5 décès, 1 autre sortie, "
+            "741 à la fin ; annuaire CNSS 2024 : 767, 104, 7, 23, 3, 94, 758. L'écart du début et de la fin, et "
+            "les 84 « autres sorties », viennent des 84 engagés de 2019 (point 2). Les disponibilités de la "
+            "base (0 à 1 par an) sont sous celles de l'annuaire (2 à 7) : 12 agents en disponibilité ont une "
+            "fiche inactive sans départ daté, et la règle ne les voit pas encore (point 64)."
         ),
     },
 
@@ -207,10 +209,10 @@ TABLEAUX = {
             ]),
         ],
         "chiffres": (
-            "Avec ces règles, en 2024 : 409 agents permanents formés (81 employés, 96 agents de maîtrise, "
-            "181 cadres moyens, 51 cadres supérieurs), pour 524 inscriptions, dont 2 avec promotion. "
-            "L'annuaire CNSS 2024 en publie 480 (132, 142, 118, 88), dont 6 avec promotion : il compte sans "
-            "doute des participations, pas des agents."
+            "Requête lancée le 17/11/2026 sur la base, exercice 2024 : 407 permanents formés (employés 81, "
+            "agents de maîtrise 96, cadres moyens 179, cadres supérieurs 51), 522 inscriptions, aucun « avec "
+            "promotion ». Annuaire CNSS 2024 : 480 (132, 142, 118, 88), dont 6 avec promotion. Avec la date de "
+            "fin des formations : 409. Ni la date ni le type d'agent n'expliquent l'écart (point 4)."
         ),
     },
 

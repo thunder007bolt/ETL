@@ -24,7 +24,7 @@ sys.path.insert(0, str(ROOT / "sources" / "prestations"))
 from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
 from fiche_cipres import BADGE_H, WIDTH, badge, badge_width, height_of, wrap  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "grh" / "regles_grh.excalidraw"
+OUTPUT = ROOT / "schemas" / "archives" / "grh" / "regles_grh.excalidraw"
 INNER = WIDTH - 50
 
 # état d'une règle : (étiquette, fond, bord, ce qu'il veut dire)
@@ -222,7 +222,7 @@ NEXT = [
     "disponibilite.",
     "Toi : les exécuter sur le cliché 102026, exercice 2024, et comparer aux contrôles attendus "
     "de leur en-tête.",
-    "Fiches de validation faites (dossier grh/tableaux cipres) : T58 (pilote de T58, T59, T61, "
+    "Fiches de validation faites (dossier grh/1 pour la cnss/fiches de validation) : T58 (pilote de T58, T59, T61, "
     "T65), T60, T62. À faire remplir par la DRH. T63-T64 attendent la paie et la comptabilité.",
     "Après le visa de la DRH : reporter les règles dans les requêtes DTM, sans changer leurs "
     "colonnes ; puis les fiches de maîtrise « 4 gestion administrative ».",

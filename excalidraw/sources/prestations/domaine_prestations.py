@@ -15,7 +15,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "domaine_prestations.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "3 comprendre" / "domaine_prestations.excalidraw"
 
 
 def build():

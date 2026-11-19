@@ -10,7 +10,7 @@ faire.
 
 Le détail est dans analyses/prestations/regles_t28_t31_controles_indus.md : mêmes identifiants,
 mêmes statuts, mêmes verdicts. Le travail existant (README, requête t31, fiche T31, fiche de
-lecture, regles_prestations, points_a_valider, vues cnss) n'est pas modifié.
+lecture, regles_prestations, points_a_valider, commun/vues cnss) n'est pas modifié.
 
 Usage :
     python3 excalidraw/sources/prestations/famille_t28_t31_controles_indus.py [--force]
@@ -26,7 +26,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from excalidraw_builder import main  # noqa: E402
 from gabarit_famille import construire  # noqa: E402
 
-OUTPUT = (ROOT / "schemas" / "prestations" / "T28 T31 controles indus"
+OUTPUT = (ROOT / "schemas" / "prestations" / "2 regles et sources"
           / "regles_t28_t31_controles_indus.excalidraw")
 
 RV7 = "Recueil v7"
@@ -576,16 +576,16 @@ DATA = {
     "questions": [
         ("Q1", "Depuis juillet 2025, où sont enregistrés les contrôles a posteriori ?",
          "DAI, avec la DSI", "T28 à T30 pas produits",
-         "Déjà posée : README ; points_a_valider n° 29 ; vues cnss 02, q. 1 ; C1"),
+         "Déjà posée : README ; points_a_valider n° 29 ; commun/vues cnss 02, q. 1 ; C1"),
         ("Q2", "La table des contrôles de l'application a-t-elle un jour contenu tous vos "
                "contrôles ?", "DAI", "la table ne sert pas, même pour le passé", "Nouvelle"),
         ("Q3", "Pouvez-vous donner vos contrôles des cinq derniers exercices, un par ligne "
                "(dossier, prestation, date, résultat, indu trouvé) ?", "DAI, avec la DSI",
-         "rien : la vue est seulement proposée", "Déjà posée : vues cnss 02 (étendue à 5 ans)"),
+         "rien : la vue est seulement proposée", "Déjà posée : commun/vues cnss 02 (étendue à 5 ans)"),
         ("Q4", "Un contrôle porte-t-il sur tout le dossier, ou sur une seule prestation ?",
-         "DAI", "la ligne de la prestation contrôlée", "Déjà posée : vues cnss 02, q. 2"),
+         "DAI", "la ligne de la prestation contrôlée", "Déjà posée : commun/vues cnss 02, q. 2"),
         ("Q5", "Quels résultats peut avoir un contrôle (conforme, anomalie, en cours…) ?",
-         "DAI", "tout contrôle compte", "Déjà posée : vues cnss 02, q. 3"),
+         "DAI", "tout contrôle compte", "Déjà posée : commun/vues cnss 02, q. 3"),
         ("Q6", "Le taux de contrôle divise-t-il par les dossiers payés, ou par les dossiers "
                "« liquidés ou en portefeuille » de votre grille ?", "DAI, avec la DCP et les DR",
          "les dossiers payés", "Nouvelle"),
@@ -612,7 +612,7 @@ DATA = {
          "Déjà posée : T25-T27 Q22"),
         ("Q14", "T31 prend-il tous les trop-perçus de l'application, ou seulement ceux trouvés "
                 "par les contrôles de la DAI ?", "DAI, avec la DCP",
-         "tous ceux de l'application", "Déjà posée : vues cnss 02, q. 4 ; remarque B13"),
+         "tous ceux de l'application", "Déjà posée : commun/vues cnss 02, q. 4 ; remarque B13"),
         ("Q15", "Le taux d'indus divise-t-il par toutes les prestations payées, ou par le seul "
                 "montant des dossiers contrôlés ?", "DAI", "toutes les payées (recueil)",
          "Nouvelle"),

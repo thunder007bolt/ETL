@@ -34,7 +34,7 @@ from excalidraw_builder import C, main  # noqa: E402
 from fiche_cipres import height_of, wrap  # noqa: E402
 from gabarit_famille import INNER, VERDICTS, WIDTH, X0, Page, chip_verdict  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "annuaire cnss" / "prestations_2024.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "2 regles et sources" / "annuaire_cnss_2024_prestations.excalidraw"
 
 TITRE = "Annuaire CNSS 2024 · Les prestations, face aux tableaux CIPRES T25 à T57"
 SOUS_TITRE = (

@@ -542,7 +542,7 @@ F04 = Fiche(
                      "exécutée."),
             ], genre="suite"),
             Bloc("Les fiches de validation", [
-                ("", "T25, T26 et T27, dans schemas/prestations/tableaux cipres : maquette, "
+                ("", "T25, T26 et T27, dans schemas/prestations/1 pour la cnss/fiches de validation : maquette, "
                      "exemples, dix règles avec leur SQL, quatre ou cinq questions. En attente "
                      "des réponses du métier."),
             ], genre="suite"),
@@ -1068,7 +1068,7 @@ F07 = Fiche(
                   "Requêtes : P66, P67"),
         ]),
         Partie("Les fiches de validation", colonnes=3,
-               intro="Dans schemas/prestations/tableaux cipres. Le métier coche une case par "
+               intro="Dans schemas/prestations/1 pour la cnss/fiches de validation. Le métier coche une case par "
                      "règle et répond aux questions.",
                blocs=[
             Bloc("T25 · les dossiers de pension", [

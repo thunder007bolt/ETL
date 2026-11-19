@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "grh" / "T60 mouvements" / "cas_mouvements_t60.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "3 comprendre" / "T60 mouvements" / "cas_mouvements_t60.excalidraw"
 
 WIDTH = 2600
 GAP = 40

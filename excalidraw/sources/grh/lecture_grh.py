@@ -1,6 +1,6 @@
 """
 Contenu de la fiche de lecture de la gestion administrative (T58 à T65), générée par
-sources/fiche_de_lecture.py dans schemas/grh/fiche_de_lecture.excalidraw.
+sources/fiche_de_lecture.py dans schemas/grh/3 comprendre/fiche_de_lecture.excalidraw.
 
 Même modèle que la fiche des prestations : pour chaque tableau, chaque terme de l'Annuaire CIPRES avec
 ce que j'en ai compris, la question à valider, où je le prends dans la base et la requête pour

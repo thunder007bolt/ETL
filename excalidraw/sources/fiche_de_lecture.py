@@ -29,8 +29,8 @@ from fiche_cipres import ANSWERS, BADGE_H, WIDTH, badge, badge_width, height_of,
 
 DOMAINES = {
     "prestations": ("prestations.lecture_prestations",
-                    ROOT / "schemas" / "prestations" / "fiche_de_lecture.excalidraw"),
-    "grh": ("grh.lecture_grh", ROOT / "schemas" / "grh" / "fiche_de_lecture.excalidraw"),
+                    ROOT / "schemas" / "prestations" / "3 comprendre" / "fiche_de_lecture.excalidraw"),
+    "grh": ("grh.lecture_grh", ROOT / "schemas" / "grh" / "3 comprendre" / "fiche_de_lecture.excalidraw"),
 }
 GAP = 20
 INNER = WIDTH - 50

@@ -10,7 +10,7 @@ P48 à P58 : nouvelles demandes et réversions, stock en instance, refus ; règl
 D8 ; t25_requete_proposee.sql pour les dates du dossier).
 
 Usage :
-    python3 excalidraw/sources/prestations/vie_dossier.py [--force]
+    python3 excalidraw/sources/prestations/3 comprendre/vie_dossier.py [--force]
 """
 
 import sys
@@ -21,7 +21,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 
 from excalidraw_builder import C, LINE_HEIGHT, Diagram, main, text_size  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "vie_dossier" / "vie_dossier.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "3 comprendre" / "vie_dossier" / "vie_dossier.excalidraw"
 
 # Partie 2 : une bande par étape ; colonnes du cadre (décalage, largeur)
 STEP_W = 300

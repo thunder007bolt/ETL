@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT / "sources" / "besoins_cnss"))
 from excalidraw_builder import C, Diagram, main  # noqa: E402
 from remarques_besoins_v7 import cards, rows  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "reunions" / "reunion_grh_2026-11-03.excalidraw"
+OUTPUT = ROOT / "schemas" / "grh" / "2 regles et sources" / "reunion_grh_2026-11-03.excalidraw"
 
 EN_BREF = [
     ("Qui, quoi",

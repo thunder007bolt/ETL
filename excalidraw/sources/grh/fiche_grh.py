@@ -19,12 +19,16 @@ from fiche_cipres import chip, height_of, wrap  # noqa: E402
 
 # la légende des sources, lue par banner() et chip() au moment du dessin
 fiche_cipres.SOURCES = {
+    # le recueil des besoins et les réunions passent avant les autres sources
+    "Réunion": (C["bleu_clair"], C["bleu"], "une réunion avec la CNSS, avec sa date"),
+    "Recueil v7": (C["vert_clair"], C["vert"],
+                   "le recueil des besoins de la CNSS (v7), qui prime sur Kaya et l'Annuaire"),
     **fiche_cipres.SOURCES,
     "Base": (C["gris"], C["gris_bord"], "les libellés de la base GRH (listes de codes)"),
     "Données": (C["gris"], C["gris_bord"], "nos requêtes sur la base GRH (copie du 18/02/2026)"),
 }
 
-OUTPUT_DIR = ROOT / "schemas" / "grh" / "tableaux cipres"
+OUTPUT_DIR = ROOT / "schemas" / "grh" / "1 pour la cnss" / "fiches de validation"
 
 HOW_TO_DEBUT = ("Pour chaque règle (partie 4) et chaque question (partie 5), dessine une croix "
                 "dans une case : D'accord, Pas d'accord ou À discuter, et écris ta remarque sous la "

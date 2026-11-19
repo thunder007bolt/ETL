@@ -1,8 +1,8 @@
 # GRH : règles et questions à valider (version 2)
 
-Mis à jour le 17/11/2026. Base consultée : copie de l'application de gestion du personnel (schéma USER_GRH) du 18/02/2026, comparée à l'annuaire statistique CNSS 2024 (partie IX, tableaux 119 à 126) et au recueil des besoins v7 de la CNSS (partie RH, lignes 1 à 8).
+Mis à jour le 17/11/2026, au soir. Base consultée : copie de l'application de gestion du personnel (schéma USER_GRH) du 18/02/2026, comparée à l'annuaire statistique CNSS 2024 (partie IX, tableaux 119 à 126) et au recueil des besoins v7 de la CNSS (partie RH, lignes 1 à 8).
 
-Cette version remplace celle du 01/11, qui avait été écrite avant la lecture du recueil des besoins v7 et avant la réunion du 03/11 avec la CNSS. Chaque point garde son numéro : les autres documents y renvoient. Les points déjà tranchés sont regroupés à la fin, avec la réponse et sa source ; les points 29 et 31 sont reformulés, car le recueil a donné une partie de la réponse ; les points 45 à 63 sont nouveaux. Chaque point dit de quoi on parle, ce qu'il permet de faire dans le tableau (Objectif), où on le voit dans la base, ce qu'on fait aujourd'hui et à qui poser la question, puis pose une seule question. Aucune question ne bloque : en attendant la réponse, on applique ce que dit la ligne « Aujourd'hui ». S'il n'y a pas le temps de tout voir : les points à trancher en priorité d'abord.
+Cette version remplace celle du 01/11, qui avait été écrite avant la lecture du recueil des besoins v7 et avant la réunion du 03/11 avec la CNSS. Chaque point garde son numéro : les autres documents y renvoient. Les points déjà tranchés sont regroupés à la fin, avec la réponse et sa source ; les points 29 et 31 sont reformulés, car le recueil a donné une partie de la réponse ; les points 45 à 64 sont nouveaux. Le soir du 17/11, les trois requêtes proposées (effectif, T60, T62) et trois lots de comptages ont été lancés sur la base : les chiffres des points en viennent, et les points 12, 60 et 61 sont devenus sans objet. Chaque point dit de quoi on parle, ce qu'il permet de faire dans le tableau (Objectif), où on le voit dans la base, ce qu'on fait aujourd'hui et à qui poser la question, puis pose une seule question. Aucune question ne bloque : en attendant la réponse, on applique ce que dit la ligne « Aujourd'hui ». S'il n'y a pas le temps de tout voir : les points à trancher en priorité d'abord.
 
 ## Pour lire ce document
 
@@ -19,12 +19,22 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
 
 ## À trancher en priorité
 
+20. La fin d'un contrat temporaire
+   C'est quoi : pour savoir si un contractuel est encore là à une date, il faut connaître la fin de son contrat.
+   Objectif : dans T58 (tableau des temporaires), T60 et T65, chaque contractuel doit sortir de l'effectif à la fin de son contrat. Cela permet de compter les temporaires présents à chaque date (recueil v7, RH ligne 1 : par type d'employé). La réponse permet de ne pas garder dans l'effectif des contractuels déjà partis.
+   Dans la base : aucune date de fin de contrat n'est saisie. La seule trace est la décision d'indemnité de fin de contrat (35), prise environ 9 mois après la fin réelle. La fiche de l'agent dit s'il est inactif (GRH_PERSONNE, ETAT_EMPLOYE), sans date.
+   Aujourd'hui : un contrat finit au premier départ saisi, sinon la veille du contrat suivant ; sans l'un ni l'autre, l'agent reste compté (réunion du 03/11 : la BI ne fixe pas de durée de contrat).
+   Chiffre : avec cette règle, 299 temporaires au 31/12/2024, pour 46 contractuels dans l'annuaire. Presque personne ne sort, et le nombre monte chaque année : 237 fin 2020, 338 fin 2025. En ne gardant que les fiches non inactives : 47 fin 2024. Avec un contrat de 18 mois : 60.
+   À qui : DRH
+   Question : en attendant la saisie des fins de contrat, compte-t-on un temporaire sans fin de contrat seulement si sa fiche n'est pas inactive ?
+   Réponse :
+
 2. Les 84 agents engagés en 2019
-   C'est quoi : en août et septembre 2019, 84 personnes ont été engagées comme agents permanents (décision 51).
+   C'est quoi : en août et septembre 2019, 84 personnes ont été engagées comme agents permanents (décision 51). Elles étaient en service depuis 2018.
    Objectif : dans T58, T60 et T65, l'effectif de chaque année doit compter les agents vraiment présents. Il permet de suivre l'effectif sur cinq ans et le taux d'encadrement (Annuaire CIPRES, p. 17). La réponse permet de dater le départ de ces 84 agents et de retomber sur l'annuaire de 2019 à 2024.
-   Dans la base : leurs fiches sont inactives (GRH_PERSONNE, ETAT_EMPLOYE = INACTIF) et n'ont aucune décision de départ. 10 sont marquées radiées dès 2019 (STATUT_EMPLOYE = X).
+   Dans la base : 84 fiches de permanents, prise de service en 2018 (DATE_PRISE_SERVICE), embauche en 2019 (DATE_EMBAUCHE), toutes inactives (ETAT_EMPLOYE = INACTIF), sans aucune décision de départ. 10 sont marquées radiées dès 2019 (STATUT_EMPLOYE = X). Aucune n'a d'autre fiche plus récente.
    Aujourd'hui : faute de date de départ, ils ne sont comptés dans aucune année. Seul ce qui est saisi dans l'application compte (fiche des règles, règle 3) : une liste à côté ne serait pas lue.
-   Chiffre : l'annuaire les compte dans l'effectif de 2019 à 2023, puis les fait sortir en 2024 (84 « autres sorties »).
+   Chiffre : l'annuaire les fait entrer en 2019 (84 « autres entrées »), les compte jusqu'en 2023 et les fait sortir en 2024 (84 « autres sorties »). C'est l'essentiel de l'écart des permanents : 670 dans la base fin 2023, pour 767 publiés.
    À qui : DRH
    Question : que sont devenus ces 84 agents, et pouvez-vous saisir leur départ (décision, date et motif) dans l'application ?
    Réponse :
@@ -34,6 +44,7 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
    Objectif : dans T60, la colonne des décès doit montrer chaque année les agents morts en activité, et T58 doit les retirer de l'effectif à la bonne date. Elle permet de suivre les sorties du personnel sur cinq ans (Annuaire CIPRES, p. 51). La réponse permet de dater les décès au jour près au lieu de 8 mois plus tard.
    Dans la base : la date de décès (GRH_PERSONNE, DATE_DECES) n'est plus remplie depuis 2010 : 59 dates pour 435 agents décédés.
    Aujourd'hui : on prend la décision de liquidation des droits (code 34), qui arrive environ 8 mois après le décès. Kaya 2017 prévoyait de prendre le communiqué nécrologique en attendant l'acte de décès.
+   Chiffre : de 2019 à 2024, tous les décès sont datés par la liquidation. La base donne 3, 4, 4, 3 et 5 décès de 2020 à 2024, l'annuaire 4, 2, 3, 5 et 3 : le même total à deux près, décalé d'un an. Aucun décès n'est encore visible pour 2025.
    À qui : DRH
    Question : peut-on saisir la date du décès dans l'application, ou au moins celle du communiqué nécrologique ?
    Réponse :
@@ -43,18 +54,9 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
    Objectif : dans T62, chaque case doit montrer les agents formés de l'année, par catégorie, par sexe et par finalité. Elle permet de suivre l'effort de formation du personnel (Annuaire CIPRES, p. 17). La réponse permet de savoir pourquoi la base ne retombe pas sur l'annuaire, et de prendre la même source.
    Dans la base : les formations sont dans GRH_FORMATION et les agents inscrits dans GRH_INSCRIPTION. Chaque agent compte une fois.
    Aujourd'hui : seule l'application du personnel est lue (fiche des règles, règle 3).
-   Chiffre : l'annuaire publie 480 agents permanents formés en 2024 (132 employés, 142 agents de maîtrise, 118 cadres moyens, 88 cadres supérieurs). La base en donne 409, pour 524 inscriptions, avec deux fois plus de cadres moyens.
+   Chiffre : l'annuaire publie 480 agents permanents formés en 2024 (132 employés, 142 agents de maîtrise, 118 cadres moyens, 88 cadres supérieurs). La base en donne 407 avec la date de début des formations (81, 96, 179, 51), 409 avec la date de fin, pour 522 inscriptions. Aucun temporaire ni externe n'est formé : ni la date ni le type d'agent n'expliquent l'écart.
    À qui : DRH
    Question : d'où viennent les chiffres de l'annuaire ? Si c'est un autre fichier que l'application, pouvez-vous nous le donner, avec la liste de ses colonnes ?
-   Réponse :
-
-20. La fin d'un contrat temporaire
-   C'est quoi : pour savoir si un contractuel est encore là à une date, il faut connaître la fin de son contrat.
-   Objectif : dans T58 (tableau des temporaires) et T60, chaque contractuel doit sortir de l'effectif à la fin de son contrat. Cela permet de compter les temporaires présents à chaque date (recueil v7, RH ligne 1 : par type d'employé). La réponse permet de ne pas garder dans l'effectif des contractuels déjà partis.
-   Dans la base : aucune date de fin de contrat n'est saisie. La seule trace est la décision d'indemnité de fin de contrat (35), prise environ 9 mois après la fin réelle.
-   Aujourd'hui : un contrat finit au premier départ saisi, sinon la veille du contrat suivant ; sans l'un ni l'autre, l'agent reste compté (réunion du 03/11 : la BI ne fixe pas de durée de contrat).
-   À qui : DRH
-   Question : peut-on saisir la vraie date de fin de chaque contrat temporaire ?
    Réponse :
 
 25. Les départs sans date
@@ -80,19 +82,12 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
    Objectif : dans T60, T63, T64 et T65, les années d'avant doivent montrer des chiffres stables et admis par la CNSS. Elles permettent de suivre l'évolution sur cinq ans (Annuaire CIPRES, p. 17). La réponse permet de choisir entre reprendre les chiffres publiés et les recalculer.
    Dans la base : une seule copie, du 18/02/2026. Recalculées sur elle, les années passées s'écartent de l'annuaire, par exemple de 84 agents de 2019 à 2023 (point 2).
    Aujourd'hui : on recalcule toutes les années sur la copie du moment. Pour les prestations, les années d'avant reprennent les chiffres de leur photo officielle (règle 77).
+   Chiffre : permanents recalculés aujourd'hui : 769, 734, 703, 670 et 741 de 2020 à 2024 ; annuaire : 869, 834, 806, 767 et 758.
    À qui : DRH, avec la DPC
    Question : pour 2021 à 2024, faut-il reprendre les chiffres publiés dans l'annuaire, ou les recalculer sur la base d'aujourd'hui ?
    Réponse :
 
 ## Ce qu'on applique, à confirmer
-
-12. Le décès d'un retraité
-   C'est quoi : un agent peut mourir après son départ à la retraite.
-   Objectif : dans T60, la colonne des décès doit montrer les agents qui quittent l'effectif par décès. Elle permet de distinguer les départs à la retraite des décès en activité (Annuaire CIPRES, p. 51). La réponse permet de ne compter chaque départ qu'une fois.
-   Aujourd'hui : un agent mort après son départ à la retraite n'est pas compté dans les décès de T60 : il avait déjà quitté l'effectif.
-   À qui : DRH
-   Question : d'accord ?
-   Réponse :
 
 13. Les agents formés (T62)
    C'est quoi : un agent formé est un agent inscrit à une formation de l'année.
@@ -114,11 +109,11 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
 
 45. La fiche sans état
    C'est quoi : quand un agent vient d'être embauché, sa fiche n'a pas encore d'état : elle n'est ni active ni inactive.
-   Objectif : dans T58 et T60, un agent embauché avant la date d'arrêté doit être compté, même si sa fiche n'est pas encore passée à « actif ». Cela permet de ne pas perdre les recrutements de fin d'année (recueil v7, RH ligne 1). La réponse permet de fixer la règle pour ces fiches.
-   Dans la base : GRH_PERSONNE, ETAT_EMPLOYE vide : 67 fiches, embauchées jusqu'au 28/01/2026.
-   Aujourd'hui : une fiche sans état compte comme encore là (depuis le 05/11).
+   Objectif : dans T58 et T60, un agent embauché avant la date d'arrêté doit être compté, même si sa fiche n'est pas encore passée à « actif ». Cela permet de ne pas perdre les recrutements de fin d'année (recueil v7, RH ligne 1). La réponse permet de ne pas compter de vieilles fiches jamais fermées.
+   Dans la base : GRH_PERSONNE, ETAT_EMPLOYE vide : 67 fiches. La plupart sont des embauches récentes, jusqu'au 28/01/2026. Mais au moins 11 sont anciennes : 5 permanents de 69 à 80 ans sans retraite saisie, 3 temporaires sans engagement, 3 fiches sans aucune situation.
+   Aujourd'hui : une fiche sans état compte comme encore là (depuis le 05/11). Les fiches anciennes ajoutent 5 permanents de 60 ans et plus fin 2024, alors que l'annuaire n'en a aucun.
    À qui : DRH
-   Question : une fiche sans état est-elle bien celle d'un agent présent ?
+   Question : une fiche sans état entrée depuis plus de deux ans est-elle celle d'un agent parti, à ne plus compter ?
    Réponse :
 
 46. Les agents inactifs
@@ -135,6 +130,7 @@ Cette version remplace celle du 01/11, qui avait été écrite avant la lecture 
    Objectif : dans T58, T62 et T65, chaque agent doit tomber dans un groupe de catégories. Cela permet de calculer le taux d'encadrement (recueil v7, RH ligne 1). La réponse permet de ranger ces agents sans les perdre.
    Dans la base : GRH_SITUATION, CATEGORIE = HC.
    Aujourd'hui : HC est rangé en cadres supérieurs. Avec ce rangement, le tableau 126 de l'annuaire CNSS 2024 retombe sur le tableau 119.
+   Chiffre : 2 agents seulement ont la catégorie HC : deux permanents, à la fiche aujourd'hui inactive.
    À qui : DRH
    Question : un agent hors catégorie est-il un cadre supérieur ?
    Réponse :
@@ -167,15 +163,6 @@ T58 et T61, l'effectif
    Objectif : dans T58, T60 et T65, l'effectif de la BI doit pouvoir se comparer aux chiffres officiels. Cela permet de vérifier les règles sur plus d'années (Proposition BI). La réponse permet de contrôler le début de T60 en 2020 et la fin en 2025.
    À qui : DRH
    Question : pouvez-vous nous donner l'effectif officiel au 31/12/2019 et au 31/12/2025, pour comparer ?
-   Réponse :
-
-61. Les temporaires sans engagement
-   C'est quoi : un temporaire est compté pendant ses contrats, qui commencent à la décision d'engagement (50).
-   Objectif : dans T58 (tableau des temporaires), chaque contractuel présent doit être compté. Cela permet de suivre les temporaires comme les permanents (recueil v7, RH ligne 1). La réponse permet de savoir si ces agents doivent être comptés.
-   Dans la base : 234 temporaires n'ont aucune décision 50 (GRH_DECISION) ; presque tous sont anciens.
-   Aujourd'hui : sans date de début de contrat, ils ne sont jamais comptés.
-   À qui : DRH
-   Question : ces temporaires sont-ils encore sous contrat ? Si oui, pouvez-vous saisir leur décision d'engagement ?
    Réponse :
 
 62. Les agents d'une unité fermée
@@ -211,7 +198,7 @@ T60, les mouvements
    C'est quoi : la colonne des retraites compte les agents admis à la retraite dans l'année.
    Objectif : dans T60, chaque retraite doit tomber dans l'année du départ. Elle permet de suivre les départs à la retraite sur cinq ans (Annuaire CIPRES, p. 51). La réponse permet de prendre la bonne date quand une retraite a été modifiée.
    Dans la base : une retraite est une décision 02, à sa date d'effet (DATE_VIGUEUR).
-   Chiffre : 39, 31, 29, 30 et 25 départs à la retraite de 2020 à 2024 dans la base ; 43, 31, 26, 32 et 23 dans l'annuaire.
+   Chiffre : 39, 31, 29, 30 et 24 départs à la retraite de 2020 à 2024 dans la base ; 43, 31, 26, 32 et 23 dans l'annuaire.
    À qui : DRH
    Question : la date d'effet de la décision 02 est-elle le jour du départ, et quelle date garder quand la retraite a été modifiée après coup (218 décisions de modification) ?
    Réponse :
@@ -229,6 +216,7 @@ T60, les mouvements
    C'est quoi : un agent peut être recruté puis partir avant le 31 décembre.
    Objectif : dans T60, les entrées et les sorties doivent compter tous les mouvements de l'année. Elles permettent de suivre les recrutements et les départs (Annuaire CIPRES, p. 51). La réponse permet de savoir si ces passages courts doivent apparaître.
    Aujourd'hui : on trouve les entrées et les sorties en comparant l'effectif d'un 31/12 au suivant : un agent entré et parti dans la même année n'apparaît pas.
+   Chiffre : 2 permanents sont entrés et partis en 2024 ; aucun autre depuis 2019. T60 donne 101 recrutements en 2024, l'annuaire 104.
    À qui : DRH
    Question : faut-il le compter quand même, une fois en entrée et une fois en sortie ?
    Réponse :
@@ -238,6 +226,7 @@ T60, les mouvements
    Objectif : dans T60, les autres entrées et sorties doivent se détailler par motif. Cela permet de savoir pourquoi le personnel bouge (recueil v7, RH ligne 3). La réponse permet de valider la liste des motifs.
    Dans la base : la table des types de mouvement de l'application (GRH_TYPE_MOUVEMENT) : autres entrées REM, DETAC, AUTRE_ENT ; autres sorties LIC, DEM, DISP, MISE_DIS, FIN_DETACH, FIN_CTRAT, AUTRE_SORT. C'est la liste du tableau 121 de l'annuaire CNSS 2024.
    Aujourd'hui : on reprend cette liste telle quelle.
+   Chiffre : la table a bien ses 18 codes (vérifié le 17/11). De 2020 à 2025, T60 ne remplit que REM, DISP, DEM, LIC et FIN_CTRAT : aucun détachement, aucune mise à disposition.
    À qui : DRH
    Question : cette liste des autres entrées et sorties vous convient-elle ?
    Réponse :
@@ -247,6 +236,7 @@ T60, les mouvements
    Objectif : dans T58 et T60, chaque recrutement doit tomber dans l'année où l'agent entre. Cela permet de suivre les recrutements (Annuaire CIPRES, p. 51). La réponse permet d'utiliser la même date partout, ancienneté comprise.
    Dans la base : GRH_PERSONNE, DATE_EMBAUCHE et DATE_PRISE_SERVICE.
    Aujourd'hui : l'entrée est la date d'embauche, sinon la prise de service. L'ancienneté (T61) part de la prise de service, sinon de l'embauche (réunion du 03/11).
+   Chiffre : de 2020 à 2025, 5 agents seulement ont pris leur service une autre année que leur embauche. En 2019, 88 sur 122, dont les 84 du point 2.
    À qui : DRH
    Question : la date d'entrée d'un agent est-elle sa prise de service, comme pour l'ancienneté ?
    Réponse :
@@ -256,6 +246,7 @@ T60, les mouvements
    Objectif : dans T58 et T60, la mise à disposition doit être traitée comme la CNSS la voit : une sortie ou non. Cela permet de compter l'effectif comme l'annuaire (recueil v7, RH ligne 3). La réponse permet de remplir, ou non, la sortie MISE_DIS.
    Dans la base : décision 14, sans décision de retour.
    Aujourd'hui : ce n'est pas une sortie ; le tableau 121 de l'annuaire CNSS 2024 n'a pas de colonne pour elle.
+   Chiffre : 33 agents ont été mis à disposition. Ensuite, 17 ont une remise en activité (décision 18), 7 sont partis, et 5 seraient encore mis à disposition.
    À qui : DRH
    Question : une mise à disposition fait-elle sortir l'agent de l'effectif ?
    Réponse :
@@ -268,40 +259,42 @@ T60, les mouvements
    Question : pour une direction ou une agence, faut-il montrer les arrivées et les départs par mutation ?
    Réponse :
 
+64. L'agent en disponibilité : une fiche inactive
+   C'est quoi : la fiche d'un agent a un état, actif ou inactif. On lisait « inactif » comme « parti ».
+   Objectif : dans T58 et T60, un agent en disponibilité doit être compté jusqu'à sa mise en disponibilité, puis apparaître dans les autres sorties. Cela permet de détailler les « autres », comme le demande le recueil (RH ligne 3). La réponse permet de savoir ce que veut dire une fiche inactive.
+   Dans la base : 12 agents mis en disponibilité de 2021 à 2025 (décision 07) ne sont pas revenus : leur fiche est inactive (GRH_PERSONNE, ETAT_EMPLOYE = INACTIF), sans aucun départ daté.
+   Aujourd'hui : une fiche inactive sans départ daté n'est comptée à aucune date (point 25). Ces 12 agents disparaissent donc de toutes les années, même celles où ils travaillaient, et T60 ne voit pas leur sortie. On corrigera : la mise en disponibilité servira de date de sortie.
+   Chiffre : T60 montre 1, 1, 0, 1 et 0 disponibilité de 2020 à 2024, pour 5, 3, 2, 4 et 7 dans l'annuaire ; la base a pourtant 3, 4, 2, 5 et 6 décisions. Il manque aussi 12 permanents fin 2020, et encore 3 fin 2024.
+   À qui : DRH
+   Question : la fiche d'un agent passe-t-elle bien à « inactif » pendant sa disponibilité, et pour quelles autres absences ?
+   Réponse :
+
 T62, les formés
 
 26. La formation « avec promotion »
    C'est quoi : T62 sépare les formations « avec promotion », après lesquelles l'agent change de classement, et « sans promotion ».
    Objectif : dans T62, la finalité de chaque formation doit être juste. Elle permet de suivre les formations qui font progresser les agents (Annuaire CIPRES, p. 51). La réponse permet de savoir où lire le reclassement.
    Dans la base : l'inscription garde le classement avant et après la formation (GRH_INSCRIPTION, CLA_AVANT et CLA_APRES), rempli seulement pour les formations diplômantes.
-   Chiffre : 2 changements de classement en 2024, pour 6 promotions dans l'annuaire.
+   Chiffre : avec la date de début, aucun formé « avec promotion » en 2024, pour 6 dans l'annuaire. Les 2 changements de classement connus sont sur une formation commencée en 2023 et finie en 2024.
    À qui : DRH
    Question : où est noté le reclassement après une formation ? Sinon, compte-t-on « avec promotion » toute formation diplômante ?
    Réponse :
 
-27. Les contractuels formés
-   C'est quoi : un contractuel peut aussi suivre une formation.
+27. Les temporaires et les agents de la fonction publique formés
+   C'est quoi : un contractuel, ou un agent de la fonction publique en poste à la CNSS, peut aussi suivre une formation.
    Objectif : dans T62, le périmètre des formés doit être le même que celui de l'annuaire. Cela permet de comparer l'effort de formation d'une année à l'autre (Annuaire CIPRES, p. 17). La réponse permet de les compter, ou non.
-   Aujourd'hui : seuls les permanents sont comptés. Il y a un contractuel formé en 2024.
+   Aujourd'hui : seuls les permanents de la CNSS sont comptés. En 2024, aucun temporaire n'a été formé, et un seul agent de la fonction publique.
    À qui : DRH
-   Question : T62 compte-t-il aussi les contractuels formés ?
+   Question : T62 compte-t-il aussi les temporaires et les agents de la fonction publique formés ?
    Réponse :
 
 28. Une formation sur deux années
    C'est quoi : une formation peut commencer en décembre et finir en janvier.
    Objectif : dans T62, chaque formation doit compter dans une seule année. Cela permet de ne pas compter deux fois un agent (Kaya 2017). La réponse permet de confirmer l'année retenue.
    Aujourd'hui : une formation compte pour l'année où elle commence (Kaya 2017).
+   Chiffre : de 2019 à 2025, une seule formation est à cheval sur deux années (commencée en 2023, finie en 2024), avec 2 agents.
    À qui : DRH
    Question : une formation commencée en décembre et finie en janvier compte bien pour l'année de son début ?
-   Réponse :
-
-60. La formation longue
-   C'est quoi : une formation diplômante peut durer plus d'un an. La maquette de T62 compte les travailleurs « en formation ou formés ». Ce point est resté ouvert à la réunion du 03/11.
-   Objectif : dans T62, un agent en formation longue doit être compté comme la CNSS le veut. Cela permet de suivre les agents en formation chaque année (Annuaire CIPRES, p. 51). La réponse permet de le compter une seule fois, ou chaque année.
-   Dans la base : GRH_FORMATION, date de début et date de fin.
-   Aujourd'hui : il compte seulement l'année où sa formation commence.
-   À qui : DRH
-   Question : un agent en formation sur deux ans compte-t-il aussi la deuxième année ?
    Réponse :
 
 53. La formation des personnes externes
@@ -366,7 +359,7 @@ T65, l'encadrement
    C'est quoi : le taux d'encadrement est la part des cadres dans l'effectif.
    Objectif : dans T65, le taux doit porter sur le personnel que la CIPRES vise. Il permet de comparer la CNSS à la norme de 10 % au plus (recueil v7, RH ligne 8). La réponse permet de savoir s'il faut un taux pour les seuls permanents, ou aussi pour les temporaires.
    Dans la base : la nature de la dernière situation (GRH_SITUATION, NATURE_EMPLOIE).
-   Aujourd'hui : le taux CIPRES se calcule sur les permanents (362 cadres sur 742 en 2024) ; celui des temporaires se lit à part, avec le même filtre que T58.
+   Aujourd'hui : le taux CIPRES se calcule sur les permanents : 48,3 % en 2024 (358 cadres sur 741), pour 49,2 % publiés. Celui des temporaires se lit à part : 19,7 % (59 sur 299), à revoir avec le point 20.
    À qui : DRH
    Question : le taux d'encadrement CIPRES porte-t-il sur les seuls permanents ?
    Réponse :
@@ -488,6 +481,11 @@ T65, l'encadrement
    Réponse donnée : T60 se lit entre deux photos de l'effectif (début + entrées − sorties = fin), avec les codes de mouvement de la CNSS. Les changements de poste restent hors du tableau.
    Source : réunion du 03/11 (la table des mouvements ne garde que les changements de poste) ; règles de T60 du 08/11. Le détail des « autres » est au point 49.
 
+12. Le décès d'un retraité
+   C'est quoi : un agent peut mourir après son départ à la retraite.
+   Réponse donnée : sans objet aujourd'hui. Aucun décès après la retraite n'est enregistré depuis 2019. Si un cas arrive, il ne compte pas dans les décès de T60 : l'agent avait déjà quitté l'effectif.
+   Source : la base (lot 26, Q147, le 17/11).
+
 16. La durée d'un contrat temporaire
    C'est quoi : la date de fin d'un contrat n'est pas saisie.
    Réponse donnée : la BI ne fixe pas de durée à la place de la CNSS (voir les points 10 et 20).
@@ -528,20 +526,30 @@ T65, l'encadrement
    Réponse donnée : sans objet pour les tableaux CIPRES. La masse salariale vient de la comptabilité (comptes 651 et 652), pas de la paie.
    Source : recueil v7, RH ligne 6.
 
+60. La formation longue
+   C'est quoi : une formation diplômante peut durer plus d'un an.
+   Réponse donnée : sans objet aujourd'hui. Depuis 2019, aucune formation ne dure plus d'un an ; une seule est à cheval sur deux années (point 28).
+   Source : la base (lot 26, Q148, le 17/11).
+
+61. Les temporaires sans engagement
+   C'est quoi : un temporaire est compté pendant ses contrats, qui commencent à la décision d'engagement (50).
+   Réponse donnée : sans effet. Sur 230 temporaires sans décision 50, 227 ont une fiche inactive et sont entrés avant 2015. Les 3 autres sont des fiches sans état (point 45).
+   Source : la base (lot 26, Q151, le 17/11).
+
 ## Tous les tableaux, un par un
 
-- T58, effectif par catégorie, âge et sexe, permanents puis contractuels : points 2, 3, 14, 15, 17, 20, 25, 45, 46, 47, 50, 56, 61, 62 ; déjà répondus : 1, 5 à 8, 10, 16.
+- T58, effectif par catégorie, âge et sexe, permanents puis contractuels : points 2, 3, 14, 15, 17, 20, 25, 45, 46, 47, 50, 56, 62 ; déjà répondus : 1, 5 à 8, 10, 16, 61.
 - T59, effectif par sexe et domaine d'activité : points 14, 48, 56, 58, 62 ; déjà répondus : 6, 7, 18.
-- T60, mouvement du personnel sur cinq ans : points 2, 3, 12, 20 à 25, 49 à 52, 56, 57 ; déjà répondus : 5, 11, 19.
+- T60, mouvement du personnel sur cinq ans : points 2, 3, 20 à 25, 49 à 52, 56, 57, 64 ; déjà répondus : 5, 11, 12, 19.
 - T61, effectif par ancienneté et sexe : points 14, 50, 56, 62 ; déjà répondus : 6 à 8.
-- T62, personnel formé par catégorie, sexe et finalité : points 4, 13, 26 à 28, 47, 53, 56, 60.
+- T62, personnel formé par catégorie, sexe et finalité : points 4, 13, 26 à 28, 47, 53, 56 ; déjà répondu : 60.
 - T63, ratio des frais de personnel sur les charges de fonctionnement : points 29, 54, 55, 57 ; déjà répondu : 30.
 - T64, ratios des dépenses de formation sur la masse salariale et sur le budget : points 31, 32, 54, 55, 57, 63 ; déjà répondus : 33, 40.
 - T65, taux d'encadrement sur cinq ans : points 2, 14, 47, 56, 57, 59 ; déjà répondus : 1, 9, 34, 35.
 
 ## Les points de chaque direction
 
-- DRH, la Direction des ressources humaines : points 2 à 4, 12 à 15, 17, 20 à 28, 45 à 53, 56 à 62 (57 avec la DPC).
+- DRH, la Direction des ressources humaines : points 2 à 4, 13 à 15, 17, 20 à 28, 45 à 53, 56 à 59, 62, 64 (57 avec la DPC).
 - DFC, la Direction financière et comptable : points 29, 31, 32, 54, 63, et 55 avec la DSI.
 - DSI, la Direction des systèmes d'information : points 36 à 39, 41 à 44, 55, et 56 avec la DRH.
 - DPC, la Direction de la prospective et de la coopération, qui fait l'annuaire : point 57.

@@ -24,7 +24,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from excalidraw_builder import C, Diagram, main, text_size  # noqa: E402
 from fiche_cipres import BADGE_H, WIDTH, badge, badge_width, height_of, wrap  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "regles_prestations.excalidraw"
+OUTPUT = ROOT / "schemas" / "archives" / "prestations" / "regles_prestations.excalidraw"
 INNER = WIDTH - 50
 
 # état d'une règle : (étiquette, fond, bord, ce qu'il veut dire)

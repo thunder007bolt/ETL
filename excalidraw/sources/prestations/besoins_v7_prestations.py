@@ -32,7 +32,7 @@ from excalidraw_builder import C, main  # noqa: E402
 from fiche_cipres import WIDTH, height_of, wrap  # noqa: E402
 from gabarit_famille import INNER, STATUTS, X0, Page  # noqa: E402
 
-OUTPUT = ROOT / "schemas" / "prestations" / "besoins_v7_prestations.excalidraw"
+OUTPUT = ROOT / "schemas" / "prestations" / "2 regles et sources" / "besoins_v7_prestations.excalidraw"
 
 PC = "pris en compte"
 AI = "à intégrer"
@@ -1244,13 +1244,13 @@ QUESTIONS = [
              "ligne : le dossier, la prestation contrôlée, la date, le résultat et le montant "
              "de l'indu trouvé ?", "DAI, avec la DSI",
              "rien : la vue `V_BI_CONTROLE_POSTERIORI` est seulement proposée",
-             "T28-T31 Q3 · planche 02 « vues cnss » (07/11/2026)"),
+             "T28-T31 Q3 · planche 02 « commun/vues cnss » (07/11/2026)"),
             ("DAI 4", "Un contrôle porte-t-il sur tout le dossier, ou sur une seule prestation "
              "du dossier ?", "DAI", "la ligne du tableau est celle de la prestation contrôlée",
-             "T28-T31 Q4 · planche 02 « vues cnss »"),
+             "T28-T31 Q4 · planche 02 « commun/vues cnss »"),
             ("DAI 5", "Quels résultats peut avoir un contrôle (conforme, anomalie, en cours…) ?",
              "DAI", "tout contrôle enregistré compte, quel que soit son résultat",
-             "T28-T31 Q5 · planche 02 « vues cnss »"),
+             "T28-T31 Q5 · planche 02 « commun/vues cnss »"),
             ("DAI 6", "Pour le taux de contrôle, divise-t-on par les dossiers payés dans la "
              "période, ou par les dossiers « liquidés ou en portefeuille » de votre grille ?",
              "DAI, avec la DCP et les DR",
@@ -1276,7 +1276,7 @@ QUESTIONS = [
              "dans l'application, ou seulement ceux trouvés par vos contrôles ?",
              "DAI, avec la DCP",
              "tous les trop-perçus de l'application (`source_indus` = 'BASE')",
-             "T28-T31 Q14 · planche 02 « vues cnss », question 4 ; remarque B13 du recueil"),
+             "T28-T31 Q14 · planche 02 « commun/vues cnss », question 4 ; remarque B13 du recueil"),
             ("DAI 12", "Le taux d'indus se calcule-t-il sur toutes les prestations payées de la "
              "période, ou sur le seul montant des dossiers contrôlés ?", "DAI",
              "sur toutes les prestations payées (`taux_denominateur` = 'PAYEES'), formule du "

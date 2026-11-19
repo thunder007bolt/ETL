@@ -10,8 +10,8 @@
 --   contrôles d'aujourd'hui est mesurée aux points 29 et 69.
 -- Base : la base source, comme les lots. SQL Developer, mode script (F5).
 --   Ne lit que le catalogue de la base (ALL_OBJECTS), aucune donnée.
--- Source de la vue proposée : schéma « vues cnss », planche
---   excalidraw/schemas/vues cnss/02 controles a posteriori.excalidraw
+-- Source de la vue proposée : schéma « commun/vues cnss », planche
+--   excalidraw/schemas/commun/vues cnss/02 controles a posteriori.excalidraw
 --   (07/11/2026), fait par excalidraw/sources/vues_cnss/vues_cnss.py.
 -- Règle appliquée dans : aucune requête proposée. Fiche des règles : la ligne
 --   « À faire (DAI et DSI) » : la DAI enregistre chaque contrôle, la DSI les
