@@ -16,7 +16,8 @@ Les documents et les explications du projet sont faits sous forme de schémas Ex
 | `sources/<domaine>/*.py` | Scripts qui ont produit le premier jet de chaque schéma |
 | `historique/<dossier>/<schéma>/` | Les versions gardées de chaque schéma (pas suivi par git) |
 | `historique/deplacements.json` | L'ancien et le nouveau chemin des schémas déplacés dans la visionneuse |
-| `espaces.json` | Les espaces de travail de la visionneuse : pour chacun, son nom et la liste de ses dossiers et schémas |
+| `espaces.json` | Registre des espaces physiques (`id`, `nom`) ; chaque espace a sa racine `schemas/espaces/<id>/` |
+| `vues.json` | Les vues thématiques de la Bibliothèque : pour chacune, son nom et la liste de dossiers / schémas |
 
 ## Ouvrir la visionneuse
 
@@ -45,7 +46,8 @@ cd excalidraw/viewer/build && npm install && npm run build
 ## Utiliser la visionneuse
 
 - **Ouvrir** : cliquer sur un schéma dans l'arborescence de gauche. Le bouton « Liste » la masque pour avoir tout l'écran.
-- **Espaces de travail** : le bouton en tête de la liste (« Tous les schémas ») ouvre le menu des espaces. Un espace est une vue par thème, par exemple « Réunion CNSS » : il n'affiche que les dossiers et les schémas qu'on y a mis. Rien n'est déplacé sur le disque, et un même dossier peut être dans plusieurs espaces. Pour en remplir un : au survol d'un dossier ou d'un schéma, le signet l'ajoute à un espace ; dans l'espace, la croix l'en retire, après une confirmation. Le menu crée, renomme et supprime un espace (supprimer un espace ne supprime aucun schéma). La visionneuse retient l'espace affiché. Un dossier déplacé ou renommé dans la visionneuse reste dans ses espaces ; un déplacement fait hors de la visionneuse (Finder, script) demande de corriger `espaces.json`.
+- **Espaces** : au démarrage, un hub permet d'entrer dans un **espace** (arborescence isolée sous `schemas/espaces/<id>/`) ou dans la **Bibliothèque** (tous les schémas). Le bouton « Espaces » / « Changer » y ramène. Créer un schéma dans un espace le range dans cet espace sur le disque. Au survol d'un dossier ou d'un schéma, l'icône flèche le **déplace vers un autre espace** (racine de l'espace choisi). Supprimer un espace non vide demande confirmation (les fichiers partent avec).
+- **Vues** : uniquement en Bibliothèque, le sélecteur en tête de liste filtre par thème (ex. « Réunion CNSS »). Une vue est une liste de chemins : rien n'est déplacé sur le disque ; le signet ajoute, la croix retire. Les vues sont dans `vues.json`. Un dossier déplacé dans la visionneuse reste dans ses vues ; un déplacement hors visionneuse demande de corriger `vues.json`.
 - **Largeur de la liste** : glisser le bord droit de la liste pour l'élargir ou la rétrécir (de 200 à 720 pixels) ; un double-clic sur ce bord lui rend sa largeur d'origine. La visionneuse retient la largeur.
 - **Dossiers** : un clic sur un dossier le replie ou le déplie ; replié, il affiche son nombre de schémas. La visionneuse retient les dossiers repliés.
 - **Modifier** : comme sur excalidraw.com. La barre du haut indique « Modifications non enregistrées » dès qu'on change quelque chose.
@@ -58,6 +60,7 @@ cd excalidraw/viewer/build && npm install && npm run build
 - **Suivi du disque** : quand Claude régénère le schéma ouvert, la visionneuse le recharge seule. Si des modifications ne sont pas enregistrées, elle affiche « Modifié sur le disque » et ne recharge qu'à la demande. À l'enregistrement, elle prévient si le fichier a changé entre-temps.
 - **Versions** : le bouton « Versions » ouvre l'historique du schéma (voir ci-dessous).
 - **Marqueur de lecture** : clic droit sur le schéma — les options marqueur apparaissent au-dessus du menu natif Excalidraw (Coller, Copier, etc.). « Poser / Déplacer le marqueur ici », puis « Aller… » / « Retirer… ». Un marqueur par schéma, retenu dans ce navigateur (pas dans le fichier).
+- **Cadrage** : le zoom et la position (scroll) de chaque schéma sont retenus dans ce navigateur : un rechargement de la page rouvre le schéma au même endroit.
 
 Les fichiers s'ouvrent aussi sans la visionneuse : en les glissant sur excalidraw.com, ou dans VS Code avec l'extension Excalidraw. Une modification faite par ce chemin est gardée dans l'historique à la prochaine écriture par la visionneuse ou par un script.
 
@@ -153,9 +156,9 @@ Quatre règles :
 3. Pas de dossier pour un seul schéma : il remonte d'un niveau.
 4. Une version remplacée part dans `archives/`, au même chemin qu'à l'origine.
 
-Un déplacement se fait dans la visionneuse (glisser), ou par un script qui suit le même chemin, comme `sources/rangement/ranger.py` (le rangement du 17/11) : l'historique, `deplacements.json` et les espaces de travail suivent. Jamais par le Finder ni `git mv`. Après un déplacement, corriger la sortie (`OUTPUT`) du script du schéma.
+Un déplacement se fait dans la visionneuse (glisser), ou par un script qui suit le même chemin, comme `sources/rangement/ranger.py` (le rangement du 17/11) : l'historique, `deplacements.json` et les vues suivent. Jamais par le Finder ni `git mv`. Après un déplacement, corriger la sortie (`OUTPUT`) du script du schéma.
 
-Les thèmes qui traversent les dossiers (« Réunion CNSS »…) se font avec les espaces de travail, pas avec des dossiers.
+Les thèmes qui traversent les dossiers (« Réunion CNSS »…) se font avec les **vues** de la Bibliothèque, pas avec des dossiers. Un **espace** sert quand le travail a sa propre arborescence isolée.
 
 
 | Schéma | Domaine | État au |

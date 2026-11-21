@@ -39,9 +39,31 @@ body { background: var(--fond); color: var(--texte); }
 }
 .barre-tete .boutons { display: flex; gap: 6px; }
 
-/* espaces de travail : le sélecteur en tête de la liste, et son menu */
-.espaces { position: relative; }
-.espace-bouton {
+/* contexte courant : bouton pour revenir au hub Espaces */
+.contexte-bouton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 7px 10px;
+  border: 1px solid var(--bord);
+  border-radius: 8px;
+  background: var(--accent-clair);
+  color: var(--texte);
+  font: inherit;
+  font-weight: 600;
+  text-align: left;
+  cursor: pointer;
+}
+.contexte-bouton:hover { border-color: var(--accent); }
+.contexte-bouton .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.contexte-bouton .icone { color: var(--accent); }
+.contexte-lien { flex: none; color: var(--accent); font-size: 12px; font-weight: 500; }
+
+/* vues thématiques : sélecteur en Bibliothèque seulement */
+.vues { position: relative; }
+.vue-bouton {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -57,10 +79,10 @@ body { background: var(--fond); color: var(--texte); }
   text-align: left;
   cursor: pointer;
 }
-.espace-bouton:hover, .espace-bouton.ouvert { border-color: var(--accent); }
-.espace-bouton .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.espace-bouton .icone:first-child { color: var(--accent); }
-.espace-menu {
+.vue-bouton:hover, .vue-bouton.ouvert { border-color: var(--accent); }
+.vue-bouton .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vue-bouton .icone:first-child { color: var(--accent); }
+.vue-menu {
   position: absolute;
   z-index: 50;
   top: calc(100% + 4px);
@@ -75,7 +97,7 @@ body { background: var(--fond); color: var(--texte); }
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
   font-size: 14px;
 }
-.espace-menu button {
+.vue-menu button {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -90,15 +112,59 @@ body { background: var(--fond); color: var(--texte); }
   text-align: left;
   cursor: pointer;
 }
-.espace-menu button:hover { background: var(--fond); }
-.espace-menu button.actif { background: var(--accent-clair); font-weight: 600; }
-.espace-menu .marque { display: inline-flex; justify-content: center; width: 16px; flex: none; color: var(--accent); }
-.espace-menu .marque .icone { color: var(--accent); }
-.espace-menu .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.espace-titre { padding: 8px 8px 4px; color: var(--doux); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
-.espace-trait { height: 1px; margin: 6px 0; background: var(--bord); }
-.espace-alerte { margin: 4px 8px 8px; color: var(--rouge); font-size: 13px; line-height: 1.4; }
-/* en tête d'un espace, un dossier ou un schéma rappelle d'où il vient */
+.vue-menu button:hover { background: var(--fond); }
+.vue-menu button.actif { background: var(--accent-clair); font-weight: 600; }
+.vue-menu .marque { display: inline-flex; justify-content: center; width: 16px; flex: none; color: var(--accent); }
+.vue-menu .marque .icone { color: var(--accent); }
+.vue-menu .nom { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.vue-menu .compte { flex: none; color: var(--doux); font-size: 12px; }
+.vue-titre { padding: 8px 8px 4px; color: var(--doux); font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+.vue-trait { height: 1px; margin: 6px 0; background: var(--bord); }
+.vue-alerte { margin: 4px 8px 8px; color: var(--rouge); font-size: 13px; line-height: 1.4; }
+
+/* hub Espaces : écran d'accueil pour entrer dans un contexte */
+.hub-app { display: block; overflow: auto; background: var(--fond); }
+.hub {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 48px 24px 64px;
+}
+.hub-tete h1 { margin: 0 0 8px; font-size: 28px; font-weight: 700; }
+.hub-tete p { margin: 0 0 28px; color: var(--doux); line-height: 1.5; max-width: 52ch; }
+.hub-alerte { color: var(--rouge); margin-bottom: 16px; }
+.hub-grille {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+}
+.hub-carte-wrap { display: flex; flex-direction: column; gap: 8px; }
+.hub-carte {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  min-height: 120px;
+  padding: 18px;
+  border: 1px solid var(--bord);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--texte);
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+.hub-carte:hover { border-color: var(--accent); }
+.hub-carte.biblio { border-color: var(--accent); background: var(--accent-clair); }
+.hub-carte.creer { border-style: dashed; color: var(--doux); }
+.hub-carte .icone { color: var(--accent); width: 22px; height: 22px; }
+.hub-nom { font-size: 16px; font-weight: 600; }
+.hub-meta { color: var(--doux); font-size: 13px; line-height: 1.35; }
+.hub-plus { font-size: 28px; line-height: 1; color: var(--accent); font-weight: 500; }
+.hub-actions { display: flex; gap: 6px; }
+.hub-avis { position: fixed; bottom: 20px; right: 20px; }
+
+/* en tête d'une vue, un dossier ou un schéma rappelle d'où il vient */
 .origine {
   flex: none;
   max-width: 45%;

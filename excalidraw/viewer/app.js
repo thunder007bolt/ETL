@@ -1,6 +1,6 @@
 // Visionneuse des schémas Excalidraw : arborescence des dossiers et des schémas (glisser-déposer
-// pour les ranger), espaces de travail (des vues par thème sur ces dossiers), édition et
-// enregistrement sur le disque, à la main ou automatique.
+// pour les ranger), espaces physiques (racine schemas/espaces/<id>/), vues thématiques en
+// Bibliothèque, édition et enregistrement sur le disque, à la main ou automatique.
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import htm from "htm";
@@ -13,18 +13,22 @@ const FOLDERS_API = "/api/dossiers";
 const MOVE_API = "/api/deplacer";
 const HISTORY_API = "/api/historique";
 const SPACES_API = "/api/espaces";
+const VIEWS_API = "/api/vues";
 const POLL_MS = 3000;
 const CLOSED_KEY = "schemas.dossiers-fermes";
-// espace de travail affiché ("" : tous les schémas), retenu dans ce navigateur
-const SPACE_KEY = "schemas.espace";
-const NEW_SPACE = "\u0000nouveau";
+// contexte : hub | biblio | espace:<id> — retenu dans ce navigateur
+const CONTEXT_KEY = "schemas.contexte";
+// vue active en Bibliothèque ("" : toute la bibliothèque)
+const VIEW_KEY = "schemas.vue";
+const NEW_VIEW = "\u0000nouvelle";
+const SPACE_ROOT = "espaces"; // dossier réservé sous schemas/
 // largeur de la liste, réglée en glissant son bord droit et retenue dans ce navigateur
 const BAR_KEY = "schemas.largeur-liste";
 const BAR_DEFAULT = 270;
 const BAR_MIN = 200;
 const BAR_MAX = 720;
-// un serveur lancé avant les espaces de travail ne les connaît pas : il faut le relancer
-const OLD_SERVER = "Relancez la visionneuse (server.py) : son serveur a été lancé avant les espaces de travail.";
+// un serveur lancé avant les espaces/vues séparés ne les connaît pas : il faut le relancer
+const OLD_SERVER = "Relancez la visionneuse (server.py) : son serveur a été lancé avant les espaces et les vues.";
 const DRAG_TYPE = "application/x-visionneuse-schemas";
 const OPEN_ON_HOVER_MS = 700;
 // enregistrement automatique : toutes les N secondes si le schéma ouvert a changé (0 : désactivé) ;
@@ -37,6 +41,8 @@ const AUTO_MAX = 3600;
 const AUTO_LABEL = "Enregistrement auto";
 // marqueur de lecture : une position par schéma, retenue dans ce navigateur (pas dans le fichier)
 const MARKER_KEY = "schemas.marqueurs-lecture";
+// cadrage (scroll + zoom) par schéma, retenu dans ce navigateur pour survivre à un rechargement
+const VIEWPORT_KEY = "schemas.cadrages";
 const UI_OPTIONS = { canvasActions: { loadScene: false, saveToActiveFile: false } };
 const SOURCE_LABELS = {
   visionneuse: "Enregistrée dans la visionneuse",
@@ -62,11 +68,54 @@ const versionSum = (elements) => elements.reduce((sum, e) => sum + e.version, 0)
 const parentOf = (path) => (path.includes("/") ? path.slice(0, path.lastIndexOf("/")) : "");
 const isWithin = (path, folder) => path === folder || path.startsWith(`${folder}/`);
 
-// identifiant d'un espace de travail, tiré de son nom : « À valider (CNSS) » → a-valider-cnss
+// identifiant tiré d'un nom : « À valider (CNSS) » → a-valider-cnss
 const slug = (name) => name.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
   .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 32) || "espace";
-// un espace contient un schéma ou un dossier s'il le liste, ou s'il liste un dossier au-dessus
-const inSpace = (space, path) => space.chemins.some((c) => isWithin(path, c));
+// une vue contient un schéma ou un dossier s'il le liste, ou s'il liste un dossier au-dessus
+const inView = (view, path) => view.chemins.some((c) => isWithin(path, c));
+const spacePrefix = (id) => `${SPACE_ROOT}/${id}`;
+const underSpace = (id, path) => isWithin(path, spacePrefix(id));
+// identifiant d'espace propriétaire d'un chemin, ou null (bibliothèque / hors espaces)
+const spaceIdOf = (path) => {
+  const parts = path.split("/");
+  return parts[0] === SPACE_ROOT && parts[1] ? parts[1] : null;
+};
+const isSpaceRootPath = (path) => {
+  const id = spaceIdOf(path);
+  return !!id && path === spacePrefix(id);
+};
+
+function loadContext() {
+  try {
+    const raw = localStorage.getItem(CONTEXT_KEY);
+    if (raw === "biblio" || raw === "hub" || (raw && raw.startsWith("espace:"))) return raw;
+    // ancienne clé schemas.espace : une vue → hub (les vues ne sont plus le contexte)
+    return "hub";
+  } catch {
+    return "hub";
+  }
+}
+function storeContext(value) {
+  try {
+    localStorage.setItem(CONTEXT_KEY, value);
+  } catch {
+    // stockage indisponible
+  }
+}
+function loadView() {
+  try {
+    return localStorage.getItem(VIEW_KEY) || "";
+  } catch {
+    return "";
+  }
+}
+function storeView(id) {
+  try {
+    localStorage.setItem(VIEW_KEY, id);
+  } catch {
+    // stockage indisponible
+  }
+}
 
 async function request(url, options) {
   const response = await fetch(url, options);
@@ -167,21 +216,6 @@ function saveClosed(closed) {
   }
 }
 
-function loadSpace() {
-  try {
-    return localStorage.getItem(SPACE_KEY) || "";
-  } catch {
-    return "";
-  }
-}
-function storeSpace(id) {
-  try {
-    localStorage.setItem(SPACE_KEY, id);
-  } catch {
-    // stockage indisponible : la visionneuse rouvrira sur tous les schémas
-  }
-}
-
 function loadBarWidth() {
   try {
     const width = Number(localStorage.getItem(BAR_KEY));
@@ -241,6 +275,60 @@ function saveMarker(path, point) {
   else delete markers[path];
   storeMarkers(markers);
 }
+
+function loadViewports() {
+  try {
+    const data = JSON.parse(localStorage.getItem(VIEWPORT_KEY) || "{}");
+    return data && typeof data === "object" ? data : {};
+  } catch {
+    return {};
+  }
+}
+function viewportFor(path) {
+  const entry = loadViewports()[path];
+  if (!entry || typeof entry !== "object") return null;
+  const { scrollX, scrollY, zoom } = entry;
+  if (![scrollX, scrollY, zoom].every(Number.isFinite) || zoom <= 0) return null;
+  return { scrollX, scrollY, zoom };
+}
+function saveViewport(path, frame) {
+  if (!path || !frame) return;
+  const scrollX = frame.scrollX;
+  const scrollY = frame.scrollY;
+  const zoom = typeof frame.zoom === "object" ? frame.zoom?.value : frame.zoom;
+  if (![scrollX, scrollY, zoom].every(Number.isFinite) || zoom <= 0) return;
+  const all = loadViewports();
+  const prev = all[path];
+  if (prev && prev.scrollX === scrollX && prev.scrollY === scrollY && prev.zoom === zoom) return;
+  all[path] = { scrollX, scrollY, zoom };
+  try {
+    localStorage.setItem(VIEWPORT_KEY, JSON.stringify(all));
+  } catch {
+    // stockage indisponible : le cadrage ne sera pas retenu
+  }
+}
+function followViewports(oldPath, newPath) {
+  const all = loadViewports();
+  const next = {};
+  let changed = false;
+  for (const [key, value] of Object.entries(all)) {
+    if (key === oldPath || key.startsWith(`${oldPath}/`)) {
+      changed = true;
+      if (newPath !== null) next[newPath + key.slice(oldPath.length)] = value;
+    } else {
+      next[key] = value;
+    }
+  }
+  if (!changed) return;
+  try {
+    localStorage.setItem(VIEWPORT_KEY, JSON.stringify(next));
+  } catch {
+    // stockage indisponible
+  }
+}
+// Excalidraw attend zoom sous la forme { value } dans appState
+const asAppZoom = (zoom) => (typeof zoom === "object" && zoom ? zoom : { value: zoom });
+
 // coordonnées du schéma ↔ pixels de l'écran (formules d'Excalidraw)
 function sceneToScreen(sceneX, sceneY, view) {
   const zoom = view.zoom || 1;
@@ -270,6 +358,8 @@ const ICONS = {
   retirer: html`<g><path d="M18 6 6 18" /><path d="m6 6 12 12" /></g>`,
   coche: html`<path d="M20 6 9 17l-5-5" />`,
   bas: html`<path d="m6 9 6 6 6-6" />`,
+  // dossier / schéma vers un autre espace
+  versEspace: html`<g><path d="M3 12h13" /><path d="m11 6 5 6-5 6" /><path d="M21 5v14" /></g>`,
 };
 const Icon = ({ name }) => html`<svg class="icone" viewBox="0 0 24 24" aria-hidden="true">${ICONS[name]}</svg>`;
 
@@ -310,10 +400,12 @@ function App() {
   const [schemas, setSchemas] = useState([]);
   const [folders, setFolders] = useState([]);
   const [closed, setClosed] = useState(loadClosed);
-  const [spaces, setSpaces] = useState([]); // espaces de travail : [{ id, nom, chemins }]
-  const [spaceId, setSpaceId] = useState(loadSpace); // espace affiché ("" : tous les schémas)
-  const [spaceMenu, setSpaceMenu] = useState(false);
-  const [oldServer, setOldServer] = useState(false); // le serveur ne connaît pas les espaces
+  const [spaces, setSpaces] = useState([]); // espaces physiques : [{ id, nom }]
+  const [views, setViews] = useState([]); // vues thématiques : [{ id, nom, chemins }]
+  const [context, setContext] = useState(loadContext); // hub | biblio | espace:<id>
+  const [viewId, setViewId] = useState(loadView); // vue en Bibliothèque ("" : tout)
+  const [viewMenu, setViewMenu] = useState(false);
+  const [oldServer, setOldServer] = useState(false); // le serveur ne connaît pas vues/espaces
   const [dragging, setDragging] = useState(false);
   const [dropTarget, setDropTarget] = useState(null); // dossier survolé pendant un glisser ("" : la racine)
   const [scene, setScene] = useState(null); // { path, key, initial }
@@ -360,8 +452,10 @@ function App() {
   const dialogRef = useRef(null); // sa fonction de réponse
   const saveRef = useRef(null);
   const spacesRef = useRef([]);
-  const spaceIdRef = useRef(spaceId);
-  const spaceMenuRef = useRef(null);
+  const viewsRef = useRef([]);
+  const contextRef = useRef(context);
+  const viewIdRef = useRef(viewId);
+  const viewMenuRef = useRef(null);
   const oldServerRef = useRef(false);
 
   const markDirty = (value) => {
@@ -433,7 +527,10 @@ function App() {
       setFolders(tree.dossiers);
       spacesRef.current = tree.espaces || [];
       setSpaces(spacesRef.current);
-      oldServerRef.current = tree.espaces === undefined;
+      viewsRef.current = tree.vues || [];
+      setViews(viewsRef.current);
+      // un serveur trop ancien n'envoie ni vues ni le nouveau format d'espaces
+      oldServerRef.current = tree.vues === undefined;
       setOldServer(oldServerRef.current);
     }
     return tree;
@@ -456,11 +553,15 @@ function App() {
     if (!force && !(await leaveDirty("ouvrir un autre schéma"))) return;
     try {
       const { contenu, modifie } = await readSchema(path);
-      // en rechargeant le même schéma, on garde le cadrage en cours
+      // cadrage : 1) même schéma déjà ouvert → cadrage live ; 2) sinon cadrage mémorisé ; 3) sinon fit
       const api = apiRef.current;
-      const view = path === pathRef.current && api
+      const live = path === pathRef.current && api
         ? (({ scrollX, scrollY, zoom }) => ({ scrollX, scrollY, zoom }))(api.getAppState())
         : null;
+      const remembered = !live ? viewportFor(path) : null;
+      const view = live || (remembered
+        ? { scrollX: remembered.scrollX, scrollY: remembered.scrollY, zoom: asAppZoom(remembered.zoom) }
+        : null);
       pathRef.current = path;
       mtimeRef.current = modifie;
       baselineRef.current = null;
@@ -472,8 +573,8 @@ function App() {
       markerDockRef.current?.remove();
       markerDockRef.current = null;
       setMarker(markerFor(path));
-      if (!view) setLastSave(null);
-      if (!view) setVersions(null); // autre schéma : l'historique affiché n'est plus le sien
+      if (!live) setLastSave(null);
+      if (!live) setVersions(null); // autre schéma : l'historique affiché n'est plus le sien
       loadCountRef.current += 1;
       setScene({
         path,
@@ -623,174 +724,310 @@ function App() {
     setVersionsOpen(versionsOpenRef.current);
   };
 
-  // --- espaces de travail : des vues par thème ; rien n'est déplacé sur le disque
-  const chooseSpace = (id) => {
-    spaceIdRef.current = id;
-    setSpaceId(id);
-    storeSpace(id);
-    setSpaceMenu(false);
+  // --- contexte : hub (choix d'espace), biblio, ou espace physique
+  const enterContext = useCallback((next) => {
+    contextRef.current = next;
+    setContext(next);
+    storeContext(next);
+    setViewMenu(false);
+  }, []);
+  const goHub = useCallback(async () => {
+    if (!(await leaveDirty("changer d'espace"))) return;
+    pathRef.current = null;
+    setScene(null);
+    history.replaceState(null, "", location.pathname + location.search);
+    document.title = "Espaces · Schémas";
+    enterContext("hub");
+  }, [enterContext, leaveDirty]);
+  const enterBiblio = useCallback(() => enterContext("biblio"), [enterContext]);
+  const enterSpace = useCallback((id) => enterContext(`espace:${id}`), [enterContext]);
+  const activeSpaceId = context.startsWith("espace:") ? context.slice(7) : "";
+  const activeSpace = spaces.find((e) => e.id === activeSpaceId) || null;
+  const inBiblio = context === "biblio";
+  const inHub = context === "hub";
+
+  // --- vues : filtre thématique en Bibliothèque seulement
+  const chooseView = (id) => {
+    viewIdRef.current = id;
+    setViewId(id);
+    storeView(id);
+    setViewMenu(false);
   };
-  const saveSpaces = useCallback(async (next) => {
+  const saveViews = useCallback(async (next) => {
     if (oldServerRef.current) {
       flash(OLD_SERVER, "erreur");
       return false;
     }
     try {
-      const result = await request(SPACES_API, {
+      const result = await request(VIEWS_API, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ espaces: next }),
+        body: JSON.stringify({ vues: next }),
       });
-      spacesRef.current = result.espaces;
-      setSpaces(result.espaces);
+      viewsRef.current = result.vues;
+      setViews(result.vues);
       refreshList();
       return true;
     } catch (e) {
-      flash(e.message === "Adresse inconnue" ? OLD_SERVER : `Espaces non enregistrés : ${e.message}`,
+      flash(e.message === "Adresse inconnue" ? OLD_SERVER : `Vues non enregistrées : ${e.message}`,
         "erreur");
       return false;
     }
   }, [flash, refreshList]);
-  // crée un espace (avec, au besoin, un premier dossier ou schéma) ; répond son identifiant
-  const createSpace = useCallback(async (first) => {
-    setSpaceMenu(false);
+  const createView = useCallback(async (first) => {
+    setViewMenu(false);
     if (oldServerRef.current) {
       flash(OLD_SERVER, "erreur");
       return null;
     }
     const answer = await askText({
-      title: "Nouvel espace de travail",
-      message: "Un espace est une vue sur vos dossiers, par thème : « Réunion CNSS », « GRH »… "
+      title: "Nouvelle vue",
+      message: "Une vue regroupe des dossiers et schémas par thème : « Réunion CNSS », « GRH »… "
         + "Rien n'est déplacé sur le disque.",
       confirmLabel: "Créer",
     });
     const name = answer && answer.trim().slice(0, 60);
     if (!name) return null;
-    const taken = new Set(spacesRef.current.map((e) => e.id));
+    const taken = new Set(viewsRef.current.map((e) => e.id));
     let id = slug(name);
     for (let n = 2; taken.has(id); n += 1) id = `${slug(name).slice(0, 28)}-${n}`;
-    const ok = await saveSpaces([...spacesRef.current, { id, nom: name, chemins: first ? [first] : [] }]);
+    const ok = await saveViews([...viewsRef.current, { id, nom: name, chemins: first ? [first] : [] }]);
     return ok ? id : null;
-  }, [askText, saveSpaces]);
-  const renameSpace = useCallback(async (space) => {
-    setSpaceMenu(false);
-    const answer = await askText({ title: "Renommer l'espace", value: space.nom, confirmLabel: "Renommer" });
+  }, [askText, flash, saveViews]);
+  const renameView = useCallback(async (view) => {
+    setViewMenu(false);
+    const answer = await askText({ title: "Renommer la vue", value: view.nom, confirmLabel: "Renommer" });
     const name = answer && answer.trim().slice(0, 60);
-    if (!name || name === space.nom) return;
-    if (await saveSpaces(spacesRef.current.map((e) => (e.id === space.id ? { ...e, nom: name } : e)))) {
-      flash("Espace renommé");
+    if (!name || name === view.nom) return;
+    if (await saveViews(viewsRef.current.map((e) => (e.id === view.id ? { ...e, nom: name } : e)))) {
+      flash("Vue renommée");
     }
-  }, [askText, flash, saveSpaces]);
-  const deleteSpace = useCallback(async (space) => {
-    setSpaceMenu(false);
+  }, [askText, flash, saveViews]);
+  const deleteView = useCallback(async (view) => {
+    setViewMenu(false);
     if (!(await ask({
-      title: `Supprimer l'espace « ${space.nom} » ?`,
+      title: `Supprimer la vue « ${view.nom} » ?`,
       message: "Seule la vue disparaît : les dossiers et les schémas restent à leur place.",
-      choices: [{ label: "Supprimer l'espace", value: true, fort: true }],
+      choices: [{ label: "Supprimer la vue", value: true, fort: true }],
     }))) return;
-    if (await saveSpaces(spacesRef.current.filter((e) => e.id !== space.id))) {
-      if (spaceIdRef.current === space.id) chooseSpace("");
-      flash("Espace supprimé");
+    if (await saveViews(viewsRef.current.filter((e) => e.id !== view.id))) {
+      if (viewIdRef.current === view.id) chooseView("");
+      flash("Vue supprimée");
     }
-  }, [ask, flash, saveSpaces]);
-  const addToSpace = useCallback(async (path) => {
+  }, [ask, flash, saveViews]);
+  const addToView = useCallback(async (path) => {
     if (oldServerRef.current) {
       flash(OLD_SERVER, "erreur");
       return;
     }
-    const all = spacesRef.current;
-    const picked = all.length === 0 ? NEW_SPACE : await ask({
-      title: "Ajouter à un espace de travail",
-      message: `« ${label(path)} » apparaîtra dans l'espace choisi. Il reste à sa place sur le disque.`,
+    const all = viewsRef.current;
+    const picked = all.length === 0 ? NEW_VIEW : await ask({
+      title: "Ajouter à une vue",
+      message: `« ${label(path)} » apparaîtra dans la vue choisie. Il reste à sa place sur le disque.`,
       colonne: true,
       choices: [
-        ...all.map((e) => ({ label: inSpace(e, path) ? `${e.nom} (déjà dedans)` : e.nom, value: e.id })),
-        { label: "+ Nouvel espace…", value: NEW_SPACE, fort: true },
+        ...all.map((e) => ({ label: inView(e, path) ? `${e.nom} (déjà dedans)` : e.nom, value: e.id })),
+        { label: "+ Nouvelle vue…", value: NEW_VIEW, fort: true },
       ],
     });
     if (!picked) return;
-    if (picked === NEW_SPACE) {
-      if (await createSpace(path)) flash("Espace créé");
+    if (picked === NEW_VIEW) {
+      if (await createView(path)) flash("Vue créée");
       return;
     }
-    const space = all.find((e) => e.id === picked);
-    if (!space || inSpace(space, path)) return;
-    // un dossier ajouté remplace ce qu'il contient déjà dans l'espace
-    const kept = space.chemins.filter((c) => !isWithin(c, path));
-    if (await saveSpaces(all.map((e) => (e.id === picked ? { ...e, chemins: [...kept, path] } : e)))) {
-      flash(`Ajouté à « ${space.nom} »`);
+    const view = all.find((e) => e.id === picked);
+    if (!view || inView(view, path)) return;
+    const kept = view.chemins.filter((c) => !isWithin(c, path));
+    if (await saveViews(all.map((e) => (e.id === picked ? { ...e, chemins: [...kept, path] } : e)))) {
+      flash(`Ajouté à « ${view.nom} »`);
     }
-  }, [ask, createSpace, flash, saveSpaces]);
-  // la croix est vite cliquée par mégarde : on demande avant de retirer
-  const removeFromSpace = useCallback(async (path) => {
-    const id = spaceIdRef.current;
-    const space = spacesRef.current.find((e) => e.id === id);
-    if (!space) return;
+  }, [ask, createView, flash, saveViews]);
+  const removeFromView = useCallback(async (path) => {
+    const id = viewIdRef.current;
+    const view = viewsRef.current.find((e) => e.id === id);
+    if (!view) return;
     if (!(await ask({
-      title: `Retirer « ${label(path)} » de l'espace « ${space.nom} » ?`,
-      message: "Il disparaît seulement de cet espace. Il reste à sa place sur le disque, et dans "
-        + "« Tous les schémas ».",
-      choices: [{ label: "Retirer de l'espace", value: true, fort: true }],
+      title: `Retirer « ${label(path)} » de la vue « ${view.nom} » ?`,
+      message: "Il disparaît seulement de cette vue. Il reste à sa place sur le disque, et dans "
+        + "toute la Bibliothèque.",
+      choices: [{ label: "Retirer de la vue", value: true, fort: true }],
     }))) return;
-    const next = spacesRef.current.map((e) =>
+    const next = viewsRef.current.map((e) =>
       (e.id === id ? { ...e, chemins: e.chemins.filter((c) => c !== path) } : e));
-    if (await saveSpaces(next)) flash("Retiré de l'espace");
-  }, [ask, flash, saveSpaces]);
-  // ce qu'on crée depuis un espace y apparaît, même rangé hors de ses dossiers
-  const showInSpace = useCallback(async (path) => {
-    const space = spacesRef.current.find((e) => e.id === spaceIdRef.current);
-    if (!space || inSpace(space, path)) return;
-    await saveSpaces(spacesRef.current.map((e) =>
-      (e.id === space.id ? { ...e, chemins: [...e.chemins, path] } : e)));
-  }, [saveSpaces]);
-  // dossier proposé pour un nouveau schéma : celui de l'espace, s'il n'en a qu'un
-  const spaceFolder = () => {
-    const space = spacesRef.current.find((e) => e.id === spaceIdRef.current);
-    const own = space ? space.chemins.filter((c) => !c.endsWith(".excalidraw")) : [];
+    if (await saveViews(next)) flash("Retiré de la vue");
+  }, [ask, flash, saveViews]);
+  const showInView = useCallback(async (path) => {
+    const view = viewsRef.current.find((e) => e.id === viewIdRef.current);
+    if (!view || inView(view, path)) return;
+    await saveViews(viewsRef.current.map((e) =>
+      (e.id === view.id ? { ...e, chemins: [...e.chemins, path] } : e)));
+  }, [saveViews]);
+
+  // --- espaces physiques (hub)
+  const createSpace = useCallback(async () => {
+    if (oldServerRef.current) {
+      flash(OLD_SERVER, "erreur");
+      return null;
+    }
+    const answer = await askText({
+      title: "Nouvel espace",
+      message: "Un espace a sa propre arborescence sur le disque "
+        + `(sous ${SPACE_ROOT}/…). Les schémas créés dedans y restent.`,
+      confirmLabel: "Créer",
+    });
+    const name = answer && answer.trim().slice(0, 60);
+    if (!name) return null;
+    try {
+      const result = await request(SPACES_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom: name }),
+      });
+      await refreshList();
+      flash("Espace créé");
+      return result.espace.id;
+    } catch (e) {
+      flash(e.message === "Adresse inconnue" ? OLD_SERVER : `Création impossible : ${e.message}`,
+        "erreur");
+      return null;
+    }
+  }, [askText, flash, refreshList]);
+  const renameSpace = useCallback(async (space) => {
+    const answer = await askText({ title: "Renommer l'espace", value: space.nom, confirmLabel: "Renommer" });
+    const name = answer && answer.trim().slice(0, 60);
+    if (!name || name === space.nom) return;
+    try {
+      await request(`${SPACES_API}/${encodeURIComponent(space.id)}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nom: name }),
+      });
+      await refreshList();
+      flash("Espace renommé");
+    } catch (e) {
+      flash(`Renommage impossible : ${e.message}`, "erreur");
+    }
+  }, [askText, flash, refreshList]);
+  const deleteSpace = useCallback(async (space) => {
+    const count = schemas.filter((s) => underSpace(space.id, s.chemin)).length;
+    const first = await ask({
+      title: `Supprimer l'espace « ${space.nom} » ?`,
+      message: count
+        ? `Cet espace contient ${count} schéma${count > 1 ? "s" : ""}. `
+          + "Vous pouvez le vider (suppression définitive des fichiers) ou annuler."
+        : "L'espace est vide. Sa suppression retire le dossier réservé.",
+      choices: count
+        ? [{ label: "Supprimer l'espace et ses schémas", value: "force", fort: true }]
+        : [{ label: "Supprimer l'espace", value: "ok", fort: true }],
+    });
+    if (!first) return;
+    try {
+      const suffix = first === "force" ? "?force=1" : "";
+      await request(`${SPACES_API}/${encodeURIComponent(space.id)}${suffix}`, { method: "DELETE" });
+      if (contextRef.current === `espace:${space.id}`) enterContext("hub");
+      await refreshList();
+      flash("Espace supprimé");
+    } catch (e) {
+      flash(e.code === "non_vide"
+        ? "L'espace n'est pas vide."
+        : `Suppression impossible : ${e.message}`, "erreur");
+    }
+  }, [ask, enterContext, flash, refreshList, schemas]);
+
+  // dossier proposé pour un nouveau schéma / dossier selon le contexte
+  const defaultFolder = () => {
+    if (activeSpaceId) return spacePrefix(activeSpaceId);
+    const view = viewsRef.current.find((e) => e.id === viewIdRef.current);
+    const own = view ? view.chemins.filter((c) => !c.endsWith(".excalidraw")) : [];
     return own.length === 1 ? own[0] : "";
   };
 
+  // dans un espace : l'utilisateur ne voit / ne saisit que le chemin relatif ; le préfixe
+  // schemas/espaces/<id>/ est ajouté ici, pour qu'on ne puisse pas sortir de l'espace en éditant
+  const relativeInSpace = (folder) => {
+    const root = spacePrefix(activeSpaceId);
+    if (!folder || folder === root) return "";
+    return underSpace(activeSpaceId, folder) ? folder.slice(root.length + 1) : "";
+  };
+  const resolveInSpace = (typed) => {
+    const root = spacePrefix(activeSpaceId);
+    let rel = typed.trim().replace(/^\/+|\/+$/g, "");
+    // si quelqu'un colle quand même le préfixe, on le retire pour recomposer proprement
+    if (rel === root || rel.startsWith(`${root}/`)) rel = rel.slice(root.length).replace(/^\/+/, "");
+    if (!rel || rel.split("/").some((p) => p === ".." || p === ".")) return null;
+    return `${root}/${rel}`;
+  };
+
   const createSchema = useCallback(async (folder = "") => {
-    const base = folder || spaceFolder();
+    const base = folder || defaultFolder();
     const answer = await askText({
       title: "Nouveau schéma",
-      message: "Son nom, précédé de son dossier : par exemple grh/effectif.",
-      value: base ? `${base}/` : "",
+      message: activeSpaceId
+        ? "Son nom dans cet espace, par exemple notes/intro (sans le chemin de l'espace)."
+        : "Son nom, précédé de son dossier : par exemple grh/effectif.",
+      value: activeSpaceId
+        ? (relativeInSpace(base) ? `${relativeInSpace(base)}/` : "")
+        : (base ? `${base}/` : ""),
       confirmLabel: "Créer",
     });
     if (!answer || !answer.trim()) return;
-    const path = `${answer.trim().replace(/^\/+/, "").replace(/\.excalidraw$/, "")}.excalidraw`;
+    let path;
+    if (activeSpaceId) {
+      const resolved = resolveInSpace(answer.replace(/\.excalidraw$/, ""));
+      if (!resolved) {
+        flash("Nom invalide : restez dans cet espace, sans « .. ».", "erreur");
+        return;
+      }
+      path = `${resolved}.excalidraw`;
+    } else {
+      path = `${answer.trim().replace(/^\/+/, "").replace(/\.excalidraw$/, "")}.excalidraw`;
+    }
     try {
       await writeSchema(path, emptyScene(), { create: true });
-      await showInSpace(path);
+      if (inBiblio) await showInView(path);
       await refreshList();
       open(path);
     } catch (e) {
       flash(e.code === "existe" ? "Un schéma porte déjà ce nom." : `Création impossible : ${e.message}`,
         "erreur");
     }
-  }, [askText, flash, open, refreshList, showInSpace]);
+  }, [activeSpaceId, askText, flash, inBiblio, open, refreshList, showInView]);
 
   const createFolder = useCallback(async (parent = "") => {
-    const base = parent || spaceFolder();
+    const base = parent || defaultFolder();
     const answer = await askText({
       title: "Nouveau dossier",
-      message: "Son nom, précédé de son dossier parent : par exemple prestations/archives.",
-      value: base ? `${base}/` : "",
+      message: activeSpaceId
+        ? "Son nom dans cet espace, par exemple archives (sans le chemin de l'espace)."
+        : "Son nom, précédé de son dossier parent : par exemple prestations/archives.",
+      value: activeSpaceId
+        ? (relativeInSpace(base) ? `${relativeInSpace(base)}/` : "")
+        : (base ? `${base}/` : ""),
       confirmLabel: "Créer",
     });
     if (!answer || !answer.trim()) return;
-    const path = answer.trim().replace(/^\/+|\/+$/g, "");
+    let path;
+    if (activeSpaceId) {
+      path = resolveInSpace(answer);
+      if (!path) {
+        flash("Nom invalide : restez dans cet espace, sans « .. ».", "erreur");
+        return;
+      }
+    } else {
+      path = answer.trim().replace(/^\/+|\/+$/g, "");
+    }
     try {
       await postJson(FOLDERS_API, { chemin: path });
-      await showInSpace(path);
+      if (inBiblio) await showInView(path);
       reveal(path);
       await refreshList();
       flash("Dossier créé");
     } catch (e) {
-      flash(e.code === "existe" ? "Ce dossier existe déjà." : `Création impossible : ${e.message}`, "erreur");
+      flash(e.code === "existe" ? "Ce dossier existe déjà."
+        : e.code === "reserve" ? e.message
+          : `Création impossible : ${e.message}`, "erreur");
     }
-  }, [askText, flash, refreshList, showInSpace]);
+  }, [activeSpaceId, askText, flash, inBiblio, refreshList, showInView]);
 
   const removeFolder = useCallback(async (folder) => {
     try {
@@ -803,10 +1040,17 @@ function App() {
     }
   }, [flash, refreshList]);
 
-  // range un schéma ou un dossier dans folder ; le schéma ouvert suit, même non enregistré
-  const move = useCallback(async (item, folder) => {
+  // range un schéma ou un dossier dans folder ; le schéma ouvert suit, même non enregistré.
+  // crossSpace : autorise une destination hors de l'espace affiché (ex. vers un autre espace)
+  const move = useCallback(async (item, folder, { crossSpace = false } = {}) => {
+    const dest = folder === "" && activeSpaceId && !crossSpace ? spacePrefix(activeSpaceId) : folder;
+    if (!crossSpace && activeSpaceId
+      && dest !== spacePrefix(activeSpaceId) && !underSpace(activeSpaceId, dest)) {
+      flash("Dans un espace, on ne range que dans cet espace.", "erreur");
+      return null;
+    }
     try {
-      const result = await postJson(MOVE_API, { de: item.chemin, vers: folder });
+      const result = await postJson(MOVE_API, { de: item.chemin, vers: dest });
       const moved = (path) => result.chemin + path.slice(item.chemin.length);
       const opened = pathRef.current;
       if (opened && isWithin(opened, item.chemin)) {
@@ -818,24 +1062,78 @@ function App() {
       if (item.type === "dossier") {
         updateClosed((set) => new Set([...set].map((f) => (isWithin(f, item.chemin) ? moved(f) : f))));
       }
+      followViewports(item.chemin, result.chemin);
       reveal(result.chemin);
       await refreshList();
       refreshVersions();
       if (result.avertissement) flash(result.avertissement, "erreur");
-      else flash(`Rangé dans ${folder || "la racine"}`);
+      else flash(`Rangé dans ${dest || "la racine"}`);
+      return result;
     } catch (e) {
       flash(e.code === "existe" ? "Le dossier contient déjà un élément de ce nom."
-        : `Déplacement impossible : ${e.message}`, "erreur");
+        : e.code === "reserve" ? e.message
+          : `Déplacement impossible : ${e.message}`, "erreur");
+      return null;
     }
-  }, [flash, refreshList, refreshVersions]);
+  }, [activeSpaceId, flash, refreshList, refreshVersions]);
+
+  // déplace un dossier (ou un schéma) vers la racine d'un autre espace
+  const moveToOtherSpace = useCallback(async (item) => {
+    if (isSpaceRootPath(item.chemin)) {
+      flash("La racine d'un espace ne se déplace pas ainsi : utilisez le hub Espaces.", "erreur");
+      return;
+    }
+    const fromId = spaceIdOf(item.chemin);
+    let targets = spacesRef.current.filter((e) => e.id !== fromId);
+    if (targets.length === 0) {
+      if (!(await ask({
+        title: "Aucun autre espace",
+        message: "Créez un espace de destination, puis réessayez.",
+        choices: [{ label: "Créer un espace…", value: "creer", fort: true }],
+      }))) return;
+      const id = await createSpace();
+      if (!id) return;
+      targets = spacesRef.current.filter((e) => e.id !== fromId);
+    }
+    const picked = await ask({
+      title: `Déplacer « ${label(item.chemin)} » vers un autre espace`,
+      message: "Le dossier (ou le schéma) et son contenu passent à la racine de l'espace choisi.",
+      colonne: true,
+      choices: targets.map((e) => ({ label: e.nom, value: e.id, fort: true })),
+    });
+    if (!picked) return;
+    const target = targets.find((e) => e.id === picked);
+    if (!target) return;
+    const dest = spacePrefix(picked);
+    if (parentOf(item.chemin) === dest) {
+      flash(`Déjà dans l'espace « ${target.nom} ».`);
+      return;
+    }
+    const result = await move(item, dest, { crossSpace: true });
+    if (!result) return;
+    // si on regarde l'espace d'origine, proposer d'ouvrir la destination
+    if (activeSpaceId && fromId === activeSpaceId) {
+      const go = await ask({
+        title: `Déplacé vers « ${target.nom} »`,
+        message: "Ouvrir cet espace maintenant ?",
+        choices: [{ label: `Ouvrir « ${target.nom} »`, value: true, fort: true }],
+      });
+      if (go) enterSpace(picked);
+    }
+  }, [activeSpaceId, ask, createSpace, enterSpace, flash, move]);
 
   // glisser-déposer dans l'arbre : un schéma ou un dossier se dépose sur un dossier, sur un schéma
-  // (il rejoint son dossier) ou sur la zone « racine »
+  // (il rejoint son dossier) ou sur la zone « racine » (racine de l'espace ou de schemas/)
   const canDrop = (folder) => {
     const item = dragRef.current;
-    if (folder === "" && spaceIdRef.current) return false; // pas de racine dans un espace
-    return !!item && parentOf(item.chemin) !== folder
-      && !(item.type === "dossier" && isWithin(folder, item.chemin));
+    if (!item) return false;
+    const dest = folder === "" && activeSpaceId ? spacePrefix(activeSpaceId) : folder;
+    if (activeSpaceId && dest !== spacePrefix(activeSpaceId) && !underSpace(activeSpaceId, dest || "")) {
+      return false;
+    }
+    if (activeSpaceId && !underSpace(activeSpaceId, item.chemin)) return false;
+    return parentOf(item.chemin) !== dest
+      && !(item.type === "dossier" && isWithin(dest, item.chemin));
   };
   const armOpen = (folder) => {
     const hover = hoverRef.current;
@@ -888,7 +1186,9 @@ function App() {
   };
 
   const onChange = useCallback((elements, appState) => {
-    if (fitPendingRef.current && apiRef.current) {
+    // pendant le fit initial, on ne mémorise pas encore le cadrage (ce sera le tour suivant)
+    const fitting = fitPendingRef.current;
+    if (fitting && apiRef.current) {
       fitPendingRef.current = false;
       fitView(apiRef.current, elements);
     }
@@ -902,12 +1202,19 @@ function App() {
         width: appState.width,
         height: appState.height,
       };
-      setView((prev) => (prev
-        && prev.scrollX === next.scrollX && prev.scrollY === next.scrollY
-        && prev.zoom === next.zoom && prev.offsetLeft === next.offsetLeft
-        && prev.offsetTop === next.offsetTop
-        && prev.width === next.width && prev.height === next.height
-        ? prev : next));
+      setView((prev) => {
+        if (prev
+          && prev.scrollX === next.scrollX && prev.scrollY === next.scrollY
+          && prev.zoom === next.zoom && prev.offsetLeft === next.offsetLeft
+          && prev.offsetTop === next.offsetTop
+          && prev.width === next.width && prev.height === next.height) {
+          return prev;
+        }
+        if (!fitting && pathRef.current && !previewRef.current) {
+          saveViewport(pathRef.current, next);
+        }
+        return next;
+      });
     }
     const sum = versionSum(elements);
     if (baselineRef.current === null || !interactedRef.current) {
@@ -1053,17 +1360,48 @@ function App() {
     };
   }, []);
 
-  // premier chargement : le schéma de l'adresse (#dossier/nom.excalidraw) ou le premier de la liste
+  // premier chargement : hub, ou le schéma de l'adresse / du contexte retenu
   useEffect(() => {
     refreshList()
       .then((tree) => {
         const wanted = decodeURIComponent(location.hash.slice(1));
-        const space = (tree.espaces || []).find((e) => e.id === spaceIdRef.current);
-        // l'espace retenu n'existe plus, ou le schéma demandé par l'adresse n'y est pas : tout afficher
         const asked = tree.schemas.find((s) => s.chemin === wanted);
-        if (spaceIdRef.current && (!space || (asked && !inSpace(space, asked.chemin)))) chooseSpace("");
-        const visible = space && !asked ? tree.schemas.filter((s) => inSpace(space, s.chemin)) : tree.schemas;
-        const first = asked || visible[0] || tree.schemas[0];
+        let ctx = contextRef.current;
+        // schéma deep-link : ouvrir le bon contexte
+        if (asked) {
+          const match = asked.chemin.match(new RegExp(`^${SPACE_ROOT}/([^/]+)/`));
+          if (match && (tree.espaces || []).some((e) => e.id === match[1])) {
+            enterContext(`espace:${match[1]}`);
+            ctx = `espace:${match[1]}`;
+          } else {
+            enterContext("biblio");
+            ctx = "biblio";
+          }
+          open(asked.chemin, { force: true });
+          return;
+        }
+        // espace retenu disparu → hub
+        if (ctx.startsWith("espace:")) {
+          const id = ctx.slice(7);
+          if (!(tree.espaces || []).some((e) => e.id === id)) {
+            enterContext("hub");
+            return;
+          }
+        }
+        // vue retenue disparue → toute la bibliothèque
+        if (viewIdRef.current && !(tree.vues || []).some((v) => v.id === viewIdRef.current)) {
+          chooseView("");
+        }
+        if (ctx === "hub") {
+          document.title = "Espaces · Schémas";
+          return;
+        }
+        const spaceId = ctx.startsWith("espace:") ? ctx.slice(7) : "";
+        const view = (tree.vues || []).find((v) => v.id === viewIdRef.current);
+        let visible = tree.schemas;
+        if (spaceId) visible = tree.schemas.filter((s) => underSpace(spaceId, s.chemin));
+        else if (view) visible = tree.schemas.filter((s) => inView(view, s.chemin));
+        const first = visible[0] || (!spaceId && !view ? tree.schemas[0] : null);
         if (first) open(first.chemin, { force: true });
       })
       .catch((e) => flash(`Serveur injoignable : ${e.message}`, "erreur"));
@@ -1112,14 +1450,14 @@ function App() {
     if (versionsOpen) refreshVersions();
   }, [versionsOpen, scene?.key, refreshVersions]);
 
-  // le menu des espaces se ferme au clic ailleurs et à Échap
+  // le menu des vues se ferme au clic ailleurs et à Échap
   useEffect(() => {
-    if (!spaceMenu) return undefined;
+    if (!viewMenu) return undefined;
     const onDown = (e) => {
-      if (!spaceMenuRef.current?.contains(e.target)) setSpaceMenu(false);
+      if (!viewMenuRef.current?.contains(e.target)) setViewMenu(false);
     };
     const onKey = (e) => {
-      if (e.key === "Escape") setSpaceMenu(false);
+      if (e.key === "Escape") setViewMenu(false);
     };
     addEventListener("mousedown", onDown);
     addEventListener("keydown", onKey);
@@ -1127,7 +1465,7 @@ function App() {
       removeEventListener("mousedown", onDown);
       removeEventListener("keydown", onKey);
     };
-  }, [spaceMenu]);
+  }, [viewMenu]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -1184,12 +1522,14 @@ function App() {
   const current = scene?.path;
   const indent = (depth) => ({ paddingLeft: `${8 + depth * 16}px` });
 
-  // pinned : le dossier ou le schéma est listé par l'espace affiché (il en est une entrée)
-  const spaceActions = (path, pinned) => html`
-    <button class="icone-bouton" title="Ajouter à un espace de travail"
-      onClick=${() => addToSpace(path)}><${Icon} name="espacePlus" /></button>
-    ${pinned ? html`<button class="icone-bouton" title="Retirer de cet espace (rien n'est supprimé)"
-      onClick=${() => removeFromSpace(path)}><${Icon} name="retirer" /></button>` : null}`;
+  // pinned : entrée listée par la vue affichée (Bibliothèque seulement)
+  const viewActions = (path, pinned) => inBiblio ? html`
+    <button class="icone-bouton" title="Ajouter à une vue"
+      onClick=${() => addToView(path)}><${Icon} name="espacePlus" /></button>
+    ${pinned ? html`<button class="icone-bouton" title="Retirer de cette vue (rien n'est supprimé)"
+      onClick=${() => removeFromView(path)}><${Icon} name="retirer" /></button>` : null}` : null;
+
+  const canMoveToSpace = (path) => path !== SPACE_ROOT && !isSpaceRootPath(path);
 
   const renderFolder = (node, depth, pinned = false) => {
     const isClosed = closed.has(node.chemin);
@@ -1210,7 +1550,11 @@ function App() {
             ? html`<span class="origine" title=${node.chemin}>${parentOf(node.chemin)}</span>` : null}
           ${isClosed ? html`<span class="compte">${countSchemas(node)}</span>` : null}
           <span class="actions" onClick=${(e) => e.stopPropagation()}>
-            ${spaceActions(node.chemin, pinned)}
+            ${viewActions(node.chemin, pinned)}
+            ${canMoveToSpace(node.chemin) ? html`
+              <button class="icone-bouton" title="Déplacer vers un autre espace"
+                onClick=${() => moveToOtherSpace({ type: "dossier", chemin: node.chemin })}>
+                <${Icon} name="versEspace" /></button>` : null}
             <button class="icone-bouton" title="Nouveau schéma dans ce dossier"
               onClick=${() => createSchema(node.chemin)}><${Icon} name="schemaPlus" /></button>
             <button class="icone-bouton" title="Nouveau sous-dossier"
@@ -1233,7 +1577,13 @@ function App() {
         <${Icon} name="schema" />
         <span class="nom">${label(s.chemin)}</span>
         ${pinned && s.dossier ? html`<span class="origine" title=${s.chemin}>${s.dossier}</span>` : null}
-        <span class="actions" onClick=${(e) => e.stopPropagation()}>${spaceActions(s.chemin, pinned)}</span>
+        <span class="actions" onClick=${(e) => e.stopPropagation()}>
+          ${viewActions(s.chemin, pinned)}
+          ${canMoveToSpace(s.chemin) ? html`
+            <button class="icone-bouton" title="Déplacer vers un autre espace"
+              onClick=${() => moveToOtherSpace({ type: "schema", chemin: s.chemin })}>
+              <${Icon} name="versEspace" /></button>` : null}
+        </span>
       </div>
     </li>`;
 
@@ -1243,61 +1593,137 @@ function App() {
   ];
 
   const tree = buildTree(folders, schemas);
-  const space = spaces.find((e) => e.id === spaceId) || null;
-  // les entrées de l'espace affiché : ses dossiers puis ses schémas, ceux qui existent encore
-  const spaceItems = () => {
-    const nodes = space.chemins.filter((c) => !c.endsWith(".excalidraw"))
+  const activeView = inBiblio ? (views.find((e) => e.id === viewId) || null) : null;
+  const viewItems = () => {
+    if (!activeView) return null;
+    const nodes = activeView.chemins.filter((c) => !c.endsWith(".excalidraw"))
       .map((c) => findNode(tree, c)).filter(Boolean)
       .sort((a, b) => a.nom.localeCompare(b.nom, "fr") || a.chemin.localeCompare(b.chemin, "fr"));
-    const files = space.chemins.filter((c) => c.endsWith(".excalidraw"))
+    const files = activeView.chemins.filter((c) => c.endsWith(".excalidraw"))
       .map((c) => schemas.find((s) => s.chemin === c)).filter(Boolean)
       .sort((a, b) => label(a.chemin).localeCompare(label(b.chemin), "fr"));
     return [...nodes.map((n) => renderFolder(n, 0, true)), ...files.map((f) => renderSchema(f, -1, true))];
   };
-  const items = space ? spaceItems() : null;
-  const countIn = (e) => schemas.filter((sch) => inSpace(e, sch.chemin)).length;
+  const spaceNode = activeSpaceId ? findNode(tree, spacePrefix(activeSpaceId)) : null;
+  const treeItems = activeSpaceId
+    ? (spaceNode ? renderChildren(spaceNode, 0) : [])
+    : (activeView ? viewItems() : renderChildren(tree, 0));
+  const countInView = (e) => schemas.filter((sch) => inView(e, sch.chemin)).length;
+  const countInSpace = (id) => schemas.filter((sch) => underSpace(id, sch.chemin)).length;
   const autoOptions = [...new Set([...AUTO_CHOICES, autoSeconds])].sort((a, b) => a - b);
   const savedLabel = lastSave?.auto ? `Enregistré (auto, ${formatTime(lastSave.at)})` : "Enregistré";
+  const contextTitle = activeSpace ? activeSpace.nom : "Bibliothèque";
+
+  if (inHub) {
+    return html`
+      <div class="app hub-app">
+        <main class="hub">
+          <header class="hub-tete">
+            <h1>Espaces</h1>
+            <p>Choisissez un espace de travail ou ouvrez la bibliothèque de tous les schémas.
+              Les vues thématiques se gèrent dans la bibliothèque.</p>
+          </header>
+          ${oldServer ? html`<p class="hub-alerte">${OLD_SERVER}</p>` : null}
+          <div class="hub-grille">
+            <button type="button" class="hub-carte biblio" onClick=${() => {
+              enterBiblio();
+              const first = schemas[0];
+              if (first) open(first.chemin, { force: true });
+            }}>
+              <${Icon} name="dossier" />
+              <span class="hub-nom">Bibliothèque</span>
+              <span class="hub-meta">${schemas.length} schéma${schemas.length === 1 ? "" : "s"} · toutes les vues</span>
+            </button>
+            ${spaces.map((e) => html`
+              <div key=${e.id} class="hub-carte-wrap">
+                <button type="button" class="hub-carte" onClick=${() => {
+                  enterSpace(e.id);
+                  const first = schemas.find((s) => underSpace(e.id, s.chemin));
+                  if (first) open(first.chemin, { force: true });
+                  else {
+                    pathRef.current = null;
+                    setScene(null);
+                    history.replaceState(null, "", location.pathname + location.search);
+                    document.title = `${e.nom} · Schémas`;
+                  }
+                }}>
+                  <${Icon} name="espace" />
+                  <span class="hub-nom">${e.nom}</span>
+                  <span class="hub-meta">${countInSpace(e.id)} schéma${countInSpace(e.id) === 1 ? "" : "s"}</span>
+                </button>
+                <div class="hub-actions">
+                  <button type="button" class="bouton petit" onClick=${() => renameSpace(e)}>Renommer</button>
+                  <button type="button" class="bouton petit" onClick=${() => deleteSpace(e)}>Supprimer</button>
+                </div>
+              </div>`)}
+            <button type="button" class="hub-carte creer" onClick=${async () => {
+              const id = await createSpace();
+              if (id) {
+                enterSpace(id);
+                pathRef.current = null;
+                setScene(null);
+                history.replaceState(null, "", location.pathname + location.search);
+                document.title = "Espace · Schémas";
+              }
+            }}>
+              <span class="hub-plus">+</span>
+              <span class="hub-nom">Nouvel espace</span>
+              <span class="hub-meta">Racine dédiée sous ${SPACE_ROOT}/</span>
+            </button>
+          </div>
+        </main>
+        ${dialog ? html`<${Dialog} key=${dialog.key} dialog=${dialog} onClose=${closeDialog} />` : null}
+        ${notice ? html`<div class="hub-avis"><span class=${`avis ${notice.kind}`}>${notice.text}</span></div>` : null}
+      </div>`;
+  }
+
   return html`
     <div class=${sidebar ? "app" : "app sans-barre"}>
       <aside class="barre" style=${{ width: `${barWidth}px` }}>
         <div class="barre-tete">
-          <div class="espaces" ref=${spaceMenuRef}>
-            <button class=${spaceMenu ? "espace-bouton ouvert" : "espace-bouton"} aria-haspopup="menu"
-              aria-expanded=${spaceMenu} title="Changer d'espace de travail"
-              onClick=${() => setSpaceMenu((v) => !v)}>
-              <${Icon} name="espace" />
-              <span class="nom">${space ? space.nom : "Tous les schémas"}</span>
-              <${Icon} name="bas" />
-            </button>
-            ${spaceMenu ? html`
-              <div class="espace-menu" role="menu">
-                <button role="menuitem" class=${space ? "" : "actif"} onClick=${() => chooseSpace("")}>
-                  <span class="marque">${space ? null : html`<${Icon} name="coche" />`}</span>
-                  <span class="nom">Tous les schémas</span>
-                  <span class="compte">${schemas.length}</span>
-                </button>
-                ${spaces.length ? html`<div class="espace-titre">Espaces de travail</div>` : null}
-                ${spaces.map((e) => html`
-                  <button key=${e.id} role="menuitem" class=${e.id === spaceId ? "actif" : ""}
-                    onClick=${() => chooseSpace(e.id)}>
-                    <span class="marque">${e.id === spaceId ? html`<${Icon} name="coche" />` : null}</span>
-                    <span class="nom">${e.nom}</span>
-                    <span class="compte">${countIn(e)}</span>
-                  </button>`)}
-                <div class="espace-trait"></div>
-                ${oldServer ? html`<p class="espace-alerte">${OLD_SERVER}</p>` : null}
-                <button role="menuitem" onClick=${async () => {
-                  const id = await createSpace();
-                  if (id) chooseSpace(id);
-                }}><span class="marque">+</span><span class="nom">Nouvel espace…</span></button>
-                ${space ? html`
-                  <button role="menuitem" onClick=${() => renameSpace(space)}>
-                    <span class="marque"></span><span class="nom">Renommer « ${space.nom} »…</span></button>
-                  <button role="menuitem" onClick=${() => deleteSpace(space)}>
-                    <span class="marque"></span><span class="nom">Supprimer « ${space.nom} »…</span></button>` : null}
-              </div>` : null}
-          </div>
+          <button class="contexte-bouton" title="Changer d'espace"
+            onClick=${() => goHub()}>
+            <${Icon} name="espace" />
+            <span class="nom">${contextTitle}</span>
+            <span class="contexte-lien">Changer</span>
+          </button>
+          ${inBiblio ? html`
+            <div class="vues" ref=${viewMenuRef}>
+              <button class=${viewMenu ? "vue-bouton ouvert" : "vue-bouton"} aria-haspopup="menu"
+                aria-expanded=${viewMenu} title="Filtrer par vue"
+                onClick=${() => setViewMenu((v) => !v)}>
+                <${Icon} name="espace" />
+                <span class="nom">${activeView ? activeView.nom : "Toutes les vues"}</span>
+                <${Icon} name="bas" />
+              </button>
+              ${viewMenu ? html`
+                <div class="vue-menu" role="menu">
+                  <button role="menuitem" class=${activeView ? "" : "actif"} onClick=${() => chooseView("")}>
+                    <span class="marque">${activeView ? null : html`<${Icon} name="coche" />`}</span>
+                    <span class="nom">Toutes les vues</span>
+                    <span class="compte">${schemas.length}</span>
+                  </button>
+                  ${views.length ? html`<div class="vue-titre">Vues</div>` : null}
+                  ${views.map((e) => html`
+                    <button key=${e.id} role="menuitem" class=${e.id === viewId ? "actif" : ""}
+                      onClick=${() => chooseView(e.id)}>
+                      <span class="marque">${e.id === viewId ? html`<${Icon} name="coche" />` : null}</span>
+                      <span class="nom">${e.nom}</span>
+                      <span class="compte">${countInView(e)}</span>
+                    </button>`)}
+                  <div class="vue-trait"></div>
+                  ${oldServer ? html`<p class="vue-alerte">${OLD_SERVER}</p>` : null}
+                  <button role="menuitem" onClick=${async () => {
+                    const id = await createView();
+                    if (id) chooseView(id);
+                  }}><span class="marque">+</span><span class="nom">Nouvelle vue…</span></button>
+                  ${activeView ? html`
+                    <button role="menuitem" onClick=${() => renameView(activeView)}>
+                      <span class="marque"></span><span class="nom">Renommer « ${activeView.nom} »…</span></button>
+                    <button role="menuitem" onClick=${() => deleteView(activeView)}>
+                      <span class="marque"></span><span class="nom">Supprimer « ${activeView.nom} »…</span></button>` : null}
+                </div>` : null}
+            </div>` : null}
           <span class="boutons">
             <button class="bouton petit" title="Nouveau schéma" onClick=${() => createSchema()}>+ Schéma</button>
             <button class="bouton petit" title="Nouveau dossier" onClick=${() => createFolder()}>+ Dossier</button>
@@ -1305,19 +1731,23 @@ function App() {
         </div>
         <nav class=${dropTarget === "" ? "arbre cible" : "arbre"} aria-label="Dossiers et schémas"
           onDragOver=${(e) => dragOver(e, "")} onDrop=${(e) => dropOn(e, "")} onDragLeave=${leaveTree}>
-          ${schemas.length === 0 && folders.length === 0
+          ${!activeSpaceId && schemas.length === 0 && folders.length === 0
             ? html`<p class="vide-liste">Aucun schéma pour l'instant.</p>` : null}
-          ${space && items.length === 0 ? html`<p class="vide-liste">Cet espace est vide. Passez sur
-            « Tous les schémas », survolez un dossier ou un schéma, puis cliquez sur le signet pour
-            l'ajouter ici.</p>` : null}
-          <ul>${space ? items : renderChildren(tree, 0)}</ul>
-          ${dragging && !space ? html`
+          ${activeSpaceId && (!spaceNode || countSchemas(spaceNode) === 0)
+            ? html`<p class="vide-liste">Cet espace est vide. Créez un schéma ou un dossier ici.</p>` : null}
+          ${activeView && treeItems && treeItems.length === 0
+            ? html`<p class="vide-liste">Cette vue est vide. Survolez un dossier ou un schéma, puis
+              cliquez sur le signet pour l'ajouter ici.</p>` : null}
+          <ul>${treeItems}</ul>
+          ${dragging ? html`
             <div class=${dropTarget === "" ? "zone-racine cible" : "zone-racine"}>
-              Déposer ici pour ranger à la racine</div>` : null}
+              Déposer ici pour ranger à la ${activeSpaceId ? "racine de l'espace" : "racine"}</div>` : null}
         </nav>
-        <p class="aide-arbre">${space
-          ? "Un espace est une vue : y ajouter ou en retirer un dossier ne déplace rien sur le disque."
-          : "Glissez un schéma ou un dossier sur un dossier pour l'y ranger. Le signet l'ajoute à un espace de travail."}</p>
+        <p class="aide-arbre">${activeSpaceId
+          ? "Tout ce que vous créez ou rangez ici reste dans cet espace."
+          : activeView
+            ? "Une vue est un filtre : y ajouter ou en retirer un dossier ne déplace rien sur le disque."
+            : "Glissez un schéma ou un dossier sur un dossier pour l'y ranger. Le signet l'ajoute à une vue."}</p>
       </aside>
       ${sidebar ? html`<div class=${resizing ? "poignee active" : "poignee"} role="separator"
         aria-orientation="vertical" aria-label="Largeur de la liste" tabIndex="0"
@@ -1328,6 +1758,7 @@ function App() {
         <header class="entete">
           <button class="bouton" title="Afficher ou masquer la liste des schémas"
             onClick=${() => setSidebar((v) => !v)}>Liste</button>
+          <button class="bouton" title="Changer d'espace" onClick=${() => goHub()}>Espaces</button>
           <span class="titre">${current ? label(current) : "Aucun schéma ouvert"}</span>
           ${preview ? html`<span class="apercu">Ancienne version</span>`
             : current ? html`<span class=${dirty ? "etat modifie" : "etat"}>

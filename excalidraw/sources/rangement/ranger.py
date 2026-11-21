@@ -5,7 +5,7 @@ domaine, « 1 pour la cnss », « 2 regles et sources », « 3 comprendre ».
 
 Chaque déplacement suit le chemin de la visionneuse (server.py, _move) : le fichier ou le dossier
 est renommé, les versions de l'historique suivent, deplacements.json note l'ancienne et la
-nouvelle place, et les espaces de travail (espaces.json) sont mis à jour. Aucun schéma n'est
+nouvelle place, et les vues thématiques (vues.json) sont mises à jour. Aucun schéma n'est
 régénéré ni modifié. Les dossiers laissés vides sont retirés.
 
 Usage (depuis ETL) :
@@ -82,7 +82,7 @@ DEPLACEMENTS = [
      "archives/rangement/proposition de rangement.excalidraw"),
 ]
 
-# dossiers dont les schémas partent un par un : un espace de travail qui liste le dossier doit
+# dossiers dont les schémas partent un par un : une vue qui liste le dossier doit
 # d'abord lister ses schémas, pour les suivre
 DISSOUS = ["regles cipres", "besoins cnss", "lexique", "annuaire cnss", "reunions", "Tests",
            "Tests/test", "grh/T63 T64 finances", "rangement",
@@ -93,20 +93,20 @@ def schemas_de(dossier):
     return sorted(p for p in dossier.rglob("*.excalidraw") if not server._hidden(p))
 
 
-def detailler_espaces(faire):
-    """Remplace, dans chaque espace, un dossier dissous par la liste de ses schémas."""
-    espaces, change = server.read_spaces(), False
-    for espace in espaces:
+def detailler_vues(faire):
+    """Remplace, dans chaque vue, un dossier dissous par la liste de ses schémas."""
+    vues, change = server.read_views(), False
+    for vue in vues:
         chemins = []
-        for chemin in espace["chemins"]:
+        for chemin in vue["chemins"]:
             if chemin in DISSOUS and (SCHEMAS / chemin).is_dir():
                 change = True
                 chemins += [server.relative(p) for p in schemas_de(SCHEMAS / chemin)]
             else:
                 chemins.append(chemin)
-        espace["chemins"] = list(dict.fromkeys(chemins))
+        vue["chemins"] = list(dict.fromkeys(chemins))
     if change and faire:
-        server.write_spaces(espaces)
+        server.write_views(vues)
     return change
 
 
@@ -125,7 +125,7 @@ def deplacer(ancien, nouveau, faire):
     for avant, apres in suivis:
         move_history(avant, apres)
         record_move(avant, apres)
-    server.follow_in_spaces(ancien, nouveau)
+    server.follow_in_vues(ancien, nouveau)
     return f"fait ({len(suivis)} schéma{'s' if len(suivis) > 1 else ''})"
 
 
@@ -139,21 +139,21 @@ def retirer_dossiers_vides(faire):
         if faire:
             (dossier / ".DS_Store").unlink(missing_ok=True)
             dossier.rmdir()
-            server.follow_in_spaces(retires[-1], None)
+            server.follow_in_vues(retires[-1], None)
     return retires
 
 
-def nettoyer_espaces(faire):
-    """Dans un espace, une entrée déjà contenue dans un de ses dossiers est en double : on la retire."""
-    espaces, change = server.read_spaces(), False
-    for espace in espaces:
-        gardes = [c for c in espace["chemins"]
-                  if not any(c != d and c.startswith(f"{d}/") for d in espace["chemins"])]
-        change = change or gardes != espace["chemins"]
-        espace["chemins"] = gardes
+def nettoyer_vues(faire):
+    """Dans une vue, une entrée déjà contenue dans un de ses dossiers est en double : on la retire."""
+    vues, change = server.read_views(), False
+    for vue in vues:
+        gardes = [c for c in vue["chemins"]
+                  if not any(c != d and c.startswith(f"{d}/") for d in vue["chemins"])]
+        change = change or gardes != vue["chemins"]
+        vue["chemins"] = gardes
     if change and faire:
-        server.write_spaces(espaces)
-    return espaces
+        server.write_views(vues)
+    return vues
 
 
 if __name__ == "__main__":
@@ -161,7 +161,7 @@ if __name__ == "__main__":
     parser.add_argument("--faire", action="store_true", help="déplacer vraiment (sinon : à blanc)")
     args = parser.parse_args()
 
-    detailler_espaces(args.faire)
+    detailler_vues(args.faire)
     problemes = 0
     for ancien, nouveau in DEPLACEMENTS:
         etat = deplacer(ancien, nouveau, args.faire)
@@ -169,6 +169,6 @@ if __name__ == "__main__":
         print(f"{etat:28} {ancien}  ->  {nouveau}")
     if args.faire:
         print("dossiers vides retirés :", ", ".join(retirer_dossiers_vides(True)) or "aucun")
-    for espace in nettoyer_espaces(args.faire):
-        print(f"espace « {espace['nom']} » :", espace["chemins"])
+    for vue in nettoyer_vues(args.faire):
+        print(f"vue « {vue['nom']} » :", vue["chemins"])
     sys.exit(1 if problemes else 0)

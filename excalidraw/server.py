@@ -7,7 +7,7 @@ Usage :
     python3 excalidraw/server.py --host 127.0.0.1   # local seulement
 
 Sert la visionneuse (viewer/) et une petite API sur les fichiers de schemas/ :
-    GET  /api/arbre              dossiers (même vides) et schémas, pour l'arborescence
+    GET  /api/arbre              dossiers, schémas, espaces et vues
     GET  /api/schemas            liste des schémas
     GET  /api/schemas/<chemin>   contenu d'un schéma et date de modification
     PUT  /api/schemas/<chemin>   enregistre un schéma
@@ -23,11 +23,16 @@ Sert la visionneuse (viewer/) et une petite API sur les fichiers de schemas/ :
     DELETE /api/dossiers/<chemin>  supprime un dossier vide
     POST /api/deplacer           déplace un schéma ou un dossier dans un autre dossier :
                                  {"de": "prestations/x.excalidraw", "vers": "grh"} ("" : la racine)
-    GET  /api/espaces            les espaces de travail (aussi dans /api/arbre)
-    PUT  /api/espaces            remplace la liste : {"espaces": [{"id", "nom", "chemins"}]}
-Un espace de travail est une vue : un nom et une liste de dossiers ou de schémas de schemas/.
-Rien n'est déplacé sur le disque ; la liste est dans espaces.json, à côté de ce fichier. Un
-déplacement ou une suppression de dossier met les espaces à jour.
+    GET  /api/vues               les vues thématiques (aussi dans /api/arbre)
+    PUT  /api/vues               remplace la liste : {"vues": [{"id", "nom", "chemins"}]}
+    GET  /api/espaces            les espaces physiques (aussi dans /api/arbre)
+    POST /api/espaces            crée un espace : {"nom": "…"} → dossier schemas/espaces/<id>/
+    PUT  /api/espaces/<id>       renomme : {"nom": "…"}
+    DELETE /api/espaces/<id>     supprime un espace vide ; ?force=1 retire aussi son contenu
+
+Un espace est un contexte isolé : sa racine sur le disque est schemas/espaces/<id>/.
+Une vue est un filtre thématique (nom + liste de chemins) : rien n'est déplacé ; la liste
+est dans vues.json. Un déplacement ou une suppression met les vues à jour.
 Chaque enregistrement garde l'état précédent et le nouveau dans historique/ (lib/historique.py) ;
 un déplacement emmène les versions du schéma avec lui.
 Par défaut écoute sur 0.0.0.0 : accessible depuis un autre ordinateur du réseau
@@ -39,6 +44,7 @@ import argparse
 import json
 import os
 import re
+import shutil
 import socket
 import sys
 from http import HTTPStatus
@@ -54,13 +60,17 @@ from historique import (list_versions, move_history, read_version, record_move, 
 
 SCHEMAS_DIR = ROOT / "schemas"
 VIEWER_DIR = ROOT / "viewer"
+SPACES_ROOT_NAME = "espaces"
+SPACES_DIR = SCHEMAS_DIR / SPACES_ROOT_NAME
 API = "/api/schemas"
 TREE_API = "/api/arbre"
 FOLDERS_API = "/api/dossiers"
 MOVE_API = "/api/deplacer"
 HISTORY_API = "/api/historique"
 SPACES_API = "/api/espaces"
+VIEWS_API = "/api/vues"
 SPACES_FILE = ROOT / "espaces.json"
+VIEWS_FILE = ROOT / "vues.json"
 SPACE_ID = re.compile(r"[a-z0-9][a-z0-9\-]{0,39}")
 # nom d'un nouveau dossier : lettres (accents compris), chiffres, espaces, - et _
 FOLDER_NAME = re.compile(r"\w[\w\- ]{0,79}")
@@ -90,6 +100,13 @@ def inside(relative_path):
     return path
 
 
+def space_root(ident):
+    """Racine disque d'un espace, ou None si l'identifiant est invalide."""
+    if not isinstance(ident, str) or not SPACE_ID.fullmatch(ident):
+        return None
+    return SPACES_DIR / ident
+
+
 def list_folders():
     return sorted(relative(p) for p in SCHEMAS_DIR.rglob("*") if p.is_dir() and not _hidden(p))
 
@@ -108,11 +125,11 @@ def list_schemas():
     return items
 
 
-def clean_spaces(data):
-    """La liste d'espaces de travail, vérifiée et normalisée, ou None si elle est invalide."""
+def clean_views(data):
+    """La liste de vues, vérifiée et normalisée, ou None si elle est invalide."""
     if not isinstance(data, list) or len(data) > 50:
         return None
-    root, seen, spaces = SCHEMAS_DIR.resolve(), set(), []
+    root, seen, views = SCHEMAS_DIR.resolve(), set(), []
     for item in data:
         if not isinstance(item, dict):
             return None
@@ -131,8 +148,40 @@ def clean_spaces(data):
             if relative(path) not in kept:
                 kept.append(relative(path))
         seen.add(ident)
-        spaces.append({"id": ident, "nom": name.strip(), "chemins": kept})
+        views.append({"id": ident, "nom": name.strip(), "chemins": kept})
+    return views
+
+
+def clean_spaces(data):
+    """La liste d'espaces physiques ({id, nom}), ou None si elle est invalide."""
+    if not isinstance(data, list) or len(data) > 50:
+        return None
+    seen, spaces = set(), []
+    for item in data:
+        if not isinstance(item, dict):
+            return None
+        ident, name = item.get("id"), item.get("nom")
+        if not isinstance(ident, str) or not SPACE_ID.fullmatch(ident) or ident in seen:
+            return None
+        if not isinstance(name, str) or not 0 < len(name.strip()) <= 60:
+            return None
+        # un ancien format (vues) ne doit pas passer pour des espaces
+        if "chemins" in item:
+            return None
+        seen.add(ident)
+        spaces.append({"id": ident, "nom": name.strip()})
     return spaces
+
+
+def read_views():
+    try:
+        return clean_views(json.loads(VIEWS_FILE.read_text(encoding="utf-8")).get("vues")) or []
+    except (OSError, ValueError, AttributeError):
+        return []
+
+
+def write_views(views):
+    write_atomic(VIEWS_FILE, json.dumps({"vues": views}, ensure_ascii=False, indent=2) + "\n")
 
 
 def read_spaces():
@@ -146,12 +195,12 @@ def write_spaces(spaces):
     write_atomic(SPACES_FILE, json.dumps({"espaces": spaces}, ensure_ascii=False, indent=2) + "\n")
 
 
-def follow_in_spaces(old, new):
-    """Un schéma ou un dossier est passé de old à new (None : supprimé) : les espaces suivent."""
-    spaces, changed = read_spaces(), False
-    for space in spaces:
+def follow_in_vues(old, new):
+    """Un schéma ou un dossier est passé de old à new (None : supprimé) : les vues suivent."""
+    views, changed = read_views(), False
+    for view in views:
         paths = []
-        for path in space["chemins"]:
+        for path in view["chemins"]:
             if path == old or path.startswith(f"{old}/"):
                 changed = True
                 if new is None:
@@ -159,9 +208,55 @@ def follow_in_spaces(old, new):
                 path = new + path[len(old):]
             if path not in paths:
                 paths.append(path)
-        space["chemins"] = paths
+        view["chemins"] = paths
     if changed:
-        write_spaces(spaces)
+        write_views(views)
+
+
+# compatibilité pour les scripts qui appelaient encore follow_in_spaces
+follow_in_spaces = follow_in_vues
+
+
+def migrate_views_and_spaces():
+    """Si vues.json manque et que espaces.json contient encore des chemins : migrer une fois."""
+    SPACES_DIR.mkdir(parents=True, exist_ok=True)
+    if VIEWS_FILE.exists():
+        return
+    try:
+        raw = json.loads(SPACES_FILE.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        write_views([])
+        write_spaces([])
+        return
+    items = raw.get("espaces") if isinstance(raw, dict) else None
+    if not isinstance(items, list):
+        write_views([])
+        return
+    if items and isinstance(items[0], dict) and "chemins" in items[0]:
+        views = clean_views(items)
+        write_views(views if views is not None else [])
+        write_spaces([])
+        return
+    write_views([])
+
+
+def space_is_empty(path):
+    """True si le dossier n'a rien d'utile (un .DS_Store ou .gitkeep ne compte pas)."""
+    if not path.is_dir():
+        return True
+    skip = {".DS_Store", ".gitkeep"}
+    return not any(child.name not in skip for child in path.iterdir())
+
+
+def remove_space_tree(path):
+    """Retire le contenu d'un espace (schémas + historique associé) puis le dossier."""
+    if path.is_dir():
+        for schema in [p for p in path.rglob("*.excalidraw") if not _hidden(p)]:
+            follow_in_vues(relative(schema), None)
+        shutil.rmtree(path)
+    history_root = ROOT / "historique" / SPACES_ROOT_NAME / path.name
+    if history_root.exists():
+        shutil.rmtree(history_root, ignore_errors=True)
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -174,7 +269,7 @@ class Handler(SimpleHTTPRequestHandler):
 
     def log_message(self, fmt, *args):
         # la visionneuse relit la liste toutes les 3 secondes : on ne journalise pas ces lectures
-        if self.command == "GET" and self.path.startswith((API, TREE_API, SPACES_API)):
+        if self.command == "GET" and self.path.startswith((API, TREE_API, SPACES_API, VIEWS_API)):
             return
         super().log_message(fmt, *args)
 
@@ -201,15 +296,35 @@ class Handler(SimpleHTTPRequestHandler):
             return None
         return path
 
+    def _read_json_body(self, max_size):
+        length = int(self.headers.get("Content-Length") or 0)
+        try:
+            return json.loads(self.rfile.read(length)) if 0 < length <= max_size else None
+        except ValueError:
+            return None
+
+    def _space_id_from_path(self, url_path):
+        """Identifiant dans /api/espaces/<id>, ou None."""
+        if not url_path.startswith(SPACES_API + "/"):
+            return None
+        ident = unquote(url_path[len(SPACES_API) + 1:]).strip("/")
+        return ident if SPACE_ID.fullmatch(ident) and "/" not in ident else None
+
     def do_GET(self):
         url = urlparse(self.path)
         if url.path == API:
             return self._send_json(HTTPStatus.OK, list_schemas())
         if url.path == TREE_API:
-            return self._send_json(HTTPStatus.OK, {"dossiers": list_folders(), "schemas": list_schemas(),
-                                                   "espaces": read_spaces()})
+            return self._send_json(HTTPStatus.OK, {
+                "dossiers": list_folders(),
+                "schemas": list_schemas(),
+                "espaces": read_spaces(),
+                "vues": read_views(),
+            })
         if url.path == SPACES_API:
             return self._send_json(HTTPStatus.OK, {"espaces": read_spaces()})
+        if url.path == VIEWS_API:
+            return self._send_json(HTTPStatus.OK, {"vues": read_views()})
         if url.path.startswith(API + "/"):
             path = self._schema_path(url.path)
             if path is None or not path.is_file():
@@ -238,24 +353,94 @@ class Handler(SimpleHTTPRequestHandler):
         except ValueError:
             return self._error(HTTPStatus.UNPROCESSABLE_ENTITY, "La version n'est pas du JSON valide")
 
-    def _put_spaces(self):
+    def _put_views(self):
         if not self._same_origin():
             return self._error(HTTPStatus.FORBIDDEN, "Origine refusée")
-        length = int(self.headers.get("Content-Length") or 0)
-        try:
-            body = json.loads(self.rfile.read(length)) if 0 < length <= 256 * 1024 else None
-        except ValueError:
-            body = None
-        spaces = clean_spaces(body.get("espaces")) if isinstance(body, dict) else None
-        if spaces is None:
-            return self._error(HTTPStatus.BAD_REQUEST, "Liste d'espaces invalide")
+        body = self._read_json_body(256 * 1024)
+        views = clean_views(body.get("vues")) if isinstance(body, dict) else None
+        if views is None:
+            return self._error(HTTPStatus.BAD_REQUEST, "Liste de vues invalide")
+        write_views(views)
+        return self._send_json(HTTPStatus.OK, {"vues": views})
+
+    def _create_space(self):
+        if not self._same_origin():
+            return self._error(HTTPStatus.FORBIDDEN, "Origine refusée")
+        body = self._read_json_body(64 * 1024)
+        if not isinstance(body, dict):
+            return self._error(HTTPStatus.BAD_REQUEST, "JSON invalide")
+        name = body.get("nom")
+        if not isinstance(name, str) or not 0 < len(name.strip()) <= 60:
+            return self._error(HTTPStatus.BAD_REQUEST, "Nom d'espace invalide")
+        name = name.strip()
+        wanted = body.get("id")
+        if wanted is None:
+            wanted = _slug(name)
+        if not isinstance(wanted, str) or not SPACE_ID.fullmatch(wanted):
+            return self._error(HTTPStatus.BAD_REQUEST, "Identifiant d'espace invalide")
+        spaces = read_spaces()
+        taken = {e["id"] for e in spaces}
+        ident = wanted
+        n = 2
+        while ident in taken or (SPACES_DIR / ident).exists():
+            ident = f"{wanted[:28]}-{n}"
+            n += 1
+            if not SPACE_ID.fullmatch(ident):
+                return self._error(HTTPStatus.BAD_REQUEST, "Identifiant d'espace invalide")
+        root = space_root(ident)
+        root.mkdir(parents=True, exist_ok=False)
+        spaces.append({"id": ident, "nom": name})
         write_spaces(spaces)
-        return self._send_json(HTTPStatus.OK, {"espaces": spaces})
+        return self._send_json(HTTPStatus.CREATED, {"espace": {"id": ident, "nom": name}})
+
+    def _rename_space(self, ident):
+        if not self._same_origin():
+            return self._error(HTTPStatus.FORBIDDEN, "Origine refusée")
+        body = self._read_json_body(64 * 1024)
+        if not isinstance(body, dict):
+            return self._error(HTTPStatus.BAD_REQUEST, "JSON invalide")
+        name = body.get("nom")
+        if not isinstance(name, str) or not 0 < len(name.strip()) <= 60:
+            return self._error(HTTPStatus.BAD_REQUEST, "Nom d'espace invalide")
+        spaces = read_spaces()
+        space = next((e for e in spaces if e["id"] == ident), None)
+        if space is None:
+            return self._error(HTTPStatus.NOT_FOUND, "Espace introuvable")
+        space["nom"] = name.strip()
+        write_spaces(spaces)
+        return self._send_json(HTTPStatus.OK, {"espace": space})
+
+    def _delete_space(self, ident, force):
+        if not self._same_origin():
+            return self._error(HTTPStatus.FORBIDDEN, "Origine refusée")
+        spaces = read_spaces()
+        space = next((e for e in spaces if e["id"] == ident), None)
+        if space is None:
+            return self._error(HTTPStatus.NOT_FOUND, "Espace introuvable")
+        root = space_root(ident)
+        if root is None:
+            return self._error(HTTPStatus.BAD_REQUEST, "Identifiant d'espace invalide")
+        if root.exists() and not space_is_empty(root) and not force:
+            return self._error(HTTPStatus.CONFLICT, "L'espace n'est pas vide", "non_vide")
+        if root.exists():
+            if force:
+                remove_space_tree(root)
+            else:
+                (root / ".DS_Store").unlink(missing_ok=True)
+                (root / ".gitkeep").unlink(missing_ok=True)
+                if root.exists():
+                    root.rmdir()
+        follow_in_vues(f"{SPACES_ROOT_NAME}/{ident}", None)
+        write_spaces([e for e in spaces if e["id"] != ident])
+        return self._send_json(HTTPStatus.OK, {"espace": space})
 
     def do_PUT(self):
         url = urlparse(self.path)
-        if url.path == SPACES_API:
-            return self._put_spaces()
+        if url.path == VIEWS_API:
+            return self._put_views()
+        space_id = self._space_id_from_path(url.path)
+        if space_id is not None:
+            return self._rename_space(space_id)
         if not url.path.startswith(API + "/"):
             return self._error(HTTPStatus.NOT_FOUND, "Adresse inconnue")
         if not self._same_origin():
@@ -292,18 +477,15 @@ class Handler(SimpleHTTPRequestHandler):
             "modifie": mtime(path),
         })
 
-
     def do_POST(self):
         url = urlparse(self.path)
+        if url.path == SPACES_API:
+            return self._create_space()
         if url.path not in (FOLDERS_API, MOVE_API):
             return self._error(HTTPStatus.NOT_FOUND, "Adresse inconnue")
         if not self._same_origin():
             return self._error(HTTPStatus.FORBIDDEN, "Origine refusée")
-        length = int(self.headers.get("Content-Length") or 0)
-        try:
-            body = json.loads(self.rfile.read(length)) if 0 < length <= 64 * 1024 else None
-        except ValueError:
-            body = None
+        body = self._read_json_body(64 * 1024)
         if not isinstance(body, dict):
             return self._error(HTTPStatus.BAD_REQUEST, "JSON invalide")
         if url.path == FOLDERS_API:
@@ -315,6 +497,15 @@ class Handler(SimpleHTTPRequestHandler):
         if not all(FOLDER_NAME.fullmatch(part) and part == part.strip() for part in parts):
             return self._error(HTTPStatus.BAD_REQUEST, "Nom de dossier invalide : lettres, chiffres, "
                                "espaces, - et _ seulement", "nom")
+        if parts == [SPACES_ROOT_NAME] or (len(parts) == 1 and parts[0] == SPACES_ROOT_NAME):
+            return self._error(HTTPStatus.BAD_REQUEST,
+                               "Le dossier « espaces » est réservé aux espaces de travail",
+                               "reserve")
+        # créer un sous-dossier direct de schemas/espaces/ hors API espaces : refusé
+        if len(parts) == 2 and parts[0] == SPACES_ROOT_NAME:
+            return self._error(HTTPStatus.BAD_REQUEST,
+                               "Créez un espace depuis le hub Espaces, pas un dossier à cet endroit",
+                               "reserve")
         path = inside("/".join(parts))
         if path is None:
             return self._error(HTTPStatus.BAD_REQUEST, "Le dossier doit rester dans schemas/")
@@ -330,6 +521,13 @@ class Handler(SimpleHTTPRequestHandler):
             return self._error(HTTPStatus.NOT_FOUND, "Schéma ou dossier introuvable")
         if dest is None or not dest.is_dir():
             return self._error(HTTPStatus.NOT_FOUND, "Dossier de destination introuvable")
+        # le dossier réservé schemas/espaces et chaque racine d'espace ne se déplacent pas
+        if src == SPACES_DIR.resolve() or src.parent == SPACES_DIR.resolve():
+            return self._error(HTTPStatus.BAD_REQUEST,
+                               "Un espace ne se déplace pas comme un dossier ordinaire", "reserve")
+        if dest == SPACES_DIR.resolve():
+            return self._error(HTTPStatus.BAD_REQUEST,
+                               "Déposez dans un espace précis, pas dans le dossier réservé", "reserve")
         if src.is_dir() and (dest == src or src in dest.parents):
             return self._error(HTTPStatus.BAD_REQUEST, "Un dossier ne peut pas aller dans lui-même",
                                "boucle")
@@ -345,16 +543,20 @@ class Handler(SimpleHTTPRequestHandler):
         os.rename(src, target)
         result = {"chemin": relative(target)}
         try:
-            follow_in_spaces(old, result["chemin"])
-            for old, new in moves:
-                move_history(old, new)
-                record_move(old, new)
+            follow_in_vues(old, result["chemin"])
+            for old_path, new_path in moves:
+                move_history(old_path, new_path)
+                record_move(old_path, new_path)
         except OSError as e:
             result["avertissement"] = f"Versions non déplacées : {e}"
         return self._send_json(HTTPStatus.OK, result)
 
     def do_DELETE(self):
         url = urlparse(self.path)
+        space_id = self._space_id_from_path(url.path)
+        if space_id is not None:
+            force = "force" in parse_qs(url.query)
+            return self._delete_space(space_id, force)
         if not url.path.startswith(FOLDERS_API + "/"):
             return self._error(HTTPStatus.NOT_FOUND, "Adresse inconnue")
         if not self._same_origin():
@@ -362,6 +564,9 @@ class Handler(SimpleHTTPRequestHandler):
         path = inside(unquote(url.path[len(FOLDERS_API) + 1:]))
         if path is None or path == SCHEMAS_DIR.resolve() or not path.is_dir():
             return self._error(HTTPStatus.NOT_FOUND, "Dossier introuvable")
+        if path == SPACES_DIR.resolve() or path.parent == SPACES_DIR.resolve():
+            return self._error(HTTPStatus.BAD_REQUEST,
+                               "Supprimez un espace depuis le hub Espaces", "reserve")
         # seul un dossier vide se supprime ; .DS_Store est le fichier que le Finder y laisse
         if any(child.name != ".DS_Store" for child in path.iterdir()):
             return self._error(HTTPStatus.CONFLICT, "Le dossier n'est pas vide", "non_vide")
@@ -369,10 +574,18 @@ class Handler(SimpleHTTPRequestHandler):
         gone = relative(path)
         path.rmdir()
         try:
-            follow_in_spaces(gone, None)
+            follow_in_vues(gone, None)
         except OSError:
             pass
         return self._send_json(HTTPStatus.OK, {"chemin": gone})
+
+
+def _slug(name):
+    """Identifiant d'espace tiré du nom : « À valider (CNSS) » → a-valider-cnss."""
+    import unicodedata
+    folded = unicodedata.normalize("NFD", name).encode("ascii", "ignore").decode("ascii")
+    slug = re.sub(r"[^a-z0-9]+", "-", folded.lower()).strip("-")[:32]
+    return slug or "espace"
 
 
 def local_ips():
@@ -406,6 +619,7 @@ def main():
     args = parser.parse_args()
 
     SCHEMAS_DIR.mkdir(exist_ok=True)
+    migrate_views_and_spaces()
     server = ThreadingHTTPServer((args.host, args.port), Handler)
     print(f"Visionneuse Excalidraw : http://localhost:{args.port}  (schémas : {SCHEMAS_DIR})")
     if args.host in ("0.0.0.0", ""):

@@ -1,52 +1,8 @@
 {
   "espaces": [
     {
-      "id": "reunion-cnss",
-      "nom": "Réunion CNSS",
-      "chemins": [
-        "prestations/1 pour la cnss/regles par tableau",
-        "grh/1 pour la cnss/regles par tableau",
-        "prestations/1 pour la cnss/points_a_valider.excalidraw",
-        "prestations/1 pour la cnss/points_a_valider_v3.excalidraw",
-        "grh/1 pour la cnss/points_a_valider_v2.excalidraw",
-        "commun/fiche_regles.excalidraw",
-        "commun/vues cnss"
-      ]
-    },
-    {
-      "id": "prestations",
-      "nom": "Prestations",
-      "chemins": [
-        "prestations"
-      ]
-    },
-    {
       "id": "grh",
-      "nom": "GRH",
-      "chemins": [
-        "grh"
-      ]
-    },
-    {
-      "id": "suivi-du-projet",
-      "nom": "Suivi du projet",
-      "chemins": [
-        "journal",
-        "archives/rangement/proposition de rangement.excalidraw"
-      ]
-    },
-    {
-      "id": "reviser",
-      "nom": "Réviser",
-      "chemins": [
-        "maitrise",
-        "commun/lexique.excalidraw"
-      ]
-    },
-    {
-      "id": "test",
-      "nom": "TEST",
-      "chemins": []
+      "nom": "grh"
     }
   ]
 }
