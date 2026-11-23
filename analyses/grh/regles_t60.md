@@ -1,6 +1,6 @@
 # Le mouvement du personnel (T60) : règles proposées
 
-État au 17/11/2026 : la requête a été lancée sur la base source le 17/11 (partie 5). Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Ces règles sont des propositions, à faire viser par la DRH. Le 08/11, l'annuaire CNSS 2024 (tableaux 119 à 126, schéma `annuaire cnss/gestion_administrative_2024`) a tranché la disponibilité : elle sort de l'effectif (réglage HORS_EFFECTIF).
+État au 21/11/2026. La requête est alignée sur le socle commun de l'effectif (mêmes réglages COMMUN, mêmes listes, même présence G2/G7) : `controles/construire.py` s'arrête s'ils diffèrent. Chiffres de référence : lancement du 17/11 sur la base source. Les termes de T60 de la fiche de lecture GRH n'ont pas encore été vus en réunion avec la CNSS. Le 08/11, l'annuaire CNSS 2024 a tranché la disponibilité hors effectif (liste `absences`, code 07).
 
 La requête qui applique ces règles : [t60_requete_proposee.sql](t60_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête, dans la CTE `parametres` (partie 0), comme dans la requête de l'effectif. Changer un réglage ne demande pas de réécrire la requête.
 
@@ -56,7 +56,7 @@ Ordre de priorité : une décision de réunion avec la CNSS, puis le recueil des
 
 ### G14. Les deux photos de l'exercice
 
-L'effectif **au début** de l'exercice N est celui des agents présents au **31/12 de N-1**. L'effectif **à la fin** est celui des présents au **31/12 de N**. Être présent suit **exactement les règles de T58** : G1 (la nature), G2 (les permanents), G7 (les temporaires), avec les mêmes réglages `disponibilite` et `fin_contrat_inconnue`. Les parties 0 à 7 de la requête reprennent celles de la requête de l'effectif. Une modification de ces règles se fait donc dans les deux requêtes.
+L'effectif **au début** de l'exercice N est celui des agents présents au **31/12 de N-1**. L'effectif **à la fin** est celui des présents au **31/12 de N**. Être présent suit **exactement les règles de T58** : G1, G2, G7, avec les mêmes réglages COMMUN (`fin_contrat_inconnue`, `fiche_sans_etat`, `inactif_sans_depart`, `ordre_date_entree`) et les mêmes listes (`decisions_depart`, `absences`). Le socle commun (blocs marqués dans les deux fichiers) doit rester identique.
 
 À chaque date, un agent appartient à la population de sa nature : les permanents, les temporaires, ou les agents sans situation. Le filtre de nature d'OBIEE donne ainsi un tableau des permanents et un tableau des temporaires, chacun juste.
 
@@ -166,8 +166,8 @@ Ils s'écrivent en tête de la requête, dans la CTE `parametres` (partie 0), co
 
 | Valeur | Ce que fait la requête |
 |---|---|
-| **HORS_EFFECTIF** (valeur retenue le 08/11/2026) | un permanent en disponibilité (décision 07, pas encore de retour 18) sort de l'effectif : une sortie DISP à la mise en disponibilité, une entrée REM au retour, comme le tableau 121 de l'annuaire CNSS 2024 |
-| **PRESENT** | il reste dans l'effectif : ni sortie, ni retour |
+| **HORS_EFFECTIF** (effet de la ligne 07 dans `absences`, retenu le 08/11/2026) | un permanent en disponibilité (pas encore de retour 18) sort de l'effectif : une sortie DISP, une entrée REM au retour, comme le tableau 121 de l'annuaire CNSS 2024 |
+| **PRESENT** (effet possible sur la même ligne) | il reste dans l'effectif : ni sortie, ni retour |
 
 La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa propre CTE `parametres`. Il faut lui donner **la même valeur dans les deux requêtes**, sinon la fin de T60 ne retombe plus sur l'effectif de T58.
 
@@ -191,7 +191,8 @@ La requête de l'effectif (T58) a le même réglage `disponibilite`, dans sa pro
 
 | Point | Ce qui est retenu | Ce qui pourrait changer | Qui décide |
 |---|---|---|---|
-| Disponibilité (réglage `disponibilite`) | HORS_EFFECTIF : sortie DISP et retour REM, dans T58 et T60 à la fois (annuaire CNSS 2024, tableau 121) | PRESENT : l'agent reste dans l'effectif, ni sortie ni retour | tranché le 08/11/2026 (QG6) ; la DRH peut encore le revoir |
+| Disponibilité (liste `absences`, code 07) | effet HORS_EFFECTIF : sortie DISP et retour REM, T58 et T60 | effet PRESENT : reste dans l'effectif | tranché le 08/11/2026 (QG6) ; la DRH peut encore le revoir |
+| Fiche inactive après dispo sans retour (`inactif_sans_depart`) | JAMAIS_COMPTE (aujourd'hui) | ABSENCE : compté jusqu'à la dispo | point 64 |
 | Date d'un décès | Date de décès, sinon liquidation des droits (34) | Une date saisie, ou celle du communiqué nécrologique | DRH (QG3, M12) |
 | Date d'entrée | Embauche, sinon prise de service (comme T58) | Prise de service d'abord, comme l'ancienneté | CNSS (M10) |
 | Entré et sorti la même année | Pas compté | Compté en entrée et en sortie | DRH (Q7) |

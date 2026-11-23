@@ -1,8 +1,8 @@
 # L'effectif du personnel (T58, T59, T61, T65) : règles retenues
 
-État au 05/11/2026, après la réunion du 03/11/2026 avec la CNSS (termes 1 à 9 de la fiche de lecture GRH) et le lot 24 (les décisions face aux situations). Le 08/11/2026, l'annuaire CNSS 2024 (tableaux 119 à 126) a tranché la disponibilité (hors effectif) et confirmé HC en cadres supérieurs.
+État au 21/11/2026. Les règles de présence restent celles du 08/11/2026 (réunion du 03/11, lot 24, annuaire CNSS 2024 pour la disponibilité hors effectif et HC). Le 21/11, chaque point encore ouvert est devenu un **réglage** en tête de requête, partagé avec T60 (socle commun vérifié par `controles/construire.py`).
 
-La requête qui applique ces règles : [t58_t65_effectif_requete_proposee.sql](t58_t65_effectif_requete_proposee.sql). Chaque choix qui peut changer est un **réglage** en tête de la requête (partie 0). Changer un réglage ne demande pas de réécrire la requête.
+La requête qui applique ces règles : [t58_t65_effectif_requete_proposee.sql](t58_t65_effectif_requete_proposee.sql). Changer un réglage ne demande pas de réécrire la requête.
 
 **La structure ne change pas.** La requête garde la structure de la table actuelle DTM_GRH_EFFECTIF (requête du DTM [grh_effectif.sql](../../domaines/grh/dtm/sql/grh_effectif.sql)) : les mêmes colonnes, le même grain, le même paramètre (le cliché). Ce sont seulement les règles de calcul qui changent. Cinq colonnes s'ajoutent à la fin, et aucune n'est retirée. Les tableaux déjà construits dans OBIEE continuent de marcher. La mise en page des tableaux CIPRES (catégories et sexe en colonnes) se fait dans OBIEE, pas dans la table.
 
@@ -36,12 +36,13 @@ Un agent qui n'a aucune situation suit la règle des permanents (G2) et reste co
 
 ### G2. Le permanent présent à la date d'arrêté (terme 2)
 
-La date d'arrêté est le 31 décembre pour l'annuaire, ou toute autre date (fin de mois, fin de trimestre). Un permanent est compté quand **les deux conditions** sont remplies.
+La date d'arrêté est le 31 décembre pour l'annuaire, ou toute autre date (fin de mois, fin de trimestre). Un permanent est compté quand **les trois conditions** sont remplies.
 
-1. **Il est entré au plus tard à la date d'arrêté.** La date d'entrée est la date d'embauche (GRH_PERSONNE.DATE_EMBAUCHE). Si elle est vide, c'est la date de prise de service.
-2. **Il n'est pas encore parti.** C'est le cas si sa fiche n'est pas inactive (GRH_PERSONNE.ETAT_EMPLOYE différent de INACTIF), ou si sa première décision de départ prend effet **après** la date d'arrêté.
+1. **Il est entré au plus tard à la date d'arrêté.** La date d'entrée suit le réglage `ordre_date_entree` (aujourd'hui : embauche, à défaut prise de service).
+2. **Il n'est pas dans une absence qui sort de l'effectif.** Les absences longues sont la liste réglable `absences` (aujourd'hui : disponibilité 07 = hors effectif ; mise à disposition 14 = présent).
+3. **Il n'est pas encore parti.** Sa fiche n'est pas lue comme partie, **ou** son premier départ daté tombe après la date d'arrêté, **ou** (réglage `inactif_sans_depart` = ABSENCE) sa dernière absence hors effectif sans retour tombe après la date d'arrêté.
 
-Une fiche **sans état** compte comme encore là. Ce sont des embauches récentes, dont la fiche n'a pas encore été passée à ACTIF : 67 fiches, jusqu'au 28/01/2026 (lot 2, Q10). Avant le 05/11/2026, la requête demandait une fiche ACTIF, et ces agents n'étaient comptés nulle part, ce qui risquait de sous-compter le 31/12/2025.
+Une fiche **sans état** (ni ACTIF ni INACTIF) suit le réglage `fiche_sans_etat` : aujourd'hui PRESENT (comptée comme encore là) ; en RECENTE, seulement si l'entrée a moins de `fiche_sans_etat_mois` mois. Ce sont surtout des embauches récentes (lot 2, Q10).
 
 Les décisions de départ (GRH_DECISION.CDEC_CODE, liste réglable `decisions_depart`) :
 
@@ -68,11 +69,11 @@ Un temporaire est compté quand la date d'arrêté tombe **entre le début et la
 - **Fin d'un contrat :**
   1. la **date de départ**, si elle est saisie : la première décision de départ après le début du contrat ;
   2. sinon, **la veille du début du contrat suivant** ;
-  3. sinon, **aucune fin connue** : l'agent est **considéré encore sous contrat**, donc compté.
+  3. sinon, **aucune fin connue** : le réglage `fin_contrat_inconnue` décide (aujourd'hui PRESENT = encore sous contrat ; FICHE = seulement si la fiche n'est pas INACTIF ; DUREE = `duree_contrat_mois` mois).
 
-*Exemple : contrat commencé le 01/03/2024, nouveau contrat le 01/09/2024, aucun départ saisi entre les deux. Le premier contrat finit le 31/08/2024. Si le second n'a ni départ ni contrat suivant, l'agent est compté à toute date après le 01/09/2024.*
+*Exemple : contrat commencé le 01/03/2024, nouveau contrat le 01/09/2024, aucun départ saisi entre les deux. Le premier contrat finit le 31/08/2024. Si le second n'a ni départ ni contrat suivant, avec PRESENT l'agent est compté à toute date après le 01/09/2024.*
 
-*Source : réunion du 03/11/2026. La BI ne fixe pas de durée de contrat à la place de la CNSS : l'ancien réglage de 18 mois est supprimé.*
+*Source : réunion du 03/11/2026. PRESENT est la valeur du jour ; FICHE et DUREE attendent la réponse au point 20.*
 
 ### G3. La catégorie professionnelle (terme 3)
 
@@ -140,17 +141,13 @@ La table DTM_GRH_RATIO (requête grh_ratio.sql) calcule aujourd'hui le même tau
 
 Ces deux colonnes existaient déjà dans la table. Les tableaux CIPRES ne les lisent pas (ils lisent NB_AGENTS et NB_CADRES), mais OBIEE peut les afficher.
 
-Un agent compté est **inactif** quand il est **en disponibilité à la date d'arrêté** : sa dernière mise en disponibilité (décision **07**) n'est pas suivie d'une remise en activité (décision **18**) à cette date. Les autres agents comptés sont **actifs**. C'est la même lecture que pour la disponibilité (QG6) et pour l'ancienneté (G5).
+Un agent compté est **inactif** quand une absence de la liste `absences` est **en cours** à la date d'arrêté et que son effet est HORS_EFFECTIF ou INACTIF (réglage `inactifs` = DECISIONS, aujourd'hui). Les autres agents comptés sont **actifs**.
 
-**Pourquoi on ne lit plus le statut de la situation.** Avant, un agent était inactif si sa dernière situation avait le statut B (détachement), D (mise à disposition), E (disponibilité), F (suspendu) ou H (sous les drapeaux). Mais ce statut n'est pas daté. Quand un agent s'absente ou part, l'application modifie le statut de la situation en cours au lieu d'ouvrir une nouvelle situation. Le statut dit donc l'état d'aujourd'hui, pas celui de la date d'arrêté. Au 31/12/2024, les 6 permanents en disponibilité selon les décisions avaient le statut A et étaient comptés actifs (lot 24, Q137 à Q139).
+**Pourquoi on ne lit plus le statut de la situation.** Avant, un agent était inactif si sa dernière situation avait le statut B, D, E, F ou H. Ce statut n'est pas daté : l'application le modifie sur la situation en cours. Au 31/12/2024, les 6 permanents en disponibilité selon les décisions avaient le statut A (lot 24).
 
-**Limite.** Le détachement, la mise à disposition, la suspension et le service militaire n'ont pas de paire de décisions début et fin connue. Ils ne sont plus comptés inactifs. Au 31/12/2024, le statut n'en trouvait qu'un seul (F).
+Avec la disponibilité en **hors effectif** (liste `absences`, code 07, tranché le 08/11/2026), ces agents ne sont plus dans NB_AGENTS : NB_AGENTS_INACTIFS vaut 0. Le réglage `inactifs` = STATUT revient à l'ancienne lecture sur le statut.
 
-Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibilite` = HORS_EFFECTIF, la valeur retenue le 08/11/2026, les agents en disponibilité sortent de l'effectif, et NB_AGENTS_INACTIFS vaut 0 : la colonne ne sert plus qu'avec PRESENT.
-
-*Exemple : mise en disponibilité le 01/03/2023 (07), remise en activité le 01/06/2025 (18). L'agent est compté inactif au 31/12/2023 et au 31/12/2024, et actif au 31/12/2025.*
-
-*Source : lot 24 (05/11/2026) ; proposition BI, à faire viser par la DRH avec les autres règles.*
+*Source : lot 24 (05/11/2026) ; liste `absences` du 21/11/2026.*
 
 ### La déclinaison et la périodicité
 
@@ -163,16 +160,19 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 
 | Réglage | Valeur retenue | Autre valeur possible | D'où vient la valeur |
 |---|---|---|---|
-| `periodicite` | ANNUELLE (31/12 des exercices clos, comme avant) | MENSUELLE (fins de mois de l'année passée et de l'année en cours) | recueil des besoins v7 ; à activer avec Jules |
-| `decisions_depart` | 02, 34, 35, 36, 52, 54 | ajouter ou retirer un code | réunion du 03/11 |
-| `codes_decision` | annulation 40 ; engagements 50 et 51 ; disponibilité 07 et remise 18 | autres codes | lots 3, 13, 20 |
-| `regroupement_categorie` | 01-02, 03, 04-05, 06-HC ; cadres : 04, 05, 06, HC | déplacer une catégorie (Kaya 2017 mettait la 5e en cadres supérieurs) | recueil des besoins v7 ; confirmé par l'annuaire CNSS 2024 (le tableau 126 retombe sur le 119, HC compris) |
+| `periodicite` | ANNUELLE | MENSUELLE (fins de mois) | recueil v7 ; à activer avec Jules |
+| `ordre_date_entree` | EMBAUCHE | PRISE_SERVICE | point 50 ; **COMMUN** avec T60 |
+| `fiche_sans_etat` | PRESENT | RECENTE (+ `fiche_sans_etat_mois`) | point 45 ; **COMMUN** |
+| `inactif_sans_depart` | JAMAIS_COMPTE | ABSENCE (compte jusqu'à la dispo sans retour) | point 64 ; **COMMUN** |
+| `fin_contrat_inconnue` | PRESENT | FICHE ; DUREE (+ `duree_contrat_mois`) | point 20 ; **COMMUN** |
+| `absences` | 07 HORS_EFFECTIF ; 14 PRESENT | changer l'effet d'une ligne, ou ajouter un code | points 5, 51, 14 ; **COMMUN** (liste du socle) |
+| `decisions_depart` | 02, 34, 35, 36, 52, 54 | ajouter un code ; `date_effet` / `retenir` | points 21–23 ; **COMMUN** |
+| `codes_decision` | 40, 50, 51, 18, 37 | autres codes | lots 3, 13, 20 ; **COMMUN** |
+| `regroupement_categorie` | 01-02, 03, 04-05, 06-HC | déplacer une catégorie | recueil v7 ; annuaire 2024 |
 | `ordre_date_anciennete` | PRISE_SERVICE | EMBAUCHE | réunion du 03/11 |
-| `retirer_interruptions` | OUI | NON | recueil des besoins v7 |
-| `fin_contrat_inconnue` | PRESENT | FICHE (compté seulement si la fiche n'est pas inactive) | réunion du 03/11 |
-| `disponibilite` | HORS_EFFECTIF (il sort de l'effectif, comme le tableau 121 de l'annuaire CNSS 2024) | PRESENT (l'agent en disponibilité est compté, inactif) | **tranché le 08/11/2026** (QG6) : annuaire CNSS 2024, tableau 121, et réunion du 03/11 (M11) ; même valeur dans la requête de T60 |
-| `inactifs` | DECISIONS (en disponibilité selon les décisions 07 et 18) | STATUT (statuts B, D, E, F, H de la situation, comme avant) | lot 24 |
-| `correspondance_domaine` | *vide : à brancher* | la table chargée depuis le fichier Excel | réunion du 03/11 |
+| `retirer_interruptions` | OUI | NON | recueil v7 |
+| `inactifs` | DECISIONS | STATUT | point 46 ; lot 24 |
+| `correspondance_domaine` | *vide : à brancher* | table Excel CNSS | point 48 |
 
 ---
 
@@ -180,10 +180,11 @@ Le réglage `inactifs` = STATUT revient à l'ancienne lecture. Avec `disponibili
 
 | Point | Ce qui est retenu | Ce qui pourrait changer | Qui décide |
 |---|---|---|---|
-| Temporaire sans fin de contrat connue | Compté présent | Le compter seulement si sa fiche est active (`fin_contrat_inconnue` = FICHE) | CNSS, au vu du chiffre |
-| Agent en disponibilité à la date d'arrêté | Sorti de l'effectif, comme l'annuaire CNSS 2024 (tableau 121) ; 741 permanents au 31/12/2024 au lieu de 747 | Le garder dans l'effectif, compté inactif (`disponibilite` = PRESENT) | tranché le 08/11/2026 (QG6) ; la DRH peut le revoir |
-| Agents inactifs | En disponibilité selon les décisions 07 et 18 | Revenir au statut de la situation (`inactifs` = STATUT) | DRH |
-| Fiche sans état (embauche récente) | Comptée comme encore là | Ne la compter qu'une fois passée à ACTIF | DRH |
+| Temporaire sans fin de contrat connue | Compté présent | `fin_contrat_inconnue` = FICHE ou DUREE | point 20, DRH |
+| Agent en disponibilité à la date d'arrêté | Sorti de l'effectif (liste `absences`, 07 = HORS_EFFECTIF) | Mettre l'effet de 07 à PRESENT ou INACTIF | tranché le 08/11 (QG6) ; la DRH peut revoir |
+| Fiche inactive après dispo sans retour | Jamais compté (`inactif_sans_depart` = JAMAIS_COMPTE) | Compter jusqu'à l'absence (`ABSENCE`) | point 64 |
+| Agents inactifs | Absences en cours (DECISIONS) | Revenir au statut (`inactifs` = STATUT) | point 46 |
+| Fiche sans état | Comptée présente | Limiter aux entrées récentes (`fiche_sans_etat` = RECENTE) | point 45 |
 | Catégorie HC (hors catégorie) | Cadres supérieurs | Autre groupe | DRH |
 | Ordre des dates de l'ancienneté | Prise de service, puis embauche | Embauche d'abord | CNSS |
 | Interruptions de l'ancienneté | Retirées | Non retirées | CNSS |

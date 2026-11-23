@@ -1,7 +1,7 @@
 -- =============================================================================
--- CONTRÔLE 2 — La requête de T60 (mouvement du personnel), 17/11/2026
--- Requête contrôlée : analyses/grh/t60_requete_proposee.sql (jamais lancée). Réglage en
--- place : disponibilite = HORS_EFFECTIF.
+-- CONTRÔLE 2 — La requête de T60 (mouvement du personnel), 21/11/2026
+-- Requête contrôlée : analyses/grh/t60_requete_proposee.sql (version du 21/11/2026,
+-- socle commun avec l'effectif ; absence 07 = HORS_EFFECTIF).
 -- Exécution : mode script (F5) dans SQL Developer, rien à saisir. Comptages seulement.
 -- Lit LA SOURCE (USER_GRH), pas l'entrepôt : la requête proposée lit DWH et DTM, sa
 -- copie ci-dessous lit les mêmes tables dans USER_GRH, sans condition de cliché.
@@ -36,25 +36,34 @@ FROM (
     WITH
     parametres AS (
         SELECT
-               'HORS_EFFECTIF'         AS disponibilite,
-               'PRESENT'               AS fin_contrat_inconnue,
-               'NON'                   AS passages_annee,
-               'COMME_AVANT'           AS mouvements_internes
+            'PRESENT'               AS fin_contrat_inconnue,
+            18                      AS duree_contrat_mois,
+            'PRESENT'               AS fiche_sans_etat,
+            24                      AS fiche_sans_etat_mois,
+            'JAMAIS_COMPTE'         AS inactif_sans_depart,
+            'EMBAUCHE'              AS ordre_date_entree,
+            'NON'                   AS passages_annee,
+            'COMME_AVANT'           AS mouvements_internes
         FROM DUAL
     ),
     decisions_depart AS (
-        SELECT '02' AS code, 'RET' AS type_mvt, 'admission à la retraite' AS libelle FROM DUAL UNION ALL
-        SELECT '34', 'DEC',       'liquidation des droits après décès'          FROM DUAL UNION ALL
-        SELECT '35', 'FIN_CTRAT', 'fin de contrat'                              FROM DUAL UNION ALL
-        SELECT '36', 'DEM',       'démission'                                   FROM DUAL UNION ALL
-        SELECT '52', 'FIN_CTRAT', 'rupture du contrat'                          FROM DUAL UNION ALL
-        SELECT '54', 'LIC',       'licenciement'                                FROM DUAL
+        SELECT '02' AS code, 'RET' AS type_mvt, 'PREMIER_JOUR_PARTI' AS date_effet, 'TOUTES' AS retenir,
+               'admission à la retraite' AS libelle                                             FROM DUAL UNION ALL
+        SELECT '34', 'DEC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'liquidation des droits après décès' FROM DUAL UNION ALL
+        SELECT '35', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'fin de contrat'                     FROM DUAL UNION ALL
+        SELECT '36', 'DEM',       'PREMIER_JOUR_PARTI', 'TOUTES', 'démission'                          FROM DUAL UNION ALL
+        SELECT '52', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'rupture du contrat'                 FROM DUAL UNION ALL
+        SELECT '54', 'LIC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'licenciement'                       FROM DUAL
+    ),
+    absences AS (
+        SELECT '07' AS code, 'HORS_EFFECTIF' AS effet, 'RETIREE' AS anciennete, 'DISP' AS type_mvt,
+               'mise en disponibilité' AS libelle                                 FROM DUAL UNION ALL
+        SELECT '14', 'PRESENT',       'COMPTEE', 'MISE_DIS', 'mise à disposition' FROM DUAL
     ),
     codes_decision AS (
         SELECT '40' AS annulation,
                '50' AS engagement_temporaire,
                '51' AS engagement_permanent,
-               '07' AS mise_en_disponibilite,
                '18' AS remise_en_activite,
                '37' AS classement_detache
         FROM DUAL
@@ -81,10 +90,17 @@ FROM (
         WHERE ADD_MONTHS(da.date_arrete, -12) IN (SELECT date_arrete FROM dates)
     ),
     personnes AS (
-        SELECT p.PERS_ID, p.SEXE, NVL(p.ETAT_EMPLOYE, '-') AS etat,
+        SELECT p.PERS_ID, p.SEXE, p.DATE_NAISS,
+               p.DATE_EMBAUCHE                                        AS date_embauche,
+               p.DATE_PRISE_SERVICE                                   AS date_prise_service,
+               NVL(p.ETAT_EMPLOYE, '-')                               AS etat,
                TO_CHAR(p.QUALITE)                                     AS qualite,
-               COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)        AS date_entree
+               CASE pr.ordre_date_entree
+                   WHEN 'PRISE_SERVICE' THEN COALESCE(p.DATE_PRISE_SERVICE, p.DATE_EMBAUCHE)
+                   ELSE                      COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)
+               END                                                    AS date_entree
         FROM USER_GRH.GRH_PERSONNE p
+        CROSS JOIN parametres pr
         WHERE 1 = 1
     ),
     decisions AS (
@@ -99,9 +115,9 @@ FROM (
         WHERE 1 = 1
           AND d.DATE_VIGUEUR IS NOT NULL
           AND (TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM decisions_depart)
+               OR TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM absences)
                OR TO_CHAR(d.CDEC_CODE) IN (cd.engagement_temporaire, cd.engagement_permanent,
-                                           cd.mise_en_disponibilite, cd.remise_en_activite,
-                                           cd.classement_detache))
+                                           cd.remise_en_activite, cd.classement_detache))
           AND NOT EXISTS (SELECT 1
                           FROM USER_GRH.GRH_DECISION a
                           WHERE 1 = 1
@@ -109,11 +125,20 @@ FROM (
                             AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))
     ),
     departs AS (
-        SELECT dc.PERS_ID, dc.date_decision AS date_depart,
-               dd.type_mvt, 'DECISION_' || dc.code AS motif
-        FROM decisions dc
-        JOIN decisions_depart dd ON dd.code = dc.code
-        WHERE dc.PERS_ID IS NOT NULL
+        SELECT x.PERS_ID,
+               x.date_decision
+                   + CASE x.date_effet WHEN 'DERNIER_JOUR_TRAVAILLE' THEN 1 ELSE 0 END AS date_depart,
+               x.type_mvt,
+               'DECISION_' || x.code                                  AS motif
+        FROM (SELECT dc.PERS_ID, dc.code, dc.date_decision,
+                     dd.type_mvt, dd.date_effet, dd.retenir,
+                     ROW_NUMBER() OVER (PARTITION BY dc.PERS_ID, dc.code
+                                        ORDER BY dc.date_decision DESC) AS rang_fin
+              FROM decisions dc
+              JOIN decisions_depart dd ON dd.code = dc.code
+              WHERE dc.PERS_ID IS NOT NULL) x
+        WHERE x.retenir = 'TOUTES'
+           OR x.rang_fin = 1
         UNION ALL
         SELECT PERS_ID, DATE_DECES, 'DEC', 'DATE_DECES'
         FROM USER_GRH.GRH_PERSONNE
@@ -138,47 +163,97 @@ FROM (
           AND e.code = cd.engagement_temporaire
     ),
     contrats AS (
-        SELECT g.PERS_ID, g.debut,
-               LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
-                     NVL(g.debut_suivant, DATE '9999-12-31'))         AS fin
-        FROM engagements g
-        LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
-                             AND dep.date_depart > g.debut
-        GROUP BY g.PERS_ID, g.debut, g.debut_suivant
+        SELECT x.PERS_ID, x.debut,
+               CASE
+                   WHEN x.fin_base < DATE '9999-12-31'       THEN x.fin_base
+                   WHEN pr.fin_contrat_inconnue = 'DUREE'    THEN ADD_MONTHS(x.debut, pr.duree_contrat_mois)
+                   WHEN pr.fin_contrat_inconnue = 'FICHE'
+                    AND p.etat = 'INACTIF'                   THEN CAST(NULL AS DATE)
+                   ELSE                                           x.fin_base
+               END                                                    AS fin
+        FROM (SELECT g.PERS_ID, g.debut,
+                     LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
+                           NVL(g.debut_suivant, DATE '9999-12-31'))   AS fin_base
+              FROM engagements g
+              LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
+                                   AND dep.date_depart > g.debut
+              GROUP BY g.PERS_ID, g.debut, g.debut_suivant) x
+        JOIN personnes p ON p.PERS_ID = x.PERS_ID
+        CROSS JOIN parametres pr
     ),
     temporaires_sous_contrat AS (
-        SELECT da.date_arrete, c.PERS_ID,
-               MAX(CASE WHEN c.fin = DATE '9999-12-31' THEN 1 ELSE 0 END) AS fin_inconnue
+        SELECT DISTINCT da.date_arrete, c.PERS_ID
         FROM dates da
         JOIN contrats c ON c.debut       <= da.date_arrete
                        AND da.date_arrete <  c.fin
-        GROUP BY da.date_arrete, c.PERS_ID
     ),
-    positions AS (
-        SELECT da.date_arrete, d.PERS_ID,
-               MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END) AS date_dispo,
-               MAX(CASE WHEN d.code = cd.remise_en_activite    THEN d.date_decision END) AS date_remise
+    remises AS (
+        SELECT da.date_arrete, d.PERS_ID, MAX(d.date_decision) AS date_remise
         FROM dates da
         JOIN decisions d ON d.date_decision <= da.date_arrete
         CROSS JOIN codes_decision cd
         WHERE d.PERS_ID IS NOT NULL
-          AND d.code IN (cd.mise_en_disponibilite, cd.remise_en_activite)
+          AND d.code = cd.remise_en_activite
         GROUP BY da.date_arrete, d.PERS_ID
     ),
+    absences_en_cours AS (
+        SELECT x.date_arrete, x.PERS_ID, x.code, x.effet, x.type_mvt, x.date_absence
+        FROM (SELECT da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt,
+                     MAX(d.date_decision) AS date_absence
+              FROM dates da
+              JOIN decisions d ON d.date_decision <= da.date_arrete
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+              GROUP BY da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt) x
+        LEFT JOIN remises r ON r.date_arrete = x.date_arrete
+                           AND r.PERS_ID     = x.PERS_ID
+        WHERE x.date_absence > NVL(r.date_remise, DATE '1900-01-01')
+    ),
+    positions AS (
+        SELECT date_arrete, PERS_ID,
+               MAX(CASE WHEN effet = 'HORS_EFFECTIF' THEN 1 ELSE 0 END)              AS hors_effectif,
+               MAX(CASE WHEN effet IN ('HORS_EFFECTIF', 'INACTIF') THEN 1 ELSE 0 END) AS inactif
+        FROM absences_en_cours
+        GROUP BY date_arrete, PERS_ID
+    ),
+    absence_sans_retour AS (
+        SELECT x.PERS_ID, x.date_absence
+        FROM (SELECT d.PERS_ID, MAX(d.date_decision) AS date_absence
+              FROM decisions d
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+                AND ab.effet = 'HORS_EFFECTIF'
+              GROUP BY d.PERS_ID) x
+        WHERE NOT EXISTS (SELECT 1
+                          FROM decisions r, codes_decision cd
+                          WHERE r.PERS_ID       =  x.PERS_ID
+                            AND r.code          =  cd.remise_en_activite
+                            AND r.date_decision >= x.date_absence)
+          AND NOT EXISTS (SELECT 1
+                          FROM departs dep
+                          WHERE dep.PERS_ID     = x.PERS_ID
+                            AND dep.date_depart > x.date_absence)
+    ),
     situations AS (
-        SELECT da.date_arrete, s.PERS_ID, s.QUAL_CODE, s.UA_CODE,
+        SELECT da.date_arrete, s.PERS_ID,
+               s.QUAL_CODE, s.CODE_DOMAINE_ACT, s.UA_CODE, s.LIEU_ID, s.FNCT_CODE,
+               s.STATUT_EMPLOYE,
                TO_CHAR(s.NATURE_EMPLOIE)                              AS nature,
+               TO_CHAR(s.CATEGORIE)                                   AS categorie,
                ROW_NUMBER() OVER (PARTITION BY da.date_arrete, s.PERS_ID
                                   ORDER BY s.DATE_DEBUT DESC, s.SITU_ID DESC) AS rn
         FROM dates da
         JOIN USER_GRH.GRH_SITUATION s ON 1 = 1
                                      AND s.DATE_DEBUT <= da.date_arrete
     ),
-    base AS (
+    presents AS (
         SELECT da.date_arrete, p.PERS_ID, p.SEXE,
                p.qualite                                              AS QUALITE_EMPLOYE,
                si.nature                                              AS NATURE_EMPLOI,
-               si.QUAL_CODE, si.UA_CODE
+               si.QUAL_CODE, si.CODE_DOMAINE_ACT, si.UA_CODE, si.LIEU_ID, si.FNCT_CODE,
+               si.STATUT_EMPLOYE,
+               si.categorie                                           AS CATEGORIE,
+               NVL(po.inactif, 0)                                     AS en_absence
         FROM dates da
         CROSS JOIN personnes p
         CROSS JOIN parametres pr
@@ -186,6 +261,7 @@ FROM (
                                              AND si.PERS_ID     = p.PERS_ID
                                              AND si.rn          = 1
         LEFT JOIN premier_depart pd           ON pd.PERS_ID     = p.PERS_ID
+        LEFT JOIN absence_sans_retour asr     ON asr.PERS_ID    = p.PERS_ID
         LEFT JOIN positions po                ON po.date_arrete = da.date_arrete
                                              AND po.PERS_ID     = p.PERS_ID
         LEFT JOIN temporaires_sous_contrat tc ON tc.date_arrete = da.date_arrete
@@ -193,26 +269,31 @@ FROM (
         WHERE
                 (NVL(si.nature, '-') <> 'TEMPORAIRE'
                  AND p.date_entree <= da.date_arrete
-                 AND (p.etat <> 'INACTIF' OR pd.date_depart > da.date_arrete)
-                 AND NOT (pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')))
+                 AND NVL(po.hors_effectif, 0) = 0
+                 AND (
+                         NOT (p.etat = 'INACTIF'
+                              OR (p.etat = '-'
+                                  AND pr.fiche_sans_etat = 'RECENTE'
+                                  AND p.date_entree <= ADD_MONTHS(da.date_arrete,
+                                                                  -pr.fiche_sans_etat_mois)))
+                      OR pd.date_depart > da.date_arrete
+                      OR (pr.inactif_sans_depart = 'ABSENCE'
+                          AND asr.date_absence > da.date_arrete)))
              OR
                 (si.nature = 'TEMPORAIRE'
-                 AND tc.PERS_ID IS NOT NULL
-                 AND NOT (pr.fin_contrat_inconnue = 'FICHE'
-                          AND tc.fin_inconnue = 1
-                          AND p.etat = 'INACTIF'))
+                 AND tc.PERS_ID IS NOT NULL)
     ),
     au_debut AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d0
+        JOIN presents p ON p.date_arrete = e.d0
     ),
     a_la_fin AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d1
+        JOIN presents p ON p.date_arrete = e.d1
     ),
     dernier_depart_annee AS (
         SELECT annee, PERS_ID, type_mvt, motif
@@ -260,20 +341,17 @@ FROM (
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND dt.PERS_ID IS NOT NULL                       THEN 'DETACHEMENT'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND p.date_entree >  f.d0
-                          AND p.date_entree <= f.d1                        THEN 'EMBAUCHE'
+                          AND pe.date_entree >  f.d0
+                          AND pe.date_entree <= f.d1                       THEN 'EMBAUCHE'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'REMISE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'REMISE'
                          WHEN f.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND tc0.PERS_ID IS NULL                          THEN 'ENGAGEMENT'
                          WHEN dbt.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM a_la_fin f
-              JOIN personnes p ON p.PERS_ID = f.PERS_ID
-              CROSS JOIN parametres pr
+              JOIN personnes pe ON pe.PERS_ID = f.PERS_ID
               CROSS JOIN codes_decision cd
               LEFT JOIN au_debut dbt                 ON dbt.annee        = f.annee
                                                     AND dbt.PERS_ID      = f.PERS_ID
@@ -292,13 +370,13 @@ FROM (
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.type_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.type_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DISP'
+                   WHEN 'ABSENCE'           THEN NVL(x.type_absence, 'DISP')
                    ELSE                          'AUTRE_SORT'
                END                                                    AS CODE_TYPE_MVT,
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.motif_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.motif_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DECISION_' || x.code_dispo
+                   WHEN 'ABSENCE'           THEN 'DECISION_' || x.code_absence
                    WHEN 'NATURE'            THEN 'DEVIENT_' || NVL(x.nature_fin, 'SANS_SITUATION')
                    ELSE                          'SANS_MOTIF'
                END                                                    AS MOTIF_MVT
@@ -308,7 +386,8 @@ FROM (
                      pd.motif                   AS motif_premier,
                      dda.type_mvt               AS type_dernier,
                      dda.motif                  AS motif_dernier,
-                     cd.mise_en_disponibilite   AS code_dispo,
+                     ae.code                    AS code_absence,
+                     ae.type_mvt                AS type_absence,
                      CASE
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND pd.date_depart >  dbt.d0
@@ -316,15 +395,11 @@ FROM (
                          WHEN dbt.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND dda.PERS_ID IS NOT NULL                      THEN 'DEPART_TEMPORAIRE'
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'DISPONIBILITE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'ABSENCE'
                          WHEN fin.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM au_debut dbt
-              CROSS JOIN parametres pr
-              CROSS JOIN codes_decision cd
               LEFT JOIN a_la_fin fin             ON fin.annee      = dbt.annee
                                                 AND fin.PERS_ID    = dbt.PERS_ID
               LEFT JOIN premier_depart pd        ON pd.PERS_ID     = dbt.PERS_ID
@@ -332,6 +407,9 @@ FROM (
                                                 AND dda.PERS_ID    = dbt.PERS_ID
               LEFT JOIN positions po             ON po.date_arrete = dbt.d1
                                                 AND po.PERS_ID     = dbt.PERS_ID
+              LEFT JOIN absences_en_cours ae     ON ae.date_arrete = dbt.d1
+                                                AND ae.PERS_ID     = dbt.PERS_ID
+                                                AND ae.effet       = 'HORS_EFFECTIF'
               WHERE fin.PERS_ID IS NULL
                  OR NVL(fin.NATURE_EMPLOI, '-') <> NVL(dbt.NATURE_EMPLOI, '-')) x
     ),
@@ -341,6 +419,7 @@ FROM (
         JOIN contrats c ON c.debut >  e.d0
                        AND c.debut <= e.d1
                        AND c.fin   <= e.d1
+                       AND c.fin   <  DATE '9999-12-31'
     ),
     passages AS (
         SELECT e.annee, p.PERS_ID, p.SEXE, p.qualite AS QUALITE_EMPLOYE,
@@ -499,25 +578,34 @@ FROM (
     WITH
     parametres AS (
         SELECT
-               'HORS_EFFECTIF'         AS disponibilite,
-               'PRESENT'               AS fin_contrat_inconnue,
-               'NON'                   AS passages_annee,
-               'COMME_AVANT'           AS mouvements_internes
+            'PRESENT'               AS fin_contrat_inconnue,
+            18                      AS duree_contrat_mois,
+            'PRESENT'               AS fiche_sans_etat,
+            24                      AS fiche_sans_etat_mois,
+            'JAMAIS_COMPTE'         AS inactif_sans_depart,
+            'EMBAUCHE'              AS ordre_date_entree,
+            'NON'                   AS passages_annee,
+            'COMME_AVANT'           AS mouvements_internes
         FROM DUAL
     ),
     decisions_depart AS (
-        SELECT '02' AS code, 'RET' AS type_mvt, 'admission à la retraite' AS libelle FROM DUAL UNION ALL
-        SELECT '34', 'DEC',       'liquidation des droits après décès'          FROM DUAL UNION ALL
-        SELECT '35', 'FIN_CTRAT', 'fin de contrat'                              FROM DUAL UNION ALL
-        SELECT '36', 'DEM',       'démission'                                   FROM DUAL UNION ALL
-        SELECT '52', 'FIN_CTRAT', 'rupture du contrat'                          FROM DUAL UNION ALL
-        SELECT '54', 'LIC',       'licenciement'                                FROM DUAL
+        SELECT '02' AS code, 'RET' AS type_mvt, 'PREMIER_JOUR_PARTI' AS date_effet, 'TOUTES' AS retenir,
+               'admission à la retraite' AS libelle                                             FROM DUAL UNION ALL
+        SELECT '34', 'DEC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'liquidation des droits après décès' FROM DUAL UNION ALL
+        SELECT '35', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'fin de contrat'                     FROM DUAL UNION ALL
+        SELECT '36', 'DEM',       'PREMIER_JOUR_PARTI', 'TOUTES', 'démission'                          FROM DUAL UNION ALL
+        SELECT '52', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'rupture du contrat'                 FROM DUAL UNION ALL
+        SELECT '54', 'LIC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'licenciement'                       FROM DUAL
+    ),
+    absences AS (
+        SELECT '07' AS code, 'HORS_EFFECTIF' AS effet, 'RETIREE' AS anciennete, 'DISP' AS type_mvt,
+               'mise en disponibilité' AS libelle                                 FROM DUAL UNION ALL
+        SELECT '14', 'PRESENT',       'COMPTEE', 'MISE_DIS', 'mise à disposition' FROM DUAL
     ),
     codes_decision AS (
         SELECT '40' AS annulation,
                '50' AS engagement_temporaire,
                '51' AS engagement_permanent,
-               '07' AS mise_en_disponibilite,
                '18' AS remise_en_activite,
                '37' AS classement_detache
         FROM DUAL
@@ -544,10 +632,17 @@ FROM (
         WHERE ADD_MONTHS(da.date_arrete, -12) IN (SELECT date_arrete FROM dates)
     ),
     personnes AS (
-        SELECT p.PERS_ID, p.SEXE, NVL(p.ETAT_EMPLOYE, '-') AS etat,
+        SELECT p.PERS_ID, p.SEXE, p.DATE_NAISS,
+               p.DATE_EMBAUCHE                                        AS date_embauche,
+               p.DATE_PRISE_SERVICE                                   AS date_prise_service,
+               NVL(p.ETAT_EMPLOYE, '-')                               AS etat,
                TO_CHAR(p.QUALITE)                                     AS qualite,
-               COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)        AS date_entree
+               CASE pr.ordre_date_entree
+                   WHEN 'PRISE_SERVICE' THEN COALESCE(p.DATE_PRISE_SERVICE, p.DATE_EMBAUCHE)
+                   ELSE                      COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)
+               END                                                    AS date_entree
         FROM USER_GRH.GRH_PERSONNE p
+        CROSS JOIN parametres pr
         WHERE 1 = 1
     ),
     decisions AS (
@@ -562,9 +657,9 @@ FROM (
         WHERE 1 = 1
           AND d.DATE_VIGUEUR IS NOT NULL
           AND (TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM decisions_depart)
+               OR TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM absences)
                OR TO_CHAR(d.CDEC_CODE) IN (cd.engagement_temporaire, cd.engagement_permanent,
-                                           cd.mise_en_disponibilite, cd.remise_en_activite,
-                                           cd.classement_detache))
+                                           cd.remise_en_activite, cd.classement_detache))
           AND NOT EXISTS (SELECT 1
                           FROM USER_GRH.GRH_DECISION a
                           WHERE 1 = 1
@@ -572,11 +667,20 @@ FROM (
                             AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))
     ),
     departs AS (
-        SELECT dc.PERS_ID, dc.date_decision AS date_depart,
-               dd.type_mvt, 'DECISION_' || dc.code AS motif
-        FROM decisions dc
-        JOIN decisions_depart dd ON dd.code = dc.code
-        WHERE dc.PERS_ID IS NOT NULL
+        SELECT x.PERS_ID,
+               x.date_decision
+                   + CASE x.date_effet WHEN 'DERNIER_JOUR_TRAVAILLE' THEN 1 ELSE 0 END AS date_depart,
+               x.type_mvt,
+               'DECISION_' || x.code                                  AS motif
+        FROM (SELECT dc.PERS_ID, dc.code, dc.date_decision,
+                     dd.type_mvt, dd.date_effet, dd.retenir,
+                     ROW_NUMBER() OVER (PARTITION BY dc.PERS_ID, dc.code
+                                        ORDER BY dc.date_decision DESC) AS rang_fin
+              FROM decisions dc
+              JOIN decisions_depart dd ON dd.code = dc.code
+              WHERE dc.PERS_ID IS NOT NULL) x
+        WHERE x.retenir = 'TOUTES'
+           OR x.rang_fin = 1
         UNION ALL
         SELECT PERS_ID, DATE_DECES, 'DEC', 'DATE_DECES'
         FROM USER_GRH.GRH_PERSONNE
@@ -601,47 +705,97 @@ FROM (
           AND e.code = cd.engagement_temporaire
     ),
     contrats AS (
-        SELECT g.PERS_ID, g.debut,
-               LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
-                     NVL(g.debut_suivant, DATE '9999-12-31'))         AS fin
-        FROM engagements g
-        LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
-                             AND dep.date_depart > g.debut
-        GROUP BY g.PERS_ID, g.debut, g.debut_suivant
+        SELECT x.PERS_ID, x.debut,
+               CASE
+                   WHEN x.fin_base < DATE '9999-12-31'       THEN x.fin_base
+                   WHEN pr.fin_contrat_inconnue = 'DUREE'    THEN ADD_MONTHS(x.debut, pr.duree_contrat_mois)
+                   WHEN pr.fin_contrat_inconnue = 'FICHE'
+                    AND p.etat = 'INACTIF'                   THEN CAST(NULL AS DATE)
+                   ELSE                                           x.fin_base
+               END                                                    AS fin
+        FROM (SELECT g.PERS_ID, g.debut,
+                     LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
+                           NVL(g.debut_suivant, DATE '9999-12-31'))   AS fin_base
+              FROM engagements g
+              LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
+                                   AND dep.date_depart > g.debut
+              GROUP BY g.PERS_ID, g.debut, g.debut_suivant) x
+        JOIN personnes p ON p.PERS_ID = x.PERS_ID
+        CROSS JOIN parametres pr
     ),
     temporaires_sous_contrat AS (
-        SELECT da.date_arrete, c.PERS_ID,
-               MAX(CASE WHEN c.fin = DATE '9999-12-31' THEN 1 ELSE 0 END) AS fin_inconnue
+        SELECT DISTINCT da.date_arrete, c.PERS_ID
         FROM dates da
         JOIN contrats c ON c.debut       <= da.date_arrete
                        AND da.date_arrete <  c.fin
-        GROUP BY da.date_arrete, c.PERS_ID
     ),
-    positions AS (
-        SELECT da.date_arrete, d.PERS_ID,
-               MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END) AS date_dispo,
-               MAX(CASE WHEN d.code = cd.remise_en_activite    THEN d.date_decision END) AS date_remise
+    remises AS (
+        SELECT da.date_arrete, d.PERS_ID, MAX(d.date_decision) AS date_remise
         FROM dates da
         JOIN decisions d ON d.date_decision <= da.date_arrete
         CROSS JOIN codes_decision cd
         WHERE d.PERS_ID IS NOT NULL
-          AND d.code IN (cd.mise_en_disponibilite, cd.remise_en_activite)
+          AND d.code = cd.remise_en_activite
         GROUP BY da.date_arrete, d.PERS_ID
     ),
+    absences_en_cours AS (
+        SELECT x.date_arrete, x.PERS_ID, x.code, x.effet, x.type_mvt, x.date_absence
+        FROM (SELECT da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt,
+                     MAX(d.date_decision) AS date_absence
+              FROM dates da
+              JOIN decisions d ON d.date_decision <= da.date_arrete
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+              GROUP BY da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt) x
+        LEFT JOIN remises r ON r.date_arrete = x.date_arrete
+                           AND r.PERS_ID     = x.PERS_ID
+        WHERE x.date_absence > NVL(r.date_remise, DATE '1900-01-01')
+    ),
+    positions AS (
+        SELECT date_arrete, PERS_ID,
+               MAX(CASE WHEN effet = 'HORS_EFFECTIF' THEN 1 ELSE 0 END)              AS hors_effectif,
+               MAX(CASE WHEN effet IN ('HORS_EFFECTIF', 'INACTIF') THEN 1 ELSE 0 END) AS inactif
+        FROM absences_en_cours
+        GROUP BY date_arrete, PERS_ID
+    ),
+    absence_sans_retour AS (
+        SELECT x.PERS_ID, x.date_absence
+        FROM (SELECT d.PERS_ID, MAX(d.date_decision) AS date_absence
+              FROM decisions d
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+                AND ab.effet = 'HORS_EFFECTIF'
+              GROUP BY d.PERS_ID) x
+        WHERE NOT EXISTS (SELECT 1
+                          FROM decisions r, codes_decision cd
+                          WHERE r.PERS_ID       =  x.PERS_ID
+                            AND r.code          =  cd.remise_en_activite
+                            AND r.date_decision >= x.date_absence)
+          AND NOT EXISTS (SELECT 1
+                          FROM departs dep
+                          WHERE dep.PERS_ID     = x.PERS_ID
+                            AND dep.date_depart > x.date_absence)
+    ),
     situations AS (
-        SELECT da.date_arrete, s.PERS_ID, s.QUAL_CODE, s.UA_CODE,
+        SELECT da.date_arrete, s.PERS_ID,
+               s.QUAL_CODE, s.CODE_DOMAINE_ACT, s.UA_CODE, s.LIEU_ID, s.FNCT_CODE,
+               s.STATUT_EMPLOYE,
                TO_CHAR(s.NATURE_EMPLOIE)                              AS nature,
+               TO_CHAR(s.CATEGORIE)                                   AS categorie,
                ROW_NUMBER() OVER (PARTITION BY da.date_arrete, s.PERS_ID
                                   ORDER BY s.DATE_DEBUT DESC, s.SITU_ID DESC) AS rn
         FROM dates da
         JOIN USER_GRH.GRH_SITUATION s ON 1 = 1
                                      AND s.DATE_DEBUT <= da.date_arrete
     ),
-    base AS (
+    presents AS (
         SELECT da.date_arrete, p.PERS_ID, p.SEXE,
                p.qualite                                              AS QUALITE_EMPLOYE,
                si.nature                                              AS NATURE_EMPLOI,
-               si.QUAL_CODE, si.UA_CODE
+               si.QUAL_CODE, si.CODE_DOMAINE_ACT, si.UA_CODE, si.LIEU_ID, si.FNCT_CODE,
+               si.STATUT_EMPLOYE,
+               si.categorie                                           AS CATEGORIE,
+               NVL(po.inactif, 0)                                     AS en_absence
         FROM dates da
         CROSS JOIN personnes p
         CROSS JOIN parametres pr
@@ -649,6 +803,7 @@ FROM (
                                              AND si.PERS_ID     = p.PERS_ID
                                              AND si.rn          = 1
         LEFT JOIN premier_depart pd           ON pd.PERS_ID     = p.PERS_ID
+        LEFT JOIN absence_sans_retour asr     ON asr.PERS_ID    = p.PERS_ID
         LEFT JOIN positions po                ON po.date_arrete = da.date_arrete
                                              AND po.PERS_ID     = p.PERS_ID
         LEFT JOIN temporaires_sous_contrat tc ON tc.date_arrete = da.date_arrete
@@ -656,26 +811,31 @@ FROM (
         WHERE
                 (NVL(si.nature, '-') <> 'TEMPORAIRE'
                  AND p.date_entree <= da.date_arrete
-                 AND (p.etat <> 'INACTIF' OR pd.date_depart > da.date_arrete)
-                 AND NOT (pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')))
+                 AND NVL(po.hors_effectif, 0) = 0
+                 AND (
+                         NOT (p.etat = 'INACTIF'
+                              OR (p.etat = '-'
+                                  AND pr.fiche_sans_etat = 'RECENTE'
+                                  AND p.date_entree <= ADD_MONTHS(da.date_arrete,
+                                                                  -pr.fiche_sans_etat_mois)))
+                      OR pd.date_depart > da.date_arrete
+                      OR (pr.inactif_sans_depart = 'ABSENCE'
+                          AND asr.date_absence > da.date_arrete)))
              OR
                 (si.nature = 'TEMPORAIRE'
-                 AND tc.PERS_ID IS NOT NULL
-                 AND NOT (pr.fin_contrat_inconnue = 'FICHE'
-                          AND tc.fin_inconnue = 1
-                          AND p.etat = 'INACTIF'))
+                 AND tc.PERS_ID IS NOT NULL)
     ),
     au_debut AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d0
+        JOIN presents p ON p.date_arrete = e.d0
     ),
     a_la_fin AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d1
+        JOIN presents p ON p.date_arrete = e.d1
     ),
     dernier_depart_annee AS (
         SELECT annee, PERS_ID, type_mvt, motif
@@ -723,20 +883,17 @@ FROM (
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND dt.PERS_ID IS NOT NULL                       THEN 'DETACHEMENT'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND p.date_entree >  f.d0
-                          AND p.date_entree <= f.d1                        THEN 'EMBAUCHE'
+                          AND pe.date_entree >  f.d0
+                          AND pe.date_entree <= f.d1                       THEN 'EMBAUCHE'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'REMISE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'REMISE'
                          WHEN f.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND tc0.PERS_ID IS NULL                          THEN 'ENGAGEMENT'
                          WHEN dbt.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM a_la_fin f
-              JOIN personnes p ON p.PERS_ID = f.PERS_ID
-              CROSS JOIN parametres pr
+              JOIN personnes pe ON pe.PERS_ID = f.PERS_ID
               CROSS JOIN codes_decision cd
               LEFT JOIN au_debut dbt                 ON dbt.annee        = f.annee
                                                     AND dbt.PERS_ID      = f.PERS_ID
@@ -755,13 +912,13 @@ FROM (
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.type_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.type_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DISP'
+                   WHEN 'ABSENCE'           THEN NVL(x.type_absence, 'DISP')
                    ELSE                          'AUTRE_SORT'
                END                                                    AS CODE_TYPE_MVT,
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.motif_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.motif_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DECISION_' || x.code_dispo
+                   WHEN 'ABSENCE'           THEN 'DECISION_' || x.code_absence
                    WHEN 'NATURE'            THEN 'DEVIENT_' || NVL(x.nature_fin, 'SANS_SITUATION')
                    ELSE                          'SANS_MOTIF'
                END                                                    AS MOTIF_MVT
@@ -771,7 +928,8 @@ FROM (
                      pd.motif                   AS motif_premier,
                      dda.type_mvt               AS type_dernier,
                      dda.motif                  AS motif_dernier,
-                     cd.mise_en_disponibilite   AS code_dispo,
+                     ae.code                    AS code_absence,
+                     ae.type_mvt                AS type_absence,
                      CASE
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND pd.date_depart >  dbt.d0
@@ -779,15 +937,11 @@ FROM (
                          WHEN dbt.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND dda.PERS_ID IS NOT NULL                      THEN 'DEPART_TEMPORAIRE'
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'DISPONIBILITE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'ABSENCE'
                          WHEN fin.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM au_debut dbt
-              CROSS JOIN parametres pr
-              CROSS JOIN codes_decision cd
               LEFT JOIN a_la_fin fin             ON fin.annee      = dbt.annee
                                                 AND fin.PERS_ID    = dbt.PERS_ID
               LEFT JOIN premier_depart pd        ON pd.PERS_ID     = dbt.PERS_ID
@@ -795,6 +949,9 @@ FROM (
                                                 AND dda.PERS_ID    = dbt.PERS_ID
               LEFT JOIN positions po             ON po.date_arrete = dbt.d1
                                                 AND po.PERS_ID     = dbt.PERS_ID
+              LEFT JOIN absences_en_cours ae     ON ae.date_arrete = dbt.d1
+                                                AND ae.PERS_ID     = dbt.PERS_ID
+                                                AND ae.effet       = 'HORS_EFFECTIF'
               WHERE fin.PERS_ID IS NULL
                  OR NVL(fin.NATURE_EMPLOI, '-') <> NVL(dbt.NATURE_EMPLOI, '-')) x
     ),
@@ -804,6 +961,7 @@ FROM (
         JOIN contrats c ON c.debut >  e.d0
                        AND c.debut <= e.d1
                        AND c.fin   <= e.d1
+                       AND c.fin   <  DATE '9999-12-31'
     ),
     passages AS (
         SELECT e.annee, p.PERS_ID, p.SEXE, p.qualite AS QUALITE_EMPLOYE,
@@ -961,25 +1119,34 @@ FROM (
     WITH
     parametres AS (
         SELECT
-               'HORS_EFFECTIF'         AS disponibilite,
-               'PRESENT'               AS fin_contrat_inconnue,
-               'NON'                   AS passages_annee,
-               'COMME_AVANT'           AS mouvements_internes
+            'PRESENT'               AS fin_contrat_inconnue,
+            18                      AS duree_contrat_mois,
+            'PRESENT'               AS fiche_sans_etat,
+            24                      AS fiche_sans_etat_mois,
+            'JAMAIS_COMPTE'         AS inactif_sans_depart,
+            'EMBAUCHE'              AS ordre_date_entree,
+            'NON'                   AS passages_annee,
+            'COMME_AVANT'           AS mouvements_internes
         FROM DUAL
     ),
     decisions_depart AS (
-        SELECT '02' AS code, 'RET' AS type_mvt, 'admission à la retraite' AS libelle FROM DUAL UNION ALL
-        SELECT '34', 'DEC',       'liquidation des droits après décès'          FROM DUAL UNION ALL
-        SELECT '35', 'FIN_CTRAT', 'fin de contrat'                              FROM DUAL UNION ALL
-        SELECT '36', 'DEM',       'démission'                                   FROM DUAL UNION ALL
-        SELECT '52', 'FIN_CTRAT', 'rupture du contrat'                          FROM DUAL UNION ALL
-        SELECT '54', 'LIC',       'licenciement'                                FROM DUAL
+        SELECT '02' AS code, 'RET' AS type_mvt, 'PREMIER_JOUR_PARTI' AS date_effet, 'TOUTES' AS retenir,
+               'admission à la retraite' AS libelle                                             FROM DUAL UNION ALL
+        SELECT '34', 'DEC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'liquidation des droits après décès' FROM DUAL UNION ALL
+        SELECT '35', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'fin de contrat'                     FROM DUAL UNION ALL
+        SELECT '36', 'DEM',       'PREMIER_JOUR_PARTI', 'TOUTES', 'démission'                          FROM DUAL UNION ALL
+        SELECT '52', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'rupture du contrat'                 FROM DUAL UNION ALL
+        SELECT '54', 'LIC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'licenciement'                       FROM DUAL
+    ),
+    absences AS (
+        SELECT '07' AS code, 'HORS_EFFECTIF' AS effet, 'RETIREE' AS anciennete, 'DISP' AS type_mvt,
+               'mise en disponibilité' AS libelle                                 FROM DUAL UNION ALL
+        SELECT '14', 'PRESENT',       'COMPTEE', 'MISE_DIS', 'mise à disposition' FROM DUAL
     ),
     codes_decision AS (
         SELECT '40' AS annulation,
                '50' AS engagement_temporaire,
                '51' AS engagement_permanent,
-               '07' AS mise_en_disponibilite,
                '18' AS remise_en_activite,
                '37' AS classement_detache
         FROM DUAL
@@ -1006,10 +1173,17 @@ FROM (
         WHERE ADD_MONTHS(da.date_arrete, -12) IN (SELECT date_arrete FROM dates)
     ),
     personnes AS (
-        SELECT p.PERS_ID, p.SEXE, NVL(p.ETAT_EMPLOYE, '-') AS etat,
+        SELECT p.PERS_ID, p.SEXE, p.DATE_NAISS,
+               p.DATE_EMBAUCHE                                        AS date_embauche,
+               p.DATE_PRISE_SERVICE                                   AS date_prise_service,
+               NVL(p.ETAT_EMPLOYE, '-')                               AS etat,
                TO_CHAR(p.QUALITE)                                     AS qualite,
-               COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)        AS date_entree
+               CASE pr.ordre_date_entree
+                   WHEN 'PRISE_SERVICE' THEN COALESCE(p.DATE_PRISE_SERVICE, p.DATE_EMBAUCHE)
+                   ELSE                      COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)
+               END                                                    AS date_entree
         FROM USER_GRH.GRH_PERSONNE p
+        CROSS JOIN parametres pr
         WHERE 1 = 1
     ),
     decisions AS (
@@ -1024,9 +1198,9 @@ FROM (
         WHERE 1 = 1
           AND d.DATE_VIGUEUR IS NOT NULL
           AND (TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM decisions_depart)
+               OR TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM absences)
                OR TO_CHAR(d.CDEC_CODE) IN (cd.engagement_temporaire, cd.engagement_permanent,
-                                           cd.mise_en_disponibilite, cd.remise_en_activite,
-                                           cd.classement_detache))
+                                           cd.remise_en_activite, cd.classement_detache))
           AND NOT EXISTS (SELECT 1
                           FROM USER_GRH.GRH_DECISION a
                           WHERE 1 = 1
@@ -1034,11 +1208,20 @@ FROM (
                             AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))
     ),
     departs AS (
-        SELECT dc.PERS_ID, dc.date_decision AS date_depart,
-               dd.type_mvt, 'DECISION_' || dc.code AS motif
-        FROM decisions dc
-        JOIN decisions_depart dd ON dd.code = dc.code
-        WHERE dc.PERS_ID IS NOT NULL
+        SELECT x.PERS_ID,
+               x.date_decision
+                   + CASE x.date_effet WHEN 'DERNIER_JOUR_TRAVAILLE' THEN 1 ELSE 0 END AS date_depart,
+               x.type_mvt,
+               'DECISION_' || x.code                                  AS motif
+        FROM (SELECT dc.PERS_ID, dc.code, dc.date_decision,
+                     dd.type_mvt, dd.date_effet, dd.retenir,
+                     ROW_NUMBER() OVER (PARTITION BY dc.PERS_ID, dc.code
+                                        ORDER BY dc.date_decision DESC) AS rang_fin
+              FROM decisions dc
+              JOIN decisions_depart dd ON dd.code = dc.code
+              WHERE dc.PERS_ID IS NOT NULL) x
+        WHERE x.retenir = 'TOUTES'
+           OR x.rang_fin = 1
         UNION ALL
         SELECT PERS_ID, DATE_DECES, 'DEC', 'DATE_DECES'
         FROM USER_GRH.GRH_PERSONNE
@@ -1063,47 +1246,97 @@ FROM (
           AND e.code = cd.engagement_temporaire
     ),
     contrats AS (
-        SELECT g.PERS_ID, g.debut,
-               LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
-                     NVL(g.debut_suivant, DATE '9999-12-31'))         AS fin
-        FROM engagements g
-        LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
-                             AND dep.date_depart > g.debut
-        GROUP BY g.PERS_ID, g.debut, g.debut_suivant
+        SELECT x.PERS_ID, x.debut,
+               CASE
+                   WHEN x.fin_base < DATE '9999-12-31'       THEN x.fin_base
+                   WHEN pr.fin_contrat_inconnue = 'DUREE'    THEN ADD_MONTHS(x.debut, pr.duree_contrat_mois)
+                   WHEN pr.fin_contrat_inconnue = 'FICHE'
+                    AND p.etat = 'INACTIF'                   THEN CAST(NULL AS DATE)
+                   ELSE                                           x.fin_base
+               END                                                    AS fin
+        FROM (SELECT g.PERS_ID, g.debut,
+                     LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
+                           NVL(g.debut_suivant, DATE '9999-12-31'))   AS fin_base
+              FROM engagements g
+              LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
+                                   AND dep.date_depart > g.debut
+              GROUP BY g.PERS_ID, g.debut, g.debut_suivant) x
+        JOIN personnes p ON p.PERS_ID = x.PERS_ID
+        CROSS JOIN parametres pr
     ),
     temporaires_sous_contrat AS (
-        SELECT da.date_arrete, c.PERS_ID,
-               MAX(CASE WHEN c.fin = DATE '9999-12-31' THEN 1 ELSE 0 END) AS fin_inconnue
+        SELECT DISTINCT da.date_arrete, c.PERS_ID
         FROM dates da
         JOIN contrats c ON c.debut       <= da.date_arrete
                        AND da.date_arrete <  c.fin
-        GROUP BY da.date_arrete, c.PERS_ID
     ),
-    positions AS (
-        SELECT da.date_arrete, d.PERS_ID,
-               MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END) AS date_dispo,
-               MAX(CASE WHEN d.code = cd.remise_en_activite    THEN d.date_decision END) AS date_remise
+    remises AS (
+        SELECT da.date_arrete, d.PERS_ID, MAX(d.date_decision) AS date_remise
         FROM dates da
         JOIN decisions d ON d.date_decision <= da.date_arrete
         CROSS JOIN codes_decision cd
         WHERE d.PERS_ID IS NOT NULL
-          AND d.code IN (cd.mise_en_disponibilite, cd.remise_en_activite)
+          AND d.code = cd.remise_en_activite
         GROUP BY da.date_arrete, d.PERS_ID
     ),
+    absences_en_cours AS (
+        SELECT x.date_arrete, x.PERS_ID, x.code, x.effet, x.type_mvt, x.date_absence
+        FROM (SELECT da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt,
+                     MAX(d.date_decision) AS date_absence
+              FROM dates da
+              JOIN decisions d ON d.date_decision <= da.date_arrete
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+              GROUP BY da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt) x
+        LEFT JOIN remises r ON r.date_arrete = x.date_arrete
+                           AND r.PERS_ID     = x.PERS_ID
+        WHERE x.date_absence > NVL(r.date_remise, DATE '1900-01-01')
+    ),
+    positions AS (
+        SELECT date_arrete, PERS_ID,
+               MAX(CASE WHEN effet = 'HORS_EFFECTIF' THEN 1 ELSE 0 END)              AS hors_effectif,
+               MAX(CASE WHEN effet IN ('HORS_EFFECTIF', 'INACTIF') THEN 1 ELSE 0 END) AS inactif
+        FROM absences_en_cours
+        GROUP BY date_arrete, PERS_ID
+    ),
+    absence_sans_retour AS (
+        SELECT x.PERS_ID, x.date_absence
+        FROM (SELECT d.PERS_ID, MAX(d.date_decision) AS date_absence
+              FROM decisions d
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+                AND ab.effet = 'HORS_EFFECTIF'
+              GROUP BY d.PERS_ID) x
+        WHERE NOT EXISTS (SELECT 1
+                          FROM decisions r, codes_decision cd
+                          WHERE r.PERS_ID       =  x.PERS_ID
+                            AND r.code          =  cd.remise_en_activite
+                            AND r.date_decision >= x.date_absence)
+          AND NOT EXISTS (SELECT 1
+                          FROM departs dep
+                          WHERE dep.PERS_ID     = x.PERS_ID
+                            AND dep.date_depart > x.date_absence)
+    ),
     situations AS (
-        SELECT da.date_arrete, s.PERS_ID, s.QUAL_CODE, s.UA_CODE,
+        SELECT da.date_arrete, s.PERS_ID,
+               s.QUAL_CODE, s.CODE_DOMAINE_ACT, s.UA_CODE, s.LIEU_ID, s.FNCT_CODE,
+               s.STATUT_EMPLOYE,
                TO_CHAR(s.NATURE_EMPLOIE)                              AS nature,
+               TO_CHAR(s.CATEGORIE)                                   AS categorie,
                ROW_NUMBER() OVER (PARTITION BY da.date_arrete, s.PERS_ID
                                   ORDER BY s.DATE_DEBUT DESC, s.SITU_ID DESC) AS rn
         FROM dates da
         JOIN USER_GRH.GRH_SITUATION s ON 1 = 1
                                      AND s.DATE_DEBUT <= da.date_arrete
     ),
-    base AS (
+    presents AS (
         SELECT da.date_arrete, p.PERS_ID, p.SEXE,
                p.qualite                                              AS QUALITE_EMPLOYE,
                si.nature                                              AS NATURE_EMPLOI,
-               si.QUAL_CODE, si.UA_CODE
+               si.QUAL_CODE, si.CODE_DOMAINE_ACT, si.UA_CODE, si.LIEU_ID, si.FNCT_CODE,
+               si.STATUT_EMPLOYE,
+               si.categorie                                           AS CATEGORIE,
+               NVL(po.inactif, 0)                                     AS en_absence
         FROM dates da
         CROSS JOIN personnes p
         CROSS JOIN parametres pr
@@ -1111,6 +1344,7 @@ FROM (
                                              AND si.PERS_ID     = p.PERS_ID
                                              AND si.rn          = 1
         LEFT JOIN premier_depart pd           ON pd.PERS_ID     = p.PERS_ID
+        LEFT JOIN absence_sans_retour asr     ON asr.PERS_ID    = p.PERS_ID
         LEFT JOIN positions po                ON po.date_arrete = da.date_arrete
                                              AND po.PERS_ID     = p.PERS_ID
         LEFT JOIN temporaires_sous_contrat tc ON tc.date_arrete = da.date_arrete
@@ -1118,26 +1352,31 @@ FROM (
         WHERE
                 (NVL(si.nature, '-') <> 'TEMPORAIRE'
                  AND p.date_entree <= da.date_arrete
-                 AND (p.etat <> 'INACTIF' OR pd.date_depart > da.date_arrete)
-                 AND NOT (pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')))
+                 AND NVL(po.hors_effectif, 0) = 0
+                 AND (
+                         NOT (p.etat = 'INACTIF'
+                              OR (p.etat = '-'
+                                  AND pr.fiche_sans_etat = 'RECENTE'
+                                  AND p.date_entree <= ADD_MONTHS(da.date_arrete,
+                                                                  -pr.fiche_sans_etat_mois)))
+                      OR pd.date_depart > da.date_arrete
+                      OR (pr.inactif_sans_depart = 'ABSENCE'
+                          AND asr.date_absence > da.date_arrete)))
              OR
                 (si.nature = 'TEMPORAIRE'
-                 AND tc.PERS_ID IS NOT NULL
-                 AND NOT (pr.fin_contrat_inconnue = 'FICHE'
-                          AND tc.fin_inconnue = 1
-                          AND p.etat = 'INACTIF'))
+                 AND tc.PERS_ID IS NOT NULL)
     ),
     au_debut AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d0
+        JOIN presents p ON p.date_arrete = e.d0
     ),
     a_la_fin AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d1
+        JOIN presents p ON p.date_arrete = e.d1
     ),
     dernier_depart_annee AS (
         SELECT annee, PERS_ID, type_mvt, motif
@@ -1185,20 +1424,17 @@ FROM (
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND dt.PERS_ID IS NOT NULL                       THEN 'DETACHEMENT'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND p.date_entree >  f.d0
-                          AND p.date_entree <= f.d1                        THEN 'EMBAUCHE'
+                          AND pe.date_entree >  f.d0
+                          AND pe.date_entree <= f.d1                       THEN 'EMBAUCHE'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'REMISE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'REMISE'
                          WHEN f.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND tc0.PERS_ID IS NULL                          THEN 'ENGAGEMENT'
                          WHEN dbt.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM a_la_fin f
-              JOIN personnes p ON p.PERS_ID = f.PERS_ID
-              CROSS JOIN parametres pr
+              JOIN personnes pe ON pe.PERS_ID = f.PERS_ID
               CROSS JOIN codes_decision cd
               LEFT JOIN au_debut dbt                 ON dbt.annee        = f.annee
                                                     AND dbt.PERS_ID      = f.PERS_ID
@@ -1217,13 +1453,13 @@ FROM (
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.type_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.type_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DISP'
+                   WHEN 'ABSENCE'           THEN NVL(x.type_absence, 'DISP')
                    ELSE                          'AUTRE_SORT'
                END                                                    AS CODE_TYPE_MVT,
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.motif_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.motif_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DECISION_' || x.code_dispo
+                   WHEN 'ABSENCE'           THEN 'DECISION_' || x.code_absence
                    WHEN 'NATURE'            THEN 'DEVIENT_' || NVL(x.nature_fin, 'SANS_SITUATION')
                    ELSE                          'SANS_MOTIF'
                END                                                    AS MOTIF_MVT
@@ -1233,7 +1469,8 @@ FROM (
                      pd.motif                   AS motif_premier,
                      dda.type_mvt               AS type_dernier,
                      dda.motif                  AS motif_dernier,
-                     cd.mise_en_disponibilite   AS code_dispo,
+                     ae.code                    AS code_absence,
+                     ae.type_mvt                AS type_absence,
                      CASE
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND pd.date_depart >  dbt.d0
@@ -1241,15 +1478,11 @@ FROM (
                          WHEN dbt.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND dda.PERS_ID IS NOT NULL                      THEN 'DEPART_TEMPORAIRE'
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'DISPONIBILITE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'ABSENCE'
                          WHEN fin.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM au_debut dbt
-              CROSS JOIN parametres pr
-              CROSS JOIN codes_decision cd
               LEFT JOIN a_la_fin fin             ON fin.annee      = dbt.annee
                                                 AND fin.PERS_ID    = dbt.PERS_ID
               LEFT JOIN premier_depart pd        ON pd.PERS_ID     = dbt.PERS_ID
@@ -1257,6 +1490,9 @@ FROM (
                                                 AND dda.PERS_ID    = dbt.PERS_ID
               LEFT JOIN positions po             ON po.date_arrete = dbt.d1
                                                 AND po.PERS_ID     = dbt.PERS_ID
+              LEFT JOIN absences_en_cours ae     ON ae.date_arrete = dbt.d1
+                                                AND ae.PERS_ID     = dbt.PERS_ID
+                                                AND ae.effet       = 'HORS_EFFECTIF'
               WHERE fin.PERS_ID IS NULL
                  OR NVL(fin.NATURE_EMPLOI, '-') <> NVL(dbt.NATURE_EMPLOI, '-')) x
     ),
@@ -1266,6 +1502,7 @@ FROM (
         JOIN contrats c ON c.debut >  e.d0
                        AND c.debut <= e.d1
                        AND c.fin   <= e.d1
+                       AND c.fin   <  DATE '9999-12-31'
     ),
     passages AS (
         SELECT e.annee, p.PERS_ID, p.SEXE, p.qualite AS QUALITE_EMPLOYE,
@@ -1436,25 +1673,34 @@ FROM (
     WITH
     parametres AS (
         SELECT
-               'HORS_EFFECTIF'         AS disponibilite,
-               'PRESENT'               AS fin_contrat_inconnue,
-               'NON'                   AS passages_annee,
-               'COMME_AVANT'           AS mouvements_internes
+            'PRESENT'               AS fin_contrat_inconnue,
+            18                      AS duree_contrat_mois,
+            'PRESENT'               AS fiche_sans_etat,
+            24                      AS fiche_sans_etat_mois,
+            'JAMAIS_COMPTE'         AS inactif_sans_depart,
+            'EMBAUCHE'              AS ordre_date_entree,
+            'NON'                   AS passages_annee,
+            'COMME_AVANT'           AS mouvements_internes
         FROM DUAL
     ),
     decisions_depart AS (
-        SELECT '02' AS code, 'RET' AS type_mvt, 'admission à la retraite' AS libelle FROM DUAL UNION ALL
-        SELECT '34', 'DEC',       'liquidation des droits après décès'          FROM DUAL UNION ALL
-        SELECT '35', 'FIN_CTRAT', 'fin de contrat'                              FROM DUAL UNION ALL
-        SELECT '36', 'DEM',       'démission'                                   FROM DUAL UNION ALL
-        SELECT '52', 'FIN_CTRAT', 'rupture du contrat'                          FROM DUAL UNION ALL
-        SELECT '54', 'LIC',       'licenciement'                                FROM DUAL
+        SELECT '02' AS code, 'RET' AS type_mvt, 'PREMIER_JOUR_PARTI' AS date_effet, 'TOUTES' AS retenir,
+               'admission à la retraite' AS libelle                                             FROM DUAL UNION ALL
+        SELECT '34', 'DEC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'liquidation des droits après décès' FROM DUAL UNION ALL
+        SELECT '35', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'fin de contrat'                     FROM DUAL UNION ALL
+        SELECT '36', 'DEM',       'PREMIER_JOUR_PARTI', 'TOUTES', 'démission'                          FROM DUAL UNION ALL
+        SELECT '52', 'FIN_CTRAT', 'PREMIER_JOUR_PARTI', 'TOUTES', 'rupture du contrat'                 FROM DUAL UNION ALL
+        SELECT '54', 'LIC',       'PREMIER_JOUR_PARTI', 'TOUTES', 'licenciement'                       FROM DUAL
+    ),
+    absences AS (
+        SELECT '07' AS code, 'HORS_EFFECTIF' AS effet, 'RETIREE' AS anciennete, 'DISP' AS type_mvt,
+               'mise en disponibilité' AS libelle                                 FROM DUAL UNION ALL
+        SELECT '14', 'PRESENT',       'COMPTEE', 'MISE_DIS', 'mise à disposition' FROM DUAL
     ),
     codes_decision AS (
         SELECT '40' AS annulation,
                '50' AS engagement_temporaire,
                '51' AS engagement_permanent,
-               '07' AS mise_en_disponibilite,
                '18' AS remise_en_activite,
                '37' AS classement_detache
         FROM DUAL
@@ -1481,10 +1727,17 @@ FROM (
         WHERE ADD_MONTHS(da.date_arrete, -12) IN (SELECT date_arrete FROM dates)
     ),
     personnes AS (
-        SELECT p.PERS_ID, p.SEXE, NVL(p.ETAT_EMPLOYE, '-') AS etat,
+        SELECT p.PERS_ID, p.SEXE, p.DATE_NAISS,
+               p.DATE_EMBAUCHE                                        AS date_embauche,
+               p.DATE_PRISE_SERVICE                                   AS date_prise_service,
+               NVL(p.ETAT_EMPLOYE, '-')                               AS etat,
                TO_CHAR(p.QUALITE)                                     AS qualite,
-               COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)        AS date_entree
+               CASE pr.ordre_date_entree
+                   WHEN 'PRISE_SERVICE' THEN COALESCE(p.DATE_PRISE_SERVICE, p.DATE_EMBAUCHE)
+                   ELSE                      COALESCE(p.DATE_EMBAUCHE, p.DATE_PRISE_SERVICE)
+               END                                                    AS date_entree
         FROM USER_GRH.GRH_PERSONNE p
+        CROSS JOIN parametres pr
         WHERE 1 = 1
     ),
     decisions AS (
@@ -1499,9 +1752,9 @@ FROM (
         WHERE 1 = 1
           AND d.DATE_VIGUEUR IS NOT NULL
           AND (TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM decisions_depart)
+               OR TO_CHAR(d.CDEC_CODE) IN (SELECT code FROM absences)
                OR TO_CHAR(d.CDEC_CODE) IN (cd.engagement_temporaire, cd.engagement_permanent,
-                                           cd.mise_en_disponibilite, cd.remise_en_activite,
-                                           cd.classement_detache))
+                                           cd.remise_en_activite, cd.classement_detache))
           AND NOT EXISTS (SELECT 1
                           FROM USER_GRH.GRH_DECISION a
                           WHERE 1 = 1
@@ -1509,11 +1762,20 @@ FROM (
                             AND TO_CHAR(a.NO_DECI_MODIF) = TO_CHAR(d.DECI_NO))
     ),
     departs AS (
-        SELECT dc.PERS_ID, dc.date_decision AS date_depart,
-               dd.type_mvt, 'DECISION_' || dc.code AS motif
-        FROM decisions dc
-        JOIN decisions_depart dd ON dd.code = dc.code
-        WHERE dc.PERS_ID IS NOT NULL
+        SELECT x.PERS_ID,
+               x.date_decision
+                   + CASE x.date_effet WHEN 'DERNIER_JOUR_TRAVAILLE' THEN 1 ELSE 0 END AS date_depart,
+               x.type_mvt,
+               'DECISION_' || x.code                                  AS motif
+        FROM (SELECT dc.PERS_ID, dc.code, dc.date_decision,
+                     dd.type_mvt, dd.date_effet, dd.retenir,
+                     ROW_NUMBER() OVER (PARTITION BY dc.PERS_ID, dc.code
+                                        ORDER BY dc.date_decision DESC) AS rang_fin
+              FROM decisions dc
+              JOIN decisions_depart dd ON dd.code = dc.code
+              WHERE dc.PERS_ID IS NOT NULL) x
+        WHERE x.retenir = 'TOUTES'
+           OR x.rang_fin = 1
         UNION ALL
         SELECT PERS_ID, DATE_DECES, 'DEC', 'DATE_DECES'
         FROM USER_GRH.GRH_PERSONNE
@@ -1538,47 +1800,97 @@ FROM (
           AND e.code = cd.engagement_temporaire
     ),
     contrats AS (
-        SELECT g.PERS_ID, g.debut,
-               LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
-                     NVL(g.debut_suivant, DATE '9999-12-31'))         AS fin
-        FROM engagements g
-        LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
-                             AND dep.date_depart > g.debut
-        GROUP BY g.PERS_ID, g.debut, g.debut_suivant
+        SELECT x.PERS_ID, x.debut,
+               CASE
+                   WHEN x.fin_base < DATE '9999-12-31'       THEN x.fin_base
+                   WHEN pr.fin_contrat_inconnue = 'DUREE'    THEN ADD_MONTHS(x.debut, pr.duree_contrat_mois)
+                   WHEN pr.fin_contrat_inconnue = 'FICHE'
+                    AND p.etat = 'INACTIF'                   THEN CAST(NULL AS DATE)
+                   ELSE                                           x.fin_base
+               END                                                    AS fin
+        FROM (SELECT g.PERS_ID, g.debut,
+                     LEAST(NVL(MIN(dep.date_depart), DATE '9999-12-31'),
+                           NVL(g.debut_suivant, DATE '9999-12-31'))   AS fin_base
+              FROM engagements g
+              LEFT JOIN departs dep ON dep.PERS_ID     = g.PERS_ID
+                                   AND dep.date_depart > g.debut
+              GROUP BY g.PERS_ID, g.debut, g.debut_suivant) x
+        JOIN personnes p ON p.PERS_ID = x.PERS_ID
+        CROSS JOIN parametres pr
     ),
     temporaires_sous_contrat AS (
-        SELECT da.date_arrete, c.PERS_ID,
-               MAX(CASE WHEN c.fin = DATE '9999-12-31' THEN 1 ELSE 0 END) AS fin_inconnue
+        SELECT DISTINCT da.date_arrete, c.PERS_ID
         FROM dates da
         JOIN contrats c ON c.debut       <= da.date_arrete
                        AND da.date_arrete <  c.fin
-        GROUP BY da.date_arrete, c.PERS_ID
     ),
-    positions AS (
-        SELECT da.date_arrete, d.PERS_ID,
-               MAX(CASE WHEN d.code = cd.mise_en_disponibilite THEN d.date_decision END) AS date_dispo,
-               MAX(CASE WHEN d.code = cd.remise_en_activite    THEN d.date_decision END) AS date_remise
+    remises AS (
+        SELECT da.date_arrete, d.PERS_ID, MAX(d.date_decision) AS date_remise
         FROM dates da
         JOIN decisions d ON d.date_decision <= da.date_arrete
         CROSS JOIN codes_decision cd
         WHERE d.PERS_ID IS NOT NULL
-          AND d.code IN (cd.mise_en_disponibilite, cd.remise_en_activite)
+          AND d.code = cd.remise_en_activite
         GROUP BY da.date_arrete, d.PERS_ID
     ),
+    absences_en_cours AS (
+        SELECT x.date_arrete, x.PERS_ID, x.code, x.effet, x.type_mvt, x.date_absence
+        FROM (SELECT da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt,
+                     MAX(d.date_decision) AS date_absence
+              FROM dates da
+              JOIN decisions d ON d.date_decision <= da.date_arrete
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+              GROUP BY da.date_arrete, d.PERS_ID, ab.code, ab.effet, ab.type_mvt) x
+        LEFT JOIN remises r ON r.date_arrete = x.date_arrete
+                           AND r.PERS_ID     = x.PERS_ID
+        WHERE x.date_absence > NVL(r.date_remise, DATE '1900-01-01')
+    ),
+    positions AS (
+        SELECT date_arrete, PERS_ID,
+               MAX(CASE WHEN effet = 'HORS_EFFECTIF' THEN 1 ELSE 0 END)              AS hors_effectif,
+               MAX(CASE WHEN effet IN ('HORS_EFFECTIF', 'INACTIF') THEN 1 ELSE 0 END) AS inactif
+        FROM absences_en_cours
+        GROUP BY date_arrete, PERS_ID
+    ),
+    absence_sans_retour AS (
+        SELECT x.PERS_ID, x.date_absence
+        FROM (SELECT d.PERS_ID, MAX(d.date_decision) AS date_absence
+              FROM decisions d
+              JOIN absences ab ON ab.code = d.code
+              WHERE d.PERS_ID IS NOT NULL
+                AND ab.effet = 'HORS_EFFECTIF'
+              GROUP BY d.PERS_ID) x
+        WHERE NOT EXISTS (SELECT 1
+                          FROM decisions r, codes_decision cd
+                          WHERE r.PERS_ID       =  x.PERS_ID
+                            AND r.code          =  cd.remise_en_activite
+                            AND r.date_decision >= x.date_absence)
+          AND NOT EXISTS (SELECT 1
+                          FROM departs dep
+                          WHERE dep.PERS_ID     = x.PERS_ID
+                            AND dep.date_depart > x.date_absence)
+    ),
     situations AS (
-        SELECT da.date_arrete, s.PERS_ID, s.QUAL_CODE, s.UA_CODE,
+        SELECT da.date_arrete, s.PERS_ID,
+               s.QUAL_CODE, s.CODE_DOMAINE_ACT, s.UA_CODE, s.LIEU_ID, s.FNCT_CODE,
+               s.STATUT_EMPLOYE,
                TO_CHAR(s.NATURE_EMPLOIE)                              AS nature,
+               TO_CHAR(s.CATEGORIE)                                   AS categorie,
                ROW_NUMBER() OVER (PARTITION BY da.date_arrete, s.PERS_ID
                                   ORDER BY s.DATE_DEBUT DESC, s.SITU_ID DESC) AS rn
         FROM dates da
         JOIN USER_GRH.GRH_SITUATION s ON 1 = 1
                                      AND s.DATE_DEBUT <= da.date_arrete
     ),
-    base AS (
+    presents AS (
         SELECT da.date_arrete, p.PERS_ID, p.SEXE,
                p.qualite                                              AS QUALITE_EMPLOYE,
                si.nature                                              AS NATURE_EMPLOI,
-               si.QUAL_CODE, si.UA_CODE
+               si.QUAL_CODE, si.CODE_DOMAINE_ACT, si.UA_CODE, si.LIEU_ID, si.FNCT_CODE,
+               si.STATUT_EMPLOYE,
+               si.categorie                                           AS CATEGORIE,
+               NVL(po.inactif, 0)                                     AS en_absence
         FROM dates da
         CROSS JOIN personnes p
         CROSS JOIN parametres pr
@@ -1586,6 +1898,7 @@ FROM (
                                              AND si.PERS_ID     = p.PERS_ID
                                              AND si.rn          = 1
         LEFT JOIN premier_depart pd           ON pd.PERS_ID     = p.PERS_ID
+        LEFT JOIN absence_sans_retour asr     ON asr.PERS_ID    = p.PERS_ID
         LEFT JOIN positions po                ON po.date_arrete = da.date_arrete
                                              AND po.PERS_ID     = p.PERS_ID
         LEFT JOIN temporaires_sous_contrat tc ON tc.date_arrete = da.date_arrete
@@ -1593,26 +1906,31 @@ FROM (
         WHERE
                 (NVL(si.nature, '-') <> 'TEMPORAIRE'
                  AND p.date_entree <= da.date_arrete
-                 AND (p.etat <> 'INACTIF' OR pd.date_depart > da.date_arrete)
-                 AND NOT (pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')))
+                 AND NVL(po.hors_effectif, 0) = 0
+                 AND (
+                         NOT (p.etat = 'INACTIF'
+                              OR (p.etat = '-'
+                                  AND pr.fiche_sans_etat = 'RECENTE'
+                                  AND p.date_entree <= ADD_MONTHS(da.date_arrete,
+                                                                  -pr.fiche_sans_etat_mois)))
+                      OR pd.date_depart > da.date_arrete
+                      OR (pr.inactif_sans_depart = 'ABSENCE'
+                          AND asr.date_absence > da.date_arrete)))
              OR
                 (si.nature = 'TEMPORAIRE'
-                 AND tc.PERS_ID IS NOT NULL
-                 AND NOT (pr.fin_contrat_inconnue = 'FICHE'
-                          AND tc.fin_inconnue = 1
-                          AND p.etat = 'INACTIF'))
+                 AND tc.PERS_ID IS NOT NULL)
     ),
     au_debut AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d0
+        JOIN presents p ON p.date_arrete = e.d0
     ),
     a_la_fin AS (
-        SELECT e.annee, e.d0, e.d1, b.*
+        SELECT e.annee, e.d0, e.d1, p.PERS_ID, p.SEXE, p.QUALITE_EMPLOYE,
+               p.NATURE_EMPLOI, p.QUAL_CODE, p.UA_CODE
         FROM exercices e
-        JOIN base b ON b.date_arrete = e.d1
+        JOIN presents p ON p.date_arrete = e.d1
     ),
     dernier_depart_annee AS (
         SELECT annee, PERS_ID, type_mvt, motif
@@ -1660,20 +1978,17 @@ FROM (
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND dt.PERS_ID IS NOT NULL                       THEN 'DETACHEMENT'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND p.date_entree >  f.d0
-                          AND p.date_entree <= f.d1                        THEN 'EMBAUCHE'
+                          AND pe.date_entree >  f.d0
+                          AND pe.date_entree <= f.d1                       THEN 'EMBAUCHE'
                          WHEN NVL(f.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'REMISE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'REMISE'
                          WHEN f.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND tc0.PERS_ID IS NULL                          THEN 'ENGAGEMENT'
                          WHEN dbt.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM a_la_fin f
-              JOIN personnes p ON p.PERS_ID = f.PERS_ID
-              CROSS JOIN parametres pr
+              JOIN personnes pe ON pe.PERS_ID = f.PERS_ID
               CROSS JOIN codes_decision cd
               LEFT JOIN au_debut dbt                 ON dbt.annee        = f.annee
                                                     AND dbt.PERS_ID      = f.PERS_ID
@@ -1692,13 +2007,13 @@ FROM (
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.type_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.type_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DISP'
+                   WHEN 'ABSENCE'           THEN NVL(x.type_absence, 'DISP')
                    ELSE                          'AUTRE_SORT'
                END                                                    AS CODE_TYPE_MVT,
                CASE x.cas
                    WHEN 'DEPART_PERMANENT'  THEN x.motif_premier
                    WHEN 'DEPART_TEMPORAIRE' THEN x.motif_dernier
-                   WHEN 'DISPONIBILITE'     THEN 'DECISION_' || x.code_dispo
+                   WHEN 'ABSENCE'           THEN 'DECISION_' || x.code_absence
                    WHEN 'NATURE'            THEN 'DEVIENT_' || NVL(x.nature_fin, 'SANS_SITUATION')
                    ELSE                          'SANS_MOTIF'
                END                                                    AS MOTIF_MVT
@@ -1708,7 +2023,8 @@ FROM (
                      pd.motif                   AS motif_premier,
                      dda.type_mvt               AS type_dernier,
                      dda.motif                  AS motif_dernier,
-                     cd.mise_en_disponibilite   AS code_dispo,
+                     ae.code                    AS code_absence,
+                     ae.type_mvt                AS type_absence,
                      CASE
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
                           AND pd.date_depart >  dbt.d0
@@ -1716,15 +2032,11 @@ FROM (
                          WHEN dbt.NATURE_EMPLOI = 'TEMPORAIRE'
                           AND dda.PERS_ID IS NOT NULL                      THEN 'DEPART_TEMPORAIRE'
                          WHEN NVL(dbt.NATURE_EMPLOI, '-') <> 'TEMPORAIRE'
-                          AND pr.disponibilite = 'HORS_EFFECTIF'
-                          AND NVL(po.date_dispo, DATE '1900-01-01')
-                              > NVL(po.date_remise, DATE '1900-01-01')     THEN 'DISPONIBILITE'
+                          AND NVL(po.hors_effectif, 0) = 1                 THEN 'ABSENCE'
                          WHEN fin.PERS_ID IS NOT NULL                      THEN 'NATURE'
                          ELSE                                                   'SANS_MOTIF'
                      END                        AS cas
               FROM au_debut dbt
-              CROSS JOIN parametres pr
-              CROSS JOIN codes_decision cd
               LEFT JOIN a_la_fin fin             ON fin.annee      = dbt.annee
                                                 AND fin.PERS_ID    = dbt.PERS_ID
               LEFT JOIN premier_depart pd        ON pd.PERS_ID     = dbt.PERS_ID
@@ -1732,6 +2044,9 @@ FROM (
                                                 AND dda.PERS_ID    = dbt.PERS_ID
               LEFT JOIN positions po             ON po.date_arrete = dbt.d1
                                                 AND po.PERS_ID     = dbt.PERS_ID
+              LEFT JOIN absences_en_cours ae     ON ae.date_arrete = dbt.d1
+                                                AND ae.PERS_ID     = dbt.PERS_ID
+                                                AND ae.effet       = 'HORS_EFFECTIF'
               WHERE fin.PERS_ID IS NULL
                  OR NVL(fin.NATURE_EMPLOI, '-') <> NVL(dbt.NATURE_EMPLOI, '-')) x
     ),
@@ -1741,6 +2056,7 @@ FROM (
         JOIN contrats c ON c.debut >  e.d0
                        AND c.debut <= e.d1
                        AND c.fin   <= e.d1
+                       AND c.fin   <  DATE '9999-12-31'
     ),
     passages AS (
         SELECT e.annee, p.PERS_ID, p.SEXE, p.qualite AS QUALITE_EMPLOYE,

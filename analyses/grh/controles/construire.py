@@ -9,16 +9,33 @@ copies des tables de la source, avec les mêmes colonnes et un cliché en plus (
 facts/sql) ; la copie change seulement le nom des tables et retire la condition sur le cliché.
 Les deux tables de tranches CIPRES, qui n'existent que dans l'entrepôt, sont écrites dans la
 copie. Les commentaires et les lignes vides sont retirés, et :2 (l'exercice) devient 2024.
+
+Avant de construire, vérifie que le socle commun (listes + présence) et les réglages COMMUN
+sont identiques entre t58_t65_effectif et t60 : sinon la fin de T60 ne retombe plus sur T58.
+
 À relancer après toute modification d'une requête proposée :
 
     python3 analyses/grh/controles/construire.py
 """
 
 import re
+import sys
 from pathlib import Path
 
 ICI = Path(__file__).resolve().parent
 GRH = ICI.parent
+EFFECTIF_FICHIER = "t58_t65_effectif_requete_proposee.sql"
+T60_FICHIER = "t60_requete_proposee.sql"
+T62_FICHIER = "t62_requete_proposee.sql"
+# Réglages que T58 et T60 doivent garder égaux (sinon T60 ≠ T58).
+REGAGES_COMMUN = (
+    "fin_contrat_inconnue",
+    "duree_contrat_mois",
+    "fiche_sans_etat",
+    "fiche_sans_etat_mois",
+    "inactif_sans_depart",
+    "ordre_date_entree",
+)
 # une table de l'entrepôt -> la table de la source qu'elle copie (le nom le plus long d'abord)
 SOURCE = [
     ("DWH.FAIT_GRH_DECISION_PERSONNE", "USER_GRH.GRH_DECISION_PERSONNE"),
@@ -98,8 +115,49 @@ def fichier(nom, entete, blocs):
     print(nom, ":", len(blocs), "contrôles")
 
 
-EFFECTIF, T60, T62 = ("t58_t65_effectif_requete_proposee.sql", "t60_requete_proposee.sql",
-                      "t62_requete_proposee.sql")
+def bloc_marque(texte, nom):
+    """Texte entre -- >>> NOM et -- <<< premier mot de NOM (socle commun)."""
+    m = re.search(
+        rf"(-- >>> {re.escape(nom)}[^\n]*\n)(.*?)(-- <<< {re.escape(nom.split()[0])}[^\n]*\n)",
+        texte, re.S)
+    if not m:
+        raise SystemExit(f"bloc « {nom} » introuvable")
+    return m.group(1) + m.group(2) + m.group(3)
+
+
+def valeur_reglage(texte, nom):
+    """Valeur littérale d'un réglage dans la CTE parametres (… AS nom)."""
+    m = re.search(
+        rf"""(['"][^'"]*['"]|\d+)\s+AS\s+{re.escape(nom)}\b""",
+        texte)
+    if not m:
+        raise SystemExit(f"réglage « {nom} » introuvable dans parametres")
+    return m.group(1)
+
+
+def verifier_socle_commun():
+    """T58 et T60 : mêmes listes, même présence, mêmes réglages COMMUN."""
+    t58 = (GRH / EFFECTIF_FICHIER).read_text(encoding="utf-8")
+    t60 = (GRH / T60_FICHIER).read_text(encoding="utf-8")
+    erreurs = []
+    for nom in ("SOCLE COMMUN A", "SOCLE COMMUN B"):
+        a, b = bloc_marque(t58, nom), bloc_marque(t60, nom)
+        if a != b:
+            erreurs.append(f"{nom} diffère entre {EFFECTIF_FICHIER} et {T60_FICHIER}")
+    for nom in REGAGES_COMMUN:
+        v58, v60 = valeur_reglage(t58, nom), valeur_reglage(t60, nom)
+        if v58 != v60:
+            erreurs.append(f"réglage COMMUN {nom} : effectif={v58}, t60={v60}")
+    if erreurs:
+        print("ERREUR — le socle commun T58/T60 n'est pas aligné :", file=sys.stderr)
+        for e in erreurs:
+            print("  -", e, file=sys.stderr)
+        print("Alignez les blocs marqués et les réglages COMMUN, puis relancez.", file=sys.stderr)
+        sys.exit(1)
+    print("socle commun T58/T60 : OK")
+
+
+EFFECTIF, T60, T62 = EFFECTIF_FICHIER, T60_FICHIER, T62_FICHIER
 COMMUN = ["Exécution : mode script (F5) dans SQL Developer, rien à saisir. Comptages seulement.",
           "Lit LA SOURCE (USER_GRH), pas l'entrepôt : la requête proposée lit DWH et DTM, sa",
           "copie ci-dessous lit les mêmes tables dans USER_GRH, sans condition de cliché.",
@@ -107,11 +165,13 @@ COMMUN = ["Exécution : mode script (F5) dans SQL Developer, rien à saisir. Com
           "ne pas modifier ce fichier à la main, relancer le script.",
           "Coller le résultat sous la ligne « Résultat » de chaque contrôle."]
 
+verifier_socle_commun()
+
 fichier("controle_1_effectif.sql", [
     "=" * 77,
-    "CONTRÔLE 1 — La requête de l'effectif (T58, T59, T61, T65), 17/11/2026",
-    "Requête contrôlée : analyses/grh/t58_t65_effectif_requete_proposee.sql (jamais lancée",
-    "dans sa version du 08/11/2026).", *COMMUN,
+    "CONTRÔLE 1 — La requête de l'effectif (T58, T59, T61, T65), 21/11/2026",
+    "Requête contrôlée : analyses/grh/t58_t65_effectif_requete_proposee.sql (version du",
+    "21/11/2026 ; chiffres attendus = 17/11/2026 avec les réglages d'aujourd'hui).", *COMMUN,
     "=" * 77,
 ], [
     controle("C1 — T58 au 31/12/2024 : par nature, catégorie et sexe", [
@@ -161,9 +221,9 @@ MAQUETTE = ("SELECT ID_TEMPS,\n"
             "                ELSE 0 END)                                            AS fin")
 fichier("controle_2_t60.sql", [
     "=" * 77,
-    "CONTRÔLE 2 — La requête de T60 (mouvement du personnel), 17/11/2026",
-    "Requête contrôlée : analyses/grh/t60_requete_proposee.sql (jamais lancée). Réglage en",
-    "place : disponibilite = HORS_EFFECTIF.", *COMMUN,
+    "CONTRÔLE 2 — La requête de T60 (mouvement du personnel), 21/11/2026",
+    "Requête contrôlée : analyses/grh/t60_requete_proposee.sql (version du 21/11/2026,",
+    "socle commun avec l'effectif ; absence 07 = HORS_EFFECTIF).", *COMMUN,
     "=" * 77,
 ], [
     controle("C1 — T60, permanents, 2020 à 2025 : la maquette", [

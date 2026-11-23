@@ -251,7 +251,7 @@ codes_decision AS (
 
 -- <<< SOCLE COMMUN A
 
--- >>> CATEGORIES — même texte dans t58_t65_effectif et dans t62 (vérifié par controles/construire.py)
+-- >>> CATEGORIES — regroupement pour T58/T59/T61/T65 (T62 a encore sa propre grille)
 
 -- ▶ POINTS 47, 41 (DRH, DSI) — Le regroupement des catégories de la grille
 --   (GRH_SITUATION.CATEGORIE), une ligne par code. La colonne cadre dit qui
